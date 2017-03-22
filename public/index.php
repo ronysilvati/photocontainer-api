@@ -135,7 +135,6 @@ $webApp->app->post('/events', function (ServerRequestInterface $request, Respons
 
         $user = new Photographer($data['user_id']);
 
-
         $allCategories = [];
         foreach ($data['categories'] as $category) {
             $allCategories[] = new Category(null, $category);

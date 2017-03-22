@@ -234,6 +234,9 @@ class Event
      */
     public function changeCategories(array $categories)
     {
+        if (empty($categories)) {
+            throw new \DomainException("Deve ser enviada ao menos uma categoria.");
+        }
         $this->categories = $categories;
     }
 
