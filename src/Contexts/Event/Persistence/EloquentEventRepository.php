@@ -7,6 +7,7 @@ use PhotoContainer\PhotoContainer\Contexts\Event\Domain\Event;
 use PhotoContainer\PhotoContainer\Contexts\Event\Domain\EventRepository;
 use PhotoContainer\PhotoContainer\Contexts\Event\Domain\Photographer;
 use PhotoContainer\PhotoContainer\Contexts\Event\Domain\Search;
+use PhotoContainer\PhotoContainer\Infrastructure\Persistence\Eloquent\EventCategory;
 use PhotoContainer\PhotoContainer\Infrastructure\Persistence\Eloquent\EventSearch;
 use PhotoContainer\PhotoContainer\Infrastructure\Persistence\Eloquent\User;
 use PhotoContainer\PhotoContainer\Infrastructure\Exception\PersistenceException;
@@ -31,6 +32,12 @@ class EloquentEventRepository implements EventRepository
             $eventModel->save();
 
             $event->changeId($eventModel->id);
+
+            $catEvent = new EventCategory();
+            $categories = $event->getCategories();
+            foreach ($categories as $cat) {
+                EventCategory::create(['event_id' => $event->getId(), 'category_id' => $cat->getCategoryId()]);
+            }
 
             return $event;
         } catch (\Exception $e) {

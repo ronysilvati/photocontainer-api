@@ -24,6 +24,7 @@ use PhotoContainer\PhotoContainer\Contexts\Event\Action\CreateEvent;
 use PhotoContainer\PhotoContainer\Contexts\Event\Persistence\EloquentEventRepository;
 use PhotoContainer\PhotoContainer\Contexts\Event\Action\FindEvent;
 use PhotoContainer\PhotoContainer\Contexts\Event\Domain\Search;
+use \PhotoContainer\PhotoContainer\Contexts\Event\Domain\Category;
 
 require '../vendor/autoload.php';
 
@@ -133,9 +134,17 @@ $webApp->app->post('/events', function (ServerRequestInterface $request, Respons
         $data = $request->getParsedBody();
 
         $user = new Photographer($data['user_id']);
+
+
+        $allCategories = [];
+        foreach ($data['categories'] as $category) {
+            $allCategories[] = new Category(null, $category);
+
+        }
+
         $event = new Event(null, $user, $data['bride'], $data['groom'], $data['eventDate'], $data['title'],
             $data['description'], (bool) $data['terms'], (bool) $data['approval_general'],
-            (bool) $data['approval_photographer'], (bool) $data['approval_bride']);
+            (bool) $data['approval_photographer'], (bool) $data['approval_bride'], $allCategories);
 
         $action = new CreateEvent(new EloquentEventRepository());
         $actionResponse = $action->handle($event);

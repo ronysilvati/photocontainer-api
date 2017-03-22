@@ -6,7 +6,6 @@
         "illuminate/pagination": "^5.4",
         "robmorgan/phinx": "^0.8.0",
         "tuupola/slim-jwt-auth": "^2.3",
-        "defuse/php-encryption": "^2.0",
         "firebase/php-jwt": "^4.0"
     },
 

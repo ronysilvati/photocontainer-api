@@ -16,6 +16,7 @@ class Event
     private $approval_photographer;
     private $approval_bride;
     private $photographer;
+    private $categories;
 
     public function __construct(int $id = null,
                                 Photographer $photographer,
@@ -27,7 +28,8 @@ class Event
                                 bool $terms = null,
                                 bool $approval_general = null,
                                 bool $approval_photographer = null,
-                                bool $approval_bride = null)
+                                bool $approval_bride = null,
+                                array $categories)
     {
         $this->changeTitle($title);
         $this->changeBride($bride);
@@ -40,6 +42,7 @@ class Event
         $this->changeApprovalBride($approval_bride);
         $this->changeApprovalPhotographer($approval_photographer);
         $this->changePhotographer($photographer);
+        $this->changeCategories($categories);
     }
 
     /**
@@ -211,11 +214,27 @@ class Event
     }
 
     /**
-     * @param mixed $photographer
+     * @param Photographer $photographer
      */
-    public function changePhotographer($photographer)
+    public function changePhotographer(Photographer $photographer)
     {
         $this->photographer = $photographer;
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getCategories()
+    {
+        return $this->categories;
+    }
+
+    /**
+     * @param array $categories
+     */
+    public function changeCategories(array $categories)
+    {
+        $this->categories = $categories;
     }
 
 
