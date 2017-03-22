@@ -151,8 +151,9 @@ $webApp->app->get('/events', function (ServerRequestInterface $request, Response
         $args = $request->getQueryParams();
 
         $keyword = isset($args['keyword']) ? $args['keyword'] : null;
+        $photographer = isset($args['photographer']) ? $args['photographer'] : null;
 
-        $search = new Search(null, null, $keyword);
+        $search = new Search(null, $photographer, $keyword);
 
         $action = new FindEvent(new EloquentEventRepository());
         $actionResponse = $action->handle($search);
