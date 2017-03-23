@@ -40,6 +40,7 @@ class Event extends AbstractMigration
             ->addColumn('approval_general', 'boolean', ['null' => true])
             ->addColumn('approval_photographer', 'boolean', ['null' => true])
             ->addColumn('approval_bride', 'boolean', ['null' => true])
+            ->addColumn('active', 'boolean', ['default' => true])
             ->addColumn('created_at', 'timestamp')
             ->addColumn('updated_at', 'timestamp', ['null' => true])
             ->create();
