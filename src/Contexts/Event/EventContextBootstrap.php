@@ -7,6 +7,7 @@ use PhotoContainer\PhotoContainer\Contexts\Event\Action\FindCategories;
 use PhotoContainer\PhotoContainer\Contexts\Event\Action\FindTags;
 use PhotoContainer\PhotoContainer\Contexts\Event\Domain\Event;
 use PhotoContainer\PhotoContainer\Contexts\Event\Domain\EventCategory;
+use PhotoContainer\PhotoContainer\Contexts\Event\Domain\EventTag;
 use PhotoContainer\PhotoContainer\Contexts\Event\Domain\Photographer;
 use PhotoContainer\PhotoContainer\Contexts\Event\Persistence\EloquentCategoryRepository;
 use PhotoContainer\PhotoContainer\Contexts\Event\Persistence\EloquentEventRepository;
@@ -31,12 +32,17 @@ class EventContextBootstrap implements ContextBootstrap
                 $allCategories = [];
                 foreach ($data['categories'] as $category) {
                     $allCategories[] = new EventCategory(null, $category);
-
                 }
 
-                $event = new Event(null, $user, $data['bride'], $data['groom'], $data['eventDate'], $data['title'],
-                    $data['description'], (bool) $data['terms'], (bool) $data['approval_general'],
-                    (bool) $data['approval_photographer'], (bool) $data['approval_bride'], $allCategories);
+                $allTags = [];
+                foreach ($data['tags'] as $tag) {
+                    $allTags[] = new EventTag(null, $tag);
+                }
+
+                $event = new Event(null, $user, $data['bride'], $data['groom'], $data['eventDate'],
+                    $data['title'], $data['description'], (bool) $data['terms'], (bool) $data['approval_general'],
+                    (bool) $data['approval_photographer'], (bool) $data['approval_bride'], $allCategories,
+                    $allTags);
 
                 $action = new CreateEvent(new EloquentEventRepository());
                 $actionResponse = $action->handle($event);

@@ -17,6 +17,7 @@ class Event
     private $approval_bride;
     private $photographer;
     private $categories;
+    private $tags;
 
     public function __construct(int $id = null,
                                 Photographer $photographer,
@@ -29,7 +30,8 @@ class Event
                                 bool $approval_general = null,
                                 bool $approval_photographer = null,
                                 bool $approval_bride = null,
-                                array $categories)
+                                array $categories,
+                                array $tags)
     {
         $this->changeTitle($title);
         $this->changeBride($bride);
@@ -43,12 +45,13 @@ class Event
         $this->changeApprovalPhotographer($approval_photographer);
         $this->changePhotographer($photographer);
         $this->changeCategories($categories);
+        $this->changeTags($tags);
     }
 
     /**
      * @return mixed
      */
-    public function getId()
+    public function getId(): int
     {
         return $this->id;
     }
@@ -64,7 +67,7 @@ class Event
     /**
      * @return mixed
      */
-    public function getBride()
+    public function getBride(): string
     {
         return $this->bride;
     }
@@ -80,29 +83,30 @@ class Event
     /**
      * @return mixed
      */
-    public function getGroom()
+    public function getGroom(): string
     {
         return $this->groom;
     }
 
     /**
-     * @param mixed $groom
+     * @param string $groom
+     * @return string
      */
-    public function changeGroom(string $groom)
+    public function changeGroom(string $groom = null)
     {
         $this->groom = $groom;
     }
 
     /**
-     * @return mixed
+     * @return string
      */
-    public function getEventDate()
+    public function getEventDate(): string
     {
         return $this->eventDate;
     }
 
     /**
-     * @param mixed $eventDate
+     * @param string $eventDate
      */
     public function changeEventDate(string $eventDate)
     {
@@ -110,9 +114,9 @@ class Event
     }
 
     /**
-     * @return mixed
+     * @return string
      */
-    public function getTitle()
+    public function getTitle(): string
     {
         return $this->title;
     }
@@ -126,9 +130,9 @@ class Event
     }
 
     /**
-     * @return mixed
+     * @return string
      */
-    public function getDescription()
+    public function getDescription(): string
     {
         return $this->description;
     }
@@ -142,9 +146,9 @@ class Event
     }
 
     /**
-     * @return mixed
+     * @return string
      */
-    public function getTerms()
+    public function getTerms(): string
     {
         return $this->terms;
     }
@@ -158,9 +162,9 @@ class Event
     }
 
     /**
-     * @return mixed
+     * @return bool
      */
-    public function getApprovalGeneral()
+    public function getApprovalGeneral(): bool
     {
         return $this->approval_general;
     }
@@ -174,9 +178,9 @@ class Event
     }
 
     /**
-     * @return mixed
+     * @return bool
      */
-    public function getApprovalPhotographer()
+    public function getApprovalPhotographer(): bool
     {
         return $this->approval_photographer;
     }
@@ -190,9 +194,9 @@ class Event
     }
 
     /**
-     * @return mixed
+     * @return bool
      */
-    public function getApprovalBride()
+    public function getApprovalBride(): bool
     {
         return $this->approval_bride;
     }
@@ -206,7 +210,7 @@ class Event
     }
 
     /**
-     * @return mixed
+     * @return Photographer
      */
     public function getPhotographer(): Photographer
     {
@@ -222,9 +226,9 @@ class Event
     }
 
     /**
-     * @return mixed
+     * @return array
      */
-    public function getCategories()
+    public function getCategories(): array
     {
         return $this->categories;
     }
@@ -237,8 +241,27 @@ class Event
         if (empty($categories)) {
             throw new \DomainException("Deve ser enviada ao menos uma categoria.");
         }
+
+        if (count($categories) > 1) {
+            throw new \DomainException("É permitido apenas uma categoria.");
+        }
+
         $this->categories = $categories;
     }
 
+    /**
+     * @return array
+     */
+    public function getTags(): array
+    {
+        return $this->tags;
+    }
 
+    /**
+     * @param $tags
+     */
+    public function changeTags($tags)
+    {
+        $this->tags = $tags;
+    }
 }

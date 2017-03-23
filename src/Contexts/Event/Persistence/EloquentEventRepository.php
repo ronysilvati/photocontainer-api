@@ -2,7 +2,6 @@
 
 namespace PhotoContainer\PhotoContainer\Contexts\Event\Persistence;
 
-use Illuminate\Support\Facades\DB;
 use PhotoContainer\PhotoContainer\Contexts\Event\Domain\Event;
 use PhotoContainer\PhotoContainer\Contexts\Event\Domain\EventRepository;
 use PhotoContainer\PhotoContainer\Contexts\Event\Domain\Photographer;
@@ -12,6 +11,7 @@ use PhotoContainer\PhotoContainer\Infrastructure\Persistence\Eloquent\EventSearc
 use PhotoContainer\PhotoContainer\Infrastructure\Persistence\Eloquent\User;
 use PhotoContainer\PhotoContainer\Infrastructure\Exception\PersistenceException;
 use PhotoContainer\PhotoContainer\Infrastructure\Persistence\Eloquent\Event as EventModel;
+use PhotoContainer\PhotoContainer\Infrastructure\Persistence\Eloquent\EventTag;
 
 class EloquentEventRepository implements EventRepository
 {
@@ -33,16 +33,23 @@ class EloquentEventRepository implements EventRepository
 
             $event->changeId($eventModel->id);
 
-            $catEvent = new EventCategory();
             $categories = $event->getCategories();
             foreach ($categories as $cat) {
                 EventCategory::create(['event_id' => $event->getId(), 'category_id' => $cat->getCategoryId()]);
             }
 
+            $tags = $event->getTags();
+            foreach ($tags as $tag) {
+                EventTag::create(['event_id' => $event->getId(), 'tag_id' => $tag->getTagId()]);
+            }
+
             return $event;
         } catch (\Exception $e) {
+            var_dump($e->getMessage());
+            exit;
             throw new PersistenceException($e->getMessage());
-        }    }
+        }
+    }
 
     public function findPhotographer(Photographer $photographer)
     {

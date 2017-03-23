@@ -16,6 +16,7 @@ class TagCollectionResponse implements \JsonSerializable
         $out = [];
         foreach ($this->collection as $item) {
             $list = [
+                'id' => $item['tag_group']['id'],
                 'description' => $item['tag_group']['description'],
                 'tags' => [],
             ];
@@ -23,7 +24,7 @@ class TagCollectionResponse implements \JsonSerializable
             foreach ($item['tag_group']['list'] as $tag) {
                 $list['tags'][] = ["id" => $tag->getId(), 'description' => $tag->getDescription()];
             }
-            
+
             $out[] = $list;
         }
 
