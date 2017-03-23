@@ -1,10 +1,4 @@
 <?php
-/**
- * Created by PhpStorm.
- * User: marte
- * Date: 16/03/2017
- * Time: 06:55
- */
 
 namespace PhotoContainer\PhotoContainer\Infrastructure\Web\Slim;
 
