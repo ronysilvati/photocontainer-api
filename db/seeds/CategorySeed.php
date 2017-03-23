@@ -16,15 +16,15 @@ class CategorySeed extends AbstractSeed
     {
         $data = [
             [
-                'description'    => 'Categoria 1',
+                'description'    => 'Casamento',
                 'created_at' => date('Y-m-d H:i:s'),
             ],
             [
-                'description'    => 'Categoria 2',
+                'description'    => 'Festa',
                 'created_at' => date('Y-m-d H:i:s'),
             ],
             [
-                'description'    => 'Categoria 3',
+                'description'    => 'Formatura',
                 'created_at' => date('Y-m-d H:i:s'),
             ]
         ];
