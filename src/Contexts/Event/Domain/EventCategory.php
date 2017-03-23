@@ -3,7 +3,7 @@
 namespace PhotoContainer\PhotoContainer\Contexts\Event\Domain;
 
 
-class Category
+class EventCategory
 {
     public $event_id;
     public $category_id;

@@ -24,7 +24,7 @@ use PhotoContainer\PhotoContainer\Contexts\Event\Action\CreateEvent;
 use PhotoContainer\PhotoContainer\Contexts\Event\Persistence\EloquentEventRepository;
 use PhotoContainer\PhotoContainer\Contexts\Event\Action\FindEvent;
 use PhotoContainer\PhotoContainer\Contexts\Event\Domain\Search;
-use \PhotoContainer\PhotoContainer\Contexts\Event\Domain\Category;
+use \PhotoContainer\PhotoContainer\Contexts\Event\Domain\EventCategory;
 
 require '../vendor/autoload.php';
 
@@ -137,7 +137,7 @@ $webApp->app->post('/events', function (ServerRequestInterface $request, Respons
 
         $allCategories = [];
         foreach ($data['categories'] as $category) {
-            $allCategories[] = new Category(null, $category);
+            $allCategories[] = new EventCategory(null, $category);
 
         }
 
