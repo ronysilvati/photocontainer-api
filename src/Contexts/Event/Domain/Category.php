@@ -15,7 +15,7 @@ class Category
      * @param $id
      * @param $description
      */
-    public function __construct(int $id, string $description)
+    public function __construct(int $id, string $description = null)
     {
         $this->changeId($id);
         $this->changeDescription($description);
@@ -48,7 +48,7 @@ class Category
     /**
      * @param mixed $description
      */
-    public function changeDescription(string $description)
+    public function changeDescription(string $description = null)
     {
         $this->description = $description;
     }

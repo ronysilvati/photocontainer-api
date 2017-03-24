@@ -4,11 +4,14 @@ namespace PhotoContainer\PhotoContainer\Contexts\Event;
 
 use PhotoContainer\PhotoContainer\Contexts\Event\Action\CreateEvent;
 use PhotoContainer\PhotoContainer\Contexts\Event\Action\FindCategories;
+use PhotoContainer\PhotoContainer\Contexts\Event\Action\FindEvent;
 use PhotoContainer\PhotoContainer\Contexts\Event\Action\FindTags;
+use PhotoContainer\PhotoContainer\Contexts\Event\Domain\Category;
 use PhotoContainer\PhotoContainer\Contexts\Event\Domain\Event;
 use PhotoContainer\PhotoContainer\Contexts\Event\Domain\EventCategory;
 use PhotoContainer\PhotoContainer\Contexts\Event\Domain\EventTag;
 use PhotoContainer\PhotoContainer\Contexts\Event\Domain\Photographer;
+use PhotoContainer\PhotoContainer\Contexts\Event\Domain\Search;
 use PhotoContainer\PhotoContainer\Contexts\Event\Persistence\EloquentCategoryRepository;
 use PhotoContainer\PhotoContainer\Contexts\Event\Persistence\EloquentEventRepository;
 use PhotoContainer\PhotoContainer\Contexts\Event\Persistence\EloquentTagRepository;
@@ -46,6 +49,31 @@ class EventContextBootstrap implements ContextBootstrap
 
                 $action = new CreateEvent(new EloquentEventRepository());
                 $actionResponse = $action->handle($event);
+
+                return $response->withJson($actionResponse, $actionResponse->getHttpStatus());
+            } catch (\Exception $e) {
+                return $response->withJson(['message' => $e->getMessage()], 500);
+            }
+        });
+
+        $slimApp->app->get('/events', function (ServerRequestInterface $request, ResponseInterface $response) use ($container) {
+            try {
+                $args = $request->getQueryParams();
+
+                $keyword = isset($args['keyword']) ? $args['keyword'] : null;
+                $photographer = isset($args['photographer']) ? $args['photographer'] : null;
+
+                $allCategories = [];
+                if (isset($args['categories'])) {
+                    foreach ($args['categories'] as $category) {
+                        $allCategories[] = new Category($category);
+                    }
+                }
+
+                $search = new Search(null, $photographer, $keyword, $allCategories);
+
+                $action = new FindEvent(new EloquentEventRepository());
+                $actionResponse = $action->handle($search);
 
                 return $response->withJson($actionResponse, $actionResponse->getHttpStatus());
             } catch (\Exception $e) {

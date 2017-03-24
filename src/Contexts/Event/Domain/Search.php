@@ -8,8 +8,13 @@ class Search
     private $photographer;
     private $title;
     private $eventdate;
+    private $categories;
 
-    public function __construct(int $id = null, string $photographer = null, string $title = null)
+    public function __construct(
+        int $id = null,
+        string $photographer = null,
+        string $title = null,
+        array $categories = null)
     {
         $this->changeId($id);
         $this->changeTitle($title);
@@ -17,67 +22,83 @@ class Search
     }
 
     /**
-     * @return mixed
+     * @return Photographer
      */
-    public function getPhotographer()
+    public function getPhotographer(): ?string
     {
         return $this->photographer;
     }
 
     /**
-     * @param mixed $photographer
+     * @param Photographer|null $photographer
      */
-    public function changePhotographer($photographer= null)
+    public function changePhotographer(string $photographer= null)
     {
         $this->photographer = $photographer;
     }
 
     /**
-     * @return mixed
+     * @return string
      */
-    public function getTitle()
+    public function getTitle(): ?string
     {
         return $this->title;
     }
 
     /**
-     * @param mixed $title
+     * @param string|null $title
      */
-    public function changeTitle($title = null)
+    public function changeTitle(string $title = null)
     {
         $this->title = $title;
     }
 
     /**
-     * @return mixed
+     * @return int
      */
-    public function getId()
+    public function getId(): ?int
     {
         return $this->id;
     }
 
     /**
-     * @param null $id
+     * @param int|null $id
      */
-    public function changeId($id = null)
+    public function changeId(int $id = null)
     {
         $this->id = $id;
     }
 
     /**
-     * @return mixed
+     * @return string
      */
-    public function getEventdate()
+    public function getEventdate(): ?string
     {
         return $this->eventdate;
     }
 
     /**
-     * @param mixed $eventdate
+     * @param string $eventdate
      */
-    public function changeEventdate($eventdate)
+    public function changeEventdate(string $eventdate = null)
     {
         list($year, $month, $day) = explode("-", $eventdate);
         $this->eventdate = $day."/".$month."/".$year;
+    }
+
+    /**
+     * @return array
+     */
+    public function getCategories(): ?array
+    {
+        return $this->categories;
+    }
+
+    /**
+     * @param array $categories
+     */
+    public function setCategories(array $categories = null)
+    {
+        $this->categories = $categories;
     }
 }

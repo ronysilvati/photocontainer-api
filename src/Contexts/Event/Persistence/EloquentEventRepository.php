@@ -68,11 +68,30 @@ class EloquentEventRepository implements EventRepository
 
     public function search(Search $search)
     {
-        $eventSearch = EventSearch::where('title', 'like', "%".$search->getTitle()."%");
+        $eventSearch = new EventSearch();
+
+        if ($search->getTitle()) {
+            $eventSearch = $eventSearch->where('title', 'like', "%".$search->getTitle()."%");
+        }
 
         if ($search->getPhotographer()) {
-            $eventSearch->where('user_id', $search->getPhotographer());
+            $eventSearch = $eventSearch->where('user_id', $search->getPhotographer());
         }
+
+        $allCategories = $search->getCategories();
+        if ($allCategories) {
+            $categories = [];
+            foreach ($allCategories as $category) {
+                $categories[] = $category->getId();
+            }
+
+            $eventSearch = $eventSearch->where('category_id', "%".implode(",", $categories)."%");
+        }
+
+        if ($eventSearch == null) {
+            return [];
+        }
+
         $eventSearch = $eventSearch->get();
 
         return $eventSearch->map(function ($item, $key) {
