@@ -1,10 +1,4 @@
 <?php
-/**
- * Created by PhpStorm.
- * User: marte
- * Date: 18/03/2017
- * Time: 18:32
- */
 
 namespace PhotoContainer\PhotoContainer\Contexts\Auth\Domain;
 

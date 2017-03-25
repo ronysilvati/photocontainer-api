@@ -1,10 +1,4 @@
 <?php
-/**
- * Created by PhpStorm.
- * User: marte
- * Date: 18/03/2017
- * Time: 17:38
- */
 
 namespace PhotoContainer\PhotoContainer\Contexts\User\Response;
 

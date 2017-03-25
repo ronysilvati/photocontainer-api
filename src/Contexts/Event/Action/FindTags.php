@@ -21,6 +21,8 @@ class FindTags
             $result = $this->repository->findAll();
             return new TagCollectionResponse($result);
         } catch (\Exception $e) {
+            var_dump($e->getMessage());
+            exit;
             return new DomainExceptionResponse($e->getMessage());
         }
     }
