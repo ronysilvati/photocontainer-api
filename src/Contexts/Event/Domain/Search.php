@@ -13,7 +13,7 @@ class Search
 
     public function __construct(
         int $id = null,
-        ?string $photographer,
+        ?Photographer $photographer,
         ?string $title ,
         ?array $categories,
         ?array $tags)
@@ -26,17 +26,17 @@ class Search
     }
 
     /**
-     * @return null|string
+     * @return null|Photographer
      */
-    public function getPhotographer(): ?string
+    public function getPhotographer(): ?Photographer
     {
         return $this->photographer;
     }
 
     /**
-     * @param string|null $photographer
+     * @param Photographer|null $photographer
      */
-    public function changePhotographer(string $photographer= null)
+    public function changePhotographer(Photographer $photographer= null)
     {
         $this->photographer = $photographer;
     }

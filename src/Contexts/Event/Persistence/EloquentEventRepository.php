@@ -2,6 +2,7 @@
 
 namespace PhotoContainer\PhotoContainer\Contexts\Event\Persistence;
 
+use PhotoContainer\PhotoContainer\Contexts\Event\Domain\Category;
 use PhotoContainer\PhotoContainer\Contexts\Event\Domain\Event;
 use PhotoContainer\PhotoContainer\Contexts\Event\Domain\EventRepository;
 use PhotoContainer\PhotoContainer\Contexts\Event\Domain\Photographer;
@@ -75,8 +76,8 @@ class EloquentEventRepository implements EventRepository
                 $where[] = ['title', 'like', "%".$search->getTitle()."%"];
             }
 
-            if ($search->getPhotographer()) {
-                $where[] = ['user_id', $search->getPhotographer()];
+            if ($search->getPhotographer()->getId()) {
+                $where[] = ['user_id', $search->getPhotographer()->getId()];
             }
 
             $allCategories = $search->getCategories();
@@ -99,10 +100,15 @@ class EloquentEventRepository implements EventRepository
                 $where[] = ['tag_id', $tags];
             }
 
-            $eventSearch = EventSearch::where($where)->groupBy('id')->get(['id', 'user_id', 'name', 'title', 'eventdate']);
+            $eventSearch = EventSearch::where($where)
+                ->groupBy('id', 'category_id', 'category')
+                ->get(['id', 'user_id', 'name', 'title', 'eventdate', 'category_id', 'category']);
 
             return $eventSearch->map(function ($item, $key) {
-                $search = new Search($item->id, $item->name, $item->title, null, null);
+                $category = new Category($item->category_id, $item->category);
+                $photographer = new Photographer($item->user_id, null, $item->name);
+
+                $search = new Search($item->id, $photographer, $item->title, [$category], null);
                 $search->changeEventdate($item->eventdate);
 
                 return $search;

@@ -6,16 +6,18 @@ class Photographer
 {
     private $id;
     private $profile_id;
+    private $name;
 
     const APPROVED_PROFILE = 2;
 
-    public function __construct(int $id = null, int $profile_id = null)
+    public function __construct(?int $id, int $profile_id = null, string $name = null)
     {
         $this->changeId($id);
 
         if ($profile_id !== null) {
             $this->changeProfileId($profile_id);
         }
+        $this->changeName($name);
     }
 
     /**
@@ -52,6 +54,22 @@ class Photographer
         }
 
         $this->profile_id = $profile_id;
+    }
+
+    /**
+     * @return string
+     */
+    public function getName(): ?string
+    {
+        return $this->name;
+    }
+
+    /**
+     * @param null|string $name
+     */
+    public function changeName(?string $name = null)
+    {
+        $this->name = $name;
     }
 
 

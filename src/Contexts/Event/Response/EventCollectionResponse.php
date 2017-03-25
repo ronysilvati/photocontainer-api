@@ -18,9 +18,11 @@ class EventCollectionResponse implements \JsonSerializable
         foreach ($this->collection as $search) {
             $out[] = [
                 "id" => $search->getId(),
-                "photographer" => $search->getPhotographer(),
+                "photographer" => $search->getPhotographer()->getName(),
+                "photographer_id" => $search->getPhotographer()->getId(),
                 "title" => $search->getTitle(),
                 "eventdate" => $search->getEventdate(),
+                "category" => $search->getCategories()[0]->getDescription(),
                 "thumb" => "user/themes/photo-container-site/_temp/photos/1.jpg",
                 "_links" => [
                     "_self" => ['href' => '/events/'.$search->getId()],

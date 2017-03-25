@@ -62,10 +62,10 @@ class EventContextBootstrap implements ContextBootstrap
                 $args = $request->getQueryParams();
 
                 $keyword = isset($args['keyword']) ? $args['keyword'] : null;
-                $photographer = isset($args['photographer']) ? $args['photographer'] : null;
+                $photographer = new Photographer((int) $args['photographer'] ?? $args['photographer']);
 
                 $allCategories = null;
-                if (isset($args['categories'])) {
+                if (!empty($args['categories'])) {
                     $allCategories = [];
                     foreach ($args['categories'] as $category) {
                         $allCategories[] = new Category((int) $category);
@@ -73,7 +73,7 @@ class EventContextBootstrap implements ContextBootstrap
                 }
 
                 $allTags = null;
-                if (isset($args['tags'])) {
+                if (!empty($args['tags'])) {
                     $allTags = [];
                     foreach ($args['tags'] as $tag) {
                         $allTags[] = new Tag((int) $tag, null);
