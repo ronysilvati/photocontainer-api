@@ -156,8 +156,12 @@ class Event
     /**
      * @param mixed $terms
      */
-    public function changeTerms(bool $terms)
+    public function changeTerms(bool $terms = null)
     {
+        if ($terms === null || $terms === false) {
+            throw new \DomainException('Os termos devem ser aceitos.');
+        }
+
         $this->terms = $terms;
     }
 

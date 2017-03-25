@@ -13,10 +13,10 @@ class EventCategory
      * @param $event_id
      * @param $category_id
      */
-    public function __construct(int $event_id = null, int $category_id)
+    public function __construct(int $event_id = null, int $category_id = null)
     {
         $this->event_id = $event_id;
-        $this->category_id = $category_id;
+        $this->changeCategoryId($category_id);
     }
 
     /**
@@ -46,8 +46,12 @@ class EventCategory
     /**
      * @param mixed $category_id
      */
-    public function changeCategoryId(int $category_id)
+    public function changeCategoryId(?int $category_id = null)
     {
+        if ($category_id === null) {
+            throw new \DomainException("A categoria é obrigatória.");
+        }
+
         $this->category_id = $category_id;
     }
 
