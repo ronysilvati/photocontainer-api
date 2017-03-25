@@ -7,7 +7,7 @@ class Tag
     private $id;
     private $description;
 
-    public function __construct(int $id, string $description)
+    public function __construct(int $id, ?string $description)
     {
         $this->changeDescription($description);
         $this->changeId($id);
@@ -32,7 +32,7 @@ class Tag
     /**
      * @return mixed
      */
-    public function getDescription()
+    public function getDescription(): ?string
     {
         return $this->description;
     }
@@ -40,7 +40,7 @@ class Tag
     /**
      * @param mixed $description
      */
-    public function changeDescription($description)
+    public function changeDescription(?string $description)
     {
         $this->description = $description;
     }

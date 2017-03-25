@@ -9,20 +9,24 @@ class Search
     private $title;
     private $eventdate;
     private $categories;
+    private $tags;
 
     public function __construct(
         int $id = null,
-        string $photographer = null,
-        string $title = null,
-        array $categories = null)
+        ?string $photographer,
+        ?string $title ,
+        ?array $categories,
+        ?array $tags)
     {
         $this->changeId($id);
         $this->changeTitle($title);
         $this->changePhotographer($photographer);
+        $this->changeCategories($categories);
+        $this->changeTags($tags);
     }
 
     /**
-     * @return Photographer
+     * @return null|string
      */
     public function getPhotographer(): ?string
     {
@@ -30,7 +34,7 @@ class Search
     }
 
     /**
-     * @param Photographer|null $photographer
+     * @param string|null $photographer
      */
     public function changePhotographer(string $photographer= null)
     {
@@ -38,7 +42,7 @@ class Search
     }
 
     /**
-     * @return string
+     * @return null|string
      */
     public function getTitle(): ?string
     {
@@ -54,7 +58,7 @@ class Search
     }
 
     /**
-     * @return int
+     * @return int|null
      */
     public function getId(): ?int
     {
@@ -70,7 +74,7 @@ class Search
     }
 
     /**
-     * @return string
+     * @return null|string
      */
     public function getEventdate(): ?string
     {
@@ -78,7 +82,7 @@ class Search
     }
 
     /**
-     * @param string $eventdate
+     * @param string|null $eventdate
      */
     public function changeEventdate(string $eventdate = null)
     {
@@ -87,7 +91,7 @@ class Search
     }
 
     /**
-     * @return array
+     * @return array|null
      */
     public function getCategories(): ?array
     {
@@ -95,10 +99,28 @@ class Search
     }
 
     /**
-     * @param array $categories
+     * @param array|null $categories
      */
-    public function setCategories(array $categories = null)
+    public function changeCategories(array $categories = null)
     {
         $this->categories = $categories;
     }
+
+    /**
+     * @return mixed
+     */
+    public function getTags(): ?array
+    {
+        return $this->tags;
+    }
+
+    /**
+     * @param mixed $tags
+     */
+    public function changeTags(?array $tags)
+    {
+        $this->tags = $tags;
+    }
+
+
 }

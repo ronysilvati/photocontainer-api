@@ -68,38 +68,49 @@ class EloquentEventRepository implements EventRepository
 
     public function search(Search $search)
     {
-        $eventSearch = new EventSearch();
+        try {
+            $where = [];
 
-        if ($search->getTitle()) {
-            $eventSearch = $eventSearch->where('title', 'like', "%".$search->getTitle()."%");
-        }
-
-        if ($search->getPhotographer()) {
-            $eventSearch = $eventSearch->where('user_id', $search->getPhotographer());
-        }
-
-        $allCategories = $search->getCategories();
-        if ($allCategories) {
-            $categories = [];
-            foreach ($allCategories as $category) {
-                $categories[] = $category->getId();
+            if ($search->getTitle()) {
+                $where[] = ['title', 'like', "%".$search->getTitle()."%"];
             }
 
-            $eventSearch = $eventSearch->where('category_id', "%".implode(",", $categories)."%");
+            if ($search->getPhotographer()) {
+                $where[] = ['user_id', $search->getPhotographer()];
+            }
+
+            $allCategories = $search->getCategories();
+            if ($allCategories) {
+                $categories = [];
+                foreach ($allCategories as $category) {
+                    $categories[] = $category->getId();
+                }
+
+                $where[] = ['category_id', $categories];
+            }
+
+            $allTags = $search->getTags();
+            if ($allTags) {
+                $tags = [];
+                foreach ($allTags as $tag) {
+                    $tags[] = $tag->getId();
+                }
+
+                $where[] = ['tag_id', $tags];
+            }
+
+            $eventSearch = EventSearch::where($where)->groupBy('id')->get(['id', 'user_id', 'name', 'title', 'eventdate']);
+
+            return $eventSearch->map(function ($item, $key) {
+                $search = new Search($item->id, $item->name, $item->title, null, null);
+                $search->changeEventdate($item->eventdate);
+
+                return $search;
+            })->toArray();
+        } catch (\Exception $e) {
+            var_dump($e->getMessage());
+            exit;
         }
-
-        if ($eventSearch == null) {
-            return [];
-        }
-
-        $eventSearch = $eventSearch->get();
-
-        return $eventSearch->map(function ($item, $key) {
-            $search = new Search($item->id, $item->name, $item->title);
-            $search->changeEventdate($item->eventdate);
-
-            return $search;
-        })->toArray();
     }
 
 

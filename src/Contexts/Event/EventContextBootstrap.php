@@ -12,6 +12,7 @@ use PhotoContainer\PhotoContainer\Contexts\Event\Domain\EventCategory;
 use PhotoContainer\PhotoContainer\Contexts\Event\Domain\EventTag;
 use PhotoContainer\PhotoContainer\Contexts\Event\Domain\Photographer;
 use PhotoContainer\PhotoContainer\Contexts\Event\Domain\Search;
+use PhotoContainer\PhotoContainer\Contexts\Event\Domain\Tag;
 use PhotoContainer\PhotoContainer\Contexts\Event\Persistence\EloquentCategoryRepository;
 use PhotoContainer\PhotoContainer\Contexts\Event\Persistence\EloquentEventRepository;
 use PhotoContainer\PhotoContainer\Contexts\Event\Persistence\EloquentTagRepository;
@@ -63,14 +64,23 @@ class EventContextBootstrap implements ContextBootstrap
                 $keyword = isset($args['keyword']) ? $args['keyword'] : null;
                 $photographer = isset($args['photographer']) ? $args['photographer'] : null;
 
-                $allCategories = [];
+                $allCategories = null;
                 if (isset($args['categories'])) {
+                    $allCategories = [];
                     foreach ($args['categories'] as $category) {
-                        $allCategories[] = new Category($category);
+                        $allCategories[] = new Category((int) $category);
                     }
                 }
 
-                $search = new Search(null, $photographer, $keyword, $allCategories);
+                $allTags = null;
+                if (isset($args['tags'])) {
+                    $allTags = [];
+                    foreach ($args['tags'] as $tag) {
+                        $allTags[] = new Tag((int) $tag, null);
+                    }
+                }
+
+                $search = new Search(null, $photographer, $keyword, $allCategories, $allTags);
 
                 $action = new FindEvent(new EloquentEventRepository());
                 $actionResponse = $action->handle($search);
