@@ -33,7 +33,7 @@ class User extends AbstractMigration
             ->addColumn('email', 'string', ['limit' => 100])
             ->addColumn('created_at', 'timestamp')
             ->addColumn('updated_at', 'timestamp', ['null' => true])
-            ->addIndex(array('email'), ['unique' => true])
+            ->addIndex(['email'], ['unique' => true])
             ->create();
 
         $details = $this->table('user_details');

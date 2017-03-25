@@ -14,6 +14,7 @@ class EventSearchView extends AbstractMigration
                          title,
                          date(eventdate) as eventdate,
                          c.id as category_id,
+                         GROUP_CONCAT(c.description) as category,
                          t.id as tag_id
                 FROM users as u
                     INNER JOIN events as e
@@ -22,9 +23,9 @@ class EventSearchView extends AbstractMigration
                       ON e.id = ec.event_id
                     INNER JOIN categories as c
                       ON c.id = ec.category_id	    
-                    INNER JOIN event_tags as et
+                    LEFT JOIN event_tags as et
                       ON e.id = et.event_id
-                    INNER JOIN tags as t
+                    LEFT JOIN tags as t
                       ON t.id = et.tag_id	 
                 GROUP BY e.id, c.id, t.id;";
 
