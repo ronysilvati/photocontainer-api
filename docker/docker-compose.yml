@@ -1,0 +1,36 @@
+version: '2'
+
+services:
+    mysql:
+        image: mariadb:latest
+        ports:
+            - 3306:3306
+        volumes:
+            - /var/lib/mysql
+        restart: always
+        environment:
+            MYSQL_ROOT_PASSWORD: root
+
+    nginx:
+        image: nginx:1.10.2
+        ports:
+            - 8081:80
+        restart: always
+        volumes:
+            - ./nginx/conf:/etc/nginx/conf.d
+            - ..:/code
+        links:
+            - php
+        depends_on:
+            - php
+
+    php:
+        build: php
+        expose:
+            - 9000
+        restart: always
+        volumes:
+            - ./php/conf/php.ini:/usr/local/etc/php/conf.d/custom.ini
+            - ..:/code
+        links:
+            - mysql
