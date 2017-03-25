@@ -12,7 +12,7 @@ use PhotoContainer\PhotoContainer\Contexts\Event\AuthContextBootstrap;
 
 require '../vendor/autoload.php';
 
-$app = new \Slim\App();
+$app = new \Slim\App(['debug' => true]);
 $container = $app->getContainer();
 
 $container['DatabaseProvider'] = function ($c) {
