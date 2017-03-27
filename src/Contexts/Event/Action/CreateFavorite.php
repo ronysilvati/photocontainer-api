@@ -2,12 +2,12 @@
 
 namespace PhotoContainer\PhotoContainer\Contexts\Event\Action;
 
-use PhotoContainer\PhotoContainer\Contexts\Event\Domain\Event;
 use PhotoContainer\PhotoContainer\Contexts\Event\Domain\EventRepository;
-use PhotoContainer\PhotoContainer\Contexts\Event\Response\EventCreatedResponse;
+use PhotoContainer\PhotoContainer\Contexts\Event\Domain\Favorite;
+use PhotoContainer\PhotoContainer\Contexts\Event\Response\FavoriteCreatedResponse;
 use PhotoContainer\PhotoContainer\Infrastructure\Web\DomainExceptionResponse;
 
-class CreateEvent
+class CreateFavorite
 {
     protected $repository;
 
@@ -16,13 +16,13 @@ class CreateEvent
         $this->repository = $repository;
     }
 
-    public function handle(Event $event)
+    public function handle(Favorite $favorite)
     {
         try {
-            $event->changePhotographer($this->repository->findPhotographer($event->getPhotographer()));
-            $this->repository->create($event);
+            $favorite->changePublisher($this->repository->findPublisher($favorite->getPublisher()));
+            $favorite = $this->repository->createFavorite($favorite);
 
-            return new EventCreatedResponse($event);
+            return new FavoriteCreatedResponse($favorite);
         } catch (\Exception $e) {
             return new DomainExceptionResponse($e->getMessage());
         }

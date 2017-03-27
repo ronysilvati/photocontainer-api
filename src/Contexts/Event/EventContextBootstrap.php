@@ -3,19 +3,14 @@
 namespace PhotoContainer\PhotoContainer\Contexts\Event;
 
 use PhotoContainer\PhotoContainer\Contexts\Event\Action\CreateEvent;
-use PhotoContainer\PhotoContainer\Contexts\Event\Action\FindCategories;
-use PhotoContainer\PhotoContainer\Contexts\Event\Action\FindEvent;
-use PhotoContainer\PhotoContainer\Contexts\Event\Action\FindTags;
-use PhotoContainer\PhotoContainer\Contexts\Event\Domain\Category;
+use PhotoContainer\PhotoContainer\Contexts\Event\Action\CreateFavorite;
 use PhotoContainer\PhotoContainer\Contexts\Event\Domain\Event;
 use PhotoContainer\PhotoContainer\Contexts\Event\Domain\EventCategory;
 use PhotoContainer\PhotoContainer\Contexts\Event\Domain\EventTag;
+use PhotoContainer\PhotoContainer\Contexts\Event\Domain\Favorite;
 use PhotoContainer\PhotoContainer\Contexts\Event\Domain\Photographer;
-use PhotoContainer\PhotoContainer\Contexts\Event\Domain\Search;
-use PhotoContainer\PhotoContainer\Contexts\Event\Domain\Tag;
-use PhotoContainer\PhotoContainer\Contexts\Event\Persistence\EloquentCategoryRepository;
+use PhotoContainer\PhotoContainer\Contexts\Event\Domain\Publisher;
 use PhotoContainer\PhotoContainer\Contexts\Event\Persistence\EloquentEventRepository;
-use PhotoContainer\PhotoContainer\Contexts\Event\Persistence\EloquentTagRepository;
 use PhotoContainer\PhotoContainer\Infrastructure\ContextBootstrap;
 use PhotoContainer\PhotoContainer\Infrastructure\Web\WebApp;
 use Psr\Http\Message\ResponseInterface;
@@ -57,60 +52,21 @@ class EventContextBootstrap implements ContextBootstrap
             }
         });
 
-        $slimApp->app->get('/events', function (ServerRequestInterface $request, ResponseInterface $response) use ($container) {
-            try {
-                $args = $request->getQueryParams();
+        $slimApp->app->post('/event/{event_id}/favorite/publisher/{publisher_id}', function (ServerRequestInterface $request, ResponseInterface $response, $args) use ($container) {
+            $publisher = new Publisher($args['publisher_id'], null, null);
+            $favorite = new Favorite(null, $publisher, $args['event_id']);
 
-                $keyword = isset($args['keyword']) ? $args['keyword'] : null;
-                $photographer = new Photographer((int) $args['photographer'] ?? $args['photographer']);
+            $action = new CreateFavorite(new EloquentEventRepository());
+            $actionResponse = $action->handle($favorite);
 
-                $allCategories = null;
-                if (!empty($args['categories'])) {
-                    $allCategories = [];
-                    foreach ($args['categories'] as $category) {
-                        $allCategories[] = new Category((int) $category);
-                    }
-                }
+            return $response->withJson($actionResponse, $actionResponse->getHttpStatus());
 
-                $allTags = null;
-                if (!empty($args['tags'])) {
-                    $allTags = [];
-                    foreach ($args['tags'] as $tag) {
-                        $allTags[] = new Tag((int) $tag, null);
-                    }
-                }
-
-                $search = new Search(null, $photographer, $keyword, $allCategories, $allTags);
-
-                $action = new FindEvent(new EloquentEventRepository());
-                $actionResponse = $action->handle($search);
-
-                return $response->withJson($actionResponse, $actionResponse->getHttpStatus());
-            } catch (\Exception $e) {
-                return $response->withJson(['message' => $e->getMessage()], 500);
-            }
+            var_dump($publisher);
+            exit;
         });
 
-        $slimApp->app->get('/events/categories', function (ServerRequestInterface $request, ResponseInterface $response) use ($container) {
-            try {
-                $action = new FindCategories(new EloquentCategoryRepository());
-                $actionResponse = $action->handle();
-
-                return $response->withJson($actionResponse, $actionResponse->getHttpStatus());
-            } catch (\Exception $e) {
-                return $response->withJson(['message' => $e->getMessage()], 500);
-            }
-        });
-
-        $slimApp->app->get('/events/tags', function (ServerRequestInterface $request, ResponseInterface $response) use ($container) {
-            try {
-                $action = new FindTags(new EloquentTagRepository());
-                $actionResponse = $action->handle();
-
-                return $response->withJson($actionResponse, $actionResponse->getHttpStatus());
-            } catch (\Exception $e) {
-                return $response->withJson(['message' => $e->getMessage()], 500);
-            }
+        $slimApp->app->delete('/event/{event_id}/favorite/{favorite_id}', function (ServerRequestInterface $request, ResponseInterface $response, $args) use ($container) {
+            $favorite = new Favorite($args['id'], $publisher, $args['event_id']);
         });
 
         return $slimApp;

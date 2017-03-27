@@ -18,6 +18,7 @@ class Event
     private $photographer;
     private $categories;
     private $tags;
+    private $favorites;
 
     public function __construct(int $id = null,
                                 Photographer $photographer,
@@ -267,5 +268,21 @@ class Event
     public function changeTags($tags)
     {
         $this->tags = $tags;
+    }
+
+    /**
+     * @return array
+     */
+    public function getFavorites(): ?array
+    {
+        return $this->tags;
+    }
+
+    /**
+     * @param array $favorites
+     */
+    public function changeFavorites(array $favorites)
+    {
+        $this->favorites = $favorites;
     }
 }

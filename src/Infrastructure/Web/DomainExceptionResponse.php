@@ -1,8 +1,8 @@
 <?php
 
-namespace PhotoContainer\PhotoContainer\Contexts\Event\Response;
+namespace PhotoContainer\PhotoContainer\Infrastructure\Web;
 
-class DomainExceptionResponse
+class DomainExceptionResponse implements \JsonSerializable
 {
     private $httpStatus = 500;
     private $message;

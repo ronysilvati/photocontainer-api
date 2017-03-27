@@ -1,10 +1,10 @@
 <?php
 
-namespace PhotoContainer\PhotoContainer\Contexts\Event\Action;
+namespace PhotoContainer\PhotoContainer\Contexts\Search\Action;
 
-use PhotoContainer\PhotoContainer\Contexts\Event\Domain\CategoryRepository;
-use PhotoContainer\PhotoContainer\Contexts\Event\Response\CategoryCollectionResponse;
-use PhotoContainer\PhotoContainer\Contexts\Event\Response\DomainExceptionResponse;
+use PhotoContainer\PhotoContainer\Contexts\Search\Domain\CategoryRepository;
+use PhotoContainer\PhotoContainer\Contexts\Search\Response\CategoryCollectionResponse;
+use PhotoContainer\PhotoContainer\Infrastructure\Web\DomainExceptionResponse;
 
 class FindCategories
 {

@@ -1,6 +1,6 @@
 <?php
 
-namespace PhotoContainer\PhotoContainer\Contexts\Event\Response;
+namespace PhotoContainer\PhotoContainer\Contexts\Search\Response;
 
 class TagCollectionResponse implements \JsonSerializable
 {

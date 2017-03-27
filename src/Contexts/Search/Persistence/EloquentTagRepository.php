@@ -1,9 +1,9 @@
 <?php
 
-namespace PhotoContainer\PhotoContainer\Contexts\Event\Persistence;
+namespace PhotoContainer\PhotoContainer\Contexts\Search\Persistence;
 
-use PhotoContainer\PhotoContainer\Contexts\Event\Domain\Tag;
-use PhotoContainer\PhotoContainer\Contexts\Event\Domain\TagRepository;
+use PhotoContainer\PhotoContainer\Contexts\Search\Domain\Tag;
+use PhotoContainer\PhotoContainer\Contexts\Search\Domain\TagRepository;
 use PhotoContainer\PhotoContainer\Infrastructure\Persistence\Eloquent\TagCategory;
 
 class EloquentTagRepository implements TagRepository

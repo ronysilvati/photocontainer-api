@@ -1,10 +1,10 @@
 <?php
 
-namespace PhotoContainer\PhotoContainer\Contexts\Event\Persistence;
+namespace PhotoContainer\PhotoContainer\Contexts\Search\Persistence;
 
-use PhotoContainer\PhotoContainer\Contexts\Event\Domain\CategoryRepository;
+use PhotoContainer\PhotoContainer\Contexts\Search\Domain\Category;
+use PhotoContainer\PhotoContainer\Contexts\Search\Domain\CategoryRepository;
 use PhotoContainer\PhotoContainer\Infrastructure\Persistence\Eloquent\Category as CategoryModel;
-use PhotoContainer\PhotoContainer\Contexts\Event\Domain\Category;
 
 class EloquentCategoryRepository implements CategoryRepository
 {

@@ -2,7 +2,6 @@
 
 namespace PhotoContainer\PhotoContainer\Infrastructure\Web;
 
-
 interface WebApp
 {
     public function bootstrap(array $conf);

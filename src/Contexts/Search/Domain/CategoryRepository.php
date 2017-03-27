@@ -1,6 +1,6 @@
 <?php
 
-namespace PhotoContainer\PhotoContainer\Contexts\Event\Domain;
+namespace PhotoContainer\PhotoContainer\Contexts\Search\Domain;
 
 interface CategoryRepository
 {

@@ -12,22 +12,18 @@ use PhotoContainer\PhotoContainer\Contexts\Event\AuthContextBootstrap;
 
 require '../vendor/autoload.php';
 
-$app = new \Slim\App(['debug' => true]);
+$app = new \Slim\App(['settings' => ['debug' => true, 'displayErrorDetails' => true,]]);
 $container = $app->getContainer();
 
 $container['DatabaseProvider'] = function ($c) {
     $database = new EloquentDatabaseProvider([
         'host' => '192.168.99.100',
-        'port' => '32706',
+        'port' => '3306',
         'database' => 'photocontainer',
-        'user' => 'photocontainer',
-        'pwd' => '1234',
+        'user' => 'root',
+        'pwd' => 'root',
     ]);
     return $database;
-};
-
-$container['EloquentUserRepository'] = function ($c) {
-    return new EloquentUserRepository();
 };
 
 $container['CryptoMethod'] = function ($c) {
@@ -40,7 +36,7 @@ $webApp->bootstrap(
     [
         'secret' => 'secret',
         "api_path" => ["/"],
-        "auth_whitelist" => ["/login", "/users", "/events"],
+        "auth_whitelist" => ["/login", "/users", "/events", "/search", "/event"],
     ]
 );
 
@@ -51,6 +47,9 @@ $eventBoostrap = new EventContextBootstrap();
 $webApp = $eventBoostrap->wireSlimRoutes($webApp);
 
 $eventBoostrap = new UserContextBootstrap();
+$webApp = $eventBoostrap->wireSlimRoutes($webApp);
+
+$eventBoostrap = new \PhotoContainer\PhotoContainer\Contexts\Search\SearchContextBootstrap();
 $webApp = $eventBoostrap->wireSlimRoutes($webApp);
 
 $webApp->app->run();

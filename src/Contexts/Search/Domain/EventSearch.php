@@ -1,8 +1,8 @@
 <?php
 
-namespace PhotoContainer\PhotoContainer\Contexts\Event\Domain;
+namespace PhotoContainer\PhotoContainer\Contexts\Search\Domain;
 
-class Search
+class EventSearch
 {
     private $id;
     private $photographer;

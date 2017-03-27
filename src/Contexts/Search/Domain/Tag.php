@@ -1,24 +1,16 @@
 <?php
 
-namespace PhotoContainer\PhotoContainer\Contexts\Event\Domain;
+namespace PhotoContainer\PhotoContainer\Contexts\Search\Domain;
 
-namespace PhotoContainer\PhotoContainer\Contexts\Event\Domain;
-
-
-class Category
+class Tag
 {
     private $id;
     private $description;
 
-    /**
-     * Category constructor.
-     * @param $id
-     * @param $description
-     */
-    public function __construct(int $id, string $description = null)
+    public function __construct(int $id, ?string $description)
     {
-        $this->changeId($id);
         $this->changeDescription($description);
+        $this->changeId($id);
     }
 
     /**
@@ -32,7 +24,7 @@ class Category
     /**
      * @param mixed $id
      */
-    public function changeId(int $id)
+    public function changeId($id)
     {
         $this->id = $id;
     }
@@ -40,7 +32,7 @@ class Category
     /**
      * @return mixed
      */
-    public function getDescription()
+    public function getDescription(): ?string
     {
         return $this->description;
     }
@@ -48,7 +40,7 @@ class Category
     /**
      * @param mixed $description
      */
-    public function changeDescription(string $description = null)
+    public function changeDescription(?string $description)
     {
         $this->description = $description;
     }
