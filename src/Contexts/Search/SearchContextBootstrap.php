@@ -8,6 +8,7 @@ use PhotoContainer\PhotoContainer\Contexts\Search\Action\FindTags;
 use PhotoContainer\PhotoContainer\Contexts\Search\Domain\Category;
 use PhotoContainer\PhotoContainer\Contexts\Search\Domain\EventSearch;
 use PhotoContainer\PhotoContainer\Contexts\Search\Domain\Photographer;
+use PhotoContainer\PhotoContainer\Contexts\Search\Domain\Tag;
 use PhotoContainer\PhotoContainer\Contexts\Search\Persistence\EloquentCategoryRepository;
 use PhotoContainer\PhotoContainer\Contexts\Search\Persistence\EloquentEventRepository;
 use PhotoContainer\PhotoContainer\Contexts\Search\Persistence\EloquentTagRepository;
