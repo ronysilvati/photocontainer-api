@@ -57,6 +57,10 @@ class UpdateUser
                 $user->getDetails()->changeBirth($data['details']['birth']);
             }
 
+            if (isset($data['details']['site'])) {
+                $user->getDetails()->changeSite($data['details']['site']);
+            }
+
             $user = $this->userRepository->updateUser($user, $crypto);
             return new UserResponse($user);
         } catch (\Exception $e) {
