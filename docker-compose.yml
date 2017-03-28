@@ -1,0 +1,107 @@
+version: '2.1'
+services:
+  nginx-proxy:
+    image: jwilder/nginx-proxy
+    container_name: nginx-proxy
+    ports:
+      - "80:80"
+    volumes:
+      - /var/run/docker.sock:/tmp/docker.sock:ro
+    networks:
+      external_default:
+        ipv4_address: 10.5.0.6
+
+  frontend.dev:
+    container_name: frontend.dev
+    image: lcidral/portal.dev:php-7.1.2-apache
+    networks:
+      external_default:
+        ipv4_address: 10.5.0.5
+    volumes:
+      - ./html:/var/www/html:rw
+      - .:/var/www:rw
+    links:
+      - my-app-db
+      - mail
+    depends_on:
+      - my-app-db
+    environment:
+      VIRTUAL_HOST: 'frontend.dev'
+      COMPOSER_BIN_DIR: 'bin'
+      COMPOSER_ALLOW_SUPERUSER: 1
+      COMPOSER_AUTH: '{"github.com": "35f9c827f3bf9e29c36f9d302605ed7137b00767"}'
+      PHINX_DBHOST: 'my-app-db'
+      PHINX_DBNAME: 'my_app_dbname'
+      PHINX_DBUSER: 'root'
+      PHINX_DBPASS: 'admin'
+      PHINX_DBPORT: '3306'
+      #DEV
+      XDEBUG_REMOTE_ENABLE: 1
+      XDEBUG_REMOTE_AUTOSTART: 1
+      XDEBUG_REMOTE_CONNECT_BACK: 0
+      XDEBUG_REMOTE_HOST: '192.168.1.102'
+      XDEBUG_REMOTE_PORT: '9000'
+      XDEBUG_IDEKEY: 'PHPSTORM'
+    user: root
+    #command: 'robo init'
+
+  my-app-db:
+    container_name: my-app-db
+    image: mariadb:latest
+    volumes:
+      - "./db/.data:/var/lib/mysql"
+    ports:
+      - "3306:3306"
+    expose:
+      - "3306"
+    environment:
+      MYSQL_ROOT_PASSWORD: 'admin'
+      VIRTUAL_HOST: my-app-db
+    networks:
+      external_default:
+        ipv4_address: 10.5.0.10
+
+  mail:
+    image: lcidral/mailcatcher.dev:latest
+    container_name: mail
+    ports:
+      - '1025:1025'
+      - '1080:1080'
+    networks:
+      external_default:
+        ipv4_address: 10.5.0.7
+
+  selenium-chrome:
+    container_name: selenium-chrome
+    image: selenium/standalone-chrome-debug:3.0.1-germanium
+    ports:
+      - '4444:4444'
+      - '5900:5900'
+    links:
+      - frontend.dev
+    networks:
+      default:
+      external_default:
+        ipv4_address: 10.5.0.8
+
+  selenium-firefox:
+    container_name: selenium-firefox
+    image: selenium/standalone-firefox-debug:3.0.1-germanium
+    ports:
+      - '4445:4444'
+      - '5901:5900'
+    links:
+      - frontend.dev
+    networks:
+      default:
+      external_default:
+        ipv4_address: 10.5.0.9
+
+networks:
+  external_default:
+    #external: true
+    driver: bridge
+    ipam:
+     config:
+       - subnet: 10.5.0.0/16
+         gateway: 10.5.0.1
