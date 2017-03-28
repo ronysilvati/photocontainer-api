@@ -71,7 +71,7 @@ class UserContextBootstrap implements ContextBootstrap
                     $crypto = $container['CryptoMethod']->hash($data['password']);
                 }
 
-                $action = new UpdateUser($container['EloquentUserRepository']);
+                $action = new UpdateUser(new EloquentUserRepository());
                 $actionResponse = $action->handle($args['id'], $data, $crypto);
 
                 return $response->withJson($actionResponse, $actionResponse->getHttpStatus());
