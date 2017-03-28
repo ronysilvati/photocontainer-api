@@ -77,7 +77,13 @@ class EloquentUserRepository implements UserRepository
 
         $user = new UserDomain($userData['id'], $userData['name'], $userData['email']);
 
-        $userProfile = new Profile(null, $userData['userprofile']['user_id'], $userData['userprofile']['profile_id'], $userData['userprofile']['active']);
+        $userProfile = new Profile(
+            null,
+            $userData['userprofile']['user_id'],
+            $userData['userprofile']['profile_id'],
+            $userData['userprofile']['active']
+        );
+
         $user->changeProfile($userProfile);
 
         if (isset($userData['detail']) && $userData['detail']['id'] > 0) {

@@ -53,6 +53,10 @@ class UpdateUser
                 $user->getDetails()->changePhone($data['details']['phone']);
             }
 
+            if (isset($data['details']['birth'])) {
+                $user->getDetails()->changeBirth($data['details']['birth']);
+            }
+
             $user = $this->userRepository->updateUser($user, $crypto);
             return new UserResponse($user);
         } catch (\Exception $e) {

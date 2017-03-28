@@ -51,6 +51,7 @@ class UserResponse implements \JsonSerializable
                 'instagram' => $this->user->getDetails()->getInstagram(),
                 'phone' => $this->user->getDetails()->getPhone(),
                 'gender' => $this->user->getDetails()->getGender(),
+                'birth' => $this->user->getDetails()->getBirth()
             ];
         }
 
