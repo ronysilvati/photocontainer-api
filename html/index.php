@@ -17,11 +17,11 @@ $container = $app->getContainer();
 
 $container['DatabaseProvider'] = function ($c) {
     $database = new EloquentDatabaseProvider([
-        'host' => '192.168.99.100',
-        'port' => '3306',
-        'database' => 'photocontainer',
-        'user' => 'root',
-        'pwd' => 'root',
+        'host'      => $_ENV['PHINX_DBHOST'],
+        'database'  => $_ENV['PHINX_DBNAME'],
+        'user'      => $_ENV['PHINX_DBUSER'],
+        'pwd'       => $_ENV['PHINX_DBPASS'],
+        'port'      => $_ENV['PHINX_DBPORT'],
     ]);
     return $database;
 };
