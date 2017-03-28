@@ -47,7 +47,7 @@ class User extends AbstractMigration
             ->addColumn('site', 'string', ['limit' => 250, 'null' => true])
             ->addColumn('gender', 'string', ['limit' => 1, 'null' => true])
             ->addColumn('phone', 'string', ['limit' => 50, 'null' => true])
-            ->addColumn('birth', 'datetime', ['null' => true])
+            ->addColumn('birth', 'date', ['null' => true])
             ->addColumn('created_at', 'timestamp')
             ->addColumn('updated_at', 'timestamp', ['null' => true])
             ->create();
