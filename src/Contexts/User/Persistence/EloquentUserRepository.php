@@ -26,7 +26,7 @@ class EloquentUserRepository implements UserRepository
 
             $userModel = new UserModel();
             if ($userModel->where("email", $user->getEmail())->first()) {
-                throw new DomainException("O email nâo está disponível.");
+                throw new \DomainException("O email nâo está disponível.");
             }
 
             $userModel = new UserModel();
@@ -67,16 +67,11 @@ class EloquentUserRepository implements UserRepository
             DB::commit();
 
             return $user;
-        } catch (DomainException $e) {
+        } catch (\DomainException $e) {
             DB::rollback();
             throw $e;
         } catch (\Exception $e) {
             DB::rollback();
-
-            var_dump($e->getMessage());
-            exit;
-
-
             throw new PersistenceException("Erro na criação do usuário!");
         }
     }
