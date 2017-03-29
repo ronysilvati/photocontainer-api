@@ -37,15 +37,17 @@ class Address
         ?string $street,
         ?string $complement)
     {
+
         $this->id = $id;
         $this->user_id = $user_id;
-        $this->zipcode = $zipcode;
-        $this->country = $country;
-        $this->state = $state;
-        $this->city = $city;
-        $this->neighborhood = $neighborhood;
-        $this->street = $street;
-        $this->complement = $complement;
+
+        $this->changeCountry($country);
+        $this->changeZipcode($zipcode);
+        $this->changeState($state);
+        $this->changeCity($city);
+        $this->changeNeighborhood($neighborhood);
+        $this->changeStreet($street);
+        $this->changeComplement($complement);
     }
 
     /**
@@ -58,6 +60,7 @@ class Address
 
     /**
      * @param int|null $id
+     * @return int|null
      */
     public function changeId(?int $id): ?int
     {
@@ -90,9 +93,14 @@ class Address
 
     /**
      * @param null|string $zipcode
+     * @throws \Exception
      */
     public function changeZipcode(?string $zipcode)
     {
+        if ($zipcode === "") {
+            throw new \Exception("O campo CEP deve ser enviado.");
+        }
+
         $this->zipcode = $zipcode;
     }
 
@@ -106,9 +114,14 @@ class Address
 
     /**
      * @param null|string $country
+     * @throws \Exception
      */
     public function changeCountry(?string $country)
     {
+        if ($country === "") {
+            throw new \Exception("O campo País deve ser enviado.");
+        }
+
         $this->country = $country;
     }
 
@@ -122,9 +135,14 @@ class Address
 
     /**
      * @param null|string $state
+     * @throws \Exception
      */
     public function changeState(?string $state)
     {
+        if ($state === "") {
+            throw new \Exception("O campo Estado deve ser enviado.");
+        }
+
         $this->state = $state;
     }
 
@@ -138,9 +156,14 @@ class Address
 
     /**
      * @param null|string $city
+     * @throws \Exception
      */
     public function changeCity(?string $city)
     {
+        if ($city === "") {
+            throw new \Exception("O campo Cidade deve ser enviado.");
+        }
+
         $this->city = $city;
     }
 
@@ -154,9 +177,14 @@ class Address
 
     /**
      * @param null|string $neighborhood
+     * @throws \Exception
      */
     public function changeNeighborhood(?string $neighborhood)
     {
+        if ($neighborhood === "") {
+            throw new \Exception("O campo Bairro deve ser enviado.");
+        }
+
         $this->neighborhood = $neighborhood;
     }
 
@@ -170,9 +198,14 @@ class Address
 
     /**
      * @param null|string $street
+     * @throws \Exception
      */
     public function changeStreet(?string $street)
     {
+        if ($street === "") {
+            throw new \Exception("O campo Logradouro deve ser enviado.");
+        }
+
         $this->street = $street;
     }
 
