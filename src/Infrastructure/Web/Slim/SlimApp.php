@@ -22,6 +22,7 @@ class SlimApp implements WebApp
     {
         $container = $this->app->getContainer();
         $container['DatabaseProvider']->boot();
+        $container['CepRestProvider']->boot();
 
         $this->app->add(new JwtAuthentication([
             "secret" => $conf["secret"],
