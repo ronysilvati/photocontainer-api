@@ -16,7 +16,7 @@ class UpdateUser
         $this->userRepository = $userRepository;
     }
 
-    public function handle(int $id, array $data, string $crypto = null)
+    public function handle(int $id, array $data, ?string $crypto)
     {
         try {
             $user = $this->userRepository->findUser($id);
@@ -30,7 +30,7 @@ class UpdateUser
             }
 
             if (isset($data['details']['blog'])) {
-                $user->getDetails()->changeBlog($data['details']['blog']);
+                $user->changeBlog($data['details']['blog']);
             }
 
             if (isset($data['details']['facebook'])) {

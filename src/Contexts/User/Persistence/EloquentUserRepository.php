@@ -6,21 +6,30 @@ use Illuminate\Database\Capsule\Manager as DB;
 use PhotoContainer\PhotoContainer\Contexts\User\Domain\Details;
 use PhotoContainer\PhotoContainer\Contexts\User\Domain\Profile;
 use PhotoContainer\PhotoContainer\Contexts\User\Domain\UserRepository;
-use PhotoContainer\PhotoContainer\Infrastructure\Entity;
 use PhotoContainer\PhotoContainer\Infrastructure\Persistence\Eloquent\Detail;
-use PhotoContainer\PhotoContainer\Infrastructure\Persistence\Eloquent\User;
+use PhotoContainer\PhotoContainer\Infrastructure\Persistence\Eloquent\User as UserModel;
 use PhotoContainer\PhotoContainer\Infrastructure\Exception\PersistenceException;
 use PhotoContainer\PhotoContainer\Infrastructure\Persistence\Eloquent\UserProfile;
-use PhotoContainer\PhotoContainer\Contexts\User\Domain\User as UserDomain;
+use PhotoContainer\PhotoContainer\Contexts\User\Domain\User;
+use Respect\Validation\Exceptions\DomainException;
 
 class EloquentUserRepository implements UserRepository
 {
-    public function createUser(Entity $user, string $encryptedPwd)
+    public function createUser(User $user, ?string $encryptedPwd)
     {
         try {
             DB::beginTransaction();
 
-            $userModel = new User();
+            if ($encryptedPwd !== null) {
+                $user->changePwd($encryptedPwd);
+            }
+
+            $userModel = new UserModel();
+            if ($userModel->where("email", $user->getEmail())->first()) {
+                throw new DomainException("O email nâo está disponível.");
+            }
+
+            $userModel = new UserModel();
             $userModel->name = $user->getName();
             $userModel->email = $user->getEmail();
             $userModel->password = $encryptedPwd;
@@ -58,24 +67,28 @@ class EloquentUserRepository implements UserRepository
             DB::commit();
 
             return $user;
+        } catch (DomainException $e) {
+            DB::rollback();
+            throw $e;
         } catch (\Exception $e) {
             DB::rollback();
 
-            $exists = $userModel->where("email", $user->getEmail());
-            $msg = $exists ? "O email já existe, favor fornecer outro." : "Erro na criação do usuário!";
+            var_dump($e->getMessage());
+            exit;
 
-            throw new PersistenceException($msg);
+
+            throw new PersistenceException("Erro na criação do usuário!");
         }
     }
 
-    public function findUser(int $id = null, string $email = null)
+    public function findUser(int $id, string $email = null)
     {
-        $userModel = $id ? User::find($id) : User::where('email', $email)->first();
+        $userModel = $id ? UserModel::find($id) : UserModel::where('email', $email)->first();
 
         $userModel->load('detail', 'userprofile');
         $userData = $userModel->toArray();
 
-        $user = new UserDomain($userData['id'], $userData['name'], $userData['email']);
+        $user = new User($userData['id'], $userData['name'], $userData['email']);
 
         $userProfile = new Profile(
             null,
@@ -104,17 +117,18 @@ class EloquentUserRepository implements UserRepository
         return $user;
     }
 
-    public function updateUser(Entity $user, string $encryptedPwd = null)
+    public function updateUser(User $user, ?string $encryptedPwd)
     {
         try {
-            $userModel = User::find($user->getId());
+            $userModel = UserModel::find($user->getId());
 
             $userModel->name = $user->getName();
             $userModel->email = $user->getEmail();
 
-            if ($encryptedPwd) {
-                $userModel->password = $encryptedPwd;
+            if ($encryptedPwd !== null) {
+                $user->changePwd($encryptedPwd);
             }
+
             $userModel->save();
 
             if ($user->getDetails()) {
@@ -139,11 +153,12 @@ class EloquentUserRepository implements UserRepository
             };
 
             return $user;
+        } catch (\DomainException $e) {
+            DB::rollback();
+            throw $e;
         } catch (\Exception $e) {
-            $exists = $userModel->where("email", $user->getEmail());
-            $msg = $exists ? "O email já existe, favor fornecer outro." : "Erro na criação do usuário!";
-
-            throw new PersistenceException($msg);
+            DB::rollback();
+            throw new PersistenceException("Erro na criação do usuário!");
         }
     }
 }

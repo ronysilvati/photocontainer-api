@@ -51,7 +51,7 @@ class UserContextBootstrap implements ContextBootstrap
                 $profile = new Profile(null, null, (int) $data['profile'], null);
                 $user = new User(null, $data['name'], $data['email'], $data['password'], $details, $profile);
 
-                $crypto = $container['CryptoMethod']->hash($data['password']);
+                $crypto = empty($data['password']) ? '' : $container['CryptoMethod']->hash($data['password']);
 
                 $action = new CreateUser(new EloquentUserRepository());
                 $actionResponse = $action->handle($user, $crypto);
@@ -68,7 +68,7 @@ class UserContextBootstrap implements ContextBootstrap
 
                 $crypto = null;
                 if (isset($data['password'])) {
-                    $crypto = $container['CryptoMethod']->hash($data['password']);
+                    $crypto = empty($data['password']) ? '' : $container['CryptoMethod']->hash($data['password']);
                 }
 
                 $action = new UpdateUser(new EloquentUserRepository());

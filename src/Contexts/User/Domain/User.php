@@ -51,6 +51,15 @@ class User implements Entity
         $this->email = $email;
     }
 
+    public function changeBlog(string $blog = null)
+    {
+        if ($this->getProfile()->getProfileId() == Profile::PUBLISHER && empty($blog)) {
+            throw new DomainViolationException("O endereço do blog deve ser enviado!");
+        }
+
+        $this->getDetails()->changeBlog($blog);
+    }
+
     public function changeDetails(Details $details = null)
     {
         if ($this->getProfile()->getProfileId() === Profile::PUBLISHER && empty($details->getBlog())) {
@@ -58,6 +67,15 @@ class User implements Entity
         }
 
         $this->details = $details;
+    }
+
+    public function changePwd(string $pwd)
+    {
+        if (empty($pwd)) {
+            throw new \DomainException("A senha nâo pode ser vazia");
+        }
+
+        $this->pwd = $pwd;
     }
 
     public function changeId(int $id)
