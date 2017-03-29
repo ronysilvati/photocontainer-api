@@ -76,7 +76,7 @@ class EloquentUserRepository implements UserRepository
         }
     }
 
-    public function findUser(int $id, string $email = null)
+    public function findUser(?int $id = null, ?string $email = null)
     {
         $userModel = $id ? UserModel::find($id) : UserModel::where('email', $email)->first();
 
