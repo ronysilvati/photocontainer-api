@@ -16,6 +16,7 @@ class User implements Entity
     protected $profile;
     protected $pwd;
     protected $id;
+    protected $address;
 
     public function __construct(int $id = null, string $name = null, string $email = null, string $pwd = null, Details $details = null, Profile $profile = null)
     {
@@ -135,4 +136,22 @@ class User implements Entity
     {
         return $this->profile;
     }
+
+    /**
+     * @return mixed
+     */
+    public function getAddress(): ?Address
+    {
+        return $this->address;
+    }
+
+    /**
+     * @param mixed $address
+     */
+    public function changeAddress(?Address $address)
+    {
+        $this->address = $address;
+    }
+
+
 }

@@ -5,6 +5,7 @@ namespace PhotoContainer\PhotoContainer\Contexts\User;
 use PhotoContainer\PhotoContainer\Contexts\User\Action\CreateUser;
 use PhotoContainer\PhotoContainer\Contexts\User\Action\FindUser;
 use PhotoContainer\PhotoContainer\Contexts\User\Action\UpdateUser;
+use PhotoContainer\PhotoContainer\Contexts\User\Domain\Address;
 use PhotoContainer\PhotoContainer\Contexts\User\Domain\Details;
 use PhotoContainer\PhotoContainer\Contexts\User\Domain\Profile;
 use PhotoContainer\PhotoContainer\Contexts\User\Domain\User;

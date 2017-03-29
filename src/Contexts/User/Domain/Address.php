@@ -2,7 +2,7 @@
 
 namespace PhotoContainer\PhotoContainer\Contexts\User\Domain;
 
-class Cep
+class Address
 {
     private $id;
     private $user_id;

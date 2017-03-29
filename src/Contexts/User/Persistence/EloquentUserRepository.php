@@ -3,15 +3,16 @@
 namespace PhotoContainer\PhotoContainer\Contexts\User\Persistence;
 
 use Illuminate\Database\Capsule\Manager as DB;
+use PhotoContainer\PhotoContainer\Contexts\User\Domain\Address;
 use PhotoContainer\PhotoContainer\Contexts\User\Domain\Details;
 use PhotoContainer\PhotoContainer\Contexts\User\Domain\Profile;
 use PhotoContainer\PhotoContainer\Contexts\User\Domain\UserRepository;
 use PhotoContainer\PhotoContainer\Infrastructure\Persistence\Eloquent\Detail;
 use PhotoContainer\PhotoContainer\Infrastructure\Persistence\Eloquent\User as UserModel;
+use PhotoContainer\PhotoContainer\Infrastructure\Persistence\Eloquent\Address as AddressModel;
 use PhotoContainer\PhotoContainer\Infrastructure\Exception\PersistenceException;
 use PhotoContainer\PhotoContainer\Infrastructure\Persistence\Eloquent\UserProfile;
 use PhotoContainer\PhotoContainer\Contexts\User\Domain\User;
-use Respect\Validation\Exceptions\DomainException;
 
 class EloquentUserRepository implements UserRepository
 {
@@ -76,11 +77,11 @@ class EloquentUserRepository implements UserRepository
         }
     }
 
-    public function findUser(?int $id = null, ?string $email = null)
+    public function findUser(?int $id = null, ?string $email = null): User
     {
         $userModel = $id ? UserModel::find($id) : UserModel::where('email', $email)->first();
 
-        $userModel->load('detail', 'userprofile');
+        $userModel->load('detail', 'userprofile', 'address');
         $userData = $userModel->toArray();
 
         $user = new User($userData['id'], $userData['name'], $userData['email']);
@@ -91,7 +92,6 @@ class EloquentUserRepository implements UserRepository
             $userData['userprofile']['profile_id'],
             $userData['userprofile']['active']
         );
-
         $user->changeProfile($userProfile);
 
         if (isset($userData['detail']) && $userData['detail']['id'] > 0) {
@@ -108,6 +108,20 @@ class EloquentUserRepository implements UserRepository
             );
             $user->changeDetails($details);
         }
+
+        $address = new Address(null, null,null,null,null, null, null, null, null);
+        if (isset($userData['address']) && $userData['address']['id'] > 0) {
+            $address->changeId($userData['address']['id']);
+            $address->changeUserId($userData['address']['user_id']);
+            $address->changeCountry($userData['address']['country']);
+            $address->changeZipcode($userData['address']['zipcode']);
+            $address->changeState($userData['address']['state']);
+            $address->changeCity($userData[ 'address']['city']);
+            $address->changeStreet($userData[ 'address']['street']);
+            $address->changeNeighborhood($userData['address']['neighborhood']);
+            $address->changeComplement($userData['address']['complement']);
+        }
+        $user->changeAddress($address);
 
         return $user;
     }
@@ -146,6 +160,25 @@ class EloquentUserRepository implements UserRepository
 
                 $user->changeDetails($details);
             };
+
+            if ($user->getAddress()) {
+                $address = $user->getAddress();
+                $addressModel = AddressModel::find($address->getId());
+
+                $addressModel->state = $address->getState();
+                $addressModel->city = $address->getCity();
+                $addressModel->neighborhood = $address->getNeighborhood();
+                $addressModel->complement = $address->getComplement();
+                $addressModel->street = $address->getStreet();
+                $addressModel->zipcode = $address->getZipcode();
+
+                $addressModel->user()->associate($userModel);
+                $addressModel->save();
+
+                $address->changeId($addressModel->id);
+
+                $user->changeAddress($address);
+            }
 
             return $user;
         } catch (\DomainException $e) {
