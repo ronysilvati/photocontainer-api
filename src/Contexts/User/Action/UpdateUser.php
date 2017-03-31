@@ -44,7 +44,7 @@ class UpdateUser
                 $address->changeStreet($data['address']['street']);
                 $address->changeComplement($data['address']['complement']);
 
-                $user->setAddress($address);
+                $user->changeAddress($address);
             }
 
             if (isset($data['details']['facebook'])) {

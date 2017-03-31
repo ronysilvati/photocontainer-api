@@ -17,4 +17,9 @@ class User extends EloquentModel
     {
         return $this->hasOne(UserProfile::class);
     }
+
+    public function address()
+    {
+        return $this->hasOne(Address::class);
+    }
 }

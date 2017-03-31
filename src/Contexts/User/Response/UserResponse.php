@@ -2,22 +2,28 @@
 
 namespace PhotoContainer\PhotoContainer\Contexts\User\Response;
 
+use PhotoContainer\PhotoContainer\Contexts\User\Domain\User;
 use PhotoContainer\PhotoContainer\Infrastructure\Entity;
 
 class UserResponse implements \JsonSerializable
 {
     private $selfReference;
+    private $addressReference;
     private $detailReference;
     private $httpStatus = 200;
     private $user;
 
-    public function __construct(Entity $user)
+    public function __construct(User $user)
     {
         $this->user = $user;
         $this->selfReference = "users/{$this->user->getId()}";
 
         if ($user->getDetails()) {
             $this->detailReference = "details/{$user->getDetails()->getId()}";
+        }
+
+        if ($user->getAddress()->getId() > 0) {
+            $this->addressReference = "details/{$user->getAddress()->getId()}";
         }
     }
 
@@ -52,6 +58,19 @@ class UserResponse implements \JsonSerializable
                 'phone' => $this->user->getDetails()->getPhone(),
                 'gender' => $this->user->getDetails()->getGender(),
                 'birth' => $this->user->getDetails()->getBirth()
+            ];
+        }
+
+        if ($this->addressReference) {
+            $out['_links']['address'] = ['href' => $this->addressReference];
+            $out['address'] = [
+                'zipcode' => $this->user->getAddress()->getZipcode(),
+                'country' => $this->user->getAddress()->getCountry(),
+                'state' => $this->user->getAddress()->getState(),
+                'city' => $this->user->getAddress()->getCity(),
+                'neighborhood' => $this->user->getAddress()->getNeighborhood(),
+                'street' => $this->user->getAddress()->getStreet(),
+                'complement' => $this->user->getAddress()->getComplement(),
             ];
         }
 
