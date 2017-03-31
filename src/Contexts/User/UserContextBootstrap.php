@@ -5,6 +5,7 @@ namespace PhotoContainer\PhotoContainer\Contexts\User;
 use PhotoContainer\PhotoContainer\Contexts\User\Action\CreateUser;
 use PhotoContainer\PhotoContainer\Contexts\User\Action\FindUser;
 use PhotoContainer\PhotoContainer\Contexts\User\Action\UpdateUser;
+use PhotoContainer\PhotoContainer\Contexts\User\Domain\Address;
 use PhotoContainer\PhotoContainer\Contexts\User\Domain\Details;
 use PhotoContainer\PhotoContainer\Contexts\User\Domain\Profile;
 use PhotoContainer\PhotoContainer\Contexts\User\Domain\User;
@@ -51,7 +52,7 @@ class UserContextBootstrap implements ContextBootstrap
                 $profile = new Profile(null, null, (int) $data['profile'], null);
                 $user = new User(null, $data['name'], $data['email'], $data['password'], $details, $profile);
 
-                $crypto = $container['CryptoMethod']->hash($data['password']);
+                $crypto = empty($data['password']) ? '' : $container['CryptoMethod']->hash($data['password']);
 
                 $action = new CreateUser(new EloquentUserRepository());
                 $actionResponse = $action->handle($user, $crypto);
@@ -68,7 +69,7 @@ class UserContextBootstrap implements ContextBootstrap
 
                 $crypto = null;
                 if (isset($data['password'])) {
-                    $crypto = $container['CryptoMethod']->hash($data['password']);
+                    $crypto = empty($data['password']) ? '' : $container['CryptoMethod']->hash($data['password']);
                 }
 
                 $action = new UpdateUser(new EloquentUserRepository());

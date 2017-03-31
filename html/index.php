@@ -3,8 +3,8 @@ error_reporting(E_ALL);
 ini_set("display_errors", true);
 
 use PhotoContainer\PhotoContainer\Infrastructure\Web\Slim\SlimApp;
-use PhotoContainer\PhotoContainer\Contexts\User\Persistence\EloquentUserRepository;
 use PhotoContainer\PhotoContainer\Infrastructure\Persistence\EloquentDatabaseProvider;
+use PhotoContainer\PhotoContainer\Infrastructure\Persistence\RestDatabaseProvider;
 use PhotoContainer\PhotoContainer\Infrastructure\Crypto\BcryptHashing;
 use PhotoContainer\PhotoContainer\Contexts\Event\EventContextBootstrap;
 use PhotoContainer\PhotoContainer\Contexts\User\UserContextBootstrap;
@@ -26,6 +26,13 @@ $container['DatabaseProvider'] = function ($c) {
     return $database;
 };
 
+$container['CepRestProvider'] = function ($c) {
+    $database = new RestDatabaseProvider([
+        'host' => 'https://viacep.com.br/ws/',
+    ]);
+    return $database;
+};
+
 $container['CryptoMethod'] = function ($c) {
     return new BcryptHashing();
 };
@@ -36,7 +43,7 @@ $webApp->bootstrap(
     [
         'secret' => 'secret',
         "api_path" => ["/"],
-        "auth_whitelist" => ["/login", "/users", "/events", "/search", "/event"],
+        "auth_whitelist" => ["/login", "/users", "/events", "/search", "/event", "/location"],
     ]
 );
 
@@ -50,6 +57,9 @@ $eventBoostrap = new UserContextBootstrap();
 $webApp = $eventBoostrap->wireSlimRoutes($webApp);
 
 $eventBoostrap = new \PhotoContainer\PhotoContainer\Contexts\Search\SearchContextBootstrap();
+$webApp = $eventBoostrap->wireSlimRoutes($webApp);
+
+$eventBoostrap = new \PhotoContainer\PhotoContainer\Contexts\Cep\CepContextBootstrap();
 $webApp = $eventBoostrap->wireSlimRoutes($webApp);
 
 $webApp->app->run();

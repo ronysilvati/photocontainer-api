@@ -3,24 +3,34 @@
 namespace PhotoContainer\PhotoContainer\Contexts\User\Persistence;
 
 use Illuminate\Database\Capsule\Manager as DB;
+use PhotoContainer\PhotoContainer\Contexts\User\Domain\Address;
 use PhotoContainer\PhotoContainer\Contexts\User\Domain\Details;
 use PhotoContainer\PhotoContainer\Contexts\User\Domain\Profile;
 use PhotoContainer\PhotoContainer\Contexts\User\Domain\UserRepository;
-use PhotoContainer\PhotoContainer\Infrastructure\Entity;
 use PhotoContainer\PhotoContainer\Infrastructure\Persistence\Eloquent\Detail;
-use PhotoContainer\PhotoContainer\Infrastructure\Persistence\Eloquent\User;
+use PhotoContainer\PhotoContainer\Infrastructure\Persistence\Eloquent\User as UserModel;
+use PhotoContainer\PhotoContainer\Infrastructure\Persistence\Eloquent\Address as AddressModel;
 use PhotoContainer\PhotoContainer\Infrastructure\Exception\PersistenceException;
 use PhotoContainer\PhotoContainer\Infrastructure\Persistence\Eloquent\UserProfile;
-use PhotoContainer\PhotoContainer\Contexts\User\Domain\User as UserDomain;
+use PhotoContainer\PhotoContainer\Contexts\User\Domain\User;
 
 class EloquentUserRepository implements UserRepository
 {
-    public function createUser(Entity $user, string $encryptedPwd)
+    public function createUser(User $user, ?string $encryptedPwd)
     {
         try {
             DB::beginTransaction();
 
-            $userModel = new User();
+            if ($encryptedPwd !== null) {
+                $user->changePwd($encryptedPwd);
+            }
+
+            $userModel = new UserModel();
+            if ($userModel->where("email", $user->getEmail())->first()) {
+                throw new \DomainException("O email nâo está disponível.");
+            }
+
+            $userModel = new UserModel();
             $userModel->name = $user->getName();
             $userModel->email = $user->getEmail();
             $userModel->password = $encryptedPwd;
@@ -58,24 +68,23 @@ class EloquentUserRepository implements UserRepository
             DB::commit();
 
             return $user;
+        } catch (\DomainException $e) {
+            DB::rollback();
+            throw $e;
         } catch (\Exception $e) {
             DB::rollback();
-
-            $exists = $userModel->where("email", $user->getEmail());
-            $msg = $exists ? "O email já existe, favor fornecer outro." : "Erro na criação do usuário!";
-
-            throw new PersistenceException($msg);
+            throw new PersistenceException("Erro na criação do usuário!");
         }
     }
 
-    public function findUser(int $id = null, string $email = null)
+    public function findUser(?int $id = null, ?string $email = null): User
     {
-        $userModel = $id ? User::find($id) : User::where('email', $email)->first();
+        $userModel = $id ? UserModel::find($id) : UserModel::where('email', $email)->first();
 
-        $userModel->load('detail', 'userprofile');
+        $userModel->load('detail', 'userprofile', 'address');
         $userData = $userModel->toArray();
 
-        $user = new UserDomain($userData['id'], $userData['name'], $userData['email']);
+        $user = new User($userData['id'], $userData['name'], $userData['email']);
 
         $userProfile = new Profile(
             null,
@@ -83,7 +92,6 @@ class EloquentUserRepository implements UserRepository
             $userData['userprofile']['profile_id'],
             $userData['userprofile']['active']
         );
-
         $user->changeProfile($userProfile);
 
         if (isset($userData['detail']) && $userData['detail']['id'] > 0) {
@@ -101,20 +109,35 @@ class EloquentUserRepository implements UserRepository
             $user->changeDetails($details);
         }
 
+        $address = new Address(null, null,null,null,null, null, null, null, null);
+        if (isset($userData['address']) && $userData['address']['id'] > 0) {
+            $address->changeId($userData['address']['id']);
+            $address->changeUserId($userData['address']['user_id']);
+            $address->changeCountry($userData['address']['country']);
+            $address->changeZipcode($userData['address']['zipcode']);
+            $address->changeState($userData['address']['state']);
+            $address->changeCity($userData[ 'address']['city']);
+            $address->changeStreet($userData[ 'address']['street']);
+            $address->changeNeighborhood($userData['address']['neighborhood']);
+            $address->changeComplement($userData['address']['complement']);
+        }
+        $user->changeAddress($address);
+
         return $user;
     }
 
-    public function updateUser(Entity $user, string $encryptedPwd = null)
+    public function updateUser(User $user, ?string $encryptedPwd)
     {
         try {
-            $userModel = User::find($user->getId());
+            $userModel = UserModel::find($user->getId());
 
             $userModel->name = $user->getName();
             $userModel->email = $user->getEmail();
 
-            if ($encryptedPwd) {
-                $userModel->password = $encryptedPwd;
+            if ($encryptedPwd !== null) {
+                $user->changePwd($encryptedPwd);
             }
+
             $userModel->save();
 
             if ($user->getDetails()) {
@@ -138,12 +161,32 @@ class EloquentUserRepository implements UserRepository
                 $user->changeDetails($details);
             };
 
-            return $user;
-        } catch (\Exception $e) {
-            $exists = $userModel->where("email", $user->getEmail());
-            $msg = $exists ? "O email já existe, favor fornecer outro." : "Erro na criação do usuário!";
+            if ($user->getAddress()) {
+                $address = $user->getAddress();
+                $addressModel = AddressModel::find($address->getId());
 
-            throw new PersistenceException($msg);
+                $addressModel->state = $address->getState();
+                $addressModel->city = $address->getCity();
+                $addressModel->neighborhood = $address->getNeighborhood();
+                $addressModel->complement = $address->getComplement();
+                $addressModel->street = $address->getStreet();
+                $addressModel->zipcode = $address->getZipcode();
+
+                $addressModel->user()->associate($userModel);
+                $addressModel->save();
+
+                $address->changeId($addressModel->id);
+
+                $user->changeAddress($address);
+            }
+
+            return $user;
+        } catch (\DomainException $e) {
+            DB::rollback();
+            throw $e;
+        } catch (\Exception $e) {
+            DB::rollback();
+            throw new PersistenceException("Erro na criação do usuário!");
         }
     }
 }
