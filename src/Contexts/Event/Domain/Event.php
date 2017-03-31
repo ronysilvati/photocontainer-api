@@ -34,6 +34,7 @@ class Event
                                 array $categories,
                                 array $tags)
     {
+        $this->changeId($id);
         $this->changeTitle($title);
         $this->changeBride($bride);
         $this->changeGroom($groom);
@@ -60,7 +61,7 @@ class Event
     /**
      * @param mixed $id
      */
-    public function changeId(int $id)
+    public function changeId(?int $id)
     {
         $this->id = $id;
     }

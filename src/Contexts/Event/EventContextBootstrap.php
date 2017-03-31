@@ -4,6 +4,7 @@ namespace PhotoContainer\PhotoContainer\Contexts\Event;
 
 use PhotoContainer\PhotoContainer\Contexts\Event\Action\CreateEvent;
 use PhotoContainer\PhotoContainer\Contexts\Event\Action\CreateFavorite;
+use PhotoContainer\PhotoContainer\Contexts\Event\Action\FindEvent;
 use PhotoContainer\PhotoContainer\Contexts\Event\Domain\Event;
 use PhotoContainer\PhotoContainer\Contexts\Event\Domain\EventCategory;
 use PhotoContainer\PhotoContainer\Contexts\Event\Domain\EventTag;
@@ -21,6 +22,16 @@ class EventContextBootstrap implements ContextBootstrap
     public function wireSlimRoutes(WebApp $slimApp): WebApp
     {
         $container = $slimApp->app->getContainer();
+
+        $slimApp->app->get('/events', function (ServerRequestInterface $request, ResponseInterface $response) use ($container) {
+            $args = $request->getQueryParams();
+            $id = isset($args['id']) ? $args['id'] : null;
+
+            $action = new FindEvent(new EloquentEventRepository());
+            $actionResponse = $action->handle($id);
+
+            return $response->withJson($actionResponse, $actionResponse->getHttpStatus());
+        });
 
         $slimApp->app->post('/events', function (ServerRequestInterface $request, ResponseInterface $response) use ($container) {
             try {

@@ -4,15 +4,17 @@ namespace PhotoContainer\PhotoContainer\Contexts\Event\Persistence;
 
 use PhotoContainer\PhotoContainer\Contexts\Event\Domain\Event;
 use PhotoContainer\PhotoContainer\Contexts\Event\Domain\EventRepository;
+use PhotoContainer\PhotoContainer\Contexts\Event\Domain\EventTag;
 use PhotoContainer\PhotoContainer\Contexts\Event\Domain\Favorite;
 use PhotoContainer\PhotoContainer\Contexts\Event\Domain\Photographer;
 use PhotoContainer\PhotoContainer\Contexts\Event\Domain\Publisher;
-use PhotoContainer\PhotoContainer\Infrastructure\Persistence\Eloquent\EventCategory;
-use PhotoContainer\PhotoContainer\Infrastructure\Persistence\Eloquent\User;
+use PhotoContainer\PhotoContainer\Contexts\Event\Domain\EventCategory;
 use PhotoContainer\PhotoContainer\Infrastructure\Exception\PersistenceException;
 use PhotoContainer\PhotoContainer\Infrastructure\Persistence\Eloquent\Event as EventModel;
-use PhotoContainer\PhotoContainer\Infrastructure\Persistence\Eloquent\EventTag;
+use PhotoContainer\PhotoContainer\Infrastructure\Persistence\Eloquent\EventCategory as EventCategoryModel;
 use PhotoContainer\PhotoContainer\Infrastructure\Persistence\Eloquent\EventFavorite;
+use PhotoContainer\PhotoContainer\Infrastructure\Persistence\Eloquent\EventTag as EventTagModel;
+use PhotoContainer\PhotoContainer\Infrastructure\Persistence\Eloquent\User;
 
 class EloquentEventRepository implements EventRepository
 {
@@ -36,12 +38,12 @@ class EloquentEventRepository implements EventRepository
 
             $categories = $event->getCategories();
             foreach ($categories as $cat) {
-                EventCategory::create(['event_id' => $event->getId(), 'category_id' => $cat->getCategoryId()]);
+                EventCategoryModel::create(['event_id' => $event->getId(), 'category_id' => $cat->getCategoryId()]);
             }
 
             $tags = $event->getTags();
             foreach ($tags as $tag) {
-                EventTag::create(['event_id' => $event->getId(), 'tag_id' => $tag->getTagId()]);
+                EventTagModel::create(['event_id' => $event->getId(), 'tag_id' => $tag->getTagId()]);
             }
 
             return $event;
@@ -53,16 +55,40 @@ class EloquentEventRepository implements EventRepository
     public function find(int $id): Event
     {
         try {
-            $eventData = EventModel::find($id);
+            $eventModel = EventModel::find($id);
+            $eventData = $eventModel->load('EventCategory', 'EventTag', 'User')->toArray();
 
-            $photographer = new Photographer($eventData->user_id);
+            $photographer = new Photographer($eventData['user']['id'], null, null);
 
-//            $event = new Event($id, $photographer, $eventData->bride, $eventData->groom, $eventData,);
+            $categories = [];
+            foreach ($eventData['event_category'] as $category) {
+                $categories[] = new EventCategory($eventData['id'], $category['category_id']);
+            }
+
+            $tags = [];
+            foreach ($eventData['event_tag'] as $tag) {
+                $tags[] = new EventTag($eventData['id'], $tag['tag_id']);
+            }
+
+            return new Event(
+                $eventData['id'],
+                $photographer,
+                $eventData['bride'],
+                $eventData['groom'],
+                $eventData['eventdate'],
+                $eventData['title'],
+                $eventData['description'],
+                $eventData['terms'],
+                $eventData['approval_general'],
+                $eventData['approval_photographer'],
+                $eventData['approval_bride'],
+                $categories,
+                $tags
+            );
         } catch (\Exception $e) {
             throw new PersistenceException($e->getMessage());
         }
     }
-
 
     public function findPhotographer(Photographer $photographer)
     {
