@@ -62,7 +62,7 @@ class Address
      * @param int|null $id
      * @return int|null
      */
-    public function changeId(?int $id): ?int
+    public function changeId(?int $id)
     {
         $this->id = $id;
     }

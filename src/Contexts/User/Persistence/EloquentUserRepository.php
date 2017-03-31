@@ -165,6 +165,11 @@ class EloquentUserRepository implements UserRepository
                 $address = $user->getAddress();
                 $addressModel = AddressModel::find($address->getId());
 
+                if ($addressModel == null) {
+                    $addressModel = new AddressModel();
+                }
+
+                $addressModel->country = $address->getCountry();
                 $addressModel->state = $address->getState();
                 $addressModel->city = $address->getCity();
                 $addressModel->neighborhood = $address->getNeighborhood();
