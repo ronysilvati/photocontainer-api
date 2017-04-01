@@ -14,9 +14,9 @@ class EventCollectionResponse implements \JsonSerializable
 
     function jsonSerialize()
     {
-        $out = [];
-        foreach ($this->collection as $search) {
-            $out[] = [
+        $out = ['total' => $this->collection['total'], 'result' => []];
+        foreach ($this->collection['result'] as $search) {
+            $out['result'][] = [
                 "id" => $search->getId(),
                 "photographer" => $search->getPhotographer()->getName(),
                 "photographer_id" => $search->getPhotographer()->getId(),
