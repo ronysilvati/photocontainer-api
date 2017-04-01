@@ -10,19 +10,23 @@ class EventSearch
     private $eventdate;
     private $categories;
     private $tags;
+    private $page;
 
     public function __construct(
         int $id = null,
         ?Photographer $photographer,
         ?string $title ,
         ?array $categories,
-        ?array $tags)
+        ?array $tags,
+        int $page = 1)
     {
         $this->changeId($id);
         $this->changeTitle($title);
         $this->changePhotographer($photographer);
         $this->changeCategories($categories);
         $this->changeTags($tags);
+
+        $this->page = $page;
     }
 
     /**
@@ -122,5 +126,11 @@ class EventSearch
         $this->tags = $tags;
     }
 
-
+    /**
+     * @return mixed
+     */
+    public function getPage(): int
+    {
+        return $this->page;
+    }
 }

@@ -22,7 +22,7 @@ class UserResponse implements \JsonSerializable
             $this->detailReference = "details/{$user->getDetails()->getId()}";
         }
 
-        if ($user->getAddress()->getId() > 0) {
+        if ($user->getAddress() && $user->getAddress()->getId() > 0) {
             $this->addressReference = "details/{$user->getAddress()->getId()}";
         }
     }

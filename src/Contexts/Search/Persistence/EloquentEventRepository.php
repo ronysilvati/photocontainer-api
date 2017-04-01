@@ -47,7 +47,11 @@ class EloquentEventRepository implements EventRepository
                 ->groupBy('id', 'category_id', 'category')
                 ->get(['id', 'user_id', 'name', 'title', 'eventdate', 'category_id', 'category']);
 
-            return $eventSearch->map(function ($item, $key) {
+            $out = ['total' => $eventSearch->count()];
+
+            $eventSearch = $eventSearch->forPage($search->getPage(), 15);
+
+            $out['result'] = $eventSearch->map(function ($item, $key) {
                 $category = new Category($item->category_id, $item->category);
                 $photographer = new Photographer($item->user_id, $item->name);
 
@@ -56,6 +60,8 @@ class EloquentEventRepository implements EventRepository
 
                 return $search;
             })->toArray();
+
+            return $out;
         } catch (\Exception $e) {
             var_dump($e->getMessage());
             exit;

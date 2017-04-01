@@ -29,6 +29,7 @@ class SearchContextBootstrap implements ContextBootstrap
 
                 $keyword = isset($args['keyword']) ? $args['keyword'] : null;
                 $photographer = new Photographer((int) $args['photographer'] ?? $args['photographer']);
+                $page = isset($args['page']) ? $args['page'] : 1 ;
 
                 $allCategories = null;
                 if (!empty($args['categories'])) {
@@ -46,7 +47,7 @@ class SearchContextBootstrap implements ContextBootstrap
                     }
                 }
 
-                $search = new EventSearch(null, $photographer, $keyword, $allCategories, $allTags);
+                $search = new EventSearch(null, $photographer, $keyword, $allCategories, $allTags, $page);
 
                 $action = new FindEvent(new EloquentEventRepository());
                 $actionResponse = $action->handle($search);

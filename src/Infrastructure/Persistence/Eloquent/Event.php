@@ -12,4 +12,14 @@ class Event extends EloquentModel
     {
         return $this->belongsTo(User::class);
     }
+
+    public function eventCategory()
+    {
+        return $this->hasMany(EventCategory::class);
+    }
+
+    public function eventTag()
+    {
+        return $this->hasMany(EventTag::class);
+    }
 }
