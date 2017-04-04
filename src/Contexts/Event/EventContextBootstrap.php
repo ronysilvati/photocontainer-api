@@ -14,6 +14,7 @@ use PhotoContainer\PhotoContainer\Contexts\Event\Domain\EventTag;
 use PhotoContainer\PhotoContainer\Contexts\Event\Domain\Favorite;
 use PhotoContainer\PhotoContainer\Contexts\Event\Domain\Photographer;
 use PhotoContainer\PhotoContainer\Contexts\Event\Domain\Publisher;
+use PhotoContainer\PhotoContainer\Contexts\Event\Domain\Suppliers;
 use PhotoContainer\PhotoContainer\Contexts\Event\Persistence\EloquentEventRepository;
 use PhotoContainer\PhotoContainer\Infrastructure\ContextBootstrap;
 use PhotoContainer\PhotoContainer\Infrastructure\Web\WebApp;
@@ -55,7 +56,7 @@ class EventContextBootstrap implements ContextBootstrap
                 $event = new Event(null, $user, $data['bride'], $data['groom'], $data['eventDate'],
                     $data['title'], $data['description'], (bool) $data['terms'], (bool) $data['approval_general'],
                     (bool) $data['approval_photographer'], (bool) $data['approval_bride'], $allCategories,
-                    $allTags);
+                    $allTags, new Suppliers(null, null,null));
 
                 $action = new CreateEvent(new EloquentEventRepository());
                 $actionResponse = $action->handle($event);
