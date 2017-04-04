@@ -93,7 +93,7 @@ class Photo implements Entity
     {
         $path_parts = pathinfo($physicalName);
         $extension = $path_parts['extension'];
-        $uuid = Uuid::uuid5(Uuid::NAMESPACE_DNS, $this->event_id)->toString();
+        $uuid = Uuid::uuid5(Uuid::NAMESPACE_DNS, $this->event_id.$physicalName)->toString();
         $new_filename = basename($uuid) . "." . $extension;
 
         $this->physicalName = $new_filename;
