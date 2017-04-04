@@ -44,7 +44,9 @@ class FilesystemPhotoRepository implements PhotoRepository
 
             // thumb
             $original_file = $shared_path . '/' . $event_dir . '/' . $photo->getPhysicalName();
-            $image = $manager->make($original_file)->resize(1280, 847);
+            $image = $manager->make($original_file)->resize(null, 847, function ($constraint) {
+                $constraint->aspectRatio();
+            });
             $thumb_target_file =  $shared_path . '/' . $event_dir . '/T' . $photo->getPhysicalName();
             $image->save($thumb_target_file);
 
