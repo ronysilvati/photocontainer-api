@@ -52,7 +52,7 @@ class FilesystemPhotoRepository implements PhotoRepository
 
             // watermark
             $watermark_target_file =  $shared_path . '/' . $event_dir . '/W' . $photo->getPhysicalName();
-            $image = $manager->make($thumb_target_file)->insert($watermark_path, 'right-right', 100, 100);
+            $image = $manager->make($thumb_target_file)->insert($watermark_path, 'bottom-right', 0, 0);
             $image->save($watermark_target_file);
 
             return $photo;
