@@ -8,7 +8,10 @@ use PhotoContainer\PhotoContainer\Infrastructure\Persistence\RestDatabaseProvide
 use PhotoContainer\PhotoContainer\Infrastructure\Crypto\BcryptHashing;
 use PhotoContainer\PhotoContainer\Contexts\Event\EventContextBootstrap;
 use PhotoContainer\PhotoContainer\Contexts\User\UserContextBootstrap;
-use PhotoContainer\PhotoContainer\Contexts\Event\AuthContextBootstrap;
+use PhotoContainer\PhotoContainer\Contexts\Auth\AuthContextBootstrap;
+use PhotoContainer\PhotoContainer\Contexts\Photo\PhotoContextBootstrap;
+use PhotoContainer\PhotoContainer\Contexts\Search\SearchContextBootstrap;
+use PhotoContainer\PhotoContainer\Contexts\Cep\CepContextBootstrap;
 
 require '../vendor/autoload.php';
 
@@ -43,11 +46,19 @@ $webApp->bootstrap(
     [
         'secret' => 'secret',
         "api_path" => ["/"],
-        "auth_whitelist" => ["/login", "/users", "/events", "/search", "/event", "/location"],
+        "auth_whitelist" => [
+            "/login",
+            "/users",
+            "/events",
+            "/search",
+            "/event",
+            "/location",
+            "/photo",
+        ],
     ]
 );
 
-$eventBoostrap = new \PhotoContainer\PhotoContainer\Contexts\Auth\AuthContextBootstrap();
+$eventBoostrap = new AuthContextBootstrap();
 $webApp = $eventBoostrap->wireSlimRoutes($webApp);
 
 $eventBoostrap = new EventContextBootstrap();
@@ -56,10 +67,13 @@ $webApp = $eventBoostrap->wireSlimRoutes($webApp);
 $eventBoostrap = new UserContextBootstrap();
 $webApp = $eventBoostrap->wireSlimRoutes($webApp);
 
-$eventBoostrap = new \PhotoContainer\PhotoContainer\Contexts\Search\SearchContextBootstrap();
+$eventBoostrap = new SearchContextBootstrap();
 $webApp = $eventBoostrap->wireSlimRoutes($webApp);
 
-$eventBoostrap = new \PhotoContainer\PhotoContainer\Contexts\Cep\CepContextBootstrap();
+$eventBoostrap = new CepContextBootstrap();
 $webApp = $eventBoostrap->wireSlimRoutes($webApp);
+
+$photoBoostrap = new PhotoContextBootstrap();
+$webApp = $photoBoostrap->wireSlimRoutes($webApp);
 
 $webApp->app->run();

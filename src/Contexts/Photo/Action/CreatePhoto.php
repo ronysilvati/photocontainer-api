@@ -3,6 +3,7 @@
 namespace PhotoContainer\PhotoContainer\Contexts\Photo\Action;
 
 use PhotoContainer\PhotoContainer\Contexts\Photo\Domain\PhotoRepository;
+use PhotoContainer\PhotoContainer\Contexts\Photo\Response\PhotoResponse;
 use PhotoContainer\PhotoContainer\Contexts\User\Response\DomainExceptionResponse;
 
 class CreatePhoto
@@ -30,6 +31,7 @@ class CreatePhoto
                     $this->fsRepo->rollback($item);
                 }
             }
+            return new PhotoResponse($array);
         } catch (\Exception $e) {
             return new DomainExceptionResponse($e->getMessage());
         }

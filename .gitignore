@@ -49,4 +49,6 @@ Temporary Items
 .database/
 .idea/
 vendor/
+shared/
+db/.data/
 *.phar
