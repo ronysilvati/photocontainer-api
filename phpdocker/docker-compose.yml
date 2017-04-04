@@ -12,7 +12,7 @@ services:
     container_name: photo.api
     image: lcidral/php-7.1.2-apache:latest
     volumes:
-      - ../html:/var/www/html:rw
+      - ../public:/var/www/html:rw
       - ../shared:/var/www/shared
       - ..:/var/www:rw
     links:
