@@ -3,12 +3,14 @@
 namespace PhotoContainer\PhotoContainer\Contexts\Photo\Domain;
 
 use PhotoContainer\PhotoContainer\Infrastructure\Entity;
+use Ramsey\Uuid\Uuid;
 
 class Photo implements Entity
 {
+    public $file;
+
     private $id;
     private $event_id;
-    private $file;
     private $physicalName;
 
     /**
@@ -51,9 +53,9 @@ class Photo implements Entity
     /**
      * @param int|null $event_id
      */
-    public function changeEventId(?$event_id = null)
+    public function changeEventId($event_id = null)
     {
-        if ($this->event_id === null) {
+        if ($event_id === null) {
             throw new \DomainException("A foto deve possuir um evento.");
         }
 
@@ -89,7 +91,12 @@ class Photo implements Entity
      */
     public function changePhysicalName(?string $physicalName)
     {
-        $this->physicalName = $physicalName;
+        $path_parts = pathinfo($physicalName);
+        $extension = $path_parts['extension'];
+        $uuid = Uuid::uuid5(Uuid::NAMESPACE_DNS, $this->event_id)->toString();
+        $new_filename = basename($uuid) . "." . $extension;
+
+        $this->physicalName = $new_filename;
     }
 
 

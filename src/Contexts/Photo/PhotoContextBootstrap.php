@@ -24,19 +24,23 @@ class PhotoContextBootstrap implements ContextBootstrap
 
                 $action = new CreatePhoto(new EloquentPhotoRepository(), new FilesystemPhotoRepository());
 
+                $event_id = (int) $data['event_id'];
+
                 $allPhotos = [];
-                foreach ($data as $photo) {
-                    foreach ($photo as $fields) {
-                        $allPhotos[] = new Photo(null, $fields['event_id'], $fields['file']);
-                    }
+                foreach ($_FILES as $photo) {
+                    $allPhotos[] = new Photo(null, $event_id, $photo, $photo['tmp_name']);
                 }
-                
+
                 $actionResponse = $action->handle($allPhotos);
 
                 return $response->withJson($actionResponse, $actionResponse->getHttpStatus());
             } catch (\Exception $e) {
                 return $response->withJson(['message' => $e->getMessage()], 500);
             }
-        });    }
+        });
+
+        return $slimApp;
+
+    }
 
 }

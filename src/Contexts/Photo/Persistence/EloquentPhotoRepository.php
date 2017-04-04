@@ -9,7 +9,9 @@ class EloquentPhotoRepository implements PhotoRepository
 {
     public function create(Photo $conf): Photo
     {
-        // TODO: Implement create() method.
+        // TODO: persistem em banco de dados
+
+        return $conf;
     }
 
 }

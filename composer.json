@@ -7,7 +7,10 @@
         "robmorgan/phinx": "^0.8.0",
         "tuupola/slim-jwt-auth": "^2.3",
         "firebase/php-jwt": "^4.0",
-        "guzzlehttp/guzzle": "^6.2"
+        "guzzlehttp/guzzle": "^6.2",
+        "intervention/image": "^2.3",
+        "ramsey/uuid": "^3.6",
+        "league/flysystem-aws-s3-v3": "^1.0"
     },
 
     "autoload": {
