@@ -15,6 +15,7 @@ use PhotoContainer\PhotoContainer\Infrastructure\Persistence\Eloquent\EventCateg
 use PhotoContainer\PhotoContainer\Infrastructure\Persistence\Eloquent\EventFavorite;
 use PhotoContainer\PhotoContainer\Infrastructure\Persistence\Eloquent\EventTag as EventTagModel;
 use PhotoContainer\PhotoContainer\Infrastructure\Persistence\Eloquent\User;
+use Symfony\Component\Config\Definition\Exception\Exception;
 
 class EloquentEventRepository implements EventRepository
 {
@@ -50,6 +51,62 @@ class EloquentEventRepository implements EventRepository
         } catch (\Exception $e) {
             throw new PersistenceException($e->getMessage());
         }
+    }
+
+    public function saveEventTags(array $eventTags, int $id)
+    {
+        try {
+            EventTagModel::where('event_id', $id)->delete();
+
+            foreach ($eventTags as $tag) {
+                EventTagModel::create(['event_id' => $tag->getEventId(), 'tag_id' => $tag->getTagId()]);
+            }
+
+            return $eventTags;
+        } catch (\Exception $e) {
+            throw new PersistenceException($e->getMessage());
+        }
+    }
+
+    public function update(int $id, array $data, Event $event): Event
+    {
+        try {
+            $event->changeGroom($data['groom']);
+            $event->changeBride($data['bride']);
+            $event->changeTitle($data['title']);
+            $event->changeDescription($data['description']);
+            $event->changeEventDate($data['eventDate']);
+            $event->getTerms($data['terms']);
+            $event->getApprovalGeneral($data['approval_general']);
+            $event->getApprovalPhotographer($data['approval_photographer']);
+            $event->getApprovalBride($data['approval_bride']);
+
+            $eventModel = EventModel::find($id);
+            $eventModel->groom = $event->getGroom();
+            $eventModel->bride = $event->getBride();
+            $eventModel->eventdate = $event->getEventDate();
+            $eventModel->title = $event->getTitle();
+            $eventModel->description = $event->getDescription();
+            $eventModel->terms = $event->getTerms();
+            $eventModel->approval_general = $event->getApprovalGeneral();
+            $eventModel->approval_photographer = $event->getApprovalPhotographer();
+            $eventModel->approval_bride = $event->getApprovalBride();
+            $eventModel->user_id = $event->getPhotographer()->getId();
+            $eventModel->save();
+
+            EventCategoryModel::where(['event_id' => $event->getId()])->delete();
+
+            $categories = $event->getCategories();
+            foreach ($categories as $cat) {
+                EventCategoryModel::create(['event_id' => $event->getId(), 'category_id' => $cat->getCategoryId()]);
+            }
+
+            return $event;
+        } catch (\Exception $e) {
+            throw new PersistenceException($e->getMessage());
+        }
+
+        // TODO: Implement update() method.
     }
 
     public function find(int $id): Event

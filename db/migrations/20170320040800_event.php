@@ -41,6 +41,7 @@ class Event extends AbstractMigration
             ->addColumn('approval_photographer', 'boolean', ['null' => true])
             ->addColumn('approval_bride', 'boolean', ['null' => true])
             ->addColumn('active', 'boolean', ['default' => true])
+            ->addColumn('status', 'enum', ['values' => ['draft', 'finalized'], 'default' => 'draft'])
             ->addColumn('created_at', 'timestamp')
             ->addColumn('updated_at', 'timestamp', ['null' => true])
             ->addIndex(['title'])
