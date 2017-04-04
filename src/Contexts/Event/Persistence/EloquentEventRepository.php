@@ -9,12 +9,15 @@ use PhotoContainer\PhotoContainer\Contexts\Event\Domain\Favorite;
 use PhotoContainer\PhotoContainer\Contexts\Event\Domain\Photographer;
 use PhotoContainer\PhotoContainer\Contexts\Event\Domain\Publisher;
 use PhotoContainer\PhotoContainer\Contexts\Event\Domain\EventCategory;
+use PhotoContainer\PhotoContainer\Contexts\Event\Domain\Suppliers;
 use PhotoContainer\PhotoContainer\Infrastructure\Exception\PersistenceException;
 use PhotoContainer\PhotoContainer\Infrastructure\Persistence\Eloquent\Event as EventModel;
 use PhotoContainer\PhotoContainer\Infrastructure\Persistence\Eloquent\EventCategory as EventCategoryModel;
 use PhotoContainer\PhotoContainer\Infrastructure\Persistence\Eloquent\EventFavorite;
+use PhotoContainer\PhotoContainer\Infrastructure\Persistence\Eloquent\EventSuppliers;
 use PhotoContainer\PhotoContainer\Infrastructure\Persistence\Eloquent\EventTag as EventTagModel;
 use PhotoContainer\PhotoContainer\Infrastructure\Persistence\Eloquent\User;
+use Respect\Validation\Rules\Even;
 use Symfony\Component\Config\Definition\Exception\Exception;
 
 class EloquentEventRepository implements EventRepository
@@ -63,6 +66,25 @@ class EloquentEventRepository implements EventRepository
             }
 
             return $eventTags;
+        } catch (\Exception $e) {
+            throw new PersistenceException($e->getMessage());
+        }
+    }
+
+    public function saveEventSuppliers(string $suppliers, int $id)
+    {
+        try {
+            $model = EventSuppliers::where('event_id', $id)->first();
+
+            if (!$model) {
+                $model = new EventSuppliers();
+                $model->event_id = $id;
+            }
+
+            $model->suppliers = $suppliers;
+            $model->save();
+
+            return new Suppliers($model->id, $id, $model->suppliers);
         } catch (\Exception $e) {
             throw new PersistenceException($e->getMessage());
         }
@@ -127,6 +149,9 @@ class EloquentEventRepository implements EventRepository
                 $tags[] = new EventTag($eventData['id'], $tag['tag_id']);
             }
 
+            $suppliersData = EventSuppliers::where('event_id', $id)->first();
+            $suppliers = new Suppliers($suppliersData->id, $suppliersData->event_id, $suppliersData->suppliers);
+
             return new Event(
                 $eventData['id'],
                 $photographer,
@@ -140,7 +165,8 @@ class EloquentEventRepository implements EventRepository
                 $eventData['approval_photographer'],
                 $eventData['approval_bride'],
                 $categories,
-                $tags
+                $tags,
+                $suppliers
             );
         } catch (\Exception $e) {
             throw new PersistenceException($e->getMessage());

@@ -6,6 +6,7 @@ interface EventRepository
 {
     public function create(Event $event);
     public function saveEventTags(array $eventTags, int $id);
+    public function saveEventSuppliers(string $suppliers, int $id);
     public function update(int $id, array $data, Event $event): Event;
     public function find(int $id): Event;
     public function findPhotographer(Photographer $photographer);

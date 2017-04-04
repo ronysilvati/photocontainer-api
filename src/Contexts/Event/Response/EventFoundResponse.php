@@ -39,6 +39,7 @@ class EventFoundResponse implements \JsonSerializable
             "approval" => $this->event->getApprovalGeneral(),
             "categories" => $categories,
             "tags" => $tags,
+            "suppliers" => $this->event->getSuppliers()->getSuppliers(),
             "_links" => [
                 "_self" => ['href' => "/events/{$this->event->getId()}"],
             ],

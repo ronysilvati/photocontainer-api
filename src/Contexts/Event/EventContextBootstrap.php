@@ -6,6 +6,7 @@ use PhotoContainer\PhotoContainer\Contexts\Event\Action\CreateEvent;
 use PhotoContainer\PhotoContainer\Contexts\Event\Action\CreateFavorite;
 use PhotoContainer\PhotoContainer\Contexts\Event\Action\FindEvent;
 use PhotoContainer\PhotoContainer\Contexts\Event\Action\UpdateEvent;
+use PhotoContainer\PhotoContainer\Contexts\Event\Action\UpdateSuppliers;
 use PhotoContainer\PhotoContainer\Contexts\Event\Action\UpdateTags;
 use PhotoContainer\PhotoContainer\Contexts\Event\Domain\Event;
 use PhotoContainer\PhotoContainer\Contexts\Event\Domain\EventCategory;
@@ -118,6 +119,24 @@ class EventContextBootstrap implements ContextBootstrap
                 return $response->withJson(['message' => $e->getMessage()], 500);
             }
         });
+
+        $slimApp->app->post('/events/{id}/suppliers', function (ServerRequestInterface $request, ResponseInterface $response, $args) use ($container) {
+            try {
+                $data = $request->getParsedBody();
+
+                if (empty($data)) {
+                    return $response->withJson(['message' => 'Fornecedores não enviados.'], 204);
+                }
+
+                $action = new UpdateSuppliers(new EloquentEventRepository());
+                $actionResponse = $action->handle($data, $args["id"]);
+
+                return $response->withJson($actionResponse, $actionResponse->getHttpStatus());
+            } catch (\Exception $e) {
+                return $response->withJson(['message' => $e->getMessage()], 500);
+            }
+        });
+
 
         return $slimApp;
     }

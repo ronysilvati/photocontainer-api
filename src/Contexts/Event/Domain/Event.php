@@ -20,6 +20,11 @@ class Event
     private $tags;
     private $favorites;
 
+    /**
+     * @var Suppliers
+     */
+    private $suppliers;
+
     public function __construct(int $id = null,
                                 Photographer $photographer,
                                 string $bride,
@@ -32,7 +37,8 @@ class Event
                                 bool $approval_photographer = null,
                                 bool $approval_bride = null,
                                 array $categories,
-                                array $tags)
+                                array $tags,
+                                Suppliers $suppliers)
     {
         $this->changeId($id);
         $this->changeTitle($title);
@@ -48,6 +54,7 @@ class Event
         $this->changePhotographer($photographer);
         $this->changeCategories($categories);
         $this->changeTags($tags);
+        $this->changeSuppliers($suppliers);
     }
 
     /**
@@ -285,5 +292,21 @@ class Event
     public function changeFavorites(array $favorites)
     {
         $this->favorites = $favorites;
+    }
+
+    /**
+     * @return Suppliers
+     */
+    public function getSuppliers(): ?Suppliers
+    {
+        return $this->suppliers;
+    }
+
+    /**
+     * @param Suppliers $suppliers
+     */
+    public function changeSuppliers(?Suppliers $suppliers)
+    {
+        $this->suppliers = $suppliers;
     }
 }
