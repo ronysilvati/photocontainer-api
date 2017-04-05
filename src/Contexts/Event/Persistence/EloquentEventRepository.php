@@ -150,7 +150,7 @@ class EloquentEventRepository implements EventRepository
             }
 
             $suppliersData = EventSuppliers::where('event_id', $id)->first();
-            $suppliers = new Suppliers($suppliersData->id, $suppliersData->event_id, $suppliersData->suppliers);
+            $suppliers = new Suppliers($suppliersData->id ?? null, $suppliersData->event_id ?? null, $suppliersData->suppliers ?? null);
 
             return new Event(
                 $eventData['id'],
