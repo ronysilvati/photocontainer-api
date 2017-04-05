@@ -16,7 +16,7 @@ class EventCollectionResponse implements \JsonSerializable
     {
         $out = ['total' => $this->collection['total'], 'result' => []];
         foreach ($this->collection['result'] as $search) {
-            $out['result'][] = [
+            $data = [
                 "id" => $search->getId(),
                 "photographer" => $search->getPhotographer()->getName(),
                 "photographer_id" => $search->getPhotographer()->getId(),
@@ -25,10 +25,17 @@ class EventCollectionResponse implements \JsonSerializable
                 "category" => $search->getCategories()[0]->getDescription(),
                 "thumb" => "user/themes/photo-container-site/_temp/photos/1.jpg",
                 "photos" => $search->getPhotos(),
+                "likes" => $search->getLikes(),
                 "_links" => [
                     "_self" => ['href' => '/events/'.$search->getId()],
                 ],
             ];
+
+            if ($search->getPublisher()) {
+                $data['publisher_like'] = $search->isPublisherLike();
+            }
+
+            $out['result'][] = $data;
         }
 
         return $out;

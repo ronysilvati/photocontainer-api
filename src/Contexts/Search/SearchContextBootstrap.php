@@ -8,6 +8,7 @@ use PhotoContainer\PhotoContainer\Contexts\Search\Action\FindTags;
 use PhotoContainer\PhotoContainer\Contexts\Search\Domain\Category;
 use PhotoContainer\PhotoContainer\Contexts\Search\Domain\EventSearch;
 use PhotoContainer\PhotoContainer\Contexts\Search\Domain\Photographer;
+use PhotoContainer\PhotoContainer\Contexts\Search\Domain\Publisher;
 use PhotoContainer\PhotoContainer\Contexts\Search\Domain\Tag;
 use PhotoContainer\PhotoContainer\Contexts\Search\Persistence\EloquentCategoryRepository;
 use PhotoContainer\PhotoContainer\Contexts\Search\Persistence\EloquentEventRepository;
@@ -48,6 +49,10 @@ class SearchContextBootstrap implements ContextBootstrap
                 }
 
                 $search = new EventSearch(null, $photographer, $keyword, $allCategories, $allTags, $page);
+
+                if (!empty($args['publisher'])) {
+                    $search->changePublisher(new Publisher((int) $args['publisher'] ?? $args['publisher']));
+                }
 
                 $action = new FindEvent(new EloquentEventRepository());
                 $actionResponse = $action->handle($search);

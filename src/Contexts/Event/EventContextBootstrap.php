@@ -5,6 +5,7 @@ namespace PhotoContainer\PhotoContainer\Contexts\Event;
 use PhotoContainer\PhotoContainer\Contexts\Event\Action\CreateEvent;
 use PhotoContainer\PhotoContainer\Contexts\Event\Action\CreateFavorite;
 use PhotoContainer\PhotoContainer\Contexts\Event\Action\DeleteEvent;
+use PhotoContainer\PhotoContainer\Contexts\Event\Action\DeleteFavorite;
 use PhotoContainer\PhotoContainer\Contexts\Event\Action\FindEvent;
 use PhotoContainer\PhotoContainer\Contexts\Event\Action\UpdateEvent;
 use PhotoContainer\PhotoContainer\Contexts\Event\Action\UpdateSuppliers;
@@ -96,7 +97,7 @@ class EventContextBootstrap implements ContextBootstrap
             }
         });
 
-        $slimApp->app->post('/event/s{event_id}/favorite/publisher/{publisher_id}', function (ServerRequestInterface $request, ResponseInterface $response, $args) use ($container) {
+        $slimApp->app->post('/events/{event_id}/favorite/publisher/{publisher_id}', function (ServerRequestInterface $request, ResponseInterface $response, $args) use ($container) {
             $publisher = new Publisher($args['publisher_id'], null, null);
             $favorite = new Favorite(null, $publisher, $args['event_id']);
 
@@ -104,13 +105,16 @@ class EventContextBootstrap implements ContextBootstrap
             $actionResponse = $action->handle($favorite);
 
             return $response->withJson($actionResponse, $actionResponse->getHttpStatus());
-
-            var_dump($publisher);
-            exit;
         });
 
-        $slimApp->app->delete('/events/{event_id}/favorite/{favorite_id}', function (ServerRequestInterface $request, ResponseInterface $response, $args) use ($container) {
-            $favorite = new Favorite($args['id'], $publisher, $args['event_id']);
+        $slimApp->app->delete('/events/{event_id}/favorite/publisher/{publisher_id}', function (ServerRequestInterface $request, ResponseInterface $response, $args) use ($container) {
+            $publisher = new Publisher($args['publisher_id'], null, null);
+            $favorite = new Favorite(null, $publisher, $args['event_id']);
+
+            $action = new DeleteFavorite(new EloquentEventRepository());
+            $actionResponse = $action->handle($favorite);
+
+            return $response->withJson($actionResponse, $actionResponse->getHttpStatus());
         });
 
         $slimApp->app->post('/events/{id}/tags', function (ServerRequestInterface $request, ResponseInterface $response, $args) use ($container) {

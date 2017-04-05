@@ -13,6 +13,6 @@ interface EventRepository
     public function findPhotographer(Photographer $photographer);
     public function findPublisher(Publisher $publisher);
     public function createFavorite(Favorite $favorite): Favorite;
-    public function removeFavorite(Favorite $favorite): bool;
+    public function removeFavorite(Favorite $favorite): Favorite;
     public function findFavorite(Favorite $favorite): Favorite;
 }

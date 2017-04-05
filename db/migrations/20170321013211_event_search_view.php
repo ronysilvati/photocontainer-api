@@ -16,7 +16,8 @@ class EventSearchView extends AbstractMigration
                          c.id as category_id,
                          GROUP_CONCAT(c.description) as category,
                          t.id as tag_id,
-                         (SELECT COUNT(id) as total FROM photos WHERE e.id = event_id) as photos
+                         (SELECT COUNT(id) as total FROM photos WHERE e.id = event_id) as photos,
+                         (SELECT COUNT(id) as total FROM event_favorites WHERE e.id = event_id) as likes
                 FROM users as u
                     INNER JOIN events as e
                       ON u.id = e.user_id

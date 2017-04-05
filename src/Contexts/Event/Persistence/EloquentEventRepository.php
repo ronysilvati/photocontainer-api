@@ -229,16 +229,28 @@ class EloquentEventRepository implements EventRepository
             $eventFavorite->event_id = $favorite->getEventId();
             $eventFavorite->save();
 
+            $favorite->changeTotalLikes(EventFavorite::where('event_id', $favorite->getEventId())->count());
             $favorite->changeId($eventFavorite->id);
+
             return $favorite;
         } catch (\Exception $e) {
             throw new PersistenceException("Erro na criação do favorito!");
         }
     }
 
-    public function removeFavorite(Favorite $favorite): bool
+    public function removeFavorite(Favorite $favorite): Favorite
     {
-        // TODO: Implement removeFavorite() method.
+        try {
+            EventFavorite::where('event_id', $favorite->getEventId())
+                ->where('user_id', $favorite->getPublisher()->getId())
+                ->delete();
+
+            $favorite->changeTotalLikes(EventFavorite::where('event_id', $favorite->getEventId())->count());
+
+            return $favorite;
+        } catch (\Exception $e) {
+            throw new PersistenceException($e->getMessage());
+        }
     }
 
     public function findFavorite(Favorite $favorite): Favorite

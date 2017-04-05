@@ -4,10 +4,10 @@ namespace PhotoContainer\PhotoContainer\Contexts\Event\Response;
 
 use PhotoContainer\PhotoContainer\Contexts\Event\Domain\Favorite;
 
-class FavoriteCreatedResponse implements \JsonSerializable
+class FavoriteRemovedResponse implements \JsonSerializable
 {
-    private $httpStatus = 201;
     private $favorite;
+    private $selfReference;
 
     public function __construct(Favorite $favorite)
     {
@@ -18,7 +18,6 @@ class FavoriteCreatedResponse implements \JsonSerializable
     function jsonSerialize()
     {
         return [
-            "id" => $this->favorite->getId(),
             'event_id' => $this->favorite->getEventId(),
             "totalLikes" => $this->favorite->getTotalLikes(),
             "_links" => [
@@ -32,7 +31,6 @@ class FavoriteCreatedResponse implements \JsonSerializable
      */
     public function getHttpStatus(): int
     {
-        return $this->httpStatus;
+        return 201;
     }
-
 }

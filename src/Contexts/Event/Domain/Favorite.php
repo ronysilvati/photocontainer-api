@@ -11,6 +11,11 @@ class Favorite implements Entity
     private $event_id;
 
     /**
+     * @var int
+     */
+    private $totalLikes;
+
+    /**
      * Favorite constructor.
      * @param int|null $id
      * @param Publisher $publisher
@@ -70,5 +75,22 @@ class Favorite implements Entity
     {
         $this->event_id = $event_id;
     }
+
+    /**
+     * @return int
+     */
+    public function getTotalLikes(): ?int
+    {
+        return $this->totalLikes;
+    }
+
+    /**
+     * @param int|null $totalLikes
+     */
+    public function changeTotalLikes(?int $totalLikes)
+    {
+        $this->totalLikes = $totalLikes;
+    }
+
 
 }

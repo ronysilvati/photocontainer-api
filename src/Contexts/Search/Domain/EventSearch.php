@@ -13,6 +13,21 @@ class EventSearch
     private $page;
     private $photos;
 
+    /**
+     * @var Publisher
+     */
+    private $publisher;
+
+    /**
+     * @var int
+     */
+    private $likes;
+
+    /**
+     * @var bool
+     */
+    private $publisherLike;
+
     public function __construct(
         int $id = null,
         ?Photographer $photographer,
@@ -149,6 +164,54 @@ class EventSearch
     public function changePhotos(?int $photos)
     {
         $this->photos = $photos;
+    }
+
+    /**
+     * @return int
+     */
+    public function getLikes(): ?int
+    {
+        return $this->likes;
+    }
+
+    /**
+     * @param int $likes
+     */
+    public function changeLikes(?int $likes)
+    {
+        $this->likes = $likes;
+    }
+
+    /**
+     * @return Publisher
+     */
+    public function getPublisher(): ?Publisher
+    {
+        return $this->publisher;
+    }
+
+    /**
+     * @param Publisher $publisher
+     */
+    public function changePublisher(?Publisher $publisher)
+    {
+        $this->publisher = $publisher;
+    }
+
+    /**
+     * @return bool
+     */
+    public function isPublisherLike(): bool
+    {
+        return $this->publisherLike == null ? false : $this->publisherLike;
+    }
+
+    /**
+     * @param bool $publisherLike
+     */
+    public function changePublisherLike(bool $publisherLike)
+    {
+        $this->publisherLike = $publisherLike;
     }
 
 
