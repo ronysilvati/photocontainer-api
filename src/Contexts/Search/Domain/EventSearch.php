@@ -11,11 +11,12 @@ class EventSearch
     private $categories;
     private $tags;
     private $page;
+    private $photos;
 
     public function __construct(
         int $id = null,
         ?Photographer $photographer,
-        ?string $title ,
+        ?string $title,
         ?array $categories,
         ?array $tags,
         int $page = 1)
@@ -133,4 +134,22 @@ class EventSearch
     {
         return $this->page;
     }
+
+    /**
+     * @return mixed
+     */
+    public function getPhotos(): ?int
+    {
+        return $this->photos;
+    }
+
+    /**
+     * @param mixed $photos
+     */
+    public function changePhotos(?int $photos)
+    {
+        $this->photos = $photos;
+    }
+
+
 }

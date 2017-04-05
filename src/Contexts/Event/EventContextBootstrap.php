@@ -4,6 +4,7 @@ namespace PhotoContainer\PhotoContainer\Contexts\Event;
 
 use PhotoContainer\PhotoContainer\Contexts\Event\Action\CreateEvent;
 use PhotoContainer\PhotoContainer\Contexts\Event\Action\CreateFavorite;
+use PhotoContainer\PhotoContainer\Contexts\Event\Action\DeleteEvent;
 use PhotoContainer\PhotoContainer\Contexts\Event\Action\FindEvent;
 use PhotoContainer\PhotoContainer\Contexts\Event\Action\UpdateEvent;
 use PhotoContainer\PhotoContainer\Contexts\Event\Action\UpdateSuppliers;
@@ -60,6 +61,20 @@ class EventContextBootstrap implements ContextBootstrap
 
                 $action = new CreateEvent(new EloquentEventRepository());
                 $actionResponse = $action->handle($event);
+
+                return $response->withJson($actionResponse, $actionResponse->getHttpStatus());
+            } catch (\Exception $e) {
+                return $response->withJson(['message' => $e->getMessage()], 500);
+            }
+        });
+
+        $slimApp->app->delete('/events/{id}', function (ServerRequestInterface $request, ResponseInterface $response, $args) use ($container) {
+            try {
+                $data = $request->getParsedBody();
+                $id = isset($args['id']) ? $args['id'] : null;
+
+                $action = new DeleteEvent(new EloquentEventRepository());
+                $actionResponse = $action->handle($id);
 
                 return $response->withJson($actionResponse, $actionResponse->getHttpStatus());
             } catch (\Exception $e) {
@@ -137,7 +152,6 @@ class EventContextBootstrap implements ContextBootstrap
                 return $response->withJson(['message' => $e->getMessage()], 500);
             }
         });
-
 
         return $slimApp;
     }

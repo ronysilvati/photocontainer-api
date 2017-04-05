@@ -15,7 +15,8 @@ class EventSearchView extends AbstractMigration
                          date(eventdate) as eventdate,
                          c.id as category_id,
                          GROUP_CONCAT(c.description) as category,
-                         t.id as tag_id
+                         t.id as tag_id,
+                         (SELECT COUNT(id) as total FROM photos WHERE e.id = event_id) as photos
                 FROM users as u
                     INNER JOIN events as e
                       ON u.id = e.user_id
@@ -26,7 +27,8 @@ class EventSearchView extends AbstractMigration
                     LEFT JOIN event_tags as et
                       ON e.id = et.event_id
                     LEFT JOIN tags as t
-                      ON t.id = et.tag_id	 
+                      ON t.id = et.tag_id
+                WHERE e.active = 1      	 
                 GROUP BY e.id, c.id, t.id;";
 
         $this->execute($sql);

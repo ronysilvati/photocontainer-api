@@ -45,7 +45,7 @@ class EloquentEventRepository implements EventRepository
 
             $eventSearch = EventSearchModel::where($where)
                 ->groupBy('id', 'category_id', 'category')
-                ->get(['id', 'user_id', 'name', 'title', 'eventdate', 'category_id', 'category']);
+                ->get(['id', 'user_id', 'name', 'title', 'eventdate', 'category_id', 'category', 'photos']);
 
             $out = ['total' => $eventSearch->count()];
 
@@ -57,6 +57,7 @@ class EloquentEventRepository implements EventRepository
 
                 $search = new EventSearch($item->id, $photographer, $item->title, [$category], null);
                 $search->changeEventdate($item->eventdate);
+                $search->changePhotos($item->photos);
 
                 return $search;
             })->toArray();

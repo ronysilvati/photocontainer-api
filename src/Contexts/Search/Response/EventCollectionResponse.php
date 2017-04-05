@@ -24,6 +24,7 @@ class EventCollectionResponse implements \JsonSerializable
                 "eventdate" => $search->getEventdate(),
                 "category" => $search->getCategories()[0]->getDescription(),
                 "thumb" => "user/themes/photo-container-site/_temp/photos/1.jpg",
+                "photos" => $search->getPhotos(),
                 "_links" => [
                     "_self" => ['href' => '/events/'.$search->getId()],
                 ],

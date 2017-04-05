@@ -90,6 +90,19 @@ class EloquentEventRepository implements EventRepository
         }
     }
 
+    public function delete(int $id): bool
+    {
+        try {
+            $event = EventModel::find($id);
+            $event->active = 0;
+            $event->save();
+
+            return true;
+        } catch (\Exception $e) {
+            throw new PersistenceException($e->getMessage());
+        }
+    }
+
     public function update(int $id, array $data, Event $event): Event
     {
         try {
