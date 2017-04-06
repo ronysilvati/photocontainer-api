@@ -23,6 +23,10 @@ class RestCepRepository implements CepRepository
 
             $cepData = json_decode($response->getBody()->getContents());
 
+            if (property_exists($cepData, 'erro') && $cepData->erro) {
+                throw new \Exception("Erro no retorno do CEP.");
+            }
+
             $cep->changeCountry('Brasil');
             $cep->changeState($cepData->uf);
             $cep->changeCity($cepData->localidade);
