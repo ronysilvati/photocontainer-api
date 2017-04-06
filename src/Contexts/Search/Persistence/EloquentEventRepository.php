@@ -73,7 +73,6 @@ class EloquentEventRepository implements EventRepository
                         $search->changePublisherLike($total > 0);
                     }
                 }
-
                 return $search;
             })->toArray();
 

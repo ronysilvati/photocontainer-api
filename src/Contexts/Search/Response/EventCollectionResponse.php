@@ -26,6 +26,7 @@ class EventCollectionResponse implements \JsonSerializable
                 "thumb" => "user/themes/photo-container-site/_temp/photos/1.jpg",
                 "photos" => $search->getPhotos(),
                 "likes" => $search->getLikes(),
+                "context" => $search->getSearchContext(),
                 "_links" => [
                     "_self" => ['href' => '/events/'.$search->getId()],
                 ],
