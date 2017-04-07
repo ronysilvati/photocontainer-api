@@ -8,4 +8,9 @@ class EventCategory extends EloquentModel
 {
     protected $fillable = ['event_id', 'category_id'];
     protected $table = 'event_categories';
+
+    public function category()
+    {
+        return $this->belongsTo(Category::class);
+    }
 }

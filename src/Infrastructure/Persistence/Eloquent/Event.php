@@ -22,4 +22,9 @@ class Event extends EloquentModel
     {
         return $this->hasMany(EventTag::class);
     }
+
+    public function photo()
+    {
+        return $this->hasMany(Photo::class);
+    }
 }

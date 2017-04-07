@@ -4,6 +4,7 @@ namespace PhotoContainer\PhotoContainer\Contexts\Search;
 
 use PhotoContainer\PhotoContainer\Contexts\Search\Action\FindCategories;
 use PhotoContainer\PhotoContainer\Contexts\Search\Action\FindEvent;
+use PhotoContainer\PhotoContainer\Contexts\Search\Action\FindEventPhotos;
 use PhotoContainer\PhotoContainer\Contexts\Search\Action\FindTags;
 use PhotoContainer\PhotoContainer\Contexts\Search\Domain\Category;
 use PhotoContainer\PhotoContainer\Contexts\Search\Domain\EventSearch;
@@ -78,6 +79,17 @@ class SearchContextBootstrap implements ContextBootstrap
             try {
                 $action = new FindTags(new EloquentTagRepository());
                 $actionResponse = $action->handle();
+
+                return $response->withJson($actionResponse, $actionResponse->getHttpStatus());
+            } catch (\Exception $e) {
+                return $response->withJson(['message' => $e->getMessage()], 500);
+            }
+        });
+
+        $slimApp->app->get('/search/events/{id}/photos', function (ServerRequestInterface $request, ResponseInterface $response, $args) use ($container) {
+            try {
+                $action = new FindEventPhotos(new EloquentEventRepository());
+                $actionResponse = $action->handle($args['id']);
 
                 return $response->withJson($actionResponse, $actionResponse->getHttpStatus());
             } catch (\Exception $e) {

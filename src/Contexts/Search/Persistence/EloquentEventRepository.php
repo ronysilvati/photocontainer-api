@@ -6,6 +6,9 @@ use PhotoContainer\PhotoContainer\Contexts\Search\Domain\Category;
 use PhotoContainer\PhotoContainer\Contexts\Search\Domain\EventRepository;
 use PhotoContainer\PhotoContainer\Contexts\Search\Domain\EventSearch;
 use PhotoContainer\PhotoContainer\Contexts\Search\Domain\Photographer;
+use PhotoContainer\PhotoContainer\Contexts\Search\Domain\Event;
+use PhotoContainer\PhotoContainer\Infrastructure\Exception\PersistenceException;
+use PhotoContainer\PhotoContainer\Infrastructure\Persistence\Eloquent\Event as EventModel;
 use PhotoContainer\PhotoContainer\Infrastructure\Persistence\Eloquent\EventFavorite;
 use PhotoContainer\PhotoContainer\Infrastructure\Persistence\Eloquent\EventSearch as EventSearchModel;
 
@@ -83,5 +86,34 @@ class EloquentEventRepository implements EventRepository
         }
     }
 
+    public function findEventPhotos(int $id)
+    {
+        try {
+            $eventModel = EventModel::find($id);
+            $eventData = $eventModel->load('EventCategory', 'User', 'Photo')->toArray();
 
+            $categories = $eventModel->EventCategory->load('Category')->toArray();
+
+            $photos = [];
+            foreach ($eventData['photo'] as $photo) {
+                $photos[] = [
+                    'id' => $photo['id'],
+                    "thumb" => "http://192.168.99.100/user/themes/photo-container-site/_temp/photos/1.jpg",
+//                    'thumb' => $photo['uuid'],
+                    'download' => $photo['uuid'],
+                    'context' => 'gallery_photos_publisher',
+                ];
+            }
+
+            return new Event(
+                $eventData['id'],
+                $eventData['title'],
+                $eventData['user']['name'],
+                $categories[0]['category']['description'],
+                $photos
+            );
+        } catch (\Exception $e) {
+            throw new PersistenceException($e->getMessage());
+        }
+    }
 }
