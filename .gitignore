@@ -49,6 +49,6 @@ Temporary Items
 .database/
 .idea/
 vendor/
-shared/*
+shared/events/*
 db/.data/
 *.phar

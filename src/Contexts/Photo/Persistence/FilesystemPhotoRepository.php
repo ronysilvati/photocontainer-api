@@ -30,7 +30,6 @@ class FilesystemPhotoRepository implements PhotoRepository
             ]);
 
             $filesystem = new Filesystem($localAdapter);
-            $filesystem->createDir($photo->getEventId());
             $filesystem->createDir($photo->getFilePath('protected'));
             $filesystem->createDir($photo->getFilePath('thumb'));
             $filesystem->createDir($photo->getFilePath('watermark'));

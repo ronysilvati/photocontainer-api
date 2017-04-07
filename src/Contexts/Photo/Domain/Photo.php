@@ -107,7 +107,7 @@ class Photo implements Entity
      */
     public function getFilePath(?string $thatFolder, $with_shared_path = false, $with_filename = false) {
 
-        $file_path = $this->getEventId() . '/' . $thatFolder;
+        $file_path = 'events/' . $this->getEventId() . '/' . $thatFolder;
 
         if ($with_shared_path) $file_path = $_ENV['SHARED_PATH'] . '/' . $file_path;
         if ($with_filename) $file_path = $file_path . '/' .  $this->getPhysicalName();
