@@ -30,11 +30,10 @@ class CreatePhotoTable extends AbstractMigration
         $photos = $this->table('photos');
         $photos->addColumn('event_id', 'integer')
             ->addForeignKey('event_id', 'events', 'id', ['delete'=> 'RESTRICT', 'update'=> 'NO_ACTION'])
-            ->addColumn('name', 'string', ['limit' => 60, 'null' => false])
-            ->addColumn('uuid', 'string', ['limit' => 36, 'null' => false])
-            ->addColumn('downloads', 'integer', ['signed' => 'unsigned'])
+            ->addColumn('filename', 'string', ['limit' => 40, 'null' => false])
             ->addColumn('created_at', 'timestamp')
             ->addColumn('updated_at', 'timestamp', ['null' => true])
+            ->addIndex(['filename', 'event_id'], ['unique' => true])
             ->create();
     }
 }

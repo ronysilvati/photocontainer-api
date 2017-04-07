@@ -4,14 +4,25 @@ namespace PhotoContainer\PhotoContainer\Contexts\Photo\Persistence;
 
 use PhotoContainer\PhotoContainer\Contexts\Photo\Domain\Photo;
 use PhotoContainer\PhotoContainer\Contexts\Photo\Domain\PhotoRepository;
+use PhotoContainer\PhotoContainer\Infrastructure\Persistence\Eloquent\Photo as PhotoModel;
+use PhotoContainer\PhotoContainer\Infrastructure\Exception\PersistenceException;
 
 class EloquentPhotoRepository implements PhotoRepository
 {
-    public function create(Photo $conf): Photo
+    public function create(Photo $photo): Photo
     {
-        // TODO: persistem em banco de dados
+        try {
+            $photoModel = new PhotoModel();
+            $photoModel->event_id = $photo->getEventId();
+            $photoModel->filename = $photo->getPhysicalName();
+            $photoModel->save();
 
-        return $conf;
+            $photo->changeId($photoModel->id);
+
+            return $photo;
+        } catch (\Exception $e) {
+            throw new PersistenceException($e->getMessage());
+        }
     }
 
 }
