@@ -51,5 +51,6 @@ class EloquentPhotoRepository implements PhotoRepository
             return $photo;
         } catch (\Exception $e) {
             throw new PersistenceException($e->getMessage());
-        }    }
+        }
+    }
 }
