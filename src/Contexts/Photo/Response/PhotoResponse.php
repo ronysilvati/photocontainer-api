@@ -6,17 +6,28 @@ use PhotoContainer\PhotoContainer\Contexts\Photo\Domain\Photo;
 
 class PhotoResponse implements \JsonSerializable
 {
-    private $photo;
+    private $photos;
 
     public function __construct(array $photo)
     {
-        $this->photo = $photo;
+        $this->photos = $photo;
     }
 
     function jsonSerialize()
     {
-        // TODO: retorno mais certinho
-        return $this->photo;
+        $photo_added = [];
+        foreach ($this->photos as $photo) {
+            $photo_added[] = [
+                'id' => $photo->getId(),
+                'event_id' => $photo->getEventId(),
+                'filename' => $photo->getPhysicalName(),
+                'protected' => $photo->getFilePath('protected', false, false),
+                'thumb' => $photo->getFilePath('thumb', false, false),
+                'watermark' => $photo->getFilePath('watermark', false, false)
+            ];
+        }
+
+        return $photo_added;
     }
 
     /**
