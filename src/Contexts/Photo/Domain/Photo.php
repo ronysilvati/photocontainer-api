@@ -24,6 +24,10 @@ class Photo implements Entity
         $this->changeId($id);
         $this->changeEventId($event_id);
         $this->changeFile($file);
+
+        if ($physicalName != null) {
+            $this->changePhysicalName($physicalName);
+        }
     }
 
     /**
@@ -92,6 +96,7 @@ class Photo implements Entity
     public function changePhysicalName(?string $physicalName)
     {
         $path_parts = pathinfo($physicalName);
+
         $extension = $path_parts['extension'];
         $uuid = Uuid::uuid5(Uuid::NAMESPACE_DNS, $this->event_id.$physicalName)->toString();
         $new_filename = basename($uuid) . "." . $extension;
@@ -109,8 +114,10 @@ class Photo implements Entity
 
         $file_path = 'events/' . $this->getEventId() . '/' . $thatFolder;
 
+        $file_path = $file_path[-1] == "/" ? $file_path : $file_path."/";
+
         if ($with_shared_path) $file_path = $_ENV['SHARED_PATH'] . '/' . $file_path;
-        if ($with_filename) $file_path = $file_path . '/' .  $this->getPhysicalName();
+        if ($with_filename) $file_path = $file_path . $this->getPhysicalName();
 
         return $file_path;
     }

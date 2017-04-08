@@ -4,6 +4,8 @@ namespace PhotoContainer\PhotoContainer\Contexts\Photo;
 
 use PhotoContainer\PhotoContainer\Contexts\Event\Persistence\EloquentTagRepository;
 use PhotoContainer\PhotoContainer\Contexts\Photo\Action\CreatePhoto;
+use PhotoContainer\PhotoContainer\Contexts\Photo\Action\DownloadPhoto;
+use PhotoContainer\PhotoContainer\Contexts\Photo\Domain\Download;
 use PhotoContainer\PhotoContainer\Contexts\Photo\Domain\Photo;
 use PhotoContainer\PhotoContainer\Contexts\Photo\Persistence\EloquentPhotoRepository;
 use PhotoContainer\PhotoContainer\Contexts\Photo\Persistence\FilesystemPhotoRepository;
@@ -39,8 +41,21 @@ class PhotoContextBootstrap implements ContextBootstrap
             }
         });
 
-        return $slimApp;
+        $slimApp->app->get('/photo/{photo_id}/user/{user_id}/download', function (ServerRequestInterface $request, ResponseInterface $response, $args) use ($container) {
+            try {
+                $data = $request->getParsedBody();
 
+                $action = new DownloadPhoto(new EloquentPhotoRepository(), new FilesystemPhotoRepository());
+                $actionResponse = $action->handle((int) $args['photo_id'], (int) $args['user_id']);
+
+                exit;
+
+                return $response->withJson($actionResponse, $actionResponse->getHttpStatus());
+            } catch (\Exception $e) {
+                return $response->withJson(['message' => $e->getMessage()], 500);
+            }
+        });
+        return $slimApp;
     }
 
 }

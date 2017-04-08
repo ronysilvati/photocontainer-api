@@ -2,6 +2,8 @@
 
 namespace PhotoContainer\PhotoContainer\Contexts\Photo\Persistence;
 
+use Intervention\Image\Image;
+use PhotoContainer\PhotoContainer\Contexts\Photo\Domain\Download;
 use PhotoContainer\PhotoContainer\Contexts\Photo\Domain\Photo;
 use PhotoContainer\PhotoContainer\Contexts\Photo\Domain\PhotoRepository;
 use Intervention\Image\ImageManager;
@@ -60,6 +62,30 @@ class FilesystemPhotoRepository implements PhotoRepository
         } catch (\Exception $e) {
             throw $e;
         }
+    }
+
+    public function download(Download $download)
+    {
+        try {
+            $filename = $download->getPhoto()->getFilePath('protected', true, true);
+
+            $manager = new ImageManager();
+            $img = $manager->make($filename);
+
+            echo 1;
+//        $img->response();
+            exit;
+
+            return $download;
+        } catch (\Exception $e) {
+            var_dump($e->getMessage());
+            exit;
+        }
+    }
+
+    public function find(int $id): Photo
+    {
+        // TODO: Implement find() method.
     }
 
     public function rollback(Photo $photo)
