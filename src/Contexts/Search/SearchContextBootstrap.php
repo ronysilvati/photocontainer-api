@@ -3,6 +3,7 @@
 namespace PhotoContainer\PhotoContainer\Contexts\Search;
 
 use PhotoContainer\PhotoContainer\Contexts\Search\Action\FindCategories;
+use PhotoContainer\PhotoContainer\Contexts\Search\Action\FindDownloadedPhotos;
 use PhotoContainer\PhotoContainer\Contexts\Search\Action\FindEvent;
 use PhotoContainer\PhotoContainer\Contexts\Search\Action\FindEventPhotos;
 use PhotoContainer\PhotoContainer\Contexts\Search\Action\FindTags;
@@ -13,6 +14,7 @@ use PhotoContainer\PhotoContainer\Contexts\Search\Domain\Publisher;
 use PhotoContainer\PhotoContainer\Contexts\Search\Domain\Tag;
 use PhotoContainer\PhotoContainer\Contexts\Search\Persistence\EloquentCategoryRepository;
 use PhotoContainer\PhotoContainer\Contexts\Search\Persistence\EloquentEventRepository;
+use PhotoContainer\PhotoContainer\Contexts\Search\Persistence\EloquentPhotoRepository;
 use PhotoContainer\PhotoContainer\Contexts\Search\Persistence\EloquentTagRepository;
 use PhotoContainer\PhotoContainer\Infrastructure\ContextBootstrap;
 use PhotoContainer\PhotoContainer\Infrastructure\Web\WebApp;
@@ -90,6 +92,17 @@ class SearchContextBootstrap implements ContextBootstrap
             try {
                 $action = new FindEventPhotos(new EloquentEventRepository());
                 $actionResponse = $action->handle($args['id']);
+
+                return $response->withJson($actionResponse, $actionResponse->getHttpStatus());
+            } catch (\Exception $e) {
+                return $response->withJson(['message' => $e->getMessage()], 500);
+            }
+        });
+
+        $slimApp->app->get('/search/photo/user/{publisher_id}/downloads', function (ServerRequestInterface $request, ResponseInterface $response, $args) use ($container) {
+            try {
+                $action = new FindDownloadedPhotos(new EloquentPhotoRepository());
+                $actionResponse = $action->handle($args['publisher_id']);
 
                 return $response->withJson($actionResponse, $actionResponse->getHttpStatus());
             } catch (\Exception $e) {

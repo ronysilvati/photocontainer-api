@@ -59,6 +59,17 @@ class EventSearchView extends AbstractMigration
                     ON t.id = et.tag_id
                 WHERE e.active = 1 and exists (SELECT COUNT(id) as total FROM photos WHERE e.id = event_id GROUP BY id)
                 GROUP BY e.id, c.id, t.id;");
+
+        $this->execute("
+        DROP VIEW IF EXISTS event_search_publisher_download;
+        CREATE VIEW event_search_publisher_download AS
+        SELECT photo_id, user_id, event_id, filename
+        FROM
+            downloads as d
+            INNER JOIN photos as p
+                ON d.photo_id = p.id
+        GROUP BY d.user_id, d.photo_id
+        ORDER BY d.created_at DESC;");
     }
 
     /**
@@ -67,5 +78,7 @@ class EventSearchView extends AbstractMigration
     public function down()
     {
         $this->execute("DROP VIEW IF EXISTS event_search;");
+        $this->execute("DROP VIEW IF EXISTS event_search_publisher;");
+        $this->execute("DROP VIEW IF EXISTS event_search_publisher_download;");
     }
 }
