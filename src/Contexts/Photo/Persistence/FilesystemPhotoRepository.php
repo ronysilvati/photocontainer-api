@@ -51,12 +51,12 @@ class FilesystemPhotoRepository implements PhotoRepository
                 $constraint->aspectRatio();
             });
             $thumb_target_file = $photo->getFilePath('thumb', true, true);
-            $image->save($thumb_target_file, 50);
+            $image->save($thumb_target_file, 40);
 
             // watermark
             $watermark_target_file =  $photo->getFilePath('watermark', true, true);
             $image = $manager->make($thumb_target_file)->insert($photo->getWatermarkFile(), 'center-center', 0, 0);
-            $image->save($watermark_target_file, 50);
+            $image->save($watermark_target_file, 40);
 
             return $photo;
         } catch (\Exception $e) {

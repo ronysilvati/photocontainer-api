@@ -98,9 +98,8 @@ class EloquentEventRepository implements EventRepository
             foreach ($eventData['photo'] as $photo) {
                 $photos[] = [
                     'id' => $photo['id'],
-                    "thumb" => "http://192.168.99.100/user/themes/photo-container-site/_temp/photos/1.jpg",
-//                    'thumb' => $photo['uuid'],
-//                    'download' => $photo['uuid'],
+                    "thumb" => "http://192.168.99.100/user/themes/photo-container-site/",
+                    "filename" => $photo['filename'],
                     'context' => 'gallery_photos_publisher',
                 ];
             }
