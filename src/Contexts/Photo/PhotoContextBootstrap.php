@@ -49,6 +49,10 @@ class PhotoContextBootstrap implements ContextBootstrap
                 $action = new DownloadPhoto(new EloquentPhotoRepository());
                 $actionResponse = $action->handle((int) $args['photo_id'], (int) $args['user_id']);
 
+                if (get_class($actionResponse) == 'PhotoContainer\PhotoContainer\Infrastructure\Web\DomainExceptionResponse') {
+                    return $response->withJson($actionResponse->jsonSerialize(), $actionResponse->getHttpStatus());
+                }
+
                 $stream = new \Slim\Http\Stream($actionResponse->getFileToStream()); // create a stream instance for the response body
                 return $response->withHeader('Content-Type', 'application/force-download')
                     ->withHeader('Content-Type', 'application/octet-stream')

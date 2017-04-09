@@ -47,6 +47,11 @@ class EloquentPhotoRepository implements PhotoRepository
     {
         try {
             $photoData = PhotoModel::find($id);
+
+            if ($photoData == null) {
+                throw new \Exception("A foto nâo existe.");
+            }
+
             $photo = new Photo($photoData->id, $photoData->event_id, null);
             $photo->setPhysicalName($photoData->filename);
 
