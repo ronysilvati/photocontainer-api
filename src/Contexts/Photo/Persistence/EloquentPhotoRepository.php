@@ -31,7 +31,7 @@ class EloquentPhotoRepository implements PhotoRepository
     {
         try {
             $downloadModel = new DownloadModel();
-            $downloadModel->event_id = $download->getEventId();
+            $downloadModel->photo_id = $download->getPhoto()->getId();
             $downloadModel->user_id = $download->getUserId();
             $downloadModel->save();
 
@@ -47,9 +47,12 @@ class EloquentPhotoRepository implements PhotoRepository
     {
         try {
             $photoData = PhotoModel::find($id);
-            $photo = new Photo($photoData->id, $photoData->event_id, null, $photoData->filename);
+            $photo = new Photo($photoData->id, $photoData->event_id, null);
+            $photo->setPhysicalName($photoData->filename);
+
             return $photo;
         } catch (\Exception $e) {
             throw new PersistenceException($e->getMessage());
-        }    }
+        }
+    }
 }

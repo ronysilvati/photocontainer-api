@@ -51,12 +51,12 @@ class FilesystemPhotoRepository implements PhotoRepository
                 $constraint->aspectRatio();
             });
             $thumb_target_file = $photo->getFilePath('thumb', true, true);
-            $image->save($thumb_target_file);
+            $image->save($thumb_target_file, 50);
 
             // watermark
             $watermark_target_file =  $photo->getFilePath('watermark', true, true);
             $image = $manager->make($thumb_target_file)->insert($photo->getWatermarkFile(), 'center-center', 0, 0);
-            $image->save($watermark_target_file);
+            $image->save($watermark_target_file, 50);
 
             return $photo;
         } catch (\Exception $e) {
@@ -64,23 +64,9 @@ class FilesystemPhotoRepository implements PhotoRepository
         }
     }
 
-    public function download(Download $download)
+    public function download(Download $download): Download
     {
-        try {
-            $filename = $download->getPhoto()->getFilePath('protected', true, true);
 
-            $manager = new ImageManager();
-            $img = $manager->make($filename);
-
-            echo 1;
-//        $img->response();
-            exit;
-
-            return $download;
-        } catch (\Exception $e) {
-            var_dump($e->getMessage());
-            exit;
-        }
     }
 
     public function find(int $id): Photo

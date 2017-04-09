@@ -24,10 +24,6 @@ class Photo implements Entity
         $this->changeId($id);
         $this->changeEventId($event_id);
         $this->changeFile($file);
-
-        if ($physicalName != null) {
-            $this->changePhysicalName($physicalName);
-        }
     }
 
     /**
@@ -88,6 +84,14 @@ class Photo implements Entity
     public function getPhysicalName(): ?string
     {
         return $this->physicalName;
+    }
+
+    /**
+     * @return mixed
+     */
+    public function setPhysicalName(string $physicalName)
+    {
+        $this->physicalName = $physicalName;
     }
 
     /**
