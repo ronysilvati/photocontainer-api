@@ -26,7 +26,7 @@ class Photo implements Entity
         $this->changeFile($file);
 
         if ($physicalName != null) {
-            $this->changePhysicalName($physicalName);
+            $this->changePhysicalName($file['name']);
         }
     }
 

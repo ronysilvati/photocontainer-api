@@ -16,7 +16,7 @@ class FilesystemPhotoRepository implements PhotoRepository
     {
         try {
             // temp pra pasta final
-            $photo->changePhysicalName($photo->file['name']);
+            $photo->changePhysicalName($_FILES['file']['name']);
 
             // TODO: injetar
             $shared_path    = $_ENV['SHARED_PATH'];
