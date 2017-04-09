@@ -105,6 +105,10 @@ class Photo implements Entity
     {
         $path_parts = pathinfo($physicalName);
 
+        if ( ! isset($path_parts['extension'])) {
+            throw new \DomainException("Não foi possivel obter a extensão do arquivo.");
+        }
+
         $extension = $path_parts['extension'];
         $uuid = Uuid::uuid5(Uuid::NAMESPACE_DNS, $this->event_id.$physicalName)->toString();
         $new_filename = basename($uuid) . "." . $extension;
