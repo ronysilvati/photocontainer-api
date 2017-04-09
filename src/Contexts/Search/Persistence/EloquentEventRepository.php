@@ -11,6 +11,7 @@ use PhotoContainer\PhotoContainer\Infrastructure\Exception\PersistenceException;
 use PhotoContainer\PhotoContainer\Infrastructure\Persistence\Eloquent\Event as EventModel;
 use PhotoContainer\PhotoContainer\Infrastructure\Persistence\Eloquent\EventFavorite;
 use PhotoContainer\PhotoContainer\Infrastructure\Persistence\Eloquent\EventSearch as EventSearchModel;
+use PhotoContainer\PhotoContainer\Infrastructure\Persistence\Eloquent\EventSearchPublisher;
 
 class EloquentEventRepository implements EventRepository
 {
@@ -47,7 +48,11 @@ class EloquentEventRepository implements EventRepository
                 $where[] = ['tag_id', $tags];
             }
 
-            $eventSearch = EventSearchModel::where($where)
+            $publisher = $search->getPublisher();
+
+            $modelSearch = $publisher ? EventSearchPublisher::where($where) : EventSearchModel::where($where);
+
+            $eventSearch = $modelSearch
                 ->groupBy('id', 'category_id', 'category')
                 ->get(['id', 'user_id', 'name', 'title', 'eventdate', 'category_id', 'category', 'photos', 'likes']);
 
@@ -55,7 +60,6 @@ class EloquentEventRepository implements EventRepository
 
             $eventSearch = $eventSearch->forPage($search->getPage(), 15);
 
-            $publisher = $search->getPublisher();
             $out['result'] = $eventSearch->map(function ($item, $key) use ($publisher) {
                 $category = new Category($item->category_id, $item->category);
                 $photographer = new Photographer($item->user_id, $item->name);
@@ -98,9 +102,8 @@ class EloquentEventRepository implements EventRepository
             foreach ($eventData['photo'] as $photo) {
                 $photos[] = [
                     'id' => $photo['id'],
-                    "thumb" => "http://192.168.99.100/user/themes/photo-container-site/_temp/photos/1.jpg",
-//                    'thumb' => $photo['uuid'],
-//                    'download' => $photo['uuid'],
+                    "thumb" => "http://192.168.99.100/user/themes/photo-container-site/",
+                    "filename" => $photo['filename'],
                     'context' => 'gallery_photos_publisher',
                 ];
             }

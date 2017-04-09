@@ -91,6 +91,14 @@ class Photo implements Entity
     }
 
     /**
+     * @return mixed
+     */
+    public function setPhysicalName(string $physicalName)
+    {
+        $this->physicalName = $physicalName;
+    }
+
+    /**
      * @param mixed $physicalName
      */
     public function changePhysicalName(?string $physicalName)

@@ -10,6 +10,7 @@ use PhotoContainer\PhotoContainer\Contexts\Photo\Domain\Photo;
 use PhotoContainer\PhotoContainer\Contexts\Photo\Persistence\EloquentPhotoRepository;
 use PhotoContainer\PhotoContainer\Contexts\Photo\Persistence\FilesystemPhotoRepository;
 use PhotoContainer\PhotoContainer\Infrastructure\ContextBootstrap;
+use PhotoContainer\PhotoContainer\Infrastructure\Helper\ImageHelper;
 use PhotoContainer\PhotoContainer\Infrastructure\Web\WebApp;
 use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\ServerRequestInterface;
@@ -45,16 +46,29 @@ class PhotoContextBootstrap implements ContextBootstrap
             try {
                 $data = $request->getParsedBody();
 
-                $action = new DownloadPhoto(new EloquentPhotoRepository(), new FilesystemPhotoRepository());
+                $action = new DownloadPhoto(new EloquentPhotoRepository());
                 $actionResponse = $action->handle((int) $args['photo_id'], (int) $args['user_id']);
 
-                exit;
+                if (get_class($actionResponse) == 'PhotoContainer\PhotoContainer\Infrastructure\Web\DomainExceptionResponse') {
+                    return $response->withJson($actionResponse->jsonSerialize(), $actionResponse->getHttpStatus());
+                }
 
-                return $response->withJson($actionResponse, $actionResponse->getHttpStatus());
+                $stream = new \Slim\Http\Stream($actionResponse->getFileToStream()); // create a stream instance for the response body
+                return $response->withHeader('Content-Type', 'application/force-download')
+                    ->withHeader('Content-Type', 'application/octet-stream')
+                    ->withHeader('Content-Type', 'application/download')
+                    ->withHeader('Content-Description', 'File Transfer')
+                    ->withHeader('Content-Transfer-Encoding', 'binary')
+                    ->withHeader('Content-Disposition', 'attachment; filename="' . $actionResponse->getDownload()->getPhoto()->getPhysicalName() . '"')
+                    ->withHeader('Expires', '0')
+                    ->withHeader('Cache-Control', 'must-revalidate, post-check=0, pre-check=0')
+                    ->withHeader('Pragma', 'public')
+                    ->withBody($stream); // all stream contents will be sent to the response
             } catch (\Exception $e) {
                 return $response->withJson(['message' => $e->getMessage()], 500);
             }
         });
+
         return $slimApp;
     }
 

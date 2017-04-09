@@ -6,4 +6,5 @@ interface PhotoRepository
 {
     public function find(int $id): Photo;
     public function create(Photo $conf): Photo;
+    public function download(Download $download): Download;
 }
