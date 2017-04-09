@@ -26,6 +26,9 @@ class PhotoContextBootstrap implements ContextBootstrap
 
                 $action = new CreatePhoto(new EloquentPhotoRepository(), new FilesystemPhotoRepository());
 
+                if (isset($data['event_id'])) {
+                    throw new \DomainException("Não foi possivel obter o ID do evento.");
+                }
                 $event_id = (int) $data['event_id'];
 
                 $allPhotos = [];
