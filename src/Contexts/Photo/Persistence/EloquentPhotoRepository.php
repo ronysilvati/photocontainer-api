@@ -60,4 +60,11 @@ class EloquentPhotoRepository implements PhotoRepository
             throw new PersistenceException($e->getMessage());
         }
     }
+
+    public function like(Photo $photo): Photo
+    {
+        // TODO: Implement like() method.
+    }
+
+
 }
