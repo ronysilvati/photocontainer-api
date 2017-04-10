@@ -61,15 +61,28 @@ class EventSearchView extends AbstractMigration
                 GROUP BY e.id, c.id, t.id;");
 
         $this->execute("
-        DROP VIEW IF EXISTS event_search_publisher_download;
-        CREATE VIEW event_search_publisher_download AS
-        SELECT photo_id, user_id, event_id, filename
-        FROM
-            downloads as d
-            INNER JOIN photos as p
-                ON d.photo_id = p.id
-        GROUP BY d.user_id, d.photo_id
-        ORDER BY d.created_at DESC;");
+            DROP VIEW IF EXISTS event_search_publisher_download;
+                    CREATE VIEW event_search_publisher_download AS
+            SELECT d.id, d.photo_id, d.user_id, p.event_id, p.filename, e.title, photographer.name, t.id as tag_id
+            FROM
+               downloads as d
+               INNER JOIN photos as p
+                   ON d.photo_id = p.id
+               INNER JOIN events as e
+                     ON e.id = p.event_id
+                INNER JOIN users as photographer
+                    ON photographer.id = e.user_id
+               INNER JOIN event_categories as ec
+                 ON e.id = ec.event_id	    
+               INNER JOIN categories as c
+                 ON c.id = ec.category_id
+               LEFT JOIN event_tags as et
+                 ON e.id = et.event_id
+               LEFT JOIN tags as t
+                 ON t.id = et.tag_id
+            GROUP BY d.user_id, d.photo_id, t.id
+            ORDER BY d.created_at DESC;
+        ");
     }
 
     /**

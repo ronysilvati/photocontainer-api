@@ -101,8 +101,22 @@ class SearchContextBootstrap implements ContextBootstrap
 
         $slimApp->app->get('/search/photo/user/{publisher_id}/downloads', function (ServerRequestInterface $request, ResponseInterface $response, $args) use ($container) {
             try {
+                $qsParams = $request->getQueryParams();
+
+                $keyword = isset($qsParams['keyword']) ? $qsParams['keyword'] : null;
+
+                $allTags = null;
+                if (!empty($qsParams['tags'])) {
+                    $allTags = [];
+                    foreach ($qsParams['tags'] as $tag) {
+                        if ($tag != "") {
+                            $allTags[] = new Tag((int) $tag, null);
+                        }
+                    }
+                }
+
                 $action = new FindDownloadedPhotos(new EloquentPhotoRepository());
-                $actionResponse = $action->handle($args['publisher_id']);
+                $actionResponse = $action->handle($args['publisher_id'], $keyword, $allTags);
 
                 return $response->withJson($actionResponse, $actionResponse->getHttpStatus());
             } catch (\Exception $e) {

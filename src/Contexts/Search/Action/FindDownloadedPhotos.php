@@ -15,10 +15,10 @@ class FindDownloadedPhotos
         $this->repository = $repository;
     }
 
-    public function handle(int $id)
+    public function handle(int $id, ?string $keyword, ?array $tags)
     {
         try {
-            $result = $this->repository->searchDownloaded($id);
+            $result = $this->repository->searchDownloaded($id, $keyword, $tags);
             return new DownloadedCollectionResponse($result);
         } catch (\Exception $e) {
             return new DomainExceptionResponse($e->getMessage());
