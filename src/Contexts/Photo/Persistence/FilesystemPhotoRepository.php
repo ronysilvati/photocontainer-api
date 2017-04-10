@@ -66,6 +66,11 @@ class FilesystemPhotoRepository implements PhotoRepository
 
     }
 
+    public function like(Photo $photo): Photo
+    {
+        // TODO: Implement like() method.
+    }
+    
     public function find(int $id): Photo
     {
         // TODO: Implement find() method.
