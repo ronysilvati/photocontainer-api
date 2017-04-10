@@ -24,6 +24,7 @@ class EventResponse implements \JsonSerializable
             'photographer' => $this->event->getPhotographer(),
             'category' => $this->event->getCategory(),
             'photos' => $this->event->getPhotos(),
+            'thumb' => 'http://192.168.99.100/user/themes/photo-container-site/_temp/photos/1.jpg',
             'context' => 'gallery_photos_publisher'
         ];
     }

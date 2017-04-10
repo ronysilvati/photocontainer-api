@@ -17,10 +17,12 @@ class DownloadedCollectionResponse implements \JsonSerializable
 
         foreach ($this->collection as $item) {
             $out['photos'][] = [
+                'id' => $item->getPhotoId(),
                 'event_id' => $item->getEventId(),
                 'user_id' => $item->getUserId(),
                 'filename' => $item->getFilename(),
                 'photo_id' => $item->getPhotoId(),
+                'thumb' => 'http://192.168.99.100/user/themes/photo-container-site/_temp/photos/1.jpg',
                 'context' => 'gallery_publisher_downloads',
             ];
         }

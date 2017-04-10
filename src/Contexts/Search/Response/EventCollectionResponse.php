@@ -23,7 +23,7 @@ class EventCollectionResponse implements \JsonSerializable
                 "title" => $search->getTitle(),
                 "eventdate" => $search->getEventdate(),
                 "category" => $search->getCategories()[0]->getDescription(),
-                "thumb" => "user/themes/photo-container-site/_temp/photos/1.jpg",
+                'thumb' => 'http://192.168.99.100/user/themes/photo-container-site/_temp/photos/1.jpg',
                 "photos" => $search->getPhotos(),
                 "likes" => $search->getLikes(),
                 "context" => $search->getSearchContext(),
