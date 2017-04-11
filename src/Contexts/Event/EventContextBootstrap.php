@@ -56,7 +56,8 @@ class EventContextBootstrap implements ContextBootstrap
                 }
 
                 $event = new Event(null, $user, $data['bride'], $data['groom'], $data['eventDate'],
-                    $data['title'], $data['description'], (bool) $data['terms'], (bool) $data['approval_general'],
+                    $data['title'], $data['description'], $data['city'], $data['state'], $data['city'],
+                    (bool) $data['terms'], (bool) $data['approval_general'],
                     (bool) $data['approval_photographer'], (bool) $data['approval_bride'], $allCategories,
                     $allTags, new Suppliers(null, null,null));
 

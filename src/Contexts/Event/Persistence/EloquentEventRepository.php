@@ -111,10 +111,13 @@ class EloquentEventRepository implements EventRepository
             $event->changeTitle($data['title']);
             $event->changeDescription($data['description']);
             $event->changeEventDate($data['eventDate']);
-            $event->getTerms($data['terms']);
-            $event->getApprovalGeneral($data['approval_general']);
-            $event->getApprovalPhotographer($data['approval_photographer']);
-            $event->getApprovalBride($data['approval_bride']);
+            $event->changeTerms($data['terms']);
+            $event->changeApprovalGeneral($data['approval_general']);
+            $event->changeApprovalPhotographer($data['approval_photographer']);
+            $event->changeApprovalBride($data['approval_bride']);
+            $event->changeCountry($data['country']);
+            $event->changeState($data['state']);
+            $event->changeCity($data['city']);
 
             $eventModel = EventModel::find($id);
             $eventModel->groom = $event->getGroom();
@@ -123,6 +126,9 @@ class EloquentEventRepository implements EventRepository
             $eventModel->title = $event->getTitle();
             $eventModel->description = $event->getDescription();
             $eventModel->terms = $event->getTerms();
+            $eventModel->country = $event->getCountry();
+            $eventModel->state = $event->getState();
+            $eventModel->city = $event->getCity();
             $eventModel->approval_general = $event->getApprovalGeneral();
             $eventModel->approval_photographer = $event->getApprovalPhotographer();
             $eventModel->approval_bride = $event->getApprovalBride();
@@ -173,6 +179,9 @@ class EloquentEventRepository implements EventRepository
                 $eventData['eventdate'],
                 $eventData['title'],
                 $eventData['description'],
+                $eventData['country'],
+                $eventData['state'],
+                $eventData['city'],
                 $eventData['terms'],
                 $eventData['approval_general'],
                 $eventData['approval_photographer'],

@@ -19,6 +19,9 @@ class Event
     private $categories;
     private $tags;
     private $favorites;
+    private $country;
+    private $state;
+    private $city;
 
     /**
      * @var Suppliers
@@ -32,6 +35,9 @@ class Event
                                 string $eventDate = null,
                                 string $title,
                                 string $description = null,
+                                string $country = null,
+                                string $state = null,
+                                string $city = null,
                                 bool $terms = null,
                                 bool $approval_general = null,
                                 bool $approval_photographer = null,
@@ -55,6 +61,10 @@ class Event
         $this->changeCategories($categories);
         $this->changeTags($tags);
         $this->changeSuppliers($suppliers);
+
+        $this->changeCountry($country);
+        $this->changeState($state);
+        $this->changeCity($city);
     }
 
     /**
@@ -308,5 +318,53 @@ class Event
     public function changeSuppliers(?Suppliers $suppliers)
     {
         $this->suppliers = $suppliers;
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getCountry()
+    {
+        return $this->country;
+    }
+
+    /**
+     * @param mixed $country
+     */
+    public function changeCountry($country)
+    {
+        $this->country = $country;
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getState()
+    {
+        return $this->state;
+    }
+
+    /**
+     * @param mixed $state
+     */
+    public function changeState($state)
+    {
+        $this->state = $state;
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getCity()
+    {
+        return $this->city;
+    }
+
+    /**
+     * @param mixed $city
+     */
+    public function changeCity($city)
+    {
+        $this->city = $city;
     }
 }
