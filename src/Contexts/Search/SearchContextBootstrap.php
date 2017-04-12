@@ -6,6 +6,7 @@ use PhotoContainer\PhotoContainer\Contexts\Search\Action\FindCategories;
 use PhotoContainer\PhotoContainer\Contexts\Search\Action\FindDownloadedPhotos;
 use PhotoContainer\PhotoContainer\Contexts\Search\Action\FindEvent;
 use PhotoContainer\PhotoContainer\Contexts\Search\Action\FindEventPhotos;
+use PhotoContainer\PhotoContainer\Contexts\Search\Action\FindHistoric;
 use PhotoContainer\PhotoContainer\Contexts\Search\Action\FindTags;
 use PhotoContainer\PhotoContainer\Contexts\Search\Domain\Category;
 use PhotoContainer\PhotoContainer\Contexts\Search\Domain\EventSearch;
@@ -88,10 +89,10 @@ class SearchContextBootstrap implements ContextBootstrap
             }
         });
 
-        $slimApp->app->get('/search/events/{id}/photos', function (ServerRequestInterface $request, ResponseInterface $response, $args) use ($container) {
+        $slimApp->app->get('/search/events/{id}/photos/user/{user_id}', function (ServerRequestInterface $request, ResponseInterface $response, $args) use ($container) {
             try {
                 $action = new FindEventPhotos(new EloquentEventRepository());
-                $actionResponse = $action->handle($args['id']);
+                $actionResponse = $action->handle($args['id'], $args['user_id']);
 
                 return $response->withJson($actionResponse, $actionResponse->getHttpStatus());
             } catch (\Exception $e) {
@@ -99,10 +100,9 @@ class SearchContextBootstrap implements ContextBootstrap
             }
         });
 
-        $slimApp->app->get('/search/photo/user/{publisher_id}/downloads', function (ServerRequestInterface $request, ResponseInterface $response, $args) use ($container) {
+        $slimApp->app->get('/search/photo/user/{publisher_id}/{type:downloads|favorites}', function (ServerRequestInterface $request, ResponseInterface $response, $args) use ($container) {
             try {
                 $qsParams = $request->getQueryParams();
-
                 $keyword = isset($qsParams['keyword']) ? $qsParams['keyword'] : null;
 
                 $allTags = null;
@@ -115,8 +115,8 @@ class SearchContextBootstrap implements ContextBootstrap
                     }
                 }
 
-                $action = new FindDownloadedPhotos(new EloquentPhotoRepository());
-                $actionResponse = $action->handle($args['publisher_id'], $keyword, $allTags);
+                $action = new FindHistoric(new EloquentPhotoRepository());
+                $actionResponse = $action->handle($args['publisher_id'], $keyword, $allTags, $args['type']);
 
                 return $response->withJson($actionResponse, $actionResponse->getHttpStatus());
             } catch (\Exception $e) {
