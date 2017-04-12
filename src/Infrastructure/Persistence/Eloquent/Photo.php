@@ -12,4 +12,9 @@ class Photo extends EloquentModel
     {
         return $this->belongsTo(Event::class);
     }
+
+    public function photoFavorite()
+    {
+        return $this->belongsTo(PhotoFavorite::class);
+    }
 }

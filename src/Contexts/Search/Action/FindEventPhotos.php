@@ -15,10 +15,10 @@ class FindEventPhotos
         $this->repository = $repository;
     }
 
-    public function handle(int $id)
+    public function handle(int $id, int $user_id)
     {
         try {
-            $result = $this->repository->findEventPhotos($id);
+            $result = $this->repository->findEventPhotos($id, $user_id);
 
             return new EventResponse($result);
         } catch (\Exception $e) {

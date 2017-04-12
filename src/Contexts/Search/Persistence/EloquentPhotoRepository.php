@@ -3,12 +3,41 @@
 namespace PhotoContainer\PhotoContainer\Contexts\Search\Persistence;
 
 use PhotoContainer\PhotoContainer\Contexts\Search\Domain\Download;
+use PhotoContainer\PhotoContainer\Contexts\Search\Domain\Historic;
 use PhotoContainer\PhotoContainer\Contexts\Search\Domain\PhotoRepository;
 use PhotoContainer\PhotoContainer\Infrastructure\Persistence\Eloquent\EventSearchPublisherDownload;
+use PhotoContainer\PhotoContainer\Infrastructure\Persistence\Eloquent\EventSearchPublisherFavorite;
 
 class EloquentPhotoRepository implements PhotoRepository
 {
     public function searchDownloaded(int $user_id, ?string $keyword, ?array $tags)
+    {
+        $where = $this->buildWhere($user_id, $keyword, $tags);
+
+        $data = EventSearchPublisherDownload::where($where)
+            ->groupBy('id')
+            ->get();
+
+        return $data->map(function ($item){
+            return new Historic($item->photo_id, $item->user_id, $item->event_id, $item->filename);
+        })->toArray();
+    }
+
+    public function searchLikes(int $user_id, ?string $keyword, ?array $tags)
+    {
+        $where = $this->buildWhere($user_id, $keyword, $tags);
+
+        $data = EventSearchPublisherFavorite::where($where)
+            ->groupBy('id')
+            ->orderBy('created_at','DESC')
+            ->get();
+
+        return $data->map(function ($item){
+            return new Historic($item->photo_id, $item->user_id, $item->event_id, $item->filename);
+        })->toArray();
+    }
+
+    private function buildWhere(int $user_id, ?string $keyword, ?array $tags): array
     {
         $where = [
             ['user_id', $user_id]
@@ -28,12 +57,6 @@ class EloquentPhotoRepository implements PhotoRepository
             $where[] = ['tag_id', $tagsSearch];
         }
 
-        $data = EventSearchPublisherDownload::where($where)
-            ->groupBy('id')
-            ->get();
-
-        return $data->map(function ($item){
-            return new Download($item->photo_id, $item->user_id, $item->event_id, $item->filename);
-        })->toArray();
+        return $where;
     }
 }

@@ -4,6 +4,7 @@ namespace PhotoContainer\PhotoContainer\Contexts\Photo\Persistence;
 
 use Intervention\Image\Image;
 use PhotoContainer\PhotoContainer\Contexts\Photo\Domain\Download;
+use PhotoContainer\PhotoContainer\Contexts\Photo\Domain\Like;
 use PhotoContainer\PhotoContainer\Contexts\Photo\Domain\Photo;
 use PhotoContainer\PhotoContainer\Contexts\Photo\Domain\PhotoRepository;
 use Intervention\Image\ImageManager;
@@ -61,16 +62,21 @@ class FilesystemPhotoRepository implements PhotoRepository
         }
     }
 
+    public function like(Like $like): Like
+    {
+        // TODO: Implement like() method.
+    }
+
+    public function dislike(Like $like): bool
+    {
+        // TODO: Implement dislike() method.
+    }
+
     public function download(Download $download): Download
     {
 
     }
 
-    public function like(Photo $photo): Photo
-    {
-        // TODO: Implement like() method.
-    }
-    
     public function find(int $id): Photo
     {
         // TODO: Implement find() method.

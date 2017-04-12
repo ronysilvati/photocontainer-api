@@ -2,12 +2,16 @@
 
 namespace PhotoContainer\PhotoContainer\Contexts\Photo\Persistence;
 
+use League\Flysystem\Exception;
+use PhotoContainer\PhotoContainer\Contexts\Photo\Action\LikePhoto;
 use PhotoContainer\PhotoContainer\Contexts\Photo\Domain\Download;
+use PhotoContainer\PhotoContainer\Contexts\Photo\Domain\Like;
 use PhotoContainer\PhotoContainer\Contexts\Photo\Domain\Photo;
 use PhotoContainer\PhotoContainer\Contexts\Photo\Domain\PhotoRepository;
 use PhotoContainer\PhotoContainer\Infrastructure\Persistence\Eloquent\Photo as PhotoModel;
 use PhotoContainer\PhotoContainer\Infrastructure\Persistence\Eloquent\Download as DownloadModel;
 use PhotoContainer\PhotoContainer\Infrastructure\Exception\PersistenceException;
+use PhotoContainer\PhotoContainer\Infrastructure\Persistence\Eloquent\PhotoFavorite;
 
 class EloquentPhotoRepository implements PhotoRepository
 {
@@ -61,10 +65,42 @@ class EloquentPhotoRepository implements PhotoRepository
         }
     }
 
-    public function like(Photo $photo): Photo
+    public function like(Like $like): Like
     {
-        // TODO: Implement like() method.
+        try {
+             $liked = PhotoFavorite::where('photo_id', $like->getPhotoId())
+                ->where('user_id', $like->getUserId())
+                ->count();
+
+             if ($liked > 0) {
+                throw new \Exception('Foto já é favorita');
+             }
+
+            $model = new PhotoFavorite();
+            $model->photo_id = $like->getPhotoId();
+            $model->user_id = $like->getUserId();
+            $model->save();
+
+            return $like;
+        } catch (\Exception $e) {
+            throw new PersistenceException($e->getMessage());
+        }
     }
 
+    public function dislike(Like $like): Like
+    {
+        try {
+            $ok = PhotoFavorite::where('photo_id', $like->getPhotoId())
+                ->where('user_id', $like->getUserId())
+                ->delete();
 
+            if ($ok == false) {
+                throw new Exception('Não foi possível remover favorito.');
+            }
+
+            return $like;
+        } catch (\Exception $e) {
+            throw new PersistenceException($e->getMessage());
+        }
+    }
 }

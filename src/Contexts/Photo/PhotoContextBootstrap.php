@@ -4,8 +4,11 @@ namespace PhotoContainer\PhotoContainer\Contexts\Photo;
 
 use PhotoContainer\PhotoContainer\Contexts\Event\Persistence\EloquentTagRepository;
 use PhotoContainer\PhotoContainer\Contexts\Photo\Action\CreatePhoto;
+use PhotoContainer\PhotoContainer\Contexts\Photo\Action\DislikePhoto;
 use PhotoContainer\PhotoContainer\Contexts\Photo\Action\DownloadPhoto;
+use PhotoContainer\PhotoContainer\Contexts\Photo\Action\LikePhoto;
 use PhotoContainer\PhotoContainer\Contexts\Photo\Domain\Download;
+use PhotoContainer\PhotoContainer\Contexts\Photo\Domain\Like;
 use PhotoContainer\PhotoContainer\Contexts\Photo\Domain\Photo;
 use PhotoContainer\PhotoContainer\Contexts\Photo\Persistence\EloquentPhotoRepository;
 use PhotoContainer\PhotoContainer\Contexts\Photo\Persistence\FilesystemPhotoRepository;
@@ -67,6 +70,24 @@ class PhotoContextBootstrap implements ContextBootstrap
             } catch (\Exception $e) {
                 return $response->withJson(['message' => $e->getMessage()], 500);
             }
+        });
+
+        $slimApp->app->post('/photo/{photo_id}/like/publisher/{publisher_id}', function (ServerRequestInterface $request, ResponseInterface $response, $args) use ($container) {
+            $like = new Like($args['publisher_id'], $args['photo_id']);
+
+            $action = new LikePhoto(new EloquentPhotoRepository());
+            $actionResponse = $action->handle($like);
+
+            return $response->withJson($actionResponse, $actionResponse->getHttpStatus());
+        });
+
+        $slimApp->app->delete('/photo/{photo_id}/dislike/publisher/{publisher_id}', function (ServerRequestInterface $request, ResponseInterface $response, $args) use ($container) {
+            $like = new Like($args['publisher_id'], $args['photo_id']);
+
+            $action = new DislikePhoto(new EloquentPhotoRepository());
+            $actionResponse = $action->handle($like);
+
+            return $response->withJson($actionResponse, $actionResponse->getHttpStatus());
         });
 
         return $slimApp;

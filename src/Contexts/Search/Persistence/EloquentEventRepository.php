@@ -12,6 +12,7 @@ use PhotoContainer\PhotoContainer\Infrastructure\Persistence\Eloquent\Event as E
 use PhotoContainer\PhotoContainer\Infrastructure\Persistence\Eloquent\EventFavorite;
 use PhotoContainer\PhotoContainer\Infrastructure\Persistence\Eloquent\EventSearch as EventSearchModel;
 use PhotoContainer\PhotoContainer\Infrastructure\Persistence\Eloquent\EventSearchPublisher;
+use PhotoContainer\PhotoContainer\Infrastructure\Persistence\Eloquent\PhotoFavorite;
 
 class EloquentEventRepository implements EventRepository
 {
@@ -90,7 +91,7 @@ class EloquentEventRepository implements EventRepository
         }
     }
 
-    public function findEventPhotos(int $id)
+    public function findEventPhotos(int $id, int $user_id)
     {
         try {
             $eventModel = EventModel::find($id);
@@ -100,11 +101,14 @@ class EloquentEventRepository implements EventRepository
 
             $photos = [];
             foreach ($eventData['photo'] as $photo) {
+                $liked = PhotoFavorite::where(['user_id' => $user_id, 'photo_id' => $photo['id']])->count();
+
                 $photos[] = [
                     'id' => $photo['id'],
-                    "thumb" => "/user/themes/photo-container-site/",
+                    "thumb" => "/user/themes/photo-container-site/_temp/photos/1.jpg",
                     "filename" => $photo['filename'],
                     'context' => 'gallery_photos_publisher',
+                    'liked' => $liked,
                 ];
             }
 
