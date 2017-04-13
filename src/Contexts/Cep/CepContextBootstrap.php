@@ -6,6 +6,7 @@ namespace PhotoContainer\PhotoContainer\Contexts\Cep;
 use PhotoContainer\PhotoContainer\Contexts\Cep\Action\FindCep;
 use PhotoContainer\PhotoContainer\Contexts\Cep\Action\FindCities;
 use PhotoContainer\PhotoContainer\Contexts\Cep\Action\FindStates;
+use PhotoContainer\PhotoContainer\Contexts\Cep\Action\GetCountries;
 use PhotoContainer\PhotoContainer\Contexts\Cep\Domain\Cep;
 use PhotoContainer\PhotoContainer\Contexts\Cep\Persistence\EloquentCepRepository;
 use PhotoContainer\PhotoContainer\Contexts\Cep\Persistence\RestCepRepository;
@@ -19,6 +20,13 @@ class CepContextBootstrap implements ContextBootstrap
     public function wireSlimRoutes(WebApp $slimApp): WebApp
     {
         $container = $slimApp->app->getContainer();
+
+        $slimApp->app->get('/location/countries', function (ServerRequestInterface $request, ResponseInterface $response) use ($container) {
+            $action = new GetCountries(new EloquentCepRepository());
+            $actionResponse = $action->handle();
+
+            return $response->withJson($actionResponse, $actionResponse->getHttpStatus());
+        });
 
         $slimApp->app->get('/location/zipcode/{cep}', function (ServerRequestInterface $request, ResponseInterface $response, $args) use ($container) {
             $action = new FindCep(new RestCepRepository($container['CepRestProvider']));

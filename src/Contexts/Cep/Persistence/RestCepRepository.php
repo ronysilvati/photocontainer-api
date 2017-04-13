@@ -49,4 +49,9 @@ class RestCepRepository implements CepRepository
     {
         throw new \Exception("Nâo implementado.");
     }
+
+    public function getCountries(): array
+    {
+        throw new \Exception("Nâo implementado.");
+    }
 }

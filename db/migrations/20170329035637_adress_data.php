@@ -9,8 +9,7 @@ class AdressData extends AbstractMigration
     {
         $table = $this->table('countries');
         $table->addColumn('name', 'string', ['limit' => 60])
-            ->addColumn('countrycode', 'string', ['limit' => 10])
-            ->addIndex('countrycode')
+            ->addIndex('name')
             ->create();
 
         $table = $this->table('states');
