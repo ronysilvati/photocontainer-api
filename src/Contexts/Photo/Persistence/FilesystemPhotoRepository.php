@@ -67,10 +67,12 @@ class FilesystemPhotoRepository implements PhotoRepository
         // TODO: Implement like() method.
     }
 
-    public function dislike(Like $like): bool
+    public function dislike(Like $like): Like
     {
         // TODO: Implement dislike() method.
     }
+
+
 
     public function download(Download $download): Download
     {
