@@ -97,10 +97,6 @@ class Address
      */
     public function changeZipcode(?string $zipcode)
     {
-        if ($zipcode === "") {
-            throw new \Exception("O campo CEP deve ser enviado.");
-        }
-
         $this->zipcode = $zipcode;
     }
 
@@ -118,7 +114,7 @@ class Address
      */
     public function changeCountry(?string $country)
     {
-        if ($country === "") {
+        if (!empty($this->zipcode) && $country === "") {
             throw new \Exception("O campo País deve ser enviado.");
         }
 
@@ -139,7 +135,7 @@ class Address
      */
     public function changeState(?string $state)
     {
-        if ($state === "") {
+        if (!empty($this->zipcode) && $state === "") {
             throw new \Exception("O campo Estado deve ser enviado.");
         }
 
@@ -160,7 +156,7 @@ class Address
      */
     public function changeCity(?string $city)
     {
-        if ($city === "") {
+        if (!empty($this->zipcode) && $city === "") {
             throw new \Exception("O campo Cidade deve ser enviado.");
         }
 
@@ -181,7 +177,7 @@ class Address
      */
     public function changeNeighborhood(?string $neighborhood)
     {
-        if ($neighborhood === "") {
+        if (!empty($this->zipcode) && $neighborhood === "") {
             throw new \Exception("O campo Bairro deve ser enviado.");
         }
 
@@ -202,7 +198,7 @@ class Address
      */
     public function changeStreet(?string $street)
     {
-        if ($street === "") {
+        if (!empty($this->zipcode) && $street === "") {
             throw new \Exception("O campo Logradouro deve ser enviado.");
         }
 
