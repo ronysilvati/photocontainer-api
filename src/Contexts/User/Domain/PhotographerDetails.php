@@ -34,7 +34,7 @@ class PhotographerDetails implements Entity
      * @param string $studio
      * @param string $name_type
      */
-    public function __construct(string $bio, string $studio, string $name_type)
+    public function __construct(?string $bio, ?string $studio, string $name_type)
     {
         $this->bio = $bio;
         $this->studio = $studio;
@@ -45,7 +45,7 @@ class PhotographerDetails implements Entity
     /**
      * @return string
      */
-    public function getBio(): string
+    public function getBio(): ?string
     {
         return $this->bio;
     }
@@ -53,7 +53,7 @@ class PhotographerDetails implements Entity
     /**
      * @return string
      */
-    public function getStudio(): string
+    public function getStudio(): ?string
     {
         return $this->studio;
     }
