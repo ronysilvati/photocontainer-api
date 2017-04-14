@@ -52,13 +52,19 @@ class UserResponse implements \JsonSerializable
             $out['details'] = [
                 'blog' => $this->user->getDetails()->getBlog(),
                 'facebook' => $this->user->getDetails()->getFacebook(),
-                'linkedin' => $this->user->getDetails()->getLinkedin(),
+                'pinterest' => $this->user->getDetails()->getPinterest(),
                 'site' => $this->user->getDetails()->getSite(),
                 'instagram' => $this->user->getDetails()->getInstagram(),
                 'phone' => $this->user->getDetails()->getPhone(),
-                'gender' => $this->user->getDetails()->getGender(),
-                'birth' => $this->user->getDetails()->getBirth()
+                'birth' => $this->user->getDetails()->getBirth(),
             ];
+
+            $photographerDetails = $this->user->getDetails()->getPhographerDetails();
+            if ($photographerDetails) {
+                $out['details']['name_type'] = $this->user->getDetails()->getPhographerDetails()->getNameType();
+                $out['details']['studio'] = $this->user->getDetails()->getPhographerDetails()->getStudio();
+                $out['details']['bio'] = $this->user->getDetails()->getPhographerDetails()->getBio();
+            }
         }
 
         if ($this->addressReference) {

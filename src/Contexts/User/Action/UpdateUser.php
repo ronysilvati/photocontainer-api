@@ -2,10 +2,10 @@
 
 namespace PhotoContainer\PhotoContainer\Contexts\User\Action;
 
+use PhotoContainer\PhotoContainer\Contexts\User\Domain\PhotographerDetails;
 use PhotoContainer\PhotoContainer\Contexts\User\Domain\UserRepository;
-use PhotoContainer\PhotoContainer\Contexts\User\Response\DomainExceptionResponse;
 use PhotoContainer\PhotoContainer\Contexts\User\Response\UserResponse;
-use PhotoContainer\PhotoContainer\Infrastructure\Entity;
+use PhotoContainer\PhotoContainer\Infrastructure\Web\DomainExceptionResponse;
 
 class UpdateUser
 {
@@ -47,20 +47,26 @@ class UpdateUser
                 $user->changeAddress($address);
             }
 
+            if ($data['profile_id'] == 2) {
+                $photographerDetails = new PhotographerDetails(
+                    isset($data['details']['bio']) ? $data['details']['bio'] : '',
+                    isset($data['details']['studio']) ? $data['details']['studio'] : '',
+                    isset($data['details']['name_type']) ? $data['details']['name_type'] : ''
+                );
+
+                $user->getDetails()->changePhographerDetails($photographerDetails);
+            }
+
             if (isset($data['details']['facebook'])) {
                 $user->getDetails()->changeFacebook($data['details']['facebook']);
             }
 
-            if (isset($data['details']['linkedin'])) {
-                $user->getDetails()->changeLinkedin($data['details']['linkedin']);
+            if (isset($data['details']['pinterest'])) {
+                $user->getDetails()->changePinterest($data['details']['pinterest']);
             }
 
             if (isset($data['details']['instagram'])) {
                 $user->getDetails()->changeInstagram($data['details']['instagram']);
-            }
-
-            if (isset($data['details']['gender'])) {
-                $user->getDetails()->changeGender($data['details']['gender']);
             }
 
             if (isset($data['details']['phone'])) {

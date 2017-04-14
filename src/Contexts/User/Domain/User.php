@@ -108,7 +108,7 @@ class User implements Entity
     /**
      * @return mixed
      */
-    public function getDetails()
+    public function getDetails(): Details
     {
         return $this->details;
     }

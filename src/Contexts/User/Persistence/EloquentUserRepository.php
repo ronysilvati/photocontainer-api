@@ -5,6 +5,7 @@ namespace PhotoContainer\PhotoContainer\Contexts\User\Persistence;
 use Illuminate\Database\Capsule\Manager as DB;
 use PhotoContainer\PhotoContainer\Contexts\User\Domain\Address;
 use PhotoContainer\PhotoContainer\Contexts\User\Domain\Details;
+use PhotoContainer\PhotoContainer\Contexts\User\Domain\PhotographerDetails;
 use PhotoContainer\PhotoContainer\Contexts\User\Domain\Profile;
 use PhotoContainer\PhotoContainer\Contexts\User\Domain\UserRepository;
 use PhotoContainer\PhotoContainer\Infrastructure\Persistence\Eloquent\Detail;
@@ -45,9 +46,8 @@ class EloquentUserRepository implements UserRepository
                 $detail->blog = $user->getDetails()->getBlog();
                 $detail->facebook = $user->getDetails()->getFacebook();
                 $detail->instagram = $user->getDetails()->getInstagram();
-                $detail->linkedin = $user->getDetails()->getLinkedin();
+                $detail->pinterest = $user->getDetails()->getPinterest();
                 $detail->site = $user->getDetails()->getSite();
-                $detail->gender = $user->getDetails()->getGender();
                 $detail->phone = $user->getDetails()->getPhone();
                 $detail->birth = $user->getDetails()->getBirth();
             };
@@ -100,12 +100,22 @@ class EloquentUserRepository implements UserRepository
                 $userData['detail']['blog'] ?? $userData['detail']['blog'],
                 $userData['detail']['instagram'],
                 $userData['detail']['facebook'],
-                $userData['detail']['linkedin'],
+                $userData['detail']['pinterest'],
                 $userData['detail']['site'],
-                $userData['detail']['gender'],
                 $userData['detail']['phone'],
                 $userData['detail']['birth']
             );
+
+            if ($userProfile->getProfileId() === Profile::PHOTOGRAPHER) {
+                $photographerDetails = new PhotographerDetails(
+                    $userData['detail']['bio'],
+                    $userData['detail']['studio_name'],
+                    $userData['detail']['name_by']
+                );
+
+                $details->changePhographerDetails($photographerDetails);
+            }
+
             $user->changeDetails($details);
         }
 
@@ -146,11 +156,17 @@ class EloquentUserRepository implements UserRepository
                 $detail->blog = $user->getDetails()->getBlog();
                 $detail->facebook = $user->getDetails()->getFacebook();
                 $detail->instagram = $user->getDetails()->getInstagram();
-                $detail->linkedin = $user->getDetails()->getLinkedin();
+                $detail->pinterest = $user->getDetails()->getPinterest();
                 $detail->site = $user->getDetails()->getSite();
-                $detail->gender = $user->getDetails()->getGender();
                 $detail->phone = $user->getDetails()->getPhone();
                 $detail->birth = $user->getDetails()->getBirth();
+
+                $phographerDetails = $user->getDetails()->getPhographerDetails();
+                if ($phographerDetails) {
+                    $detail->studio_name = $phographerDetails->getStudio();
+                    $detail->name_by = $phographerDetails->getNameType();
+                    $detail->bio = $phographerDetails->getBio();
+                }
 
                 $detail->user()->associate($userModel);
                 $detail->save();
@@ -191,6 +207,10 @@ class EloquentUserRepository implements UserRepository
             throw $e;
         } catch (\Exception $e) {
             DB::rollback();
+
+            var_dump($e->getMessage());
+            exit;
+
             throw new PersistenceException("Erro na criação do usuário!");
         }
     }

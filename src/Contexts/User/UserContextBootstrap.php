@@ -7,6 +7,7 @@ use PhotoContainer\PhotoContainer\Contexts\User\Action\FindUser;
 use PhotoContainer\PhotoContainer\Contexts\User\Action\UpdateUser;
 use PhotoContainer\PhotoContainer\Contexts\User\Domain\Address;
 use PhotoContainer\PhotoContainer\Contexts\User\Domain\Details;
+use PhotoContainer\PhotoContainer\Contexts\User\Domain\PhotographerDetails;
 use PhotoContainer\PhotoContainer\Contexts\User\Domain\Profile;
 use PhotoContainer\PhotoContainer\Contexts\User\Domain\User;
 use PhotoContainer\PhotoContainer\Contexts\User\Persistence\EloquentUserRepository;
@@ -42,9 +43,8 @@ class UserContextBootstrap implements ContextBootstrap
                     isset($data['details']['blog']) ? $data['details']['blog'] : '',
                     isset($data['details']['instagram']) ? $data['details']['instagram'] : '',
                     isset($data['details']['facebook']) ? $data['details']['facebook'] : '',
-                    isset($data['details']['linkedin']) ? $data['details']['linkedin'] : '',
+                    isset($data['details']['pinterest']) ? $data['details']['pinterest'] : '',
                     isset($data['details']['site']) ? $data['details']['site'] : '',
-                    isset($data['details']['gender']) ? $data['details']['gender'] : '',
                     isset($data['details']['phone']) ? $data['details']['phone'] : '',
                     isset($data['details']['birth']) ? $data['details']['birth'] : ''
                 );

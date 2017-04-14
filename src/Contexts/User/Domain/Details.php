@@ -13,31 +13,33 @@ class Details implements Entity
     private $blog;
     private $instagram;
     private $facebook;
-    private $linkedin;
+    private $pinterest;
     private $site;
-    private $gender;
     private $phone;
     private $birth;
 
     /**
+     * @var PhotographerDetails
+     */
+    private $phographerDetails;
+
+    /**
      * Details constructor.
-     * @param $id
-     * @param $blog
-     * @param $instagram
-     * @param $facebook
-     * @param $linkedin
-     * @param $site
-     * @param $gender
-     * @param $phone
-     * @param $birth
+     * @param int|null $id
+     * @param string|null $blog
+     * @param string|null $instagram
+     * @param string|null $facebook
+     * @param string|null $pinterest
+     * @param string|null $site
+     * @param string|null $phone
+     * @param string|null $birth
      */
     public function __construct(int $id = null,
                                 string $blog = null,
                                 string $instagram = null,
                                 string $facebook = null,
-                                string $linkedin = null,
+                                string $pinterest = null,
                                 string $site = null,
-                                string $gender = null,
                                 string $phone = null,
                                 string $birth = null)
     {
@@ -55,16 +57,12 @@ class Details implements Entity
             $this->changeFacebook($facebook);
         }
 
-        if ($linkedin) {
-            $this->changeLinkedin($linkedin);
+        if ($pinterest) {
+            $this->changePinterest($pinterest);
         }
 
         if ($site) {
             $this->changeSite($site);
-        }
-
-        if ($gender) {
-            $this->changeGender($gender);
         }
 
         if ($phone) {
@@ -149,21 +147,21 @@ class Details implements Entity
     /**
      * @return mixed
      */
-    public function getLinkedin()
+    public function getPinterest()
     {
-        return $this->linkedin;
+        return $this->pinterest;
     }
 
     /**
-     * @param mixed $linkedin
+     * @param $pinterest
      */
-    public function changeLinkedin($linkedin)
+    public function changePinterest($pinterest)
     {
-        if ($linkedin != "" && !$this->validateUrl($linkedin)) {
-            throw new \DomainException("A URL do LinkedIn é inválida!");
+        if ($pinterest != "" && !$this->validateUrl($pinterest)) {
+            throw new \DomainException("A URL do Pinterest é inválida!");
         }
 
-        $this->linkedin = $linkedin;
+        $this->pinterest = $pinterest;
     }
 
     /**
@@ -184,26 +182,6 @@ class Details implements Entity
         }
 
         $this->site = $site;
-    }
-
-    /**
-     * @return mixed
-     */
-    public function getGender()
-    {
-        return $this->gender;
-    }
-
-    /**
-     * @param mixed $gender
-     */
-    public function changeGender($gender)
-    {
-        if (!in_array(strtoupper($gender), ['M', 'F'])) {
-            throw new \DomainException("O gênero é inválido!");
-        }
-
-        $this->gender = $gender;
     }
 
     /**
@@ -238,5 +216,19 @@ class Details implements Entity
         $this->birth = $birth;
     }
 
+    /**
+     * @return null|PhotographerDetails
+     */
+    public function getPhographerDetails(): ?PhotographerDetails
+    {
+        return $this->phographerDetails;
+    }
 
+    /**
+     * @param null|PhotographerDetails $phographerDetails
+     */
+    public function changePhographerDetails(?PhotographerDetails $phographerDetails)
+    {
+        $this->phographerDetails = $phographerDetails;
+    }
 }
