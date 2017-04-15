@@ -7,6 +7,7 @@ use PhotoContainer\PhotoContainer\Contexts\Search\Action\FindEvent;
 use PhotoContainer\PhotoContainer\Contexts\Search\Action\FindEventPhotos;
 use PhotoContainer\PhotoContainer\Contexts\Search\Action\FindHistoric;
 use PhotoContainer\PhotoContainer\Contexts\Search\Action\FindTags;
+use PhotoContainer\PhotoContainer\Contexts\Search\Action\GetNotifications;
 use PhotoContainer\PhotoContainer\Contexts\Search\Action\WaitingForApproval;
 use PhotoContainer\PhotoContainer\Contexts\Search\Domain\Category;
 use PhotoContainer\PhotoContainer\Contexts\Search\Domain\EventSearch;
@@ -15,6 +16,7 @@ use PhotoContainer\PhotoContainer\Contexts\Search\Domain\Publisher;
 use PhotoContainer\PhotoContainer\Contexts\Search\Domain\Tag;
 use PhotoContainer\PhotoContainer\Contexts\Search\Persistence\EloquentCategoryRepository;
 use PhotoContainer\PhotoContainer\Contexts\Search\Persistence\EloquentEventRepository;
+use PhotoContainer\PhotoContainer\Contexts\Search\Persistence\EloquentNotificationRepository;
 use PhotoContainer\PhotoContainer\Contexts\Search\Persistence\EloquentPhotoRepository;
 use PhotoContainer\PhotoContainer\Contexts\Search\Persistence\EloquentTagRepository;
 use PhotoContainer\PhotoContainer\Infrastructure\ContextBootstrap;
@@ -129,6 +131,17 @@ class SearchContextBootstrap implements ContextBootstrap
             try {
                 $action = new WaitingForApproval(new EloquentEventRepository());
                 $actionResponse = $action->handle($args['photographer_id']);
+
+                return $response->withJson($actionResponse, $actionResponse->getHttpStatus());
+            } catch (\Exception $e) {
+                return $response->withJson(['message' => $e->getMessage()], 500);
+            }
+        });
+
+        $slimApp->app->get('/search/notifications/user/{user_id}', function (ServerRequestInterface $request, ResponseInterface $response, $args) use ($container) {
+            try {
+                $action = new GetNotifications(new EloquentNotificationRepository());
+                $actionResponse = $action->handle($args['user_id']);
 
                 return $response->withJson($actionResponse, $actionResponse->getHttpStatus());
             } catch (\Exception $e) {
