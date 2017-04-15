@@ -15,4 +15,6 @@ interface EventRepository
     public function createFavorite(Favorite $favorite): Favorite;
     public function removeFavorite(Favorite $favorite): Favorite;
     public function findFavorite(Favorite $favorite): Favorite;
+    public function createDownloadRequest(DownloadRequest $request): DownloadRequest;
+    public function findDownloadRequest(int $event_id, int $user_id): ?DownloadRequest;
 }

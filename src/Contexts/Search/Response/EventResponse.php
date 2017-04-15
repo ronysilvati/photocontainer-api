@@ -20,6 +20,7 @@ class EventResponse implements \JsonSerializable
     {
         return [
             'id' => $this->event->getId(),
+            'authorized' => $this->event->isApprovedForPublisher(),
             'title' => $this->event->getTitle(),
             'photographer' => $this->event->getPhotographer(),
             'category' => $this->event->getCategory(),

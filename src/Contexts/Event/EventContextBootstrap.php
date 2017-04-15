@@ -7,6 +7,7 @@ use PhotoContainer\PhotoContainer\Contexts\Event\Action\CreateFavorite;
 use PhotoContainer\PhotoContainer\Contexts\Event\Action\DeleteEvent;
 use PhotoContainer\PhotoContainer\Contexts\Event\Action\DeleteFavorite;
 use PhotoContainer\PhotoContainer\Contexts\Event\Action\FindEvent;
+use PhotoContainer\PhotoContainer\Contexts\Event\Action\RequestDownload;
 use PhotoContainer\PhotoContainer\Contexts\Event\Action\UpdateEvent;
 use PhotoContainer\PhotoContainer\Contexts\Event\Action\UpdateSuppliers;
 use PhotoContainer\PhotoContainer\Contexts\Event\Action\UpdateTags;
@@ -151,6 +152,17 @@ class EventContextBootstrap implements ContextBootstrap
 
                 $action = new UpdateSuppliers(new EloquentEventRepository());
                 $actionResponse = $action->handle($data, $args["id"]);
+
+                return $response->withJson($actionResponse, $actionResponse->getHttpStatus());
+            } catch (\Exception $e) {
+                return $response->withJson(['message' => $e->getMessage()], 500);
+            }
+        });
+
+        $slimApp->app->post('/events/{event_id}/request/user/{publisher_id}', function (ServerRequestInterface $request, ResponseInterface $response, $args) use ($container) {
+            try {
+                $action = new RequestDownload(new EloquentEventRepository());
+                $actionResponse = $action->handle($args['event_id'], $args['publisher_id']);
 
                 return $response->withJson($actionResponse, $actionResponse->getHttpStatus());
             } catch (\Exception $e) {

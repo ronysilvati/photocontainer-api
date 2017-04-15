@@ -2,6 +2,8 @@
 
 namespace PhotoContainer\PhotoContainer\Contexts\Event\Persistence;
 
+use PhotoContainer\PhotoContainer\Contexts\Event\Action\RequestDownload;
+use PhotoContainer\PhotoContainer\Contexts\Event\Domain\DownloadRequest;
 use PhotoContainer\PhotoContainer\Contexts\Event\Domain\Event;
 use PhotoContainer\PhotoContainer\Contexts\Event\Domain\EventRepository;
 use PhotoContainer\PhotoContainer\Contexts\Event\Domain\EventTag;
@@ -17,8 +19,7 @@ use PhotoContainer\PhotoContainer\Infrastructure\Persistence\Eloquent\EventFavor
 use PhotoContainer\PhotoContainer\Infrastructure\Persistence\Eloquent\EventSuppliers;
 use PhotoContainer\PhotoContainer\Infrastructure\Persistence\Eloquent\EventTag as EventTagModel;
 use PhotoContainer\PhotoContainer\Infrastructure\Persistence\Eloquent\User;
-use Respect\Validation\Rules\Even;
-use Symfony\Component\Config\Definition\Exception\Exception;
+use PhotoContainer\PhotoContainer\Infrastructure\Persistence\Eloquent\DownloadRequest as RequestModel;
 
 class EloquentEventRepository implements EventRepository
 {
@@ -280,6 +281,49 @@ class EloquentEventRepository implements EventRepository
         if ($data) {
             $favorite->changeId($data['id']);
             return $favorite;
+        }
+    }
+
+    public function createDownloadRequest(DownloadRequest $request): DownloadRequest
+    {
+        try {
+            $requestModel = new RequestModel();
+            $requestModel->event_id = $request->getEventId();
+            $requestModel->user_id = $request->getUserId();
+            $requestModel->authorized = $request->isAuthorized();
+            $requestModel->visualized = $request->isVisualized();
+            $requestModel->active = $request->isActive();
+            $requestModel->save();
+
+            $request->changeId($requestModel->id);
+
+            return $request;
+        } catch (\Exception $e) {
+            throw new PersistenceException("Erro na criação do pedido para acesso!");
+        }
+    }
+
+    public function findDownloadRequest(int $event_id, int $user_id): ?DownloadRequest
+    {
+        try {
+            $request = RequestModel::where('user_id', $user_id)
+                ->where('event_id', $event_id)
+                ->first();
+
+            if ($request == null) {
+                return null;
+            }
+
+            return new DownloadRequest(
+                $request->id,
+                $request->event_id,
+                $request->user_id,
+                $request->authorized,
+                $request->visualized,
+                $request->active
+            );
+        } catch (\Exception $e) {
+            throw new PersistenceException("Erro na criação do pedido para acesso!");
         }
     }
 }

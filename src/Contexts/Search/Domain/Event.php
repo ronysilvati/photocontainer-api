@@ -30,6 +30,11 @@ class Event
     private $photos;
 
     /**
+     * @var bool
+     */
+    private $approvedForPublisher;
+
+    /**
      * Event constructor.
      * @param int $int
      * @param string $title
@@ -84,5 +89,21 @@ class Event
     public function getPhotos(): array
     {
         return $this->photos;
+    }
+
+    /**
+     * @return bool
+     */
+    public function isApprovedForPublisher(): bool
+    {
+        return $this->approvedForPublisher;
+    }
+
+    /**
+     * @param bool $approvedForPublisher
+     */
+    public function changeApprovedForPublisher(bool $approvedForPublisher)
+    {
+        $this->approvedForPublisher = $approvedForPublisher;
     }
 }

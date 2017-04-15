@@ -8,6 +8,7 @@ use PhotoContainer\PhotoContainer\Contexts\Search\Domain\EventSearch;
 use PhotoContainer\PhotoContainer\Contexts\Search\Domain\Photographer;
 use PhotoContainer\PhotoContainer\Contexts\Search\Domain\Event;
 use PhotoContainer\PhotoContainer\Infrastructure\Exception\PersistenceException;
+use PhotoContainer\PhotoContainer\Infrastructure\Persistence\Eloquent\DownloadRequest;
 use PhotoContainer\PhotoContainer\Infrastructure\Persistence\Eloquent\Event as EventModel;
 use PhotoContainer\PhotoContainer\Infrastructure\Persistence\Eloquent\EventFavorite;
 use PhotoContainer\PhotoContainer\Infrastructure\Persistence\Eloquent\EventSearch as EventSearchModel;
@@ -55,7 +56,10 @@ class EloquentEventRepository implements EventRepository
 
             $eventSearch = $modelSearch
                 ->groupBy('id', 'category_id', 'category')
-                ->get(['id', 'user_id', 'name', 'title', 'eventdate', 'category_id', 'category', 'photos', 'likes']);
+                ->get([
+                    'id', 'user_id', 'name', 'title', 'approval_general', 'approval_photographer', 'approval_bride',
+                    'eventdate', 'category_id', 'category', 'photos', 'likes'
+                ]);
 
             $out = ['total' => $eventSearch->count()];
 
@@ -86,8 +90,7 @@ class EloquentEventRepository implements EventRepository
 
             return $out;
         } catch (\Exception $e) {
-            var_dump($e->getMessage());
-            exit;
+            throw $e;
         }
     }
 
@@ -112,13 +115,26 @@ class EloquentEventRepository implements EventRepository
                 ];
             }
 
-            return new Event(
+            $event = new Event(
                 $eventData['id'],
                 $eventData['title'],
                 $eventData['user']['name'],
                 $categories[0]['category']['description'],
                 $photos
             );
+
+            $event->changeApprovedForPublisher(true);
+            if ($eventData['approval_general'] == false &&
+                ($eventData['approval_photographer'] == false || $eventData['approval_bride'] == false)) {
+                $dlReq = DownloadRequest::where('user_id', $user_id)
+                    ->where('event_id', $id)
+                    ->where('authorized', 1)
+                    ->first();
+
+                $event->changeApprovedForPublisher($dlReq != null);
+            }
+
+            return $event;
         } catch (\Exception $e) {
             throw new PersistenceException($e->getMessage());
         }
