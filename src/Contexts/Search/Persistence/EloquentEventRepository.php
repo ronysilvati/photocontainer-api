@@ -2,6 +2,7 @@
 
 namespace PhotoContainer\PhotoContainer\Contexts\Search\Persistence;
 
+use PhotoContainer\PhotoContainer\Contexts\Search\Domain\Approval;
 use PhotoContainer\PhotoContainer\Contexts\Search\Domain\Category;
 use PhotoContainer\PhotoContainer\Contexts\Search\Domain\EventRepository;
 use PhotoContainer\PhotoContainer\Contexts\Search\Domain\EventSearch;
@@ -12,12 +13,13 @@ use PhotoContainer\PhotoContainer\Infrastructure\Persistence\Eloquent\DownloadRe
 use PhotoContainer\PhotoContainer\Infrastructure\Persistence\Eloquent\Event as EventModel;
 use PhotoContainer\PhotoContainer\Infrastructure\Persistence\Eloquent\EventFavorite;
 use PhotoContainer\PhotoContainer\Infrastructure\Persistence\Eloquent\EventSearch as EventSearchModel;
+use PhotoContainer\PhotoContainer\Infrastructure\Persistence\Eloquent\EventSearchApproval;
 use PhotoContainer\PhotoContainer\Infrastructure\Persistence\Eloquent\EventSearchPublisher;
 use PhotoContainer\PhotoContainer\Infrastructure\Persistence\Eloquent\PhotoFavorite;
 
 class EloquentEventRepository implements EventRepository
 {
-   public function find(EventSearch $search)
+    public function find(EventSearch $search)
     {
         try {
             $where = [];
@@ -136,6 +138,21 @@ class EloquentEventRepository implements EventRepository
             return $event;
         } catch (\Exception $e) {
             throw new PersistenceException($e->getMessage());
+        }
+    }
+
+    public function findWaitingRequests(int $photographer_id): ?array
+    {
+        try {
+            $list = EventSearchApproval::where('photographer_id', $photographer_id)->get();
+
+            return $list->map(function ($item, $key){
+                return new Approval($item->photographer_id, $item->publisher_id, $item->created_at, $item->title);
+            })->toArray();
+        } catch (\Exception $e) {
+            var_dump($e->getMessage());
+            exit;
+            throw new PersistenceException("Erro na listagem das aprovações pendentes.");
         }
     }
 }

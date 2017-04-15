@@ -36,7 +36,7 @@ class Event
 
     /**
      * Event constructor.
-     * @param int $int
+     * @param int $id
      * @param string $title
      * @param string $photographer
      * @param string $category

@@ -27,4 +27,9 @@ class Event extends EloquentModel
     {
         return $this->hasMany(Photo::class);
     }
+
+    public function downloadRequest()
+    {
+        return $this->hasMany(DownloadRequest::class);
+    }
 }

@@ -1,6 +1,6 @@
 <?php
 
-namespace PhotoContainer\PhotoContainer\Contexts\Event\Domain;
+namespace PhotoContainer\PhotoContainer\Contexts\Approval\Domain;
 
 class DownloadRequest
 {
@@ -42,8 +42,9 @@ class DownloadRequest
      * @param bool $visualized
      * @param bool $active
      */
-    public function __construct(?int $int, ?int $event_id, ?int $user_id, ?bool $authorized, ?bool $visualized, ?bool $active)
+    public function __construct(?int $id, ?int $event_id, ?int $user_id, ?bool $authorized, ?bool $visualized, ?bool $active)
     {
+        $this->id = $id;
         $this->event_id = $event_id;
         $this->user_id = $user_id;
         $this->authorized = $authorized;

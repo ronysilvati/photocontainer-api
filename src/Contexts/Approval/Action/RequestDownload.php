@@ -1,17 +1,17 @@
 <?php
 
-namespace PhotoContainer\PhotoContainer\Contexts\Event\Action;
+namespace PhotoContainer\PhotoContainer\Contexts\Approval\Action;
 
-use PhotoContainer\PhotoContainer\Contexts\Event\Domain\DownloadRequest;
-use PhotoContainer\PhotoContainer\Contexts\Event\Domain\EventRepository;
-use PhotoContainer\PhotoContainer\Contexts\Event\Response\DownloadRequestResponse;
+use PhotoContainer\PhotoContainer\Contexts\Approval\Domain\ApprovalRepository;
+use PhotoContainer\PhotoContainer\Contexts\Approval\Domain\DownloadRequest;
+use PhotoContainer\PhotoContainer\Contexts\Approval\Response\DownloadRequestResponse;
 use PhotoContainer\PhotoContainer\Infrastructure\Web\DomainExceptionResponse;
 
 class RequestDownload
 {
     protected $repository;
 
-    public function __construct(EventRepository $repository)
+    public function __construct(ApprovalRepository $repository)
     {
         $this->repository = $repository;
     }
@@ -19,7 +19,7 @@ class RequestDownload
     public function handle(int $event_id, int $user_id)
     {
         try {
-            $dlRequest = $event = $this->repository->findDownloadRequest($event_id, $user_id);
+            $dlRequest = $this->repository->findDownloadRequest($event_id, $user_id);
             if ($dlRequest) {
                 throw new \Exception('Pedido já realizado.');
             }

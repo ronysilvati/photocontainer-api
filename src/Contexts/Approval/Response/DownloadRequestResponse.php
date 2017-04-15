@@ -1,8 +1,8 @@
 <?php
 
-namespace PhotoContainer\PhotoContainer\Contexts\Event\Response;
+namespace PhotoContainer\PhotoContainer\Contexts\Approval\Response;
 
-use PhotoContainer\PhotoContainer\Contexts\Event\Domain\DownloadRequest;
+use PhotoContainer\PhotoContainer\Contexts\Approval\Domain\DownloadRequest;
 
 class DownloadRequestResponse implements \JsonSerializable
 {

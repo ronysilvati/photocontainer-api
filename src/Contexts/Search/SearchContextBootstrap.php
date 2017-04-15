@@ -3,11 +3,11 @@
 namespace PhotoContainer\PhotoContainer\Contexts\Search;
 
 use PhotoContainer\PhotoContainer\Contexts\Search\Action\FindCategories;
-use PhotoContainer\PhotoContainer\Contexts\Search\Action\FindDownloadedPhotos;
 use PhotoContainer\PhotoContainer\Contexts\Search\Action\FindEvent;
 use PhotoContainer\PhotoContainer\Contexts\Search\Action\FindEventPhotos;
 use PhotoContainer\PhotoContainer\Contexts\Search\Action\FindHistoric;
 use PhotoContainer\PhotoContainer\Contexts\Search\Action\FindTags;
+use PhotoContainer\PhotoContainer\Contexts\Search\Action\WaitingForApproval;
 use PhotoContainer\PhotoContainer\Contexts\Search\Domain\Category;
 use PhotoContainer\PhotoContainer\Contexts\Search\Domain\EventSearch;
 use PhotoContainer\PhotoContainer\Contexts\Search\Domain\Photographer;
@@ -18,6 +18,7 @@ use PhotoContainer\PhotoContainer\Contexts\Search\Persistence\EloquentEventRepos
 use PhotoContainer\PhotoContainer\Contexts\Search\Persistence\EloquentPhotoRepository;
 use PhotoContainer\PhotoContainer\Contexts\Search\Persistence\EloquentTagRepository;
 use PhotoContainer\PhotoContainer\Infrastructure\ContextBootstrap;
+use PhotoContainer\PhotoContainer\Infrastructure\Persistence\Eloquent\EventSearchApproval;
 use PhotoContainer\PhotoContainer\Infrastructure\Web\WebApp;
 use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\ServerRequestInterface;
@@ -117,6 +118,17 @@ class SearchContextBootstrap implements ContextBootstrap
 
                 $action = new FindHistoric(new EloquentPhotoRepository());
                 $actionResponse = $action->handle($args['publisher_id'], $keyword, $allTags, $args['type']);
+
+                return $response->withJson($actionResponse, $actionResponse->getHttpStatus());
+            } catch (\Exception $e) {
+                return $response->withJson(['message' => $e->getMessage()], 500);
+            }
+        });
+
+        $slimApp->app->get('/search/waiting_approval/user/{photographer_id}', function (ServerRequestInterface $request, ResponseInterface $response, $args) use ($container) {
+            try {
+                $action = new WaitingForApproval(new EloquentEventRepository());
+                $actionResponse = $action->handle($args['photographer_id']);
 
                 return $response->withJson($actionResponse, $actionResponse->getHttpStatus());
             } catch (\Exception $e) {

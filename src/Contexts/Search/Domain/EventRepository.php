@@ -6,4 +6,5 @@ interface EventRepository
 {
     public function find(EventSearch $search);
     public function findEventPhotos(int $id, int $user_id);
+    public function findWaitingRequests(int $photographer_id): ?array;
 }
