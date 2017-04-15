@@ -123,6 +123,19 @@ class EventSearchView extends AbstractMigration
             GROUP BY ef.user_id, ef.event_id, t.id
             ORDER BY ef.created_at DESC)
         ");
+
+        $this->execute("
+            DROP VIEW IF EXISTS event_search_approvals;
+            CREATE VIEW event_search_approvals AS
+            SELECT event_id, u.id as publisher_id, e.user_id as photographer_id, e.title, de.created_at
+            FROM events as e
+              INNER JOIN download_requests as de
+                ON e.id = de.event_id
+              INNER JOIN users as u
+                 ON u.id = de.user_id
+            WHERE de.active = 1
+            ORDER BY de.created_at;
+        ");
     }
 
     /**
