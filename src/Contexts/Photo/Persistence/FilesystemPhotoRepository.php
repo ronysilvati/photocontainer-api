@@ -63,6 +63,11 @@ class FilesystemPhotoRepository implements PhotoRepository
         }
     }
 
+    public function rollback(Photo $photo)
+    {
+        //TODO: rollback
+    }
+
     public function find(int $id): Photo
     {
         // TODO: Implement find() method.
