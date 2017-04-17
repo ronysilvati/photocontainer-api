@@ -59,7 +59,7 @@ class Download implements Entity
     }
 
     /**
-     * @return int
+     * @return Photo
      */
     public function getPhoto(): Photo
     {

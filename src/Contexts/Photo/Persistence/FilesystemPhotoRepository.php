@@ -2,14 +2,14 @@
 
 namespace PhotoContainer\PhotoContainer\Contexts\Photo\Persistence;
 
-use Intervention\Image\Image;
+use Intervention\Image\ImageManager;
+use League\Flysystem\Adapter\Local;
+use League\Flysystem\Filesystem;
 use PhotoContainer\PhotoContainer\Contexts\Photo\Domain\Download;
 use PhotoContainer\PhotoContainer\Contexts\Photo\Domain\Like;
 use PhotoContainer\PhotoContainer\Contexts\Photo\Domain\Photo;
+use PhotoContainer\PhotoContainer\Contexts\Photo\Domain\Photographer;
 use PhotoContainer\PhotoContainer\Contexts\Photo\Domain\PhotoRepository;
-use Intervention\Image\ImageManager;
-use League\Flysystem\Filesystem;
-use League\Flysystem\Adapter\Local;
 
 class FilesystemPhotoRepository implements PhotoRepository
 {
@@ -58,6 +58,7 @@ class FilesystemPhotoRepository implements PhotoRepository
 
             return $photo;
         } catch (\Exception $e) {
+            var_dump($e->getMessage());exit;
             throw $e;
         }
     }
@@ -89,5 +90,10 @@ class FilesystemPhotoRepository implements PhotoRepository
 //        unlink($photo->getFilePath('protected', true, true));
 //        unlink($photo->getFilePath('thumb', true, true));
 //        unlink($photo->getFilePath('watermark', true, true));
+    }
+
+    public function findPhotoOwner(Photo $photo): Photographer
+    {
+        // TODO: Implement findPhotoOwner() method.
     }
 }

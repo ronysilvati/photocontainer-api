@@ -49,7 +49,7 @@ class PhotoContextBootstrap implements ContextBootstrap
             try {
                 $data = $request->getParsedBody();
 
-                $action = new DownloadPhoto(new EloquentPhotoRepository());
+                $action = new DownloadPhoto(new EloquentPhotoRepository(), $container['EmailHelper']);
                 $actionResponse = $action->handle((int) $args['photo_id'], (int) $args['user_id']);
 
                 if (get_class($actionResponse) == 'PhotoContainer\PhotoContainer\Infrastructure\Web\DomainExceptionResponse') {

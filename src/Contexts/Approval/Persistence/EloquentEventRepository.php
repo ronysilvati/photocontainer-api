@@ -4,8 +4,12 @@ namespace PhotoContainer\PhotoContainer\Contexts\Approval\Persistence;
 
 use PhotoContainer\PhotoContainer\Contexts\Approval\Domain\ApprovalRepository;
 use PhotoContainer\PhotoContainer\Contexts\Approval\Domain\DownloadRequest;
+use PhotoContainer\PhotoContainer\Contexts\Approval\Domain\Event;
+use PhotoContainer\PhotoContainer\Contexts\Approval\Domain\User;
 use PhotoContainer\PhotoContainer\Infrastructure\Exception\PersistenceException;
 use PhotoContainer\PhotoContainer\Infrastructure\Persistence\Eloquent\DownloadRequest as RequestModel;
+use PhotoContainer\PhotoContainer\Infrastructure\Persistence\Eloquent\Event as EventModel;
+use PhotoContainer\PhotoContainer\Infrastructure\Persistence\Eloquent\User as UserModel;
 
 class EloquentEventRepository implements ApprovalRepository
 {
@@ -84,6 +88,25 @@ class EloquentEventRepository implements ApprovalRepository
             return $request;
         } catch (\Exception $e) {
             throw new PersistenceException("Não foi possível autorizar o pedido.");
+        }
+    }
+
+    public function findEvent(int $event_id): Event
+    {
+        try {
+            $data = EventModel::find($event_id);
+            return new Event($data->title, $data->user_id);
+        } catch (\Exception $e) {
+            throw new PersistenceException("Não foi buscar o Evento.");
+        }    }
+
+    public function findUser(int $user_id): User
+    {
+        try {
+            $data = UserModel::find($user_id);
+            return new User($data->name, $data->email);
+        } catch (\Exception $e) {
+            throw new PersistenceException("Não foi possível buscar o publisher.");
         }
     }
 }

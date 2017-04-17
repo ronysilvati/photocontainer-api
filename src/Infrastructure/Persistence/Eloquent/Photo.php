@@ -8,13 +8,13 @@ class Photo extends EloquentModel
 {
     protected $table = 'photos';
 
-    public function photo()
-    {
-        return $this->belongsTo(Event::class);
-    }
-
     public function photoFavorite()
     {
         return $this->belongsTo(PhotoFavorite::class);
+    }
+
+    public function event()
+    {
+        return $this->belongsTo(Event::class);
     }
 }

@@ -13,4 +13,8 @@ interface PhotoRepository
     public function like(Like $like): Like;
 
     public function dislike(Like $like): Like;
+
+    public function findPhotoOwner(Photo $photo): Photographer;
+
+    public function findPublisher(int $publisher_id): Publisher;
 }

@@ -13,6 +13,8 @@ class CreatePhoto
 
     /**
      * CreatePhoto constructor.
+     * @param PhotoRepository $dbRepo
+     * @param PhotoRepository $fsRepo
      */
     public function __construct(PhotoRepository $dbRepo, PhotoRepository $fsRepo)
     {

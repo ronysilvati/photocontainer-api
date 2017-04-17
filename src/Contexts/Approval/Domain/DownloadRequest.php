@@ -36,11 +36,12 @@ class DownloadRequest
 
     /**
      * DownloadRequest constructor.
-     * @param int $event_id
-     * @param int $user_id
-     * @param bool $authorized
-     * @param bool $visualized
-     * @param bool $active
+     * @param int|null $id
+     * @param int|null $event_id
+     * @param int|null $user_id
+     * @param bool|null $authorized
+     * @param bool|null $visualized
+     * @param bool|null $active
      */
     public function __construct(?int $id, ?int $event_id, ?int $user_id, ?bool $authorized, ?bool $visualized, ?bool $active)
     {

@@ -20,7 +20,7 @@ class ApprovalContextBootstrap implements ContextBootstrap
 
         $slimApp->app->post('/events/{event_id}/request/user/{publisher_id}', function (ServerRequestInterface $request, ResponseInterface $response, $args) use ($container) {
             try {
-                $action = new RequestDownload(new EloquentEventRepository());
+                $action = new RequestDownload(new EloquentEventRepository(), $container['EmailHelper']);
                 $actionResponse = $action->handle($args['event_id'], $args['publisher_id']);
 
                 return $response->withJson($actionResponse, $actionResponse->getHttpStatus());
@@ -31,7 +31,7 @@ class ApprovalContextBootstrap implements ContextBootstrap
 
         $slimApp->app->put('/events/{event_id}/approval/user/{publisher_id}', function (ServerRequestInterface $request, ResponseInterface $response, $args) use ($container) {
             try {
-                $action = new ApprovalDownload(new EloquentEventRepository());
+                $action = new ApprovalDownload(new EloquentEventRepository(), $container['EmailHelper']);
                 $actionResponse = $action->handle($args['event_id'], $args['publisher_id']);
 
                 return $response->withJson($actionResponse, $actionResponse->getHttpStatus());
@@ -42,7 +42,7 @@ class ApprovalContextBootstrap implements ContextBootstrap
 
         $slimApp->app->put('/events/{event_id}/disapproval/user/{publisher_id}', function (ServerRequestInterface $request, ResponseInterface $response, $args) use ($container) {
             try {
-                $action = new DisapprovalDownload(new EloquentEventRepository());
+                $action = new DisapprovalDownload(new EloquentEventRepository(), $container['EmailHelper']);
                 $actionResponse = $action->handle($args['event_id'], $args['publisher_id']);
 
                 return $response->withJson($actionResponse, $actionResponse->getHttpStatus());

@@ -7,11 +7,15 @@ use PhotoContainer\PhotoContainer\Contexts\Photo\Action\LikePhoto;
 use PhotoContainer\PhotoContainer\Contexts\Photo\Domain\Download;
 use PhotoContainer\PhotoContainer\Contexts\Photo\Domain\Like;
 use PhotoContainer\PhotoContainer\Contexts\Photo\Domain\Photo;
+use PhotoContainer\PhotoContainer\Contexts\Photo\Domain\Photographer;
 use PhotoContainer\PhotoContainer\Contexts\Photo\Domain\PhotoRepository;
+use PhotoContainer\PhotoContainer\Contexts\Photo\Domain\Publisher;
+use PhotoContainer\PhotoContainer\Infrastructure\Persistence\Eloquent\Event;
 use PhotoContainer\PhotoContainer\Infrastructure\Persistence\Eloquent\Photo as PhotoModel;
 use PhotoContainer\PhotoContainer\Infrastructure\Persistence\Eloquent\Download as DownloadModel;
 use PhotoContainer\PhotoContainer\Infrastructure\Exception\PersistenceException;
 use PhotoContainer\PhotoContainer\Infrastructure\Persistence\Eloquent\PhotoFavorite;
+use PhotoContainer\PhotoContainer\Infrastructure\Persistence\Eloquent\User;
 
 class EloquentPhotoRepository implements PhotoRepository
 {
@@ -99,6 +103,26 @@ class EloquentPhotoRepository implements PhotoRepository
             }
 
             return $like;
+        } catch (\Exception $e) {
+            throw new PersistenceException($e->getMessage());
+        }
+    }
+
+    public function findPhotoOwner(Photo $photo): Photographer
+    {
+        try {
+            $user = Event::find($photo->getEventId())->with('User')->first()->toArray();
+            return new Photographer($user['user']['name'], $user['user']['email']);
+        } catch (\Exception $e) {
+            throw new PersistenceException($e->getMessage());
+        }
+    }
+
+    public function findPublisher(int $publisher_id): Publisher
+    {
+        try {
+            $user = User::find($publisher_id)->toArray();
+            return new Publisher($user['name'], $user['email']);
         } catch (\Exception $e) {
             throw new PersistenceException($e->getMessage());
         }
