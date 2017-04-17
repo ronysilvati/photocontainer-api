@@ -1,4 +1,5 @@
 <?php
+//
 
 use PhotoContainer\PhotoContainer\Contexts\Approval\ApprovalContextBootstrap;
 use PhotoContainer\PhotoContainer\Contexts\Auth\AuthContextBootstrap;
