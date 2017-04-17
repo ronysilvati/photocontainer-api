@@ -11,11 +11,10 @@ class ApprovalCollectionResponse implements \JsonSerializable
         $this->collection = $collection;
     }
 
-    function jsonSerialize()
+    public function jsonSerialize()
     {
         $out = [];
         foreach ($this->collection as $item) {
-
             $out[] = [
                 "photographer_id" => $item->getPhotographerId(),
                 "publisher_id" => $item->getPublisherId(),

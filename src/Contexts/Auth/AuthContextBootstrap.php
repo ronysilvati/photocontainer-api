@@ -28,5 +28,4 @@ class AuthContextBootstrap implements ContextBootstrap
 
         return $slimApp;
     }
-
 }

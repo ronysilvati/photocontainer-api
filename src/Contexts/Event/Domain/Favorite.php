@@ -91,6 +91,4 @@ class Favorite implements Entity
     {
         $this->totalLikes = $totalLikes;
     }
-
-
 }

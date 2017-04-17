@@ -15,7 +15,7 @@ class EventCreatedResponse implements \JsonSerializable
         $this->selfReference = "events/{$this->event->getId()}";
     }
 
-    function jsonSerialize()
+    public function jsonSerialize()
     {
         return [
             "id" => $this->event->getId(),

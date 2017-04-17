@@ -5,7 +5,6 @@ namespace PhotoContainer\PhotoContainer\Infrastructure\Persistence\Eloquent;
 
 use Illuminate\Database\Eloquent\Model as EloquentModel;
 
-
 class Address extends EloquentModel
 {
     protected $table = "address";

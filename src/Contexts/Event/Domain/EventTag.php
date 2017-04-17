@@ -49,6 +49,4 @@ class EventTag
     {
         $this->tag_id = $tag_id;
     }
-
-
 }

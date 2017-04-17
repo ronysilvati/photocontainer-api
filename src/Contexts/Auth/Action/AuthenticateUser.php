@@ -24,7 +24,7 @@ class AuthenticateUser
         try {
             $user = $this->repository->find($auth->getUser());
 
-            if ($this->cryptoMethod->verify($auth->getPassword(), $user->password) === false){
+            if ($this->cryptoMethod->verify($auth->getPassword(), $user->password) === false) {
                 throw new \Exception("A senha está incorreta");
             }
 

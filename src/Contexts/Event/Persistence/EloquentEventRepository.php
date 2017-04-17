@@ -5,21 +5,21 @@ namespace PhotoContainer\PhotoContainer\Contexts\Event\Persistence;
 use PhotoContainer\PhotoContainer\Contexts\Event\Action\RequestDownload;
 use PhotoContainer\PhotoContainer\Contexts\Event\Domain\DownloadRequest;
 use PhotoContainer\PhotoContainer\Contexts\Event\Domain\Event;
+use PhotoContainer\PhotoContainer\Contexts\Event\Domain\EventCategory;
 use PhotoContainer\PhotoContainer\Contexts\Event\Domain\EventRepository;
 use PhotoContainer\PhotoContainer\Contexts\Event\Domain\EventTag;
 use PhotoContainer\PhotoContainer\Contexts\Event\Domain\Favorite;
 use PhotoContainer\PhotoContainer\Contexts\Event\Domain\Photographer;
 use PhotoContainer\PhotoContainer\Contexts\Event\Domain\Publisher;
-use PhotoContainer\PhotoContainer\Contexts\Event\Domain\EventCategory;
 use PhotoContainer\PhotoContainer\Contexts\Event\Domain\Suppliers;
 use PhotoContainer\PhotoContainer\Infrastructure\Exception\PersistenceException;
+use PhotoContainer\PhotoContainer\Infrastructure\Persistence\Eloquent\DownloadRequest as RequestModel;
 use PhotoContainer\PhotoContainer\Infrastructure\Persistence\Eloquent\Event as EventModel;
 use PhotoContainer\PhotoContainer\Infrastructure\Persistence\Eloquent\EventCategory as EventCategoryModel;
 use PhotoContainer\PhotoContainer\Infrastructure\Persistence\Eloquent\EventFavorite;
 use PhotoContainer\PhotoContainer\Infrastructure\Persistence\Eloquent\EventSuppliers;
 use PhotoContainer\PhotoContainer\Infrastructure\Persistence\Eloquent\EventTag as EventTagModel;
 use PhotoContainer\PhotoContainer\Infrastructure\Persistence\Eloquent\User;
-use PhotoContainer\PhotoContainer\Infrastructure\Persistence\Eloquent\DownloadRequest as RequestModel;
 
 class EloquentEventRepository implements EventRepository
 {

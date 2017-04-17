@@ -11,15 +11,32 @@ use PhotoContainer\PhotoContainer\Infrastructure\Web\DomainExceptionResponse;
 
 class ApprovalDownload
 {
+    /**
+     * @var ApprovalRepository
+     */
     private $repository;
+
+    /**
+     * @var EmailHelper
+     */
     private $emailHelper;
 
+    /**
+     * ApprovalDownload constructor.
+     * @param ApprovalRepository $repository
+     * @param EmailHelper $emailHelper
+     */
     public function __construct(ApprovalRepository $repository, EmailHelper $emailHelper)
     {
         $this->repository = $repository;
         $this->emailHelper = $emailHelper;
     }
 
+    /**
+     * @param int $event_id
+     * @param int $publisher_id
+     * @return ApprovalRequestResponse|DomainExceptionResponse
+     */
     public function handle(int $event_id, int $publisher_id)
     {
         try {
@@ -42,6 +59,10 @@ class ApprovalDownload
         }
     }
 
+    /**
+     * @param int $event_id
+     * @param int $publisher_id
+     */
     public function sendEmail(int $event_id, int $publisher_id): void
     {
         try {

@@ -2,7 +2,6 @@
 
 namespace PhotoContainer\PhotoContainer\Contexts\Event\Domain;
 
-
 class Event
 {
     private $id;

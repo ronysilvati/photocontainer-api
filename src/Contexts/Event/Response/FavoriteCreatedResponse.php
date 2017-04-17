@@ -15,7 +15,7 @@ class FavoriteCreatedResponse implements \JsonSerializable
         $this->selfReference = "event/{$this->favorite->getEventId()}/favorite/{$this->favorite->getId()}";
     }
 
-    function jsonSerialize()
+    public function jsonSerialize()
     {
         return [
             "id" => $this->favorite->getId(),
@@ -34,5 +34,4 @@ class FavoriteCreatedResponse implements \JsonSerializable
     {
         return $this->httpStatus;
     }
-
 }

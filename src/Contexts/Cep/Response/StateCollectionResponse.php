@@ -11,7 +11,7 @@ class StateCollectionResponse implements \JsonSerializable
         $this->collection = $collection;
     }
 
-    function jsonSerialize()
+    public function jsonSerialize()
     {
         return $this->collection;
     }

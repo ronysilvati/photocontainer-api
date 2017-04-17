@@ -146,7 +146,7 @@ class EloquentEventRepository implements EventRepository
         try {
             $list = EventSearchApproval::where('photographer_id', $photographer_id)->get();
 
-            return $list->map(function ($item, $key){
+            return $list->map(function ($item, $key) {
                 if ($item->visualized == false) {
                     $dlRequest = DownloadRequest::find($item->id);
                     $dlRequest->visualized = 1;

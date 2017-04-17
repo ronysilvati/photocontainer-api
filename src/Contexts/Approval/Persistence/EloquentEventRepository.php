@@ -13,7 +13,6 @@ use PhotoContainer\PhotoContainer\Infrastructure\Persistence\Eloquent\User as Us
 
 class EloquentEventRepository implements ApprovalRepository
 {
-
     public function createDownloadRequest(DownloadRequest $request): DownloadRequest
     {
         try {
@@ -98,7 +97,8 @@ class EloquentEventRepository implements ApprovalRepository
             return new Event($data->title, $data->user_id);
         } catch (\Exception $e) {
             throw new PersistenceException("Não foi buscar o Evento.");
-        }    }
+        }
+    }
 
     public function findUser(int $user_id): User
     {

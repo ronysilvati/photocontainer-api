@@ -12,7 +12,7 @@ class DomainExceptionResponse implements \JsonSerializable
         $this->message = $message;
     }
 
-    function jsonSerialize()
+    public function jsonSerialize()
     {
         return [
             "message" => $this->message

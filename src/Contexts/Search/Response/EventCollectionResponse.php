@@ -12,7 +12,7 @@ class EventCollectionResponse implements \JsonSerializable
         $this->collection = $collection;
     }
 
-    function jsonSerialize()
+    public function jsonSerialize()
     {
         $out = ['total' => $this->collection['total'], 'result' => []];
         foreach ($this->collection['result'] as $search) {

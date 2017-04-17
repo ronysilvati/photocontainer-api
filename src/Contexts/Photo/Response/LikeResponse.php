@@ -13,7 +13,7 @@ class LikeResponse implements \JsonSerializable
         $this->like = $like;
     }
 
-    function jsonSerialize()
+    public function jsonSerialize()
     {
         return [
             'photo_id' => $this->like->getPhotoId(),

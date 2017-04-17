@@ -16,7 +16,7 @@ class EventResponse implements \JsonSerializable
         $this->event = $event;
     }
 
-    function jsonSerialize()
+    public function jsonSerialize()
     {
         return [
             'id' => $this->event->getId(),

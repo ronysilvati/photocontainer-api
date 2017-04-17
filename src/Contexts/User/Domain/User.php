@@ -18,6 +18,15 @@ class User implements Entity
     protected $id;
     protected $address;
 
+    /**
+     * User constructor.
+     * @param int|null $id
+     * @param string|null $name
+     * @param string|null $email
+     * @param string|null $pwd
+     * @param Details|null $details
+     * @param Profile|null $profile
+     */
     public function __construct(int $id = null, string $name = null, string $email = null, string $pwd = null, Details $details = null, Profile $profile = null)
     {
         $this->id = $id;
@@ -35,6 +44,10 @@ class User implements Entity
         }
     }
 
+    /**
+     * @param string $name
+     * @throws DomainViolationException
+     */
     public function changeName(string $name)
     {
         if (!$this->validateLength($name, 3, 150)) {
@@ -44,6 +57,10 @@ class User implements Entity
         $this->name = $name;
     }
 
+    /**
+     * @param string $email
+     * @throws DomainViolationException
+     */
     public function changeEmail(string $email)
     {
         if (!$this->validateEmail($email)) {
@@ -52,6 +69,10 @@ class User implements Entity
         $this->email = $email;
     }
 
+    /**
+     * @param string|null $blog
+     * @throws DomainViolationException
+     */
     public function changeBlog(string $blog = null)
     {
         if ($this->getProfile()->getProfileId() == Profile::PUBLISHER && empty($blog)) {
@@ -61,6 +82,10 @@ class User implements Entity
         $this->getDetails()->changeBlog($blog);
     }
 
+    /**
+     * @param Details|null $details
+     * @throws DomainViolationException
+     */
     public function changeDetails(Details $details = null)
     {
         if ($this->getProfile()->getProfileId() === Profile::PUBLISHER && empty($details->getBlog())) {
@@ -70,6 +95,9 @@ class User implements Entity
         $this->details = $details;
     }
 
+    /**
+     * @param string $pwd
+     */
     public function changePwd(string $pwd)
     {
         if (empty($pwd)) {
@@ -79,6 +107,9 @@ class User implements Entity
         $this->pwd = $pwd;
     }
 
+    /**
+     * @param int $id
+     */
     public function changeId(int $id)
     {
         $this->id = $id;
@@ -152,6 +183,4 @@ class User implements Entity
     {
         $this->address = $address;
     }
-
-
 }

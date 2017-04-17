@@ -119,7 +119,7 @@ class EloquentUserRepository implements UserRepository
             $user->changeDetails($details);
         }
 
-        $address = new Address(null, null,null,null,null, null, null, null, null);
+        $address = new Address(null, null, null, null, null, null, null, null, null);
         if (isset($userData['address']) && $userData['address']['id'] > 0) {
             $address->changeId($userData['address']['id']);
             $address->changeUserId($userData['address']['user_id']);

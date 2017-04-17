@@ -73,5 +73,4 @@ class Publisher implements Entity
     {
         $this->name = $name;
     }
-
 }

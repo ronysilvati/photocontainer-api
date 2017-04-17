@@ -13,7 +13,7 @@ class PhotoResponse implements \JsonSerializable
         $this->photos = $photo;
     }
 
-    function jsonSerialize()
+    public function jsonSerialize()
     {
         $photo_added = [];
         foreach ($this->photos as $photo) {

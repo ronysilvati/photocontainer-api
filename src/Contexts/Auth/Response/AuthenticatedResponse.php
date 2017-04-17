@@ -12,7 +12,7 @@ class AuthenticatedResponse implements \JsonSerializable
         $this->token = $token;
     }
 
-    function jsonSerialize()
+    public function jsonSerialize()
     {
         return [
             "token" => $this->token

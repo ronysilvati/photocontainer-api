@@ -15,7 +15,7 @@ class FavoriteRemovedResponse implements \JsonSerializable
         $this->selfReference = "event/{$this->favorite->getEventId()}/favorite/{$this->favorite->getId()}";
     }
 
-    function jsonSerialize()
+    public function jsonSerialize()
     {
         return [
             'event_id' => $this->favorite->getEventId(),

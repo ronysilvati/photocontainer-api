@@ -17,7 +17,6 @@ class FilesystemPhotoRepository implements PhotoRepository
     public function create(Photo $photo): Photo
     {
         try {
-
             $shared_path    = $_ENV['SHARED_PATH'];
             $localAdapter = new Local($shared_path, LOCK_EX, Local::DISALLOW_LINKS, [
                 'file' => [

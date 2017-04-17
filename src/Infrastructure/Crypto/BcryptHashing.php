@@ -19,5 +19,4 @@ class BcryptHashing implements CryptoMethod
     {
         return password_verify($plainPwd, $hashedPwd);
     }
-
 }
