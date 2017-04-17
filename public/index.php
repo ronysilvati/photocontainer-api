@@ -1,6 +1,5 @@
 <?php
-error_reporting(E_ALL);
-ini_set("display_errors", true);
+//
 
 use PhotoContainer\PhotoContainer\Contexts\Approval\ApprovalContextBootstrap;
 use PhotoContainer\PhotoContainer\Contexts\Auth\AuthContextBootstrap;
@@ -17,7 +16,7 @@ use PhotoContainer\PhotoContainer\Infrastructure\Web\Slim\SlimApp;
 
 require '../vendor/autoload.php';
 
-$app = new \Slim\App(['settings' => ['debug' => true, 'displayErrorDetails' => true,]]);
+$app = new \Slim\App();
 $container = $app->getContainer();
 
 $container['DatabaseProvider'] = function ($c) {
