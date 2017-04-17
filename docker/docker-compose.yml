@@ -34,3 +34,12 @@ services:
             - ..:/code
         links:
             - mysql
+        environment:
+            SHARED_PATH: '/code/shared'
+            PHINX_DBHOST: 'mysql'
+            PHINX_DBNAME: 'photocontainer'
+            PHINX_DBUSER: 'root'
+            PHINX_DBPASS: '1234'
+            PHINX_DBPORT: '3306'
+            PHOTOCONTAINER_EMAIL: 'fotocontainer@mailinator.com'
+            PHOTOCONTAINER_EMAIL_NAME: 'fotocontainer'
