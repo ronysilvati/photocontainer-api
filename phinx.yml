@@ -16,11 +16,11 @@ environments:
 
     development:
         adapter: mysql
-        host: %%PHINX_DBHOST%%
-        name: %%PHINX_DBNAME%%
-        user: %%PHINX_DBUSER%%
-        pass: %%PHINX_DBPASS%%
-        port: %%PHINX_DBPORT%%
+        host: mysql
+        name: photocontainer
+        user: root
+        pass: root
+        port: 3306
         charset: utf8
 
     testing:

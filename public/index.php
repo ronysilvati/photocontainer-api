@@ -1,6 +1,6 @@
 <?php
-error_reporting(E_ALL);
-ini_set("display_errors", true);
+//error_reporting(E_ALL);
+//ini_set("display_errors", true);
 
 use PhotoContainer\PhotoContainer\Infrastructure\Web\Slim\SlimApp;
 use PhotoContainer\PhotoContainer\Infrastructure\Persistence\EloquentDatabaseProvider;
@@ -20,11 +20,11 @@ $container = $app->getContainer();
 
 $container['DatabaseProvider'] = function ($c) {
     $database = new EloquentDatabaseProvider([
-        'host'      => $_ENV['PHINX_DBHOST'],
-        'database'  => $_ENV['PHINX_DBNAME'],
-        'user'      => $_ENV['PHINX_DBUSER'],
-        'pwd'       => $_ENV['PHINX_DBPASS'],
-        'port'      => $_ENV['PHINX_DBPORT'],
+        'host'      => 'mysql',
+        'database'  => 'photocontainer',
+        'user'      => 'root',
+        'pwd'       => 'root',
+        'port'      => '3306',
     ]);
     return $database;
 };
