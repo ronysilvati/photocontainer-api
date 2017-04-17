@@ -107,9 +107,6 @@ class EloquentUserRepository implements UserRepository
             );
 
             if ($userProfile->getProfileId() === Profile::PHOTOGRAPHER) {
-
-//var_dump($userData['detail']['name_by']);exit;
-
                 $photographerDetails = new PhotographerDetails(
                     $userData['detail']['bio'],
                     $userData['detail']['studio_name'],
@@ -210,10 +207,6 @@ class EloquentUserRepository implements UserRepository
             throw $e;
         } catch (\Exception $e) {
             DB::rollback();
-
-            var_dump($e->getMessage());
-            exit;
-
             throw new PersistenceException("Erro na criação do usuário!");
         }
     }
