@@ -29,7 +29,7 @@ class CreatePhoto
                 try {
                     $this->fsRepo->create($item);
                     $this->dbRepo->create($item);
-                }catch (\Exception $e) {
+                } catch (\Exception $e) {
                     $this->fsRepo->rollback($item);
                 }
             }

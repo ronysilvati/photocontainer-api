@@ -92,5 +92,4 @@ class PhotoContextBootstrap implements ContextBootstrap
 
         return $slimApp;
     }
-
 }

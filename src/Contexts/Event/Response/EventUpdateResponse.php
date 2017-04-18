@@ -13,14 +13,15 @@ class EventUpdateResponse implements \JsonSerializable
         $this->event = $event;
     }
 
-    function jsonSerialize()
+    public function jsonSerialize()
     {
         return [
             "message" => "Update realizado.",
             "_links" => [
                 "_self" => ['href' => "/events/".$this->event->getId()],
             ],
-        ];    }
+        ];
+    }
 
     /**
      * @return int

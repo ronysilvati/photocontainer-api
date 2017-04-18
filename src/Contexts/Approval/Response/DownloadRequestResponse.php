@@ -13,7 +13,7 @@ class DownloadRequestResponse implements \JsonSerializable
         $this->request = $request;
     }
 
-    function jsonSerialize()
+    public function jsonSerialize()
     {
         return [
             "id" => $this->request->getId(),

@@ -8,8 +8,6 @@
 
 namespace PhotoContainer\PhotoContainer\Infrastructure;
 
-
 interface Entity
 {
-
 }

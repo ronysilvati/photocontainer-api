@@ -11,11 +11,10 @@ class CategoryCollectionResponse implements \JsonSerializable
         $this->collection = $collection;
     }
 
-    function jsonSerialize()
+    public function jsonSerialize()
     {
         $out = [];
         foreach ($this->collection as $item) {
-
             $out[] = [
                 "id" => $item->getId(),
                 "description" => $item->getDescription(),

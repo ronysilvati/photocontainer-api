@@ -47,5 +47,4 @@ class SlimApp implements WebApp
     {
         $this->app->run();
     }
-
 }

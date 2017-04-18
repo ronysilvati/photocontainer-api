@@ -18,7 +18,6 @@ class UpdateSuppliers
     public function handle(array $suppliers, int $id)
     {
         try {
-
             $result = $this->repository->saveEventSuppliers(json_encode((object) $suppliers), $id);
             return new SuppliersUpdateResponse($result);
         } catch (\Exception $e) {

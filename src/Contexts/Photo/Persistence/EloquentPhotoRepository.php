@@ -73,13 +73,13 @@ class EloquentPhotoRepository implements PhotoRepository
     public function like(Like $like): Like
     {
         try {
-             $liked = PhotoFavorite::where('photo_id', $like->getPhotoId())
+            $liked = PhotoFavorite::where('photo_id', $like->getPhotoId())
                 ->where('user_id', $like->getUserId())
                 ->count();
 
-             if ($liked > 0) {
+            if ($liked > 0) {
                 throw new \Exception('Foto já é favorita');
-             }
+            }
 
             $model = new PhotoFavorite();
             $model->photo_id = $like->getPhotoId();

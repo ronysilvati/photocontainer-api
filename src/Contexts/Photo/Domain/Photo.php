@@ -105,7 +105,7 @@ class Photo implements Entity
     {
         $path_parts = pathinfo($physicalName);
 
-        if ( ! isset($path_parts['extension'])) {
+        if (! isset($path_parts['extension'])) {
             throw new \DomainException("Não foi possivel obter a extensão do arquivo.");
         }
 
@@ -122,20 +122,24 @@ class Photo implements Entity
      * @param bool $with_filename
      * @return string
      */
-    public function getFilePath(?string $thatFolder, $with_shared_path = false, $with_filename = false) {
-
+    public function getFilePath(?string $thatFolder, $with_shared_path = false, $with_filename = false)
+    {
         $file_path = 'events/' . $this->getEventId() . '/' . $thatFolder;
 
         $file_path = $file_path[-1] == "/" ? $file_path : $file_path."/";
 
-        if ($with_shared_path) $file_path = $_ENV['SHARED_PATH'] . '/' . $file_path;
-        if ($with_filename) $file_path = $file_path . $this->getPhysicalName();
+        if ($with_shared_path) {
+            $file_path = $_ENV['SHARED_PATH'] . '/' . $file_path;
+        }
+        if ($with_filename) {
+            $file_path = $file_path . $this->getPhysicalName();
+        }
 
         return $file_path;
     }
 
-    public function getWatermarkFile() {
+    public function getWatermarkFile()
+    {
         return $_ENV['SHARED_PATH'] . '/watermark.png';
     }
-
 }

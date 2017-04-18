@@ -8,13 +8,25 @@ use PhotoContainer\PhotoContainer\Infrastructure\Web\DomainExceptionResponse;
 
 class FindUser
 {
+    /**
+     * @var UserRepository
+     */
     protected $userRepository;
 
+    /**
+     * FindUser constructor.
+     * @param UserRepository $userRepository
+     */
     public function __construct(UserRepository $userRepository)
     {
         $this->userRepository = $userRepository;
     }
 
+    /**
+     * @param int|null $id
+     * @param string|null $email
+     * @return UserResponse|DomainExceptionResponse
+     */
     public function handle(int $id = null, string $email = null)
     {
         try {

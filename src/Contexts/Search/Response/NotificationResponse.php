@@ -13,7 +13,7 @@ class NotificationResponse implements \JsonSerializable
         $this->notification = $notification;
     }
 
-    function jsonSerialize()
+    public function jsonSerialize()
     {
         return [
             'all' => $this->notification->getTotal(),

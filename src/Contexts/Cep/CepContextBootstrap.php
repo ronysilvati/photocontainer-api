@@ -2,7 +2,6 @@
 
 namespace PhotoContainer\PhotoContainer\Contexts\Cep;
 
-
 use PhotoContainer\PhotoContainer\Contexts\Cep\Action\FindCep;
 use PhotoContainer\PhotoContainer\Contexts\Cep\Action\FindCities;
 use PhotoContainer\PhotoContainer\Contexts\Cep\Action\FindStates;
@@ -30,21 +29,21 @@ class CepContextBootstrap implements ContextBootstrap
 
         $slimApp->app->get('/location/zipcode/{cep}', function (ServerRequestInterface $request, ResponseInterface $response, $args) use ($container) {
             $action = new FindCep(new RestCepRepository($container['CepRestProvider']));
-            $actionResponse = $action->handle(new Cep($args['cep'], null, null, null, null,null, null));
+            $actionResponse = $action->handle(new Cep($args['cep'], null, null, null, null, null, null));
 
             return $response->withJson($actionResponse, $actionResponse->getHttpStatus());
         });
 
         $slimApp->app->get('/location/country/{country_id}/states', function (ServerRequestInterface $request, ResponseInterface $response, $args) use ($container) {
             $action = new FindStates(new EloquentCepRepository());
-            $actionResponse = $action->handle(new Cep(null, $args['country_id'], null, null, null,null, null));
+            $actionResponse = $action->handle(new Cep(null, $args['country_id'], null, null, null, null, null));
 
             return $response->withJson($actionResponse, $actionResponse->getHttpStatus());
         });
 
         $slimApp->app->get('/location/state/{state_id}/cities', function (ServerRequestInterface $request, ResponseInterface $response, $args) use ($container) {
             $action = new FindCities(new EloquentCepRepository());
-            $actionResponse = $action->handle(new Cep(null, null, $args['state_id'], null, null,null, null));
+            $actionResponse = $action->handle(new Cep(null, null, $args['state_id'], null, null, null, null));
 
             return $response->withJson($actionResponse, $actionResponse->getHttpStatus());
         });

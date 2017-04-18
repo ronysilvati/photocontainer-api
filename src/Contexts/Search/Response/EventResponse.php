@@ -17,7 +17,7 @@ class EventResponse implements \JsonSerializable
         $this->context = $context;
     }
 
-    function jsonSerialize()
+    public function jsonSerialize()
     {
         if ($this->context == 'gallery_photos_publisher') {
             return [

@@ -11,7 +11,7 @@ class EventRemovedResponse implements \JsonSerializable
         $this->id = $id;
     }
 
-    function jsonSerialize()
+    public function jsonSerialize()
     {
         return [
             "id" => $this->id,
@@ -19,7 +19,8 @@ class EventRemovedResponse implements \JsonSerializable
             "_links" => [
                 "_self" => ['href' => "/events/".$this->id],
             ],
-        ];    }
+        ];
+    }
 
     /**
      * @return int

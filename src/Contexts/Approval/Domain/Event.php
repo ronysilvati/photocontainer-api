@@ -2,7 +2,6 @@
 
 namespace PhotoContainer\PhotoContainer\Contexts\Approval\Domain;
 
-
 class Event
 {
     /**

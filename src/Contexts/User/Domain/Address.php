@@ -37,7 +37,6 @@ class Address
         ?string $street,
         ?string $complement)
     {
-
         $this->id = $id;
         $this->user_id = $user_id;
 

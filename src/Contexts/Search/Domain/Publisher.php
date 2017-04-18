@@ -33,6 +33,4 @@ class Publisher
     {
         $this->id = $id;
     }
-
-
 }

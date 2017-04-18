@@ -22,5 +22,4 @@ class JwtGenerator implements CryptoMethod
     {
         // TODO: Implement verify() method.
     }
-
 }

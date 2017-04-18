@@ -18,7 +18,7 @@ class EloquentPhotoRepository implements PhotoRepository
             ->groupBy('id')
             ->get();
 
-        return $data->map(function ($item){
+        return $data->map(function ($item) {
             return new Historic($item->photo_id, $item->user_id, $item->event_id, $item->filename);
         })->toArray();
     }
@@ -29,10 +29,10 @@ class EloquentPhotoRepository implements PhotoRepository
 
         $data = EventSearchPublisherFavorite::where($where)
             ->groupBy('id')
-            ->orderBy('created_at','DESC')
+            ->orderBy('created_at', 'DESC')
             ->get();
 
-        return $data->map(function ($item){
+        return $data->map(function ($item) {
             return new Historic($item->photo_id, $item->user_id, $item->event_id, $item->filename);
         })->toArray();
     }

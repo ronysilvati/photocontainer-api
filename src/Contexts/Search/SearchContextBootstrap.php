@@ -21,7 +21,6 @@ use PhotoContainer\PhotoContainer\Contexts\Search\Persistence\EloquentNotificati
 use PhotoContainer\PhotoContainer\Contexts\Search\Persistence\EloquentPhotoRepository;
 use PhotoContainer\PhotoContainer\Contexts\Search\Persistence\EloquentTagRepository;
 use PhotoContainer\PhotoContainer\Infrastructure\ContextBootstrap;
-use PhotoContainer\PhotoContainer\Infrastructure\Persistence\Eloquent\EventSearchApproval;
 use PhotoContainer\PhotoContainer\Infrastructure\Web\WebApp;
 use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\ServerRequestInterface;

@@ -13,14 +13,15 @@ class SuppliersUpdateResponse implements \JsonSerializable
         $this->suppliers = $suppliers;
     }
 
-    function jsonSerialize()
+    public function jsonSerialize()
     {
         return [
             "message" => "Update realizado.",
             "_links" => [
                 "_self" => ['href' => "/events/".$this->suppliers->getId()],
             ],
-        ];    }
+        ];
+    }
 
     /**
      * @return int

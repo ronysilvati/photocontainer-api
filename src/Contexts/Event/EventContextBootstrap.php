@@ -60,7 +60,7 @@ class EventContextBootstrap implements ContextBootstrap
                     $data['title'], $data['description'], $data['city'], $data['state'], $data['city'],
                     (bool) $data['terms'], (bool) $data['approval_general'],
                     (bool) $data['approval_photographer'], (bool) $data['approval_bride'], $allCategories,
-                    $allTags, new Suppliers(null, null,null));
+                    $allTags, new Suppliers(null, null, null));
 
                 $action = new CreateEvent(new EloquentEventRepository());
                 $actionResponse = $action->handle($event);

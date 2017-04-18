@@ -13,7 +13,7 @@ class CepResponse implements \JsonSerializable
         $this->cep = $cep;
     }
 
-    function jsonSerialize()
+    public function jsonSerialize()
     {
         return [
             'zipcode' => $this->cep->getZipcode(),

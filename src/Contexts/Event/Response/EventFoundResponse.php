@@ -13,7 +13,7 @@ class EventFoundResponse implements \JsonSerializable
         $this->event = $event;
     }
 
-    function jsonSerialize()
+    public function jsonSerialize()
     {
         $categories = [];
         foreach ($this->event->getCategories() as $item) {

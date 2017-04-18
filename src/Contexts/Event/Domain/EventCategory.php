@@ -2,7 +2,6 @@
 
 namespace PhotoContainer\PhotoContainer\Contexts\Event\Domain;
 
-
 class EventCategory
 {
     public $event_id;
@@ -54,6 +53,4 @@ class EventCategory
 
         $this->category_id = $category_id;
     }
-
-
 }

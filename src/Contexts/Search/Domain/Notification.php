@@ -14,7 +14,8 @@ class Notification
         $this->approvalWaitList = $approvalWaitList;
     }
 
-    public function getTotal(){
+    public function getTotal()
+    {
         return $this->approvalWaitList;
     }
 }
