@@ -95,8 +95,6 @@ class PhotoContextBootstrap implements ContextBootstrap
             $action = new DeletePhoto(new EloquentPhotoRepository(), new FilesystemPhotoRepository());
             $actionResponse = $action->handle($args['guid']);
 
-            exit;
-
             return $response->withJson($actionResponse, $actionResponse->getHttpStatus());
         });
 
