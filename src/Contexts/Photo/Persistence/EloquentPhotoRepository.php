@@ -3,7 +3,6 @@
 namespace PhotoContainer\PhotoContainer\Contexts\Photo\Persistence;
 
 use League\Flysystem\Exception;
-use PhotoContainer\PhotoContainer\Contexts\Photo\Action\LikePhoto;
 use PhotoContainer\PhotoContainer\Contexts\Photo\Domain\Download;
 use PhotoContainer\PhotoContainer\Contexts\Photo\Domain\Like;
 use PhotoContainer\PhotoContainer\Contexts\Photo\Domain\Photo;
@@ -11,12 +10,12 @@ use PhotoContainer\PhotoContainer\Contexts\Photo\Domain\Photographer;
 use PhotoContainer\PhotoContainer\Contexts\Photo\Domain\PhotoRepository;
 use PhotoContainer\PhotoContainer\Contexts\Photo\Domain\Publisher;
 use PhotoContainer\PhotoContainer\Infrastructure\Persistence\Eloquent\Event;
-use PhotoContainer\PhotoContainer\Infrastructure\Persistence\Eloquent\EventFavorite;
 use PhotoContainer\PhotoContainer\Infrastructure\Persistence\Eloquent\Photo as PhotoModel;
 use PhotoContainer\PhotoContainer\Infrastructure\Persistence\Eloquent\Download as DownloadModel;
 use PhotoContainer\PhotoContainer\Infrastructure\Exception\PersistenceException;
 use PhotoContainer\PhotoContainer\Infrastructure\Persistence\Eloquent\PhotoFavorite;
 use PhotoContainer\PhotoContainer\Infrastructure\Persistence\Eloquent\User;
+use Illuminate\Database\Capsule\Manager as DB;
 
 class EloquentPhotoRepository implements PhotoRepository
 {
@@ -125,6 +124,34 @@ class EloquentPhotoRepository implements PhotoRepository
             $user = User::find($publisher_id)->toArray();
             return new Publisher($user['name'], $user['email']);
         } catch (\Exception $e) {
+            throw new PersistenceException($e->getMessage());
+        }
+    }
+
+    public function deletePhoto(string $guid): Photo
+    {
+        try {
+            DB::beginTransaction();
+
+            $photo = PhotoModel::where('filename', 'like', "{$guid}.%");
+
+            $photoData = $photo->first();
+
+            if (DownloadModel::where('photo_id', $photoData->id)->count() > 0) {
+                throw new \Exception("Algum publisher já baixou essa foto, ela não pode ser removida.");
+            }
+
+            PhotoFavorite::where('photo_id', $photoData->id)->delete();
+            $photo->delete();
+
+            DB::commit();
+
+            $photoDomain = new Photo($photoData->id, $photoData->event_id);
+            $photoDomain->setPhysicalName($photoData->filename);
+
+            return $photoDomain;
+        } catch (\Exception $e) {
+            DB::rollback();
             throw new PersistenceException($e->getMessage());
         }
     }

@@ -17,4 +17,6 @@ interface PhotoRepository
     public function findPhotoOwner(Photo $photo): Photographer;
 
     public function findPublisher(int $publisher_id): Publisher;
+
+//    public function deletePhoto(string $guid, int $photographer_id);
 }

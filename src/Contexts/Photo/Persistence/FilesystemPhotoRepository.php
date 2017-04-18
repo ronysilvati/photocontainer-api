@@ -14,30 +14,37 @@ use PhotoContainer\PhotoContainer\Contexts\Photo\Domain\Publisher;
 
 class FilesystemPhotoRepository implements PhotoRepository
 {
+    private $filesystem;
+
+    public function __construct()
+    {
+        $shared_path    = $_ENV['SHARED_PATH'];
+        $localAdapter = new Local($shared_path, LOCK_EX, Local::DISALLOW_LINKS, [
+            'file' => [
+                'public' => 0744,
+                'private' => 0700,
+            ],
+            'dir' => [
+                'public' => 0755,
+                'private' => 0700,
+            ]
+        ]);
+
+        $this->filesystem = new Filesystem($localAdapter);
+    }
+
     public function create(Photo $photo): Photo
     {
         try {
-            $shared_path    = $_ENV['SHARED_PATH'];
-            $localAdapter = new Local($shared_path, LOCK_EX, Local::DISALLOW_LINKS, [
-                'file' => [
-                    'public' => 0744,
-                    'private' => 0700,
-                ],
-                'dir' => [
-                    'public' => 0755,
-                    'private' => 0700,
-                ]
-            ]);
 
-            $filesystem = new Filesystem($localAdapter);
-            $filesystem->createDir($photo->getFilePath('protected'));
-            $filesystem->createDir($photo->getFilePath('thumb'));
-            $filesystem->createDir($photo->getFilePath('watermark'));
+            $this->filesystem->createDir($photo->getFilePath('protected'));
+            $this->filesystem->createDir($photo->getFilePath('thumb'));
+            $this->filesystem->createDir($photo->getFilePath('watermark'));
 
             // save original
             $stream = fopen($photo->file['tmp_name'], 'r+');
             $file_path = $photo->getFilePath('protected', false, true);
-            $filesystem->writeStream($file_path, $stream);
+            $this->filesystem->writeStream($file_path, $stream);
             fclose($stream);
 
             // create an image manager instance with favored driver
@@ -57,6 +64,17 @@ class FilesystemPhotoRepository implements PhotoRepository
             $image->save($watermark_target_file, 40);
 
             return $photo;
+        } catch (\Exception $e) {
+            throw $e;
+        }
+    }
+
+    public function deletePhoto(Photo $photo)
+    {
+        try {
+            unlink($photo->getFilePath('thumb', true, true));
+            unlink($photo->getFilePath('protected', true, true));
+            unlink($photo->getFilePath('watermark', true, true));
         } catch (\Exception $e) {
             throw $e;
         }

@@ -3,10 +3,10 @@
 namespace PhotoContainer\PhotoContainer\Contexts\Photo\Action;
 
 use PhotoContainer\PhotoContainer\Contexts\Photo\Domain\PhotoRepository;
-use PhotoContainer\PhotoContainer\Contexts\Photo\Response\PhotoResponse;
+use PhotoContainer\PhotoContainer\Contexts\Photo\Response\DeletedPhotoResponse;
 use PhotoContainer\PhotoContainer\Infrastructure\Web\DomainExceptionResponse;
 
-class CreatePhoto
+class DeletePhoto
 {
     private $dbRepo;
     private $fsRepo;
@@ -22,20 +22,17 @@ class CreatePhoto
         $this->fsRepo = $fsRepo;
     }
 
-    public function handle(array $array)
+    /**
+     * @param string $guid
+     * @return DeletedPhotoResponse|DomainExceptionResponse
+     */
+    public function handle(string $guid)
     {
         try {
-            foreach ($array as $item) {
-                try {
-                    $this->fsRepo->create($item);
-                    $this->dbRepo->create($item);
-                } catch (\Exception $e) {
-                    var_dump($e->getMessage());
-                    exit;
-                    $this->fsRepo->rollback($item);
-                }
-            }
-            return new PhotoResponse($array);
+            $photo = $this->dbRepo->deletePhoto($guid);
+            $this->fsRepo->deletePhoto($photo);
+
+            return new DeletedPhotoResponse($photo);
         } catch (\Exception $e) {
             return new DomainExceptionResponse($e->getMessage());
         }

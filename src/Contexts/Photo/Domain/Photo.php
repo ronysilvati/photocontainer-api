@@ -15,9 +15,10 @@ class Photo implements Entity
 
     /**
      * Photo constructor.
-     * @param $id
-     * @param $event_id
-     * @param $file
+     * @param int|null $id
+     * @param int|null $event_id
+     * @param array|null $file
+     * @param null|string $physicalName
      */
     public function __construct(?int $id = null, ?int $event_id = null, ?array $file = null, ?string $physicalName = null)
     {

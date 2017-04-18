@@ -4,6 +4,7 @@ namespace PhotoContainer\PhotoContainer\Contexts\Photo;
 
 use PhotoContainer\PhotoContainer\Contexts\Event\Persistence\EloquentTagRepository;
 use PhotoContainer\PhotoContainer\Contexts\Photo\Action\CreatePhoto;
+use PhotoContainer\PhotoContainer\Contexts\Photo\Action\DeletePhoto;
 use PhotoContainer\PhotoContainer\Contexts\Photo\Action\DislikePhoto;
 use PhotoContainer\PhotoContainer\Contexts\Photo\Action\DownloadPhoto;
 use PhotoContainer\PhotoContainer\Contexts\Photo\Action\LikePhoto;
@@ -86,6 +87,15 @@ class PhotoContextBootstrap implements ContextBootstrap
 
             $action = new DislikePhoto(new EloquentPhotoRepository());
             $actionResponse = $action->handle($like);
+
+            return $response->withJson($actionResponse, $actionResponse->getHttpStatus());
+        });
+
+        $slimApp->app->delete('/photo/{guid}', function (ServerRequestInterface $request, ResponseInterface $response, $args) use ($container) {($like);
+            $action = new DeletePhoto(new EloquentPhotoRepository(), new FilesystemPhotoRepository());
+            $actionResponse = $action->handle($args['guid']);
+
+            exit;
 
             return $response->withJson($actionResponse, $actionResponse->getHttpStatus());
         });

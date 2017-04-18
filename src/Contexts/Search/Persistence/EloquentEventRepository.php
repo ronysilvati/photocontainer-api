@@ -64,6 +64,7 @@ class EloquentEventRepository implements EventRepository
 
             $out = ['total' => $eventSearch->count()];
 
+            $eventSearch = $eventSearch->forPage($search->getPage(), 1000);
 
             $out['result'] = $eventSearch->map(function ($item, $key) use ($publisher) {
                 $category = new Category($item->category_id, $item->category);
