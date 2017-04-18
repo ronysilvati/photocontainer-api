@@ -11,6 +11,7 @@ use PhotoContainer\PhotoContainer\Contexts\Photo\Domain\Photographer;
 use PhotoContainer\PhotoContainer\Contexts\Photo\Domain\PhotoRepository;
 use PhotoContainer\PhotoContainer\Contexts\Photo\Domain\Publisher;
 use PhotoContainer\PhotoContainer\Infrastructure\Persistence\Eloquent\Event;
+use PhotoContainer\PhotoContainer\Infrastructure\Persistence\Eloquent\EventFavorite;
 use PhotoContainer\PhotoContainer\Infrastructure\Persistence\Eloquent\Photo as PhotoModel;
 use PhotoContainer\PhotoContainer\Infrastructure\Persistence\Eloquent\Download as DownloadModel;
 use PhotoContainer\PhotoContainer\Infrastructure\Exception\PersistenceException;

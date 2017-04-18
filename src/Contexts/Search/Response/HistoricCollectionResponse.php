@@ -24,6 +24,7 @@ class HistoricCollectionResponse implements \JsonSerializable
                 'photo_id' => $item->getPhotoId(),
                 'thumb' => '/user/themes/photo-container-site/_temp/photos/1.jpg',
                 'context' => 'gallery_publisher_historic',
+                'liked' => true,
             ];
         }
 

@@ -4,7 +4,8 @@ namespace PhotoContainer\PhotoContainer\Contexts\Search;
 
 use PhotoContainer\PhotoContainer\Contexts\Search\Action\FindCategories;
 use PhotoContainer\PhotoContainer\Contexts\Search\Action\FindEvent;
-use PhotoContainer\PhotoContainer\Contexts\Search\Action\FindEventPhotos;
+use PhotoContainer\PhotoContainer\Contexts\Search\Action\FindEventPhotosPhotographer;
+use PhotoContainer\PhotoContainer\Contexts\Search\Action\FindEventPhotosPublisher;
 use PhotoContainer\PhotoContainer\Contexts\Search\Action\FindHistoric;
 use PhotoContainer\PhotoContainer\Contexts\Search\Action\FindTags;
 use PhotoContainer\PhotoContainer\Contexts\Search\Action\GetNotifications;
@@ -94,8 +95,19 @@ class SearchContextBootstrap implements ContextBootstrap
 
         $slimApp->app->get('/search/events/{id}/photos/user/{user_id}', function (ServerRequestInterface $request, ResponseInterface $response, $args) use ($container) {
             try {
-                $action = new FindEventPhotos(new EloquentEventRepository());
+                $action = new FindEventPhotosPublisher(new EloquentEventRepository());
                 $actionResponse = $action->handle($args['id'], $args['user_id']);
+
+                return $response->withJson($actionResponse, $actionResponse->getHttpStatus());
+            } catch (\Exception $e) {
+                return $response->withJson(['message' => $e->getMessage()], 500);
+            }
+        });
+
+        $slimApp->app->get('/search/events/{id}/photos', function (ServerRequestInterface $request, ResponseInterface $response, $args) use ($container) {
+            try {
+                $action = new FindEventPhotosPhotographer(new EloquentEventRepository());
+                $actionResponse = $action->handle($args['id']);
 
                 return $response->withJson($actionResponse, $actionResponse->getHttpStatus());
             } catch (\Exception $e) {

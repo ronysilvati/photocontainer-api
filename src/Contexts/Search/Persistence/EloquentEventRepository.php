@@ -95,7 +95,7 @@ class EloquentEventRepository implements EventRepository
         }
     }
 
-    public function findEventPhotos(int $id, int $user_id)
+    public function findEventPhotosPublisher(int $id, int $user_id): Event
     {
         try {
             $eventModel = EventModel::find($id);
@@ -136,6 +136,36 @@ class EloquentEventRepository implements EventRepository
             }
 
             return $event;
+        } catch (\Exception $e) {
+            throw new PersistenceException($e->getMessage());
+        }
+    }
+
+    public function findEventPhotosPhotographer(int $id): Event
+    {
+        try {
+            $eventModel = EventModel::find($id);
+            $eventData = $eventModel->load('EventCategory', 'User', 'Photo')->toArray();
+
+            $categories = $eventModel->EventCategory->load('Category')->toArray();
+
+            $photos = [];
+            foreach ($eventData['photo'] as $photo) {
+                $photos[] = [
+                    'id' => $photo['id'],
+                    "thumb" => "/events/{$id}/thumb/".$photo['filename'],
+                    "filename" => $photo['filename'],
+                    'context' => 'gallery_photos_photographer',
+                ];
+            }
+
+            return new Event(
+                $eventData['id'],
+                $eventData['title'],
+                $eventData['user']['name'],
+                $categories[0]['category']['description'],
+                $photos
+            );
         } catch (\Exception $e) {
             throw new PersistenceException($e->getMessage());
         }
