@@ -28,6 +28,11 @@ class EventSearch
      */
     private $publisherLike;
 
+    /**
+     * @var string
+     */
+    private $thumb;
+
     public function __construct(
         int $id = null,
         ?Photographer $photographer,
@@ -223,5 +228,21 @@ class EventSearch
         if ($this->photographer) {
             return "gallery_photographer";
         }
+    }
+
+    /**
+     * @return string
+     */
+    public function getThumb(): string
+    {
+        return "events/{$this->id}/thumb/{$this->thumb}";
+    }
+
+    /**
+     * @param string $thumb
+     */
+    public function changeThumb(string $thumb)
+    {
+        $this->thumb = $thumb;
     }
 }

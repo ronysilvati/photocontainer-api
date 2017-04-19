@@ -15,6 +15,7 @@ use PhotoContainer\PhotoContainer\Infrastructure\Persistence\Eloquent\EventFavor
 use PhotoContainer\PhotoContainer\Infrastructure\Persistence\Eloquent\EventSearch as EventSearchModel;
 use PhotoContainer\PhotoContainer\Infrastructure\Persistence\Eloquent\EventSearchApproval;
 use PhotoContainer\PhotoContainer\Infrastructure\Persistence\Eloquent\EventSearchPublisher;
+use PhotoContainer\PhotoContainer\Infrastructure\Persistence\Eloquent\Photo;
 use PhotoContainer\PhotoContainer\Infrastructure\Persistence\Eloquent\PhotoFavorite;
 
 class EloquentEventRepository implements EventRepository
@@ -74,6 +75,8 @@ class EloquentEventRepository implements EventRepository
                 $search->changeEventdate($item->eventdate);
                 $search->changePhotos($item->photos);
                 $search->changeLikes($item->likes);
+
+                $search->changeThumb(Photo::where('event_id', $item->id)->first()->filename);
 
                 if ($publisher) {
                     $search->changePublisher($publisher);
