@@ -76,7 +76,9 @@ class EloquentEventRepository implements EventRepository
                 $search->changePhotos($item->photos);
                 $search->changeLikes($item->likes);
 
-                $search->changeThumb(Photo::where('event_id', $item->id)->first()->filename);
+                if ($item->photos > 0) {
+                    $search->changeThumb(Photo::where('event_id', $item->id)->first()->filename);
+                }
 
                 if ($publisher) {
                     $search->changePublisher($publisher);
@@ -189,8 +191,6 @@ class EloquentEventRepository implements EventRepository
                 return new Approval($item->photographer_id, $item->publisher_id, $item->created_at, $item->title);
             })->toArray();
         } catch (\Exception $e) {
-            var_dump($e->getMessage());
-            exit;
             throw new PersistenceException("Erro na listagem das aprovações pendentes.");
         }
     }

@@ -53,7 +53,7 @@ class SearchContextBootstrap implements ContextBootstrap
                     foreach ($args['tags'] as $tag) {
                         $allTags[] = new Tag((int) $tag, null);
                     }
-                }s
+                }
 
                 $search = new EventSearch(null, $photographer, $keyword, $allCategories, $allTags, 1);
 
