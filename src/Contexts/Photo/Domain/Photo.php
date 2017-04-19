@@ -130,7 +130,7 @@ class Photo implements Entity
         $file_path = $file_path[-1] == "/" ? $file_path : $file_path."/";
 
         if ($with_shared_path) {
-            $file_path = $_ENV['SHARED_PATH'] . '/' . $file_path;
+            $file_path = getenv('SHARED_PATH') . '/' . $file_path;
         }
         if ($with_filename) {
             $file_path = $file_path . $this->getPhysicalName();
@@ -141,6 +141,6 @@ class Photo implements Entity
 
     public function getWatermarkFile()
     {
-        return $_ENV['SHARED_PATH'] . '/watermark.png';
+        return getenv('SHARED_PATH') . '/watermark.png';
     }
 }

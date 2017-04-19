@@ -18,7 +18,7 @@ class FilesystemPhotoRepository implements PhotoRepository
 
     public function __construct()
     {
-        $shared_path    = $_ENV['SHARED_PATH'];
+        $shared_path    = getenv('SHARED_PATH');
         $localAdapter = new Local($shared_path, LOCK_EX, Local::DISALLOW_LINKS, [
             'file' => [
                 'public' => 0744,
