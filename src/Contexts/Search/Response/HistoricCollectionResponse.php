@@ -22,7 +22,7 @@ class HistoricCollectionResponse implements \JsonSerializable
                 'user_id' => $item->getUserId(),
                 'filename' => $item->getFilename(),
                 'photo_id' => $item->getPhotoId(),
-                'thumb' => "event/{$item->getEventId()}/thumb/{$item->getFilename()}",
+                'thumb' => "events/{$item->getEventId()}/thumb/{$item->getFilename()}",
                 'context' => 'gallery_publisher_historic',
                 'liked' => true,
             ];
