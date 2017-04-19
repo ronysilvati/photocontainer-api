@@ -233,8 +233,12 @@ class EventSearch
     /**
      * @return string
      */
-    public function getThumb(): string
+    public function getThumb(): ?string
     {
+        if ($this->thumb == null) {
+            return null;
+        }
+
         return "events/{$this->id}/thumb/{$this->thumb}";
     }
 
