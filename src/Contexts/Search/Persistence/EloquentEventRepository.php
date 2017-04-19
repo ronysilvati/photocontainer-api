@@ -109,7 +109,7 @@ class EloquentEventRepository implements EventRepository
 
                 $photos[] = [
                     'id' => $photo['id'],
-                    "thumb" => "/user/themes/photo-container-site/_temp/photos/1.jpg",
+                    "thumb" => "events/{$id}/thumb/{$photo['filename']}",
                     "filename" => $photo['filename'],
                     'context' => 'gallery_photos_publisher',
                     'liked' => $liked,
