@@ -55,7 +55,7 @@ class SearchContextBootstrap implements ContextBootstrap
                     }
                 }s
 
-                $search = new EventSearch(null, $photographer, $keyword, $allCategories, $allTags, (int) $page);
+                $search = new EventSearch(null, $photographer, $keyword, $allCategories, $allTags, 1);
 
                 if (!empty($args['publisher'])) {
                     $search->changePublisher(new Publisher((int) $args['publisher'] ?? $args['publisher']));
