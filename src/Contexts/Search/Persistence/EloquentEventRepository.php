@@ -126,7 +126,7 @@ class EloquentEventRepository implements EventRepository
 
             $event->changeApprovedForPublisher(true);
             if ($eventData['approval_general'] == false &&
-                ($eventData['approval_photographer'] == false || $eventData['approval_bride'] == false)) {
+                ($eventData['approval_photographer'] == true || $eventData['approval_bride'] == true)) {
                 $dlReq = DownloadRequest::where('user_id', $user_id)
                     ->where('event_id', $id)
                     ->where('authorized', 1)
