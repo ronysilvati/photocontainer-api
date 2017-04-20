@@ -30,7 +30,7 @@ class CreatePhoto
 
                     $eventPhotos = $this->dbRepo->findEventPhotos($event_id);
                     if (count($eventPhotos) >= 30) {
-                        throw new \Exception('O limite de fotos foi atingido.');
+                        return new DomainExceptionResponse('O limite de fotos foi atingido.');
                     }
 
                     $this->fsRepo->create($item);
