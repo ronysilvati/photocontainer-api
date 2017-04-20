@@ -69,7 +69,8 @@ class EventSearchView extends AbstractMigration
         $this->execute("
             DROP VIEW IF EXISTS event_search_publisher_download;
                     CREATE VIEW event_search_publisher_download AS
-            SELECT d.id, d.photo_id, d.user_id, p.event_id, p.filename, e.title, photographer.name, t.id as tag_id
+            SELECT d.id, d.photo_id, d.user_id, p.event_id, p.filename, e.title, photographer.name, t.id as tag_id,
+            (SELECT count(*) FROM photo_favorites as pf where pf.photo_id = d.photo_id) as favorite
             FROM
                downloads as d
                INNER JOIN photos as p
@@ -93,7 +94,8 @@ class EventSearchView extends AbstractMigration
         $this->execute("
             DROP VIEW IF EXISTS event_search_publisher_favorites;
             CREATE VIEW event_search_publisher_favorites AS
-            (SELECT pf.id, pf.photo_id, pf.user_id, p.event_id, p.filename, e.title, photographer.name, t.id as tag_id, pf.created_at
+            (SELECT pf.id, pf.photo_id, pf.user_id, p.event_id, p.filename,
+                    e.title, photographer.name, t.id as tag_id, pf.created_at, 1 as favorite
             FROM
                photo_favorites as pf
                INNER JOIN photos as p
@@ -109,7 +111,8 @@ class EventSearchView extends AbstractMigration
             GROUP BY pf.user_id, pf.photo_id, t.id
             ORDER BY pf.created_at DESC)
             UNION
-            (SELECT ef.id, null as photo_id, ef.user_id, ef.event_id, null as filename, e.title, photographer.name, t.id as tag_id, ef.created_at
+            (SELECT ef.id, null as photo_id, ef.user_id, ef.event_id, null as filename,
+                    e.title, photographer.name, t.id as tag_id, ef.created_at, 1 as favorite
             FROM
                event_favorites as ef
                INNER JOIN events as e
