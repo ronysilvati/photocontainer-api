@@ -22,16 +22,20 @@ class CreatePhoto
         $this->fsRepo = $fsRepo;
     }
 
-    public function handle(array $array)
+    public function handle(array $array, int $event_id)
     {
         try {
+            $eventPhotos = $this->dbRepo->findEventPhotos($event_id);
+
+            if (count($eventPhotos) > 30) {
+                throw new \Exception('O limite de fotos foi atingido.');
+            }
+
             foreach ($array as $item) {
                 try {
                     $this->fsRepo->create($item);
                     $this->dbRepo->create($item);
                 } catch (\Exception $e) {
-                    var_dump($e->getMessage());
-                    exit;
                     $this->fsRepo->rollback($item);
                 }
             }
