@@ -24,7 +24,7 @@ class HistoricCollectionResponse implements \JsonSerializable
                 'photo_id' => $item->getPhotoId(),
                 'thumb' => "events/{$item->getEventId()}/thumb/{$item->getFilename()}",
                 'context' => 'gallery_publisher_historic',
-                'liked' => true,
+                'liked' => $item->isFavorite(),
             ];
         }
 

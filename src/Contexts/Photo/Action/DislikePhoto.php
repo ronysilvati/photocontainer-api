@@ -5,7 +5,7 @@ namespace PhotoContainer\PhotoContainer\Contexts\Photo\Action;
 use PhotoContainer\PhotoContainer\Contexts\Photo\Domain\Like;
 use PhotoContainer\PhotoContainer\Contexts\Photo\Domain\PhotoRepository;
 use PhotoContainer\PhotoContainer\Contexts\Photo\Response\DislikeResponse;
-use PhotoContainer\PhotoContainer\Contexts\User\Response\DomainExceptionResponse;
+use PhotoContainer\PhotoContainer\Infrastructure\Web\DomainExceptionResponse;
 
 class DislikePhoto
 {
