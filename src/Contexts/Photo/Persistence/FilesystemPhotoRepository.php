@@ -4,6 +4,8 @@ namespace PhotoContainer\PhotoContainer\Contexts\Photo\Persistence;
 
 use Intervention\Image\ImageManager;
 use League\Flysystem\Adapter\Local;
+use League\Flysystem\Cached\CachedAdapter;
+use League\Flysystem\Cached\Storage\Memory as CacheStore;
 use League\Flysystem\Filesystem;
 use PhotoContainer\PhotoContainer\Contexts\Photo\Domain\Download;
 use PhotoContainer\PhotoContainer\Contexts\Photo\Domain\Like;
@@ -30,7 +32,10 @@ class FilesystemPhotoRepository implements PhotoRepository
             ]
         ]);
 
-        $this->filesystem = new Filesystem($localAdapter);
+        $cacheStore = new CacheStore();
+        $cachedAdapter = new CachedAdapter($localAdapter, $cacheStore);
+
+        $this->filesystem = new Filesystem($cachedAdapter);
     }
 
     public function create(Photo $photo): Photo

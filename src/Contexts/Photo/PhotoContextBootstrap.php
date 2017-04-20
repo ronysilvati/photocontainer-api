@@ -38,7 +38,7 @@ class PhotoContextBootstrap implements ContextBootstrap
                     $allPhotos[] = new Photo(null, $event_id, $photo, $photo['tmp_name']);
                 }
 
-                $actionResponse = $action->handle($allPhotos);
+                $actionResponse = $action->handle($allPhotos, $event_id);
 
                 return $response->withJson($actionResponse->jsonSerialize(), $actionResponse->getHttpStatus());
             } catch (\Exception $e) {

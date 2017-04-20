@@ -2,6 +2,7 @@
 
 namespace PhotoContainer\PhotoContainer\Contexts\Photo\Persistence;
 
+use Illuminate\Database\Capsule\Manager as DB;
 use League\Flysystem\Exception;
 use PhotoContainer\PhotoContainer\Contexts\Photo\Domain\Download;
 use PhotoContainer\PhotoContainer\Contexts\Photo\Domain\Like;
@@ -9,13 +10,12 @@ use PhotoContainer\PhotoContainer\Contexts\Photo\Domain\Photo;
 use PhotoContainer\PhotoContainer\Contexts\Photo\Domain\Photographer;
 use PhotoContainer\PhotoContainer\Contexts\Photo\Domain\PhotoRepository;
 use PhotoContainer\PhotoContainer\Contexts\Photo\Domain\Publisher;
+use PhotoContainer\PhotoContainer\Infrastructure\Exception\PersistenceException;
+use PhotoContainer\PhotoContainer\Infrastructure\Persistence\Eloquent\Download as DownloadModel;
 use PhotoContainer\PhotoContainer\Infrastructure\Persistence\Eloquent\Event;
 use PhotoContainer\PhotoContainer\Infrastructure\Persistence\Eloquent\Photo as PhotoModel;
-use PhotoContainer\PhotoContainer\Infrastructure\Persistence\Eloquent\Download as DownloadModel;
-use PhotoContainer\PhotoContainer\Infrastructure\Exception\PersistenceException;
 use PhotoContainer\PhotoContainer\Infrastructure\Persistence\Eloquent\PhotoFavorite;
 use PhotoContainer\PhotoContainer\Infrastructure\Persistence\Eloquent\User;
-use Illuminate\Database\Capsule\Manager as DB;
 
 class EloquentPhotoRepository implements PhotoRepository
 {
@@ -152,6 +152,15 @@ class EloquentPhotoRepository implements PhotoRepository
             return $photoDomain;
         } catch (\Exception $e) {
             DB::rollback();
+            throw new PersistenceException($e->getMessage());
+        }
+    }
+
+    public function findEventPhotos(int $event_id): ?array
+    {
+        try {
+            return PhotoModel::where('event_id', $event_id)->get()->toArray();
+        } catch (\Exception $e) {
             throw new PersistenceException($e->getMessage());
         }
     }
