@@ -64,6 +64,7 @@ class EloquentEventRepository implements EventRepository
 
             $eventSearch = $modelSearch
                 ->groupBy('id', 'category_id', 'category')
+                ->orderBy('id', 'DESC')
                 ->get([
                     'id', 'user_id', 'name', 'title', 'eventdate', 'category_id', 'category', 'photos', 'likes',
                 ]);
