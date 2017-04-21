@@ -11,8 +11,7 @@ class Supplier extends AbstractMigration
             ->addColumn('event_id', 'integer')
             ->addForeignKey('event_id', 'events', 'id', ['delete'=> 'RESTRICT', 'update'=> 'NO_ACTION'])
             ->addColumn('suppliers', 'text', ['null' => true])
-            ->addColumn('created_at', 'timestamp')
-            ->addColumn('updated_at', 'timestamp', ['null' => true])
+            ->addTimestamps()
             ->create();
     }
 }

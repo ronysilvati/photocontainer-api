@@ -15,9 +15,8 @@ class DownloadRequest extends AbstractMigration
             ->addColumn('authorized', 'boolean', ['default' => false])
             ->addColumn('visualized', 'boolean', ['default' => false])
             ->addColumn('active', 'boolean', ['default' => false])
-            ->addColumn('created_at', 'timestamp')
-            ->addColumn('updated_at', 'timestamp', ['null' => true])
             ->addIndex(['user_id', 'event_id'])
+            ->addTimestamps()
             ->create();
     }
 }

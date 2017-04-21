@@ -37,8 +37,7 @@ class Address extends AbstractMigration
             ->addColumn('neighborhood', 'string', ['limit' => 150])
             ->addColumn('street', 'string', ['limit' => 150])
             ->addColumn('complement', 'string', ['limit' => 150])
-            ->addColumn('created_at', 'timestamp')
-            ->addColumn('updated_at', 'timestamp', ['null' => true])
+            ->addTimestamps()
             ->create();
     }
 }

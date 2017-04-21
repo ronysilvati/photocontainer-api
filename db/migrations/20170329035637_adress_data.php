@@ -4,7 +4,6 @@ use Phinx\Migration\AbstractMigration;
 
 class AdressData extends AbstractMigration
 {
-
     public function change()
     {
         $table = $this->table('countries');
