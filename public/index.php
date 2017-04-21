@@ -14,6 +14,11 @@ use PhotoContainer\PhotoContainer\Infrastructure\Web\Slim\SlimApp;
 
 require '../vendor/autoload.php';
 
+if (is_file('.env')) {
+    $dotenv = new Dotenv\Dotenv(__DIR__);
+    $dotenv->load();
+}
+
 $app = new \Slim\App();
 $container = $app->getContainer();
 
