@@ -37,6 +37,10 @@ class EloquentEventRepository implements EventRepository
             $eventModel->approval_photographer = $event->getApprovalPhotographer();
             $eventModel->approval_bride = $event->getApprovalBride();
             $eventModel->user_id = $event->getPhotographer()->getId();
+            $eventModel->country = $event->getCountry();
+            $eventModel->state = $event->getState();
+            $eventModel->city = $event->getCity();
+
             $eventModel->save();
 
             $event->changeId($eventModel->id);
