@@ -1,6 +1,4 @@
 <?php
-//
-
 use PhotoContainer\PhotoContainer\Contexts\Approval\ApprovalContextBootstrap;
 use PhotoContainer\PhotoContainer\Contexts\Auth\AuthContextBootstrap;
 use PhotoContainer\PhotoContainer\Contexts\Cep\CepContextBootstrap;
@@ -42,11 +40,7 @@ $container['CryptoMethod'] = function ($c) {
 };
 
 $container['EmailHelper'] = function ($c) {
-    $transport = \Swift_SmtpTransport::newInstance('smtp.gmail.com', 465, 'ssl')
-        ->setUsername('fotocontainer1@gmail.com')
-        ->setPassword('f0t0c0nta1n3r');
-
-    return new SwiftMailerHelper($transport);
+    return new SwiftMailerHelper(Swift_SendmailTransport::newInstance('/usr/lib/sendmail -bs'));
 };
 
 $webApp = new SlimApp($app);
