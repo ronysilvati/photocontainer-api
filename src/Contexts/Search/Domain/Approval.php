@@ -4,20 +4,42 @@ namespace PhotoContainer\PhotoContainer\Contexts\Search\Domain;
 
 class Approval
 {
+    /**
+     * @var int
+     */
     private $photographer_id;
+
+    /**
+     * @var int
+     */
     private $publisher_id;
+
+    /**
+     * @var string
+     */
     private $created;
+
+    /**
+     * @var string
+     */
     private $name;
 
     /**
-     * Approval constructor.
-     * @param $photographer_id
-     * @param $publisher_id
-     * @param $created
-     * @param $name
+     * @var int
      */
-    public function __construct(int $photographer_id, int $publisher_id, string $created, string $name)
+    private $event_id;
+
+    /**
+     * Approval constructor.
+     * @param int $event_id
+     * @param int $photographer_id
+     * @param int $publisher_id
+     * @param string $created
+     * @param string $name
+     */
+    public function __construct(int $event_id, int $photographer_id, int $publisher_id, string $created, string $name)
     {
+        $this->event_id = $event_id;
         $this->photographer_id = $photographer_id;
         $this->publisher_id = $publisher_id;
         $this->created = $created;
@@ -55,5 +77,13 @@ class Approval
     public function getName(): string
     {
         return $this->name;
+    }
+
+    /**
+     * @return int
+     */
+    public function getEventId(): int
+    {
+        return $this->event_id;
     }
 }

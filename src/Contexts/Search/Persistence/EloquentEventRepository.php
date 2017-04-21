@@ -4,10 +4,10 @@ namespace PhotoContainer\PhotoContainer\Contexts\Search\Persistence;
 
 use PhotoContainer\PhotoContainer\Contexts\Search\Domain\Approval;
 use PhotoContainer\PhotoContainer\Contexts\Search\Domain\Category;
+use PhotoContainer\PhotoContainer\Contexts\Search\Domain\Event;
 use PhotoContainer\PhotoContainer\Contexts\Search\Domain\EventRepository;
 use PhotoContainer\PhotoContainer\Contexts\Search\Domain\EventSearch;
 use PhotoContainer\PhotoContainer\Contexts\Search\Domain\Photographer;
-use PhotoContainer\PhotoContainer\Contexts\Search\Domain\Event;
 use PhotoContainer\PhotoContainer\Infrastructure\Exception\PersistenceException;
 use PhotoContainer\PhotoContainer\Infrastructure\Persistence\Eloquent\DownloadRequest;
 use PhotoContainer\PhotoContainer\Infrastructure\Persistence\Eloquent\Event as EventModel;
@@ -20,6 +20,11 @@ use PhotoContainer\PhotoContainer\Infrastructure\Persistence\Eloquent\PhotoFavor
 
 class EloquentEventRepository implements EventRepository
 {
+    /**
+     * @param EventSearch $search
+     * @return array
+     * @throws \Exception
+     */
     public function find(EventSearch $search)
     {
         try {
@@ -100,6 +105,12 @@ class EloquentEventRepository implements EventRepository
         }
     }
 
+    /**
+     * @param int $id
+     * @param int $user_id
+     * @return Event
+     * @throws PersistenceException
+     */
     public function findEventPhotosPublisher(int $id, int $user_id): Event
     {
         try {
@@ -146,6 +157,11 @@ class EloquentEventRepository implements EventRepository
         }
     }
 
+    /**
+     * @param int $id
+     * @return Event
+     * @throws PersistenceException
+     */
     public function findEventPhotosPhotographer(int $id): Event
     {
         try {
@@ -176,6 +192,11 @@ class EloquentEventRepository implements EventRepository
         }
     }
 
+    /**
+     * @param int $photographer_id
+     * @return array|null
+     * @throws PersistenceException
+     */
     public function findWaitingRequests(int $photographer_id): ?array
     {
         try {
@@ -188,7 +209,13 @@ class EloquentEventRepository implements EventRepository
                     $dlRequest->save();
                 }
 
-                return new Approval($item->photographer_id, $item->publisher_id, $item->created_at, $item->title);
+                return new Approval(
+                    $item->event_id,
+                    $item->photographer_id,
+                    $item->publisher_id,
+                    $item->created_at,
+                    $item->title
+                );
             })->toArray();
         } catch (\Exception $e) {
             throw new PersistenceException("Erro na listagem das aprovações pendentes.");

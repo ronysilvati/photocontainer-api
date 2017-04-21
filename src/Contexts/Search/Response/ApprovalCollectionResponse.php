@@ -2,20 +2,30 @@
 
 namespace PhotoContainer\PhotoContainer\Contexts\Search\Response;
 
+use PhotoContainer\PhotoContainer\Contexts\Search\Domain\Approval;
+
 class ApprovalCollectionResponse implements \JsonSerializable
 {
     private $collection;
 
+    /**
+     * ApprovalCollectionResponse constructor.
+     * @param Approval[] $collection
+     */
     public function __construct(array $collection)
     {
         $this->collection = $collection;
     }
 
+    /**
+     * @return array
+     */
     public function jsonSerialize()
     {
         $out = [];
         foreach ($this->collection as $item) {
             $out[] = [
+                "event_id" => $item->getEventId(),
                 "photographer_id" => $item->getPhotographerId(),
                 "publisher_id" => $item->getPublisherId(),
                 "name" => $item->getName(),
