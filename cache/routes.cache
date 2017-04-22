@@ -1,0 +1,278 @@
+<?php return array (
+  0 => 
+  array (
+    'POST' => 
+    array (
+      '/login' => 'route1',
+      '/events' => 'route3',
+      '/users' => 'route11',
+      '/photo' => 'route25',
+    ),
+    'GET' => 
+    array (
+      '/events' => 'route2',
+      '/users' => 'route10',
+      '/search/events' => 'route13',
+      '/search/categories' => 'route14',
+      '/search/tags' => 'route15',
+      '/location/countries' => 'route21',
+    ),
+  ),
+  1 => 
+  array (
+    'OPTIONS' => 
+    array (
+      0 => 
+      array (
+        'regex' => '~^(?|/(.+))$~',
+        'routeMap' => 
+        array (
+          2 => 
+          array (
+            0 => 'route0',
+            1 => 
+            array (
+              'routes' => 'routes',
+            ),
+          ),
+        ),
+      ),
+    ),
+    'DELETE' => 
+    array (
+      0 => 
+      array (
+        'regex' => '~^(?|/events/([^/]+)|/events/([^/]+)/favorite/publisher/([^/]+)|/photo/([^/]+)/dislike/publisher/([^/]+)()|/photo/([^/]+)()()())$~',
+        'routeMap' => 
+        array (
+          2 => 
+          array (
+            0 => 'route4',
+            1 => 
+            array (
+              'id' => 'id',
+            ),
+          ),
+          3 => 
+          array (
+            0 => 'route7',
+            1 => 
+            array (
+              'event_id' => 'event_id',
+              'publisher_id' => 'publisher_id',
+            ),
+          ),
+          4 => 
+          array (
+            0 => 'route28',
+            1 => 
+            array (
+              'photo_id' => 'photo_id',
+              'publisher_id' => 'publisher_id',
+            ),
+          ),
+          5 => 
+          array (
+            0 => 'route29',
+            1 => 
+            array (
+              'guid' => 'guid',
+            ),
+          ),
+        ),
+      ),
+    ),
+    'PUT' => 
+    array (
+      0 => 
+      array (
+        'regex' => '~^(?|/events/([^/]+)|/events/([^/]+)/approval/user/([^/]+)|/events/([^/]+)/disapproval/user/([^/]+)())$~',
+        'routeMap' => 
+        array (
+          2 => 
+          array (
+            0 => 'route5',
+            1 => 
+            array (
+              'id' => 'id',
+            ),
+          ),
+          3 => 
+          array (
+            0 => 'route31',
+            1 => 
+            array (
+              'event_id' => 'event_id',
+              'publisher_id' => 'publisher_id',
+            ),
+          ),
+          4 => 
+          array (
+            0 => 'route32',
+            1 => 
+            array (
+              'event_id' => 'event_id',
+              'publisher_id' => 'publisher_id',
+            ),
+          ),
+        ),
+      ),
+    ),
+    'POST' => 
+    array (
+      0 => 
+      array (
+        'regex' => '~^(?|/events/([^/]+)/favorite/publisher/([^/]+)|/events/([^/]+)/tags()()|/events/([^/]+)/suppliers()()()|/photo/([^/]+)/like/publisher/([^/]+)()()()|/events/([^/]+)/request/user/([^/]+)()()()())$~',
+        'routeMap' => 
+        array (
+          3 => 
+          array (
+            0 => 'route6',
+            1 => 
+            array (
+              'event_id' => 'event_id',
+              'publisher_id' => 'publisher_id',
+            ),
+          ),
+          4 => 
+          array (
+            0 => 'route8',
+            1 => 
+            array (
+              'id' => 'id',
+            ),
+          ),
+          5 => 
+          array (
+            0 => 'route9',
+            1 => 
+            array (
+              'id' => 'id',
+            ),
+          ),
+          6 => 
+          array (
+            0 => 'route27',
+            1 => 
+            array (
+              'photo_id' => 'photo_id',
+              'publisher_id' => 'publisher_id',
+            ),
+          ),
+          7 => 
+          array (
+            0 => 'route30',
+            1 => 
+            array (
+              'event_id' => 'event_id',
+              'publisher_id' => 'publisher_id',
+            ),
+          ),
+        ),
+      ),
+    ),
+    'PATCH' => 
+    array (
+      0 => 
+      array (
+        'regex' => '~^(?|/users/([^/]+))$~',
+        'routeMap' => 
+        array (
+          2 => 
+          array (
+            0 => 'route12',
+            1 => 
+            array (
+              'id' => 'id',
+            ),
+          ),
+        ),
+      ),
+    ),
+    'GET' => 
+    array (
+      0 => 
+      array (
+        'regex' => '~^(?|/search/events/([^/]+)/photos/user/([^/]+)|/search/events/([^/]+)/photos()()|/search/photo/user/([^/]+)/(downloads|favorites)()()|/search/waiting_approval/user/([^/]+)()()()()|/search/notifications/user/([^/]+)()()()()()|/location/zipcode/([^/]+)()()()()()()|/location/country/([^/]+)/states()()()()()()()|/location/state/([^/]+)/cities()()()()()()()()|/photo/([^/]+)/user/([^/]+)/download()()()()()()()())$~',
+        'routeMap' => 
+        array (
+          3 => 
+          array (
+            0 => 'route16',
+            1 => 
+            array (
+              'id' => 'id',
+              'user_id' => 'user_id',
+            ),
+          ),
+          4 => 
+          array (
+            0 => 'route17',
+            1 => 
+            array (
+              'id' => 'id',
+            ),
+          ),
+          5 => 
+          array (
+            0 => 'route18',
+            1 => 
+            array (
+              'publisher_id' => 'publisher_id',
+              'type' => 'type',
+            ),
+          ),
+          6 => 
+          array (
+            0 => 'route19',
+            1 => 
+            array (
+              'photographer_id' => 'photographer_id',
+            ),
+          ),
+          7 => 
+          array (
+            0 => 'route20',
+            1 => 
+            array (
+              'user_id' => 'user_id',
+            ),
+          ),
+          8 => 
+          array (
+            0 => 'route22',
+            1 => 
+            array (
+              'cep' => 'cep',
+            ),
+          ),
+          9 => 
+          array (
+            0 => 'route23',
+            1 => 
+            array (
+              'country_id' => 'country_id',
+            ),
+          ),
+          10 => 
+          array (
+            0 => 'route24',
+            1 => 
+            array (
+              'state_id' => 'state_id',
+            ),
+          ),
+          11 => 
+          array (
+            0 => 'route26',
+            1 => 
+            array (
+              'photo_id' => 'photo_id',
+              'user_id' => 'user_id',
+            ),
+          ),
+        ),
+      ),
+    ),
+  ),
+);

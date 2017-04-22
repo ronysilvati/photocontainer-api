@@ -14,12 +14,24 @@ use PhotoContainer\PhotoContainer\Infrastructure\Web\Slim\SlimApp;
 
 require '../vendor/autoload.php';
 
+define('ROOT_DIR', dirname(__DIR__));
+define('CACHE_DIR', ROOT_DIR.'/cache');
+
 if (is_file('.env')) {
     $dotenv = new Dotenv\Dotenv(__DIR__);
     $dotenv->load();
 }
 
-$app = new \Slim\App();
+$slimParams = [];
+if (!is_dir(CACHE_DIR)) {
+    mkdir(CACHE_DIR, 0777);
+}
+
+if (!is_file(CACHE_DIR.'/routes.cache')) {
+    $slimParams['settings'] = ['routerCacheFile' => CACHE_DIR.'/routes.cache'];
+}
+
+$app = new \Slim\App($slimParams);
 $container = $app->getContainer();
 
 $container['DatabaseProvider'] = function ($c) {
