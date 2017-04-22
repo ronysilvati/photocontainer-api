@@ -52,3 +52,4 @@ vendor/
 shared/events/*
 db/.data/
 *.phar
+cache/
