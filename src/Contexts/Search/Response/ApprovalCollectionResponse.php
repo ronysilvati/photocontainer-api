@@ -18,7 +18,7 @@ class ApprovalCollectionResponse implements \JsonSerializable
     }
 
     /**
-     * @return array
+     * @return Approval[]
      */
     public function jsonSerialize()
     {
@@ -30,6 +30,7 @@ class ApprovalCollectionResponse implements \JsonSerializable
                 "publisher_id" => $item->getPublisherId(),
                 "name" => $item->getName(),
                 "created" => $item->getCreated(),
+                'publisher_name' => $item->getPublisherName()
             ];
         }
 

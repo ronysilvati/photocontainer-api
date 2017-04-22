@@ -215,7 +215,8 @@ class EloquentEventRepository implements EventRepository
                     $item->photographer_id,
                     $item->publisher_id,
                     $item->created_at,
-                    $item->title
+                    $item->title,
+                    $item->publisher_name
                 );
             })->toArray();
         } catch (\Exception $e) {

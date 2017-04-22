@@ -30,20 +30,33 @@ class Approval
     private $event_id;
 
     /**
+     * @var string
+     */
+    private $publisher_name;
+
+    /**
      * Approval constructor.
      * @param int $event_id
      * @param int $photographer_id
      * @param int $publisher_id
      * @param string $created
      * @param string $name
+     * @param string $publisher_name
      */
-    public function __construct(int $event_id, int $photographer_id, int $publisher_id, string $created, string $name)
+    public function __construct(
+        int $event_id,
+        int $photographer_id,
+        int $publisher_id,
+        string $created,
+        string $name,
+        string $publisher_name)
     {
         $this->event_id = $event_id;
         $this->photographer_id = $photographer_id;
         $this->publisher_id = $publisher_id;
         $this->created = $created;
         $this->name = $name;
+        $this->publisher_name = $publisher_name;
     }
 
     /**
@@ -85,5 +98,13 @@ class Approval
     public function getEventId(): int
     {
         return $this->event_id;
+    }
+
+    /**
+     * @return string
+     */
+    public function getPublisherName(): string
+    {
+        return $this->publisher_name;
     }
 }
