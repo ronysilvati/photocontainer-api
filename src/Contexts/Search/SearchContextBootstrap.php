@@ -75,7 +75,7 @@ class SearchContextBootstrap implements ContextBootstrap
                 $action = new FindCategories(new EloquentCategoryRepository());
                 $actionResponse = $action->handle();
 
-                $response = $container->cache->withExpires($response, time() + 3600);
+                $response = $container->cache->withExpires($response, time() + getenv('HEAD_EXPIRES'));
 
                 return $response->withJson($actionResponse, $actionResponse->getHttpStatus());
             } catch (\Exception $e) {
@@ -88,7 +88,7 @@ class SearchContextBootstrap implements ContextBootstrap
                 $action = new FindTags(new EloquentTagRepository());
                 $actionResponse = $action->handle();
 
-                $response = $container->cache->withExpires($response, time() + 3600);
+                $response = $container->cache->withExpires($response, time() + getenv('HEAD_EXPIRES'));
 
                 return $response->withJson($actionResponse, $actionResponse->getHttpStatus());
             } catch (\Exception $e) {
