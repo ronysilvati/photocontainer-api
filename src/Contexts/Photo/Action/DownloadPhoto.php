@@ -71,8 +71,9 @@ class DownloadPhoto
                 ['name' => $photographer->getName(), 'email' => $photographer->getEmail()],
                 ['name' => getenv('PHOTOCONTAINER_EMAIL_NAME'), 'email' => getenv('PHOTOCONTAINER_EMAIL')]
             );
+
             $this->emailHelper->send($email);
-        } catch (Exception $e) {
+        } catch (\Exception $e) {
             //TODO Logar o erro no monolog, fazer nada para não impedir o download.
         }
     }
