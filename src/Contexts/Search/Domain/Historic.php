@@ -81,7 +81,7 @@ class Historic
     /**
      * @return bool
      */
-    public function isFavorite(): ?bool
+    public function isFavorite(): bool
     {
         return $this->favorite;
     }
