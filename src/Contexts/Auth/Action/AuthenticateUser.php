@@ -36,9 +36,20 @@ class AuthenticateUser
             );
             $token = $tokenGenerator->hash($token);
 
+            $this->saveLog($user->id);
+
             return new AuthenticatedResponse($token);
         } catch (\Exception $e) {
             return new NotPermittedResponse($e->getMessage());
+        }
+    }
+
+    public function saveLog(int $user_id)
+    {
+        try {
+            $this->repository->logAccess($user_id);
+        } catch (\Exception $e) {
+            //TODO Controle de exceção.
         }
     }
 }

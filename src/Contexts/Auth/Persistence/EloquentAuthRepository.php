@@ -4,6 +4,7 @@ namespace PhotoContainer\PhotoContainer\Contexts\Auth\Persistence;
 
 use PhotoContainer\PhotoContainer\Contexts\Auth\Domain\AuthRepository;
 use PhotoContainer\PhotoContainer\Infrastructure\Exception\PersistenceException;
+use PhotoContainer\PhotoContainer\Infrastructure\Persistence\Eloquent\AccessLog;
 use PhotoContainer\PhotoContainer\Infrastructure\Persistence\Eloquent\User;
 
 class EloquentAuthRepository implements AuthRepository
@@ -17,5 +18,16 @@ class EloquentAuthRepository implements AuthRepository
         }
 
         return $user;
+    }
+
+    public function logAccess(int $user_id)
+    {
+        try {
+            $log = new AccessLog();
+            $log->user_id = $user_id;
+            $log->save();
+        } catch (\Exception $e) {
+            throw new PersistenceException("Erro na criação de log.");
+        }
     }
 }
