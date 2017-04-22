@@ -48,6 +48,10 @@ $container['EmailHelper'] = function ($c) {
     return new SwiftMailerHelper(Swift_SendmailTransport::newInstance('/usr/lib/sendmail -bs'));
 };
 
+$container['cache'] = function () {
+    return new \Slim\HttpCache\CacheProvider();
+};
+
 $webApp = new SlimApp($app);
 
 $webApp->bootstrap(

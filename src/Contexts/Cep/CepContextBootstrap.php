@@ -24,12 +24,16 @@ class CepContextBootstrap implements ContextBootstrap
             $action = new GetCountries(new EloquentCepRepository());
             $actionResponse = $action->handle();
 
+            $response = $container->cache->withExpires($response, time() + 3600);
+
             return $response->withJson($actionResponse, $actionResponse->getHttpStatus());
         });
 
         $slimApp->app->get('/location/zipcode/{cep}', function (ServerRequestInterface $request, ResponseInterface $response, $args) use ($container) {
             $action = new FindCep(new RestCepRepository($container['CepRestProvider']));
             $actionResponse = $action->handle(new Cep($args['cep'], null, null, null, null, null, null));
+
+            $response = $container->cache->withExpires($response, time() + 3600);
 
             return $response->withJson($actionResponse, $actionResponse->getHttpStatus());
         });
@@ -38,12 +42,16 @@ class CepContextBootstrap implements ContextBootstrap
             $action = new FindStates(new EloquentCepRepository());
             $actionResponse = $action->handle(new Cep(null, $args['country_id'], null, null, null, null, null));
 
+            $response = $container->cache->withExpires($response, time() + 3600);
+
             return $response->withJson($actionResponse, $actionResponse->getHttpStatus());
         });
 
         $slimApp->app->get('/location/state/{state_id}/cities', function (ServerRequestInterface $request, ResponseInterface $response, $args) use ($container) {
             $action = new FindCities(new EloquentCepRepository());
             $actionResponse = $action->handle(new Cep(null, null, $args['state_id'], null, null, null, null));
+
+            $response = $container->cache->withExpires($response, time() + 3600);
 
             return $response->withJson($actionResponse, $actionResponse->getHttpStatus());
         });
