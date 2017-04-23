@@ -9,6 +9,7 @@ use PhotoContainer\PhotoContainer\Contexts\Search\Domain\EventRepository;
 use PhotoContainer\PhotoContainer\Contexts\Search\Domain\EventSearch;
 use PhotoContainer\PhotoContainer\Contexts\Search\Domain\Photographer;
 use PhotoContainer\PhotoContainer\Infrastructure\Exception\PersistenceException;
+use PhotoContainer\PhotoContainer\Infrastructure\Persistence\Eloquent\Detail;
 use PhotoContainer\PhotoContainer\Infrastructure\Persistence\Eloquent\DownloadRequest;
 use PhotoContainer\PhotoContainer\Infrastructure\Persistence\Eloquent\Event as EventModel;
 use PhotoContainer\PhotoContainer\Infrastructure\Persistence\Eloquent\EventFavorite;
@@ -212,13 +213,16 @@ class EloquentEventRepository implements EventRepository
                     $dlRequest->save();
                 }
 
+                $detail = Detail::where('user_id', $item->publisher_id)->first();
+
                 return new Approval(
                     $item->event_id,
                     $item->photographer_id,
                     $item->publisher_id,
                     $item->created_at,
                     $item->title,
-                    $item->publisher_name
+                    $item->publisher_name,
+                    $detail->blog
                 );
             })->toArray();
         } catch (\Exception $e) {

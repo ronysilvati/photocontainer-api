@@ -34,6 +34,8 @@ class Approval
      */
     private $publisher_name;
 
+    private $blog;
+
     /**
      * Approval constructor.
      * @param int $event_id
@@ -49,7 +51,9 @@ class Approval
         int $publisher_id,
         string $created,
         string $name,
-        string $publisher_name)
+        string $publisher_name,
+        string $blog
+    )
     {
         $this->event_id = $event_id;
         $this->photographer_id = $photographer_id;
@@ -57,6 +61,7 @@ class Approval
         $this->created = $created;
         $this->name = $name;
         $this->publisher_name = $publisher_name;
+        $this->blog = $blog;
     }
 
     /**
@@ -106,5 +111,13 @@ class Approval
     public function getPublisherName(): string
     {
         return $this->publisher_name;
+    }
+
+    /**
+     * @return string
+     */
+    public function getBlog(): string
+    {
+        return $this->blog;
     }
 }

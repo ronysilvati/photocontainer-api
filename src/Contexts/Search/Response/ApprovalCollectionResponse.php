@@ -30,7 +30,8 @@ class ApprovalCollectionResponse implements \JsonSerializable
                 "publisher_id" => $item->getPublisherId(),
                 "name" => $item->getName(),
                 "created" => $item->getCreated(),
-                'publisher_name' => $item->getPublisherName()
+                'publisher_name' => $item->getPublisherName(),
+                'blog' => $item->getBlog(),
             ];
         }
 
