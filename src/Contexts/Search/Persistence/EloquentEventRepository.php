@@ -83,7 +83,7 @@ class EloquentEventRepository implements EventRepository
                 $search->changeLikes($item->likes);
 
                 if ($item->photos > 0) {
-                    $search->changeThumb(Photo::where('event_id', $item->id)->first()->filename);
+                    $search->changeFilename(Photo::where('event_id', $item->id)->first()->filename);
                 }
 
                 if ($publisher) {
@@ -127,6 +127,7 @@ class EloquentEventRepository implements EventRepository
                 $photos[] = [
                     'id' => $photo['id'],
                     "thumb" => "events/{$id}/thumb/{$photo['filename']}",
+                    "watermark" => "events/{$id}/watermark/{$photo['filename']}",
                     "filename" => $photo['filename'],
                     'context' => 'gallery_photos_publisher',
                     'liked' => $liked,
@@ -176,6 +177,7 @@ class EloquentEventRepository implements EventRepository
                 $photos[] = [
                     'id' => $photo['id'],
                     "thumb" => "/events/{$id}/thumb/".$photo['filename'],
+                    "thumb" => "/events/{$id}/watermark/".$photo['filename'],
                     "filename" => $photo['filename'],
                     'context' => 'gallery_photos_photographer',
                 ];

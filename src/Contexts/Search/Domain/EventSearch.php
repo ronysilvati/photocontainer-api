@@ -33,6 +33,16 @@ class EventSearch
      */
     private $thumb;
 
+    /**
+     * @var string
+     */
+    private $watermark;
+
+    /**
+     * @var string
+     */
+    private $filename;
+
     public function __construct(
         int $id = null,
         ?Photographer $photographer,
@@ -235,18 +245,38 @@ class EventSearch
      */
     public function getThumb(): ?string
     {
-        if ($this->thumb == null) {
+        if ($this->filename == null) {
             return null;
         }
 
-        return "events/{$this->id}/thumb/{$this->thumb}";
+        return "events/{$this->id}/thumb/{$this->filename}";
     }
 
     /**
-     * @param string $thumb
+     * @return string
      */
-    public function changeThumb(string $thumb)
+    public function getWatermark(): string
     {
-        $this->thumb = $thumb;
+        if ($this->filename == null) {
+            return null;
+        }
+
+        return "events/{$this->id}/watermark/{$this->filename}";
+    }
+
+    /**
+     * @param string $watermark
+     */
+    public function setWatermark(string $watermark)
+    {
+        $this->watermark = $watermark;
+    }
+
+    /**
+     * @param string $filename
+     */
+    public function changeFilename(string $filename)
+    {
+        $this->filename = $filename;
     }
 }

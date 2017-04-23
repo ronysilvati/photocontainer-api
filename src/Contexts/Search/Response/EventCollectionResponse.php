@@ -24,6 +24,7 @@ class EventCollectionResponse implements \JsonSerializable
                 "eventdate" => $search->getEventdate(),
                 "category" => $search->getCategories()[0]->getDescription(),
                 'thumb' => $search->getThumb() ? $search->getThumb() : "sem-foto.png",
+                'watermark' => $search->getWatermark() ? $search->getWatermark() : "sem-foto.png",
                 "photos" => $search->getPhotos(),
                 "likes" => $search->getLikes(),
                 "context" => $search->getSearchContext(),
