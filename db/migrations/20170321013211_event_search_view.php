@@ -94,8 +94,9 @@ class EventSearchView extends AbstractMigration
         $this->execute("
             DROP VIEW IF EXISTS event_search_publisher_favorites;
             CREATE VIEW event_search_publisher_favorites AS
-            (SELECT pf.id, pf.photo_id, pf.user_id, p.event_id, p.filename,
-                    e.title, photographer.name, t.id as tag_id, pf.created_at, 1 as favorite
+            (SELECT pf.id, pf.photo_id, pf.user_id, p.event_id, p.filename, 
+                    e.title, photographer.name, t.id as tag_id, pf.created_at, 1 as favorite,
+                    IF((SELECT DISTINCT dr.user_id FROM download_requests dr WHERE dr.event_id = p.event_id AND dr.user_id = pf.user_id) > 0 , 1, 0) as authorized
             FROM
                photo_favorites as pf
                INNER JOIN photos as p
@@ -109,22 +110,7 @@ class EventSearchView extends AbstractMigration
                LEFT JOIN tags as t
                  ON t.id = et.tag_id
             GROUP BY pf.user_id, pf.photo_id, t.id
-            ORDER BY pf.created_at DESC)
-            UNION
-            (SELECT ef.id, null as photo_id, ef.user_id, ef.event_id, null as filename,
-                    e.title, photographer.name, t.id as tag_id, ef.created_at, 1 as favorite
-            FROM
-               event_favorites as ef
-               INNER JOIN events as e
-                 ON e.id = ef.event_id
-               INNER JOIN users as photographer
-                 ON photographer.id = e.user_id
-               LEFT JOIN event_tags as et
-                 ON e.id = et.event_id
-               LEFT JOIN tags as t
-                 ON t.id = et.tag_id
-            GROUP BY ef.user_id, ef.event_id, t.id
-            ORDER BY ef.created_at DESC)
+            ORDER BY pf.created_at DESC);
         ");
 
         $this->execute("

@@ -25,7 +25,7 @@ class RequestDownload
         try {
             $dlRequest = $this->repository->findDownloadRequest($event_id, $publisher_id);
             if ($dlRequest) {
-                throw new \Exception('Pedido já realizado.');
+                throw new \Exception('Seu pedido para download ainda está sendo analisado.');
             }
 
             $dlRequest = new DownloadRequest(

@@ -30,20 +30,34 @@ class Historic
     private $favorite;
 
     /**
+     * @var bool
+     */
+    private $authorized;
+
+    /**
      * Historic constructor.
      * @param int|null $photo_id
      * @param int $user_id
      * @param int $event_id
      * @param null|string $filename
      * @param bool|null $favorite
+     * @param bool|null $authorized
      */
-    public function __construct(?int $photo_id, int $user_id, int $event_id, ?string $filename, ?bool $favorite)
+    public function __construct(
+        ?int $photo_id,
+        int $user_id,
+        int $event_id,
+        ?string $filename,
+        ?bool $favorite,
+        ?bool $authorized
+    )
     {
         $this->photo_id = $photo_id;
         $this->user_id = $user_id;
         $this->event_id = $event_id;
         $this->filename = $filename;
         $this->favorite = $favorite;
+        $this->authorized = $authorized;
     }
 
     /**
@@ -84,5 +98,13 @@ class Historic
     public function isFavorite(): bool
     {
         return $this->favorite;
+    }
+
+    /**
+     * @return bool
+     */
+    public function isAuthorized(): bool
+    {
+        return $this->authorized;
     }
 }
