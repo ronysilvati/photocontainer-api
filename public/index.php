@@ -16,6 +16,7 @@ require '../vendor/autoload.php';
 
 define('ROOT_DIR', dirname(__DIR__));
 define('CACHE_DIR', ROOT_DIR.'/cache');
+define('DEBUG_MODE', false);
 
 if (is_file('.env')) {
     $dotenv = new Dotenv\Dotenv(__DIR__);
@@ -29,6 +30,10 @@ if (!is_dir(CACHE_DIR)) {
 
 if (!is_file(CACHE_DIR.'/routes.cache')) {
     $slimParams['settings'] = ['routerCacheFile' => CACHE_DIR.'/routes.cache'];
+}
+
+if (DEBUG_MODE) {
+    $slimParams['settings'] = ['displayErrorDetails' => true];
 }
 
 $app = new \Slim\App($slimParams);
