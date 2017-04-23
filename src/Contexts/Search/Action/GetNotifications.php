@@ -5,6 +5,7 @@ namespace PhotoContainer\PhotoContainer\Contexts\Search\Action;
 use PhotoContainer\PhotoContainer\Contexts\Search\Domain\Notification;
 use PhotoContainer\PhotoContainer\Contexts\Search\Domain\NotificationRepository;
 use PhotoContainer\PhotoContainer\Contexts\Search\Response\NotificationResponse;
+use PhotoContainer\PhotoContainer\Infrastructure\Web\DomainExceptionResponse;
 
 class GetNotifications
 {
