@@ -20,7 +20,7 @@ class EloquentPhotoRepository implements PhotoRepository
             ->get();
 
         return $data->map(function ($item) {
-            return new Historic($item->photo_id, $item->user_id, $item->event_id, $item->filename, $item->favorite, $item->authorized);
+            return new Historic($item->photo_id, $item->user_id, $item->event_id, $item->filename, $item->favorite, true);
         })->toArray();
     }
 
