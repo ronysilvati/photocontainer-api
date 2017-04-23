@@ -255,7 +255,7 @@ class EventSearch
     /**
      * @return string
      */
-    public function getWatermark(): string
+    public function getWatermark(): ?string
     {
         if ($this->filename == null) {
             return null;
