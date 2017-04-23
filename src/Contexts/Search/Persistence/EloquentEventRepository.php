@@ -178,7 +178,8 @@ class EloquentEventRepository implements EventRepository
                 $photos[] = [
                     'id' => $photo['id'],
                     "thumb" => "/events/{$id}/thumb/".$photo['filename'],
-                    "thumb" => "/events/{$id}/watermark/".$photo['filename'],
+                    "watermark" => "/events/{$id}/watermark/".$photo['filename'],
+                    "protected" => "/events/{$id}/protected/".$photo['filename'],
                     "filename" => $photo['filename'],
                     'context' => 'gallery_photos_photographer',
                 ];
