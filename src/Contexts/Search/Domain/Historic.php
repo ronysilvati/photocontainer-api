@@ -95,16 +95,16 @@ class Historic
     /**
      * @return bool
      */
-    public function isFavorite(): bool
+    public function isFavorite(): ?bool
     {
-        return $this->favorite;
+        return $this->favorite ?? false;
     }
 
     /**
      * @return bool
      */
-    public function isAuthorized(): bool
+    public function isAuthorized(): ?bool
     {
-        return $this->authorized;
+        return $this->authorized ?? false;
     }
 }
