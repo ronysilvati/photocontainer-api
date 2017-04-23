@@ -16,6 +16,7 @@ class EloquentPhotoRepository implements PhotoRepository
 
         $data = EventSearchPublisherDownload::where($where)
             ->groupBy('id')
+            ->orderBy('id', 'desc')
             ->get();
 
         return $data->map(function ($item) {
