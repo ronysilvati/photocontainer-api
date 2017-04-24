@@ -25,7 +25,8 @@ class RequestDownload
         try {
             $dlRequest = $this->repository->findDownloadRequest($event_id, $publisher_id);
             if ($dlRequest) {
-                throw new \Exception('Seu pedido para download ainda está sendo analisado.');
+                $msg = !$dlRequest->isActive() && !$dlRequest->isAuthorized() ? "Seu pedido não foi autorizado." : 'Seu pedido para download ainda está sendo analisado.';
+                throw new \Exception($msg);
             }
 
             $dlRequest = new DownloadRequest(
