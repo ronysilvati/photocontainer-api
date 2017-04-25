@@ -11,6 +11,7 @@ use PhotoContainer\PhotoContainer\Infrastructure\Email\SwiftMailerHelper;
 use PhotoContainer\PhotoContainer\Infrastructure\Persistence\EloquentDatabaseProvider;
 use PhotoContainer\PhotoContainer\Infrastructure\Persistence\RestDatabaseProvider;
 use PhotoContainer\PhotoContainer\Infrastructure\Web\Slim\SlimApp;
+use PhotoContainer\PhotoContainer\Contexts\Contact\ContactContextBootstrap;
 
 require '../vendor/autoload.php';
 
@@ -83,6 +84,7 @@ $webApp->bootstrap(
             "/event",
             "/location",
             "/photo",
+            '/contact'
         ],
     ]
 );
@@ -107,5 +109,8 @@ $webApp = $photoBoostrap->wireSlimRoutes($webApp);
 
 $approvalBootstrap = new ApprovalContextBootstrap();
 $webApp = $approvalBootstrap->wireSlimRoutes($webApp);
+
+$contactBootstrap = new ContactContextBootstrap();
+$webApp = $contactBootstrap->wireSlimRoutes($webApp);
 
 $webApp->app->run();
