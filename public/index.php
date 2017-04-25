@@ -16,7 +16,7 @@ require '../vendor/autoload.php';
 
 define('ROOT_DIR', dirname(__DIR__));
 define('CACHE_DIR', ROOT_DIR.'/cache');
-define('DEBUG_MODE', false);
+define('DEBUG_MODE', true);
 
 if (is_file('.env')) {
     $dotenv = new Dotenv\Dotenv(__DIR__);
