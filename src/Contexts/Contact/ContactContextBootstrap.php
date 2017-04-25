@@ -31,7 +31,7 @@ class ContactContextBootstrap implements ContextBootstrap
                         ['name' => 'Jorge Ferla', 'email' => 'jorge@lampra.com.br'],
                         ['name' => getenv('PHOTOCONTAINER_EMAIL_NAME'), 'email' => getenv('PHOTOCONTAINER_EMAIL')]
                     );
-                    $container['EmailHelper']->send->send($email);
+                    $container['EmailHelper']->send($email);
                 }
 
                 $data = $request->getParsedBody();
