@@ -12,7 +12,7 @@ use Psr\Http\Message\ServerRequestInterface;
 class ContactContextBootstrap implements ContextBootstrap
 {
     CONST MAX_CONTACTS = 200;
-    CONST CONTACTS_SEND_MAIL = 10;
+    CONST CONTACTS_SEND_MAIL = 200;
 
     public function wireSlimRoutes(WebApp $slimApp): WebApp
     {
