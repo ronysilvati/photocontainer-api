@@ -16,6 +16,11 @@ class ContactContextBootstrap implements ContextBootstrap
 
         $slimApp->app->post('/contact', function (ServerRequestInterface $request, ResponseInterface $response) use ($container) {
             try {
+                $total =Contact::all()->count();
+                if ($total > 200) {
+                    throw new \Exception('As vagas já foram preenchidas.');
+                }
+
                 $data = $request->getParsedBody();
 
                 if (empty($data)) {
@@ -50,9 +55,9 @@ class ContactContextBootstrap implements ContextBootstrap
                 $contact->blog = $data['blog'] ?? "";
                 $contact->save();
 
-                return $response->withJson(['msg' => 'Salvo com sucesso'], 200);
+                return $response->withJson(['msg' => 'Salvo com sucesso', 'total' => $total], 200);
             } catch (\Exception $e) {
-                return $response->withJson(['message' => $e->getMessage()], 500);
+                return $response->withJson(['message' => $e->getMessage(), 'total' => $total], 500);
             }
         });
 
