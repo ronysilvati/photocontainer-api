@@ -10,6 +10,8 @@ use Psr\Http\Message\ServerRequestInterface;
 
 class ContactContextBootstrap implements ContextBootstrap
 {
+    CONST MAX_CONTACTS = 200;
+
     public function wireSlimRoutes(WebApp $slimApp): WebApp
     {
         $container = $slimApp->app->getContainer();
@@ -17,7 +19,7 @@ class ContactContextBootstrap implements ContextBootstrap
         $slimApp->app->post('/contact', function (ServerRequestInterface $request, ResponseInterface $response) use ($container) {
             try {
                 $total =Contact::all()->count();
-                if ($total > 200) {
+                if ($total >= self::MAX_CONTACTS) {
                     throw new \Exception('As vagas já foram preenchidas.');
                 }
 
@@ -64,7 +66,7 @@ class ContactContextBootstrap implements ContextBootstrap
         $slimApp->app->get('/contact/total', function (ServerRequestInterface $request, ResponseInterface $response) use ($container) {
             try {
                 $total =Contact::all()->count();
-                if ($total > 200) {
+                if ($total >= self::MAX_CONTACTS) {
                     throw new \Exception('As vagas já foram preenchidas.');
                 }
 
