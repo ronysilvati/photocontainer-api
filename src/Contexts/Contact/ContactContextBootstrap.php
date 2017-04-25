@@ -2,6 +2,7 @@
 
 namespace PhotoContainer\PhotoContainer\Contexts\Contact;
 
+use PhotoContainer\PhotoContainer\Contexts\Contact\Email\TotalContactsEmail;
 use PhotoContainer\PhotoContainer\Infrastructure\ContextBootstrap;
 use PhotoContainer\PhotoContainer\Infrastructure\Persistence\Eloquent\Contact;
 use PhotoContainer\PhotoContainer\Infrastructure\Web\WebApp;
@@ -11,6 +12,7 @@ use Psr\Http\Message\ServerRequestInterface;
 class ContactContextBootstrap implements ContextBootstrap
 {
     CONST MAX_CONTACTS = 200;
+    CONST CONTACTS_SEND_MAIL = 10;
 
     public function wireSlimRoutes(WebApp $slimApp): WebApp
     {
@@ -20,7 +22,16 @@ class ContactContextBootstrap implements ContextBootstrap
             try {
                 $total =Contact::all()->count();
                 if ($total >= self::MAX_CONTACTS) {
-                    throw new \Exception('As vagas já foram preenchidas.');
+                    //throw new \Exception('As vagas já foram preenchidas.');
+                }
+
+                if ($total == self::CONTACTS_SEND_MAIL) {
+                    $email = new TotalContactsEmail(
+                        [],
+                        ['name' => 'Jorge Ferla', 'email' => 'jorge@lampra.com.br'],
+                        ['name' => getenv('PHOTOCONTAINER_EMAIL_NAME'), 'email' => getenv('PHOTOCONTAINER_EMAIL')]
+                    );
+                    $container['EmailHelper']->send->send($email);
                 }
 
                 $data = $request->getParsedBody();
@@ -67,7 +78,7 @@ class ContactContextBootstrap implements ContextBootstrap
             try {
                 $total =Contact::all()->count();
                 if ($total >= self::MAX_CONTACTS) {
-                    throw new \Exception('As vagas já foram preenchidas.');
+                    //throw new \Exception('As vagas já foram preenchidas.');
                 }
 
                 return $response->withJson(['msg' => 'Possui vaga', 'total' => $total], 200);
