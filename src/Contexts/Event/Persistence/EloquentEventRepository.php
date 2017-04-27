@@ -124,6 +124,12 @@ class EloquentEventRepository implements EventRepository
             $event->changeState($data['state']);
             $event->changeCity($data['city']);
 
+            $allCategories = [];
+            foreach ($data['categories'] as $category) {
+                $allCategories[] = new EventCategory(null, $category);
+            }
+            $event->changeCategories($allCategories);
+
             $eventModel = EventModel::find($id);
             $eventModel->groom = $event->getGroom();
             $eventModel->bride = $event->getBride();
