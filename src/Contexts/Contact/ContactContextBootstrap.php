@@ -2,12 +2,14 @@
 
 namespace PhotoContainer\PhotoContainer\Contexts\Contact;
 
+use League\Csv\Writer;
 use PhotoContainer\PhotoContainer\Contexts\Contact\Email\TotalContactsEmail;
 use PhotoContainer\PhotoContainer\Infrastructure\ContextBootstrap;
 use PhotoContainer\PhotoContainer\Infrastructure\Persistence\Eloquent\Contact;
 use PhotoContainer\PhotoContainer\Infrastructure\Web\WebApp;
 use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\ServerRequestInterface;
+use Slim\Http\Stream;
 
 class ContactContextBootstrap implements ContextBootstrap
 {
@@ -82,6 +84,25 @@ class ContactContextBootstrap implements ContextBootstrap
                 }
 
                 return $response->withJson(['msg' => 'Possui vaga', 'total' => $total], 200);
+            } catch (\Exception $e) {
+                return $response->withJson(['message' => $e->getMessage()], 500);
+            }
+        });
+
+        $slimApp->app->get('/contact/list', function (ServerRequestInterface $request, ResponseInterface $response) use ($container) {
+            try {
+                $all = Contact::all()->toArray();
+
+                $writer = Writer::createFromFileObject(new \SplTempFileObject());
+                $writer->insertAll($all); //using an array
+
+                $response = $response
+                    ->withHeader('Content-Type','text/csv; charset=UTF-8')
+	                ->withHeader('Content-Disposition', 'attachment; filename="contacts.csv"');
+
+                echo $writer->output();
+
+                return $response;
             } catch (\Exception $e) {
                 return $response->withJson(['message' => $e->getMessage()], 500);
             }
