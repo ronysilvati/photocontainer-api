@@ -10,7 +10,7 @@ class EloquentCategoryRepository implements CategoryRepository
 {
     public function findAll(): array
     {
-        $all = CategoryModel::all();
+        $all = CategoryModel::where(['active' => true])->orderBy('order')->get();
 
         return $all->map(function ($item, $key) {
             return new Category($item->id, $item->description);

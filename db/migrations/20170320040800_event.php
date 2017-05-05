@@ -31,6 +31,8 @@ class Event extends AbstractMigration
         $categories = $this->table('categories');
         $categories
             ->addColumn('description', 'string', ['limit' => 250, 'null' => true])
+            ->addColumn('active', 'boolean', ['default' => true])
+            ->addColumn('order', 'integer', ['default' => null])
             ->addTimestamps()
             ->create();
 

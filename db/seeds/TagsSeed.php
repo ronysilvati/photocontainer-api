@@ -80,14 +80,14 @@ class TagsSeed extends AbstractSeed
             INSERT INTO `tags` (`id`, `tag_category_id`, `description`, `created_at`, `updated_at`) VALUES (47, 7, 'Religioso', '2017-03-23 17:50:57', '2017-03-23 14:44:12');
             INSERT INTO `tags` (`id`, `tag_category_id`, `description`, `created_at`, `updated_at`) VALUES (48, 7, 'Civil', '2017-03-23 17:50:57', '2017-03-23 14:44:12');
             INSERT INTO `tags` (`id`, `tag_category_id`, `description`, `created_at`, `updated_at`) VALUES (49, 8, 'Sem festa', '2017-03-23 17:51:24', '2017-03-23 14:44:12');
-            INSERT INTO `tags` (`id`, `tag_category_id`, `description`, `created_at`, `updated_at`) VALUES (50, 8, 'Coquetem (Sem dança)', '2017-03-23 17:51:33', '2017-03-23 14:44:12');
+            INSERT INTO `tags` (`id`, `tag_category_id`, `description`, `created_at`, `updated_at`) VALUES (50, 8, 'Coquetel (Sem dança)', '2017-03-23 17:51:33', '2017-03-23 14:44:12');
             INSERT INTO `tags` (`id`, `tag_category_id`, `description`, `created_at`, `updated_at`) VALUES (51, 8, 'Balada', '2017-03-23 17:51:39', '2017-03-23 14:44:12');
             INSERT INTO `tags` (`id`, `tag_category_id`, `description`, `created_at`, `updated_at`) VALUES (52, 9, 'DJ', '2017-03-23 17:51:47', '2017-03-23 14:44:12');
             INSERT INTO `tags` (`id`, `tag_category_id`, `description`, `created_at`, `updated_at`) VALUES (53, 9, 'Banda (Musica ao vivo)', '2017-03-23 17:52:03', '2017-03-23 14:44:12');
             INSERT INTO `tags` (`id`, `tag_category_id`, `description`, `created_at`, `updated_at`) VALUES (54, 10, 'Cantor / Cantora', '2017-03-23 17:52:50', '2017-03-23 14:44:12');
             INSERT INTO `tags` (`id`, `tag_category_id`, `description`, `created_at`, `updated_at`) VALUES (55, 10, 'Banda', '2017-03-23 17:53:13', '2017-03-23 14:44:12');
             INSERT INTO `tags` (`id`, `tag_category_id`, `description`, `created_at`, `updated_at`) VALUES (56, 10, 'Ator / Atriz', '2017-03-23 17:53:19', '2017-03-23 14:44:12');
-            INSERT INTO `tags` (`id`, `tag_category_id`, `description`, `created_at`, `updated_at`) VALUES (57, 10, 'CivilEscola de Samba', '2017-03-23 17:53:28', '2017-03-23 14:44:12');
+            INSERT INTO `tags` (`id`, `tag_category_id`, `description`, `created_at`, `updated_at`) VALUES (57, 10, 'Escola de Samba', '2017-03-23 17:53:28', '2017-03-23 14:44:12');
             INSERT INTO `tags` (`id`, `tag_category_id`, `description`, `created_at`, `updated_at`) VALUES (58, 11, 'Heterosexual', '2017-03-23 17:54:16', '2017-03-23 14:44:12');
             INSERT INTO `tags` (`id`, `tag_category_id`, `description`, `created_at`, `updated_at`) VALUES (59, 11, 'Homoafetivo', '2017-03-23 17:54:23', '2017-03-23 14:44:12');
             INSERT INTO `tags` (`id`, `tag_category_id`, `description`, `created_at`, `updated_at`) VALUES (60, 12, 'Branco', '2017-03-23 17:54:23', '2017-03-23 14:44:12');
