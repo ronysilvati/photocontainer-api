@@ -2,6 +2,7 @@
 
 namespace PhotoContainer\PhotoContainer\Infrastructure\Web\Slim;
 
+use PhotoContainer\PhotoContainer\Infrastructure\ContextBootstrap;
 use PhotoContainer\PhotoContainer\Infrastructure\Web\WebApp;
 use Slim\App;
 use Slim\Middleware\JwtAuthentication;
@@ -21,8 +22,6 @@ class SlimApp implements WebApp
     public function bootstrap(array $conf)
     {
         $container = $this->app->getContainer();
-        $container['DatabaseProvider']->boot();
-        $container['CepRestProvider']->boot();
 
         $this->app->add(new JwtAuthentication([
             "secret" => $conf["secret"],
@@ -42,6 +41,12 @@ class SlimApp implements WebApp
                 ->withHeader('Access-Control-Allow-Methods', 'GET, POST, PUT, DELETE, OPTIONS, PATCH')
                 ->withHeader('Access-Control-Max-Age', '604800');
         });
+    }
+
+    public function addContext(ContextBootstrap $context)
+    {
+        $this->app = ($context->wireSlimRoutes($this))->app;
+        return $this;
     }
 
     public function run()

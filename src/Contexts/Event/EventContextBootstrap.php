@@ -7,7 +7,6 @@ use PhotoContainer\PhotoContainer\Contexts\Event\Action\CreateFavorite;
 use PhotoContainer\PhotoContainer\Contexts\Event\Action\DeleteEvent;
 use PhotoContainer\PhotoContainer\Contexts\Event\Action\DeleteFavorite;
 use PhotoContainer\PhotoContainer\Contexts\Event\Action\FindEvent;
-use PhotoContainer\PhotoContainer\Contexts\Event\Action\RequestDownload;
 use PhotoContainer\PhotoContainer\Contexts\Event\Action\UpdateEvent;
 use PhotoContainer\PhotoContainer\Contexts\Event\Action\UpdateSuppliers;
 use PhotoContainer\PhotoContainer\Contexts\Event\Action\UpdateTags;
@@ -34,7 +33,7 @@ class EventContextBootstrap implements ContextBootstrap
             $args = $request->getQueryParams();
             $id = isset($args['id']) ? $args['id'] : null;
 
-            $action = new FindEvent(new EloquentEventRepository());
+            $action = new FindEvent(new EloquentEventRepository($container['DatabaseProvider']));
             $actionResponse = $action->handle($id);
 
             return $response->withJson($actionResponse, $actionResponse->getHttpStatus());
@@ -62,7 +61,7 @@ class EventContextBootstrap implements ContextBootstrap
                     (bool) $data['approval_photographer'], (bool) $data['approval_bride'], $allCategories,
                     $allTags, new Suppliers(null, null, null));
 
-                $action = new CreateEvent(new EloquentEventRepository());
+                $action = new CreateEvent(new EloquentEventRepository($container['DatabaseProvider']));
                 $actionResponse = $action->handle($event);
 
                 return $response->withJson($actionResponse, $actionResponse->getHttpStatus());
@@ -76,7 +75,7 @@ class EventContextBootstrap implements ContextBootstrap
                 $data = $request->getParsedBody();
                 $id = isset($args['id']) ? $args['id'] : null;
 
-                $action = new DeleteEvent(new EloquentEventRepository());
+                $action = new DeleteEvent(new EloquentEventRepository($container['DatabaseProvider']));
                 $actionResponse = $action->handle($id);
 
                 return $response->withJson($actionResponse, $actionResponse->getHttpStatus());
@@ -90,7 +89,7 @@ class EventContextBootstrap implements ContextBootstrap
                 $data = $request->getParsedBody();
                 $id = isset($args['id']) ? $args['id'] : null;
 
-                $action = new UpdateEvent(new EloquentEventRepository());
+                $action = new UpdateEvent(new EloquentEventRepository($container['DbalDatabaseProvider']));
                 $actionResponse = $action->handle($id, $data);
 
                 return $response->withJson($actionResponse, $actionResponse->getHttpStatus());
@@ -103,7 +102,7 @@ class EventContextBootstrap implements ContextBootstrap
             $publisher = new Publisher($args['publisher_id'], null, null);
             $favorite = new Favorite(null, $publisher, $args['event_id']);
 
-            $action = new CreateFavorite(new EloquentEventRepository());
+            $action = new CreateFavorite(new EloquentEventRepository($container['DbalDatabaseProvider']));
             $actionResponse = $action->handle($favorite);
 
             return $response->withJson($actionResponse, $actionResponse->getHttpStatus());
@@ -113,7 +112,7 @@ class EventContextBootstrap implements ContextBootstrap
             $publisher = new Publisher($args['publisher_id'], null, null);
             $favorite = new Favorite(null, $publisher, $args['event_id']);
 
-            $action = new DeleteFavorite(new EloquentEventRepository());
+            $action = new DeleteFavorite(new EloquentEventRepository($container['DatabaseProvider']));
             $actionResponse = $action->handle($favorite);
 
             return $response->withJson($actionResponse, $actionResponse->getHttpStatus());
@@ -127,7 +126,7 @@ class EventContextBootstrap implements ContextBootstrap
                     return $response->withJson(['message' => 'Tags não enviadas.'], 204);
                 }
 
-                $action = new UpdateTags(new EloquentEventRepository());
+                $action = new UpdateTags(new EloquentEventRepository($container['DatabaseProvider']));
 
                 $allTags = [];
                 foreach ($data['tags'] as $tag) {
@@ -150,7 +149,7 @@ class EventContextBootstrap implements ContextBootstrap
                     return $response->withJson(['message' => 'Fornecedores não enviados.'], 204);
                 }
 
-                $action = new UpdateSuppliers(new EloquentEventRepository());
+                $action = new UpdateSuppliers(new EloquentEventRepository($container['DatabaseProvider']));
                 $actionResponse = $action->handle($data, $args["id"]);
 
                 return $response->withJson($actionResponse, $actionResponse->getHttpStatus());

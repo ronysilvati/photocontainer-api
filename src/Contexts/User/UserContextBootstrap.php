@@ -5,9 +5,7 @@ namespace PhotoContainer\PhotoContainer\Contexts\User;
 use PhotoContainer\PhotoContainer\Contexts\User\Action\CreateUser;
 use PhotoContainer\PhotoContainer\Contexts\User\Action\FindUser;
 use PhotoContainer\PhotoContainer\Contexts\User\Action\UpdateUser;
-use PhotoContainer\PhotoContainer\Contexts\User\Domain\Address;
 use PhotoContainer\PhotoContainer\Contexts\User\Domain\Details;
-use PhotoContainer\PhotoContainer\Contexts\User\Domain\PhotographerDetails;
 use PhotoContainer\PhotoContainer\Contexts\User\Domain\Profile;
 use PhotoContainer\PhotoContainer\Contexts\User\Domain\User;
 use PhotoContainer\PhotoContainer\Contexts\User\Persistence\EloquentUserRepository;
@@ -22,13 +20,13 @@ class UserContextBootstrap implements ContextBootstrap
     {
         $container = $slimApp->app->getContainer();
 
-        $slimApp->app->get('/users', function (ServerRequestInterface $request, ResponseInterface $response) {
+        $slimApp->app->get('/users', function (ServerRequestInterface $request, ResponseInterface $response) use ($container) {
             $args = $request->getQueryParams();
 
             $id = isset($args['id']) ? $args['id'] : null;
             $email = isset($args['email']) ? $args['email'] : null;
 
-            $action = new FindUser(new EloquentUserRepository());
+            $action = new FindUser(new EloquentUserRepository($container['DatabaseProvider']));
             $actionResponse = $action->handle($id, $email);
 
             return $response->withJson($actionResponse, $actionResponse->getHttpStatus());
@@ -54,7 +52,7 @@ class UserContextBootstrap implements ContextBootstrap
 
                 $crypto = empty($data['password']) ? '' : $container['CryptoMethod']->hash($data['password']);
 
-                $action = new CreateUser(new EloquentUserRepository());
+                $action = new CreateUser(new EloquentUserRepository($container['DatabaseProvider']));
                 $actionResponse = $action->handle($user, $crypto);
 
                 return $response->withJson($actionResponse, $actionResponse->getHttpStatus());
@@ -72,7 +70,7 @@ class UserContextBootstrap implements ContextBootstrap
                     $crypto = empty($data['password']) ? '' : $container['CryptoMethod']->hash($data['password']);
                 }
 
-                $action = new UpdateUser(new EloquentUserRepository());
+                $action = new UpdateUser(new EloquentUserRepository($container['DatabaseProvider']));
                 $actionResponse = $action->handle($args['id'], $data, $crypto);
 
                 return $response->withJson($actionResponse, $actionResponse->getHttpStatus());

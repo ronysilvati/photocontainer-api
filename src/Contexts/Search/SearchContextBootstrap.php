@@ -15,9 +15,10 @@ use PhotoContainer\PhotoContainer\Contexts\Search\Domain\EventSearch;
 use PhotoContainer\PhotoContainer\Contexts\Search\Domain\Photographer;
 use PhotoContainer\PhotoContainer\Contexts\Search\Domain\Publisher;
 use PhotoContainer\PhotoContainer\Contexts\Search\Domain\Tag;
+use PhotoContainer\PhotoContainer\Contexts\Search\Persistence\DbalEventRepository;
+use PhotoContainer\PhotoContainer\Contexts\Search\Persistence\DbalNotificationRepository;
 use PhotoContainer\PhotoContainer\Contexts\Search\Persistence\EloquentCategoryRepository;
 use PhotoContainer\PhotoContainer\Contexts\Search\Persistence\EloquentEventRepository;
-use PhotoContainer\PhotoContainer\Contexts\Search\Persistence\EloquentNotificationRepository;
 use PhotoContainer\PhotoContainer\Contexts\Search\Persistence\EloquentPhotoRepository;
 use PhotoContainer\PhotoContainer\Contexts\Search\Persistence\EloquentTagRepository;
 use PhotoContainer\PhotoContainer\Infrastructure\ContextBootstrap;
@@ -61,7 +62,7 @@ class SearchContextBootstrap implements ContextBootstrap
                     $search->changePublisher(new Publisher((int) $args['publisher'] ?? $args['publisher']));
                 }
 
-                $action = new FindEvent(new EloquentEventRepository());
+                $action = new FindEvent(new DbalEventRepository($container['DbalDatabaseProvider']));
                 $actionResponse = $action->handle($search);
 
                 return $response->withJson($actionResponse, $actionResponse->getHttpStatus());
@@ -72,7 +73,7 @@ class SearchContextBootstrap implements ContextBootstrap
 
         $slimApp->app->get('/search/categories', function (ServerRequestInterface $request, ResponseInterface $response) use ($container) {
             try {
-                $action = new FindCategories(new EloquentCategoryRepository());
+                $action = new FindCategories(new EloquentCategoryRepository($container['DatabaseProvider']));
                 $actionResponse = $action->handle();
 
                 $response = $container->cache->withExpires($response, time() + getenv('HEAD_EXPIRES'));
@@ -85,7 +86,7 @@ class SearchContextBootstrap implements ContextBootstrap
 
         $slimApp->app->get('/search/tags', function (ServerRequestInterface $request, ResponseInterface $response) use ($container) {
             try {
-                $action = new FindTags(new EloquentTagRepository());
+                $action = new FindTags(new EloquentTagRepository($container['DatabaseProvider']));
                 $actionResponse = $action->handle();
 
                 $response = $container->cache->withExpires($response, time() + getenv('HEAD_EXPIRES'));
@@ -98,7 +99,7 @@ class SearchContextBootstrap implements ContextBootstrap
 
         $slimApp->app->get('/search/events/{id}/photos/user/{user_id}', function (ServerRequestInterface $request, ResponseInterface $response, $args) use ($container) {
             try {
-                $action = new FindEventPhotosPublisher(new EloquentEventRepository());
+                $action = new FindEventPhotosPublisher(new EloquentEventRepository($container['DatabaseProvider']));
                 $actionResponse = $action->handle($args['id'], $args['user_id']);
 
                 return $response->withJson($actionResponse, $actionResponse->getHttpStatus());
@@ -109,7 +110,7 @@ class SearchContextBootstrap implements ContextBootstrap
 
         $slimApp->app->get('/search/events/{id}/photos', function (ServerRequestInterface $request, ResponseInterface $response, $args) use ($container) {
             try {
-                $action = new FindEventPhotosPhotographer(new EloquentEventRepository());
+                $action = new FindEventPhotosPhotographer(new EloquentEventRepository($container['DbalDatabaseProvider']));
                 $actionResponse = $action->handle($args['id']);
 
                 return $response->withJson($actionResponse, $actionResponse->getHttpStatus());
@@ -133,7 +134,7 @@ class SearchContextBootstrap implements ContextBootstrap
                     }
                 }
 
-                $action = new FindHistoric(new EloquentPhotoRepository());
+                $action = new FindHistoric(new EloquentPhotoRepository($container['DatabaseProvider']));
                 $actionResponse = $action->handle($args['publisher_id'], $keyword, $allTags, $args['type']);
 
                 return $response->withJson($actionResponse, $actionResponse->getHttpStatus());
@@ -144,7 +145,7 @@ class SearchContextBootstrap implements ContextBootstrap
 
         $slimApp->app->get('/search/waiting_approval/user/{photographer_id}', function (ServerRequestInterface $request, ResponseInterface $response, $args) use ($container) {
             try {
-                $action = new WaitingForApproval(new EloquentEventRepository());
+                $action = new WaitingForApproval(new EloquentEventRepository($container['DatabaseProvider']));
                 $actionResponse = $action->handle($args['photographer_id']);
 
                 return $response->withJson($actionResponse, $actionResponse->getHttpStatus());
@@ -155,7 +156,7 @@ class SearchContextBootstrap implements ContextBootstrap
 
         $slimApp->app->get('/search/notifications/user/{user_id}', function (ServerRequestInterface $request, ResponseInterface $response, $args) use ($container) {
             try {
-                $action = new GetNotifications(new EloquentNotificationRepository());
+                $action = new GetNotifications(new DbalNotificationRepository($container['DbalDatabaseProvider']));
                 $actionResponse = $action->handle($args['user_id']);
 
                 return $response->withJson($actionResponse, $actionResponse->getHttpStatus());

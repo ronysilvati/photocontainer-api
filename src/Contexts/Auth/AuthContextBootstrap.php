@@ -20,8 +20,8 @@ class AuthContextBootstrap implements ContextBootstrap
         $slimApp->app->post('/login', function (ServerRequestInterface $request, ResponseInterface $response) use ($container) {
             $data = $request->getParsedBody();
 
-            $action = new AuthenticateUser(new EloquentAuthRepository(), $container['CryptoMethod']);
-            $domainResponse =  $action->handle(new Auth($data['user'], $data['password']), new JwtGenerator('secret'));
+            $action = new AuthenticateUser(new EloquentAuthRepository($container['DatabaseProvider']), $container['CryptoMethod']);
+            $domainResponse = $action->handle(new Auth($data['user'], $data['password']), new JwtGenerator('secret'));
 
             return $response->withJson($domainResponse, $domainResponse->getHttpStatus());
         });

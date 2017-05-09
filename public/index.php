@@ -1,4 +1,5 @@
 <?php
+
 use PhotoContainer\PhotoContainer\Contexts\Approval\ApprovalContextBootstrap;
 use PhotoContainer\PhotoContainer\Contexts\Auth\AuthContextBootstrap;
 use PhotoContainer\PhotoContainer\Contexts\Cep\CepContextBootstrap;
@@ -10,14 +11,15 @@ use PhotoContainer\PhotoContainer\Infrastructure\Crypto\BcryptHashing;
 use PhotoContainer\PhotoContainer\Infrastructure\Email\SwiftMailerHelper;
 use PhotoContainer\PhotoContainer\Infrastructure\Persistence\EloquentDatabaseProvider;
 use PhotoContainer\PhotoContainer\Infrastructure\Persistence\RestDatabaseProvider;
+use PhotoContainer\PhotoContainer\Infrastructure\Persistence\DbalDatabaseProvider;
 use PhotoContainer\PhotoContainer\Infrastructure\Web\Slim\SlimApp;
 use PhotoContainer\PhotoContainer\Contexts\Contact\ContactContextBootstrap;
 
-require '../vendor/autoload.php';
-
 define('ROOT_DIR', dirname(__DIR__));
 define('CACHE_DIR', ROOT_DIR.'/cache');
-define('DEBUG_MODE', true);
+define('DEBUG_MODE', false);
+
+require '../vendor/autoload.php';
 
 if (is_file('.env')) {
     $dotenv = new Dotenv\Dotenv(__DIR__);
@@ -48,6 +50,21 @@ $container['DatabaseProvider'] = function ($c) {
         'pwd'       => getenv('PHINX_DBPASS'),
         'port'      => getenv('PHINX_DBPORT'),
     ]);
+
+    $database->boot();
+    return $database;
+};
+
+$container['DbalDatabaseProvider'] = function ($c) {
+    $database = new DbalDatabaseProvider([
+        'host'      => getenv('PHINX_DBHOST'),
+        'database'  => getenv('PHINX_DBNAME'),
+        'user'      => getenv('PHINX_DBUSER'),
+        'pwd'       => getenv('PHINX_DBPASS'),
+        'port'      => getenv('PHINX_DBPORT'),
+    ]);
+
+    $database->boot();
     return $database;
 };
 
@@ -55,6 +72,8 @@ $container['CepRestProvider'] = function ($c) {
     $database = new RestDatabaseProvider([
         'host' => 'https://viacep.com.br/ws/',
     ]);
+
+    $database->boot();
     return $database;
 };
 
@@ -89,28 +108,13 @@ $webApp->bootstrap(
     ]
 );
 
-$eventBoostrap = new AuthContextBootstrap();
-$webApp = $eventBoostrap->wireSlimRoutes($webApp);
-
-$eventBoostrap = new EventContextBootstrap();
-$webApp = $eventBoostrap->wireSlimRoutes($webApp);
-
-$eventBoostrap = new UserContextBootstrap();
-$webApp = $eventBoostrap->wireSlimRoutes($webApp);
-
-$eventBoostrap = new SearchContextBootstrap();
-$webApp = $eventBoostrap->wireSlimRoutes($webApp);
-
-$eventBoostrap = new CepContextBootstrap();
-$webApp = $eventBoostrap->wireSlimRoutes($webApp);
-
-$photoBoostrap = new PhotoContextBootstrap();
-$webApp = $photoBoostrap->wireSlimRoutes($webApp);
-
-$approvalBootstrap = new ApprovalContextBootstrap();
-$webApp = $approvalBootstrap->wireSlimRoutes($webApp);
-
-$contactBootstrap = new ContactContextBootstrap();
-$webApp = $contactBootstrap->wireSlimRoutes($webApp);
+$webApp->addContext(new AuthContextBootstrap())
+    ->addContext(new EventContextBootstrap())
+    ->addContext(new UserContextBootstrap())
+    ->addContext(new SearchContextBootstrap())
+    ->addContext(new CepContextBootstrap())
+    ->addContext(new PhotoContextBootstrap())
+    ->addContext(new ApprovalContextBootstrap())
+    ->addContext(new ContactContextBootstrap());
 
 $webApp->app->run();

@@ -21,7 +21,7 @@ class CepContextBootstrap implements ContextBootstrap
         $container = $slimApp->app->getContainer();
 
         $slimApp->app->get('/location/countries', function (ServerRequestInterface $request, ResponseInterface $response) use ($container) {
-            $action = new GetCountries(new EloquentCepRepository());
+            $action = new GetCountries(new EloquentCepRepository($container['DatabaseProvider']));
             $actionResponse = $action->handle();
 
             $response = $container->cache->withExpires($response, time() + getenv('HEAD_EXPIRES'));
@@ -39,7 +39,7 @@ class CepContextBootstrap implements ContextBootstrap
         });
 
         $slimApp->app->get('/location/country/{country_id}/states', function (ServerRequestInterface $request, ResponseInterface $response, $args) use ($container) {
-            $action = new FindStates(new EloquentCepRepository());
+            $action = new FindStates(new EloquentCepRepository($container['DatabaseProvider']));
             $actionResponse = $action->handle(new Cep(null, $args['country_id'], null, null, null, null, null));
 
             $response = $container->cache->withExpires($response, time() + getenv('HEAD_EXPIRES'));
@@ -48,7 +48,7 @@ class CepContextBootstrap implements ContextBootstrap
         });
 
         $slimApp->app->get('/location/state/{state_id}/cities', function (ServerRequestInterface $request, ResponseInterface $response, $args) use ($container) {
-            $action = new FindCities(new EloquentCepRepository());
+            $action = new FindCities(new EloquentCepRepository($container['DatabaseProvider']));
             $actionResponse = $action->handle(new Cep(null, null, $args['state_id'], null, null, null, null));
 
             $response = $container->cache->withExpires($response, time() + getenv('HEAD_EXPIRES'));

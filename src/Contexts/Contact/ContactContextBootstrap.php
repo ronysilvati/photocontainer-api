@@ -9,7 +9,6 @@ use PhotoContainer\PhotoContainer\Infrastructure\Persistence\Eloquent\Contact;
 use PhotoContainer\PhotoContainer\Infrastructure\Web\WebApp;
 use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\ServerRequestInterface;
-use Slim\Http\Stream;
 
 class ContactContextBootstrap implements ContextBootstrap
 {
