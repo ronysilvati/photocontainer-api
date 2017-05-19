@@ -7,13 +7,13 @@ use PhotoContainer\PhotoContainer\Contexts\User\Domain\Address;
 use PhotoContainer\PhotoContainer\Contexts\User\Domain\Details;
 use PhotoContainer\PhotoContainer\Contexts\User\Domain\PhotographerDetails;
 use PhotoContainer\PhotoContainer\Contexts\User\Domain\Profile;
+use PhotoContainer\PhotoContainer\Contexts\User\Domain\User;
 use PhotoContainer\PhotoContainer\Contexts\User\Domain\UserRepository;
+use PhotoContainer\PhotoContainer\Infrastructure\Exception\PersistenceException;
+use PhotoContainer\PhotoContainer\Infrastructure\Persistence\Eloquent\Address as AddressModel;
 use PhotoContainer\PhotoContainer\Infrastructure\Persistence\Eloquent\Detail;
 use PhotoContainer\PhotoContainer\Infrastructure\Persistence\Eloquent\User as UserModel;
-use PhotoContainer\PhotoContainer\Infrastructure\Persistence\Eloquent\Address as AddressModel;
-use PhotoContainer\PhotoContainer\Infrastructure\Exception\PersistenceException;
 use PhotoContainer\PhotoContainer\Infrastructure\Persistence\Eloquent\UserProfile;
-use PhotoContainer\PhotoContainer\Contexts\User\Domain\User;
 
 class EloquentUserRepository implements UserRepository
 {
@@ -139,6 +139,8 @@ class EloquentUserRepository implements UserRepository
     public function updateUser(User $user, ?string $encryptedPwd)
     {
         try {
+            DB::beginTransaction();
+
             $userModel = UserModel::find($user->getId());
 
             $userModel->name = $user->getName();
