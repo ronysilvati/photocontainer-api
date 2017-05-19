@@ -12,6 +12,7 @@ use PhotoContainer\PhotoContainer\Contexts\Photo\Domain\Photo;
 use PhotoContainer\PhotoContainer\Contexts\Photo\Persistence\EloquentPhotoRepository;
 use PhotoContainer\PhotoContainer\Contexts\Photo\Persistence\FilesystemPhotoRepository;
 use PhotoContainer\PhotoContainer\Infrastructure\ContextBootstrap;
+use PhotoContainer\PhotoContainer\Infrastructure\Web\DomainExceptionResponse;
 use PhotoContainer\PhotoContainer\Infrastructure\Web\WebApp;
 use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\ServerRequestInterface;
@@ -46,10 +47,10 @@ class PhotoContextBootstrap implements ContextBootstrap
 
         $slimApp->app->get('/photo/{photo_id}/user/{user_id}/download', function (ServerRequestInterface $request, ResponseInterface $response, $args) use ($container) {
             try {
-                $action = new DownloadPhoto(new EloquentPhotoRepository($container['DatabaseProvider']), $container['EmailHelper']);
+                $action = new DownloadPhoto(new EloquentPhotoRepository($container['DatabaseProvider']));
                 $actionResponse = $action->handle((int) $args['photo_id'], (int) $args['user_id']);
 
-                if (get_class($actionResponse) == 'PhotoContainer\PhotoContainer\Infrastructure\Web\DomainExceptionResponse') {
+                if (get_class($actionResponse) == DomainExceptionResponse::class) {
                     return $response->withJson($actionResponse->jsonSerialize(), $actionResponse->getHttpStatus());
                 }
 

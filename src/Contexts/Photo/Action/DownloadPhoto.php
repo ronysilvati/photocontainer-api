@@ -7,30 +7,25 @@ use PhotoContainer\PhotoContainer\Contexts\Photo\Domain\Photo;
 use PhotoContainer\PhotoContainer\Contexts\Photo\Domain\PhotoRepository;
 use PhotoContainer\PhotoContainer\Contexts\Photo\Email\DownloadedPhoto;
 use PhotoContainer\PhotoContainer\Contexts\Photo\Response\DownloadResponse;
-use PhotoContainer\PhotoContainer\Infrastructure\Email\EmailHelper;
+use PhotoContainer\PhotoContainer\Infrastructure\Event\EventGeneratorTrait;
 use PhotoContainer\PhotoContainer\Infrastructure\Web\DomainExceptionResponse;
 
 class DownloadPhoto
 {
+    use EventGeneratorTrait;
+
     /**
      * @var PhotoRepository
      */
     private $dbRepo;
 
     /**
-     * @var EmailHelper
-     */
-    private $emailHelper;
-
-    /**
      * DownloadPhoto constructor.
      * @param PhotoRepository $dbRepo
-     * @param EmailHelper $emailHelper
      */
-    public function __construct(PhotoRepository $dbRepo, EmailHelper $emailHelper)
+    public function __construct(PhotoRepository $dbRepo)
     {
         $this->dbRepo = $dbRepo;
-        $this->emailHelper = $emailHelper;
     }
 
     /**
@@ -73,6 +68,6 @@ class DownloadPhoto
             ['name' => $photographer->getName(), 'email' => $photographer->getEmail()]
         );
 
-        $this->emailHelper->send($email);
+        $this->addEvent('generic.sendmail', $email);
     }
 }
