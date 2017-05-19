@@ -17,7 +17,9 @@
         "slim/http-cache": "^0.3.0",
         "league/csv": "^8.0",
         "doctrine/dbal": "^2.5",
-        "evenement/evenement": "^2.0"
+        "evenement/evenement": "^2.0",
+        "monolog/monolog": "^1.22",
+        "zeuxisoo/slim-whoops": "0.6.*"
     },
 
     "autoload": {

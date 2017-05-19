@@ -15,9 +15,11 @@ use PhotoContainer\PhotoContainer\Infrastructure\Persistence\DbalDatabaseProvide
 use PhotoContainer\PhotoContainer\Infrastructure\Web\Slim\SlimApp;
 use PhotoContainer\PhotoContainer\Contexts\Contact\ContactContextBootstrap;
 use PhotoContainer\PhotoContainer\Infrastructure\Event\EvenementEventProvider;
+use PhotoContainer\PhotoContainer\Infrastructure\Exception\PersistenceException;
 
 define('ROOT_DIR', dirname(__DIR__));
 define('CACHE_DIR', ROOT_DIR.'/cache');
+define('LOG_DIR', ROOT_DIR.'/logs');
 define('DEBUG_MODE', false);
 
 require '../vendor/autoload.php';
@@ -32,16 +34,56 @@ if (!is_dir(CACHE_DIR)) {
     mkdir(CACHE_DIR, 0777);
 }
 
+if (!is_dir(LOG_DIR)) {
+    mkdir(LOG_DIR, 0777);
+}
+
 if (!is_file(CACHE_DIR.'/routes.cache')) {
     $slimParams['settings'] = ['routerCacheFile' => CACHE_DIR.'/routes.cache'];
 }
 
 if (DEBUG_MODE) {
-    $slimParams['settings'] = ['displayErrorDetails' => true];
+    $slimParams['settings'] = [
+        'displayErrorDetails' => true,
+        'debug' => true,
+    ];
 }
 
 $app = new \Slim\App($slimParams);
+
+$app->add(new \Zeuxisoo\Whoops\Provider\Slim\WhoopsMiddleware);
+
 $container = $app->getContainer();
+
+$container['logger'] = function($c) {
+    $logger = new \Monolog\Logger('API_LOG');
+    $file_handler = new \Monolog\Handler\StreamHandler("../logs/api.log");
+    $logger->pushHandler($file_handler);
+    return $logger;
+} ;
+
+$container['errorHandler'] = function ($c) {
+    return function (\Psr\Http\Message\ServerRequestInterface $request, $response, Exception $e) use ($c) {
+        $trace = $e->getTrace();
+
+        $data = [
+            'file' => $e->getFile() . ': '. $e->getLine(),
+            'route' => $request->getMethod(). ' ' . $request->getUri()->getPath(),
+            'actionClass' => $trace[0],
+            'contextClass' => $trace[1],
+        ];
+
+        $body = $request->getParsedBody();
+        if (!empty($body)) {
+            $data['payload'] = $body;
+        }
+
+        $message = get_class($e) == PersistenceException::class ? $e->getInfraLayerError() : $e->getMessage();
+
+        $c->logger->addCritical($message, $data);
+        return $c['response']->withJson(['message' => $e->getMessage()], 500);
+    };
+};
 
 $container['DatabaseProvider'] = function ($c) {
     $database = new EloquentDatabaseProvider([
