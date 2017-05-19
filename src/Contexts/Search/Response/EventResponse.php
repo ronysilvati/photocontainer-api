@@ -19,8 +19,9 @@ class EventResponse implements \JsonSerializable
 
     public function jsonSerialize()
     {
+        $out = [];
         if ($this->context == 'gallery_photos_publisher') {
-            return [
+            $out = [
                 'id' => $this->event->getId(),
                 'authorized' => $this->event->isApprovedForPublisher(),
                 'title' => $this->event->getTitle(),
@@ -33,7 +34,7 @@ class EventResponse implements \JsonSerializable
         }
 
         if ($this->context == 'gallery_photos_photographer') {
-            return [
+            $out = [
                 'id' => $this->event->getId(),
                 'title' => $this->event->getTitle(),
                 'photographer' => $this->event->getPhotographer(),
@@ -42,6 +43,8 @@ class EventResponse implements \JsonSerializable
                 'context' => $this->context
             ];
         }
+
+        return $out;
     }
 
     /**

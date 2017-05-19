@@ -231,13 +231,16 @@ class EventSearch
 
     public function getSearchContext(): string
     {
+        $out = "";
         if ($this->publisher) {
-            return "gallery_publisher";
+            $out = "gallery_publisher";
         }
 
         if ($this->photographer) {
-            return "gallery_photographer";
+            $out = "gallery_photographer";
         }
+
+        return $out;
     }
 
     /**
