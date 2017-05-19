@@ -6,20 +6,27 @@ use PhotoContainer\PhotoContainer\Contexts\Event\Domain\Event;
 
 class EventUpdateResponse implements \JsonSerializable
 {
+    /**
+     * @var Event
+     */
     private $event;
 
+    /**
+     * EventUpdateResponse constructor.
+     * @param Event $event
+     */
     public function __construct(Event $event)
     {
         $this->event = $event;
     }
 
+    /**
+     * @return array
+     */
     public function jsonSerialize()
     {
         return [
             "message" => "Update realizado.",
-            "_links" => [
-                "_self" => ['href' => "/events/".$this->event->getId()],
-            ],
         ];
     }
 
@@ -28,6 +35,6 @@ class EventUpdateResponse implements \JsonSerializable
      */
     public function getHttpStatus(): int
     {
-        return 201;
+        return 200;
     }
 }

@@ -6,22 +6,25 @@ use PhotoContainer\PhotoContainer\Contexts\Event\Domain\Event;
 
 class EventCreatedResponse implements \JsonSerializable
 {
+    /**
+     * @var int
+     */
     private $httpStatus = 201;
-    private $message;
+
+    /**
+     * @var Event
+     */
+    private $event;
 
     public function __construct(Event $event)
     {
         $this->event = $event;
-        $this->selfReference = "events/{$this->event->getId()}";
     }
 
     public function jsonSerialize()
     {
         return [
             "id" => $this->event->getId(),
-            "_links" => [
-                "_self" => ['href' => $this->selfReference],
-            ],
         ];
     }
 

@@ -3,6 +3,8 @@
 namespace PhotoContainer\PhotoContainer\Contexts\Event\Response;
 
 use PhotoContainer\PhotoContainer\Contexts\Event\Domain\Event;
+use PhotoContainer\PhotoContainer\Contexts\Event\Domain\EventCategory;
+use PhotoContainer\PhotoContainer\Contexts\Event\Domain\EventTag;
 
 class EventFoundResponse implements \JsonSerializable
 {
@@ -16,11 +18,13 @@ class EventFoundResponse implements \JsonSerializable
     public function jsonSerialize()
     {
         $categories = [];
+        /** @var EventCategory $item */
         foreach ($this->event->getCategories() as $item) {
             $categories[] = $item->getCategoryId();
         }
 
         $tags = [];
+        /** @var EventTag $item */
         foreach ($this->event->getTags() as $item) {
             $tags[] = $item->getTagId();
         }
@@ -43,9 +47,6 @@ class EventFoundResponse implements \JsonSerializable
             "categories" => $categories,
             "tags" => $tags,
             "suppliers" => $this->event->getSuppliers()->getSuppliers(),
-            "_links" => [
-                "_self" => ['href' => "/events/{$this->event->getId()}"],
-            ],
         ];
     }
 

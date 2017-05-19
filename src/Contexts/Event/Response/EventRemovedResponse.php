@@ -4,21 +4,28 @@ namespace PhotoContainer\PhotoContainer\Contexts\Event\Response;
 
 class EventRemovedResponse implements \JsonSerializable
 {
+    /**
+     * @var int
+     */
     private $id;
 
+    /**
+     * EventRemovedResponse constructor.
+     * @param int $id
+     */
     public function __construct(int $id)
     {
         $this->id = $id;
     }
 
+    /**
+     * @return array
+     */
     public function jsonSerialize()
     {
         return [
             "id" => $this->id,
             "message" => "Evento removido.",
-            "_links" => [
-                "_self" => ['href' => "/events/".$this->id],
-            ],
         ];
     }
 
