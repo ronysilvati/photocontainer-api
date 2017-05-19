@@ -14,6 +14,7 @@ use PhotoContainer\PhotoContainer\Infrastructure\Persistence\RestDatabaseProvide
 use PhotoContainer\PhotoContainer\Infrastructure\Persistence\DbalDatabaseProvider;
 use PhotoContainer\PhotoContainer\Infrastructure\Web\Slim\SlimApp;
 use PhotoContainer\PhotoContainer\Contexts\Contact\ContactContextBootstrap;
+use PhotoContainer\PhotoContainer\Infrastructure\Event\EvenementEventProvider;
 
 define('ROOT_DIR', dirname(__DIR__));
 define('CACHE_DIR', ROOT_DIR.'/cache');
@@ -87,6 +88,10 @@ $container['EmailHelper'] = function ($c) {
 
 $container['cache'] = function () {
     return new \Slim\HttpCache\CacheProvider();
+};
+
+$container['EventEmitter'] = function () {
+    return new EvenementEventProvider();
 };
 
 $webApp = new SlimApp($app);
