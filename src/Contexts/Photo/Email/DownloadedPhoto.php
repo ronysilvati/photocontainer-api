@@ -6,7 +6,7 @@ use PhotoContainer\PhotoContainer\Infrastructure\Email\Email;
 
 class DownloadedPhoto extends Email
 {
-    public function __construct(array $data, array $to, array $from)
+    public function __construct(array $data, array $to, ?array $from = null)
     {
         $file = __DIR__."/templates/downloaded_photo.html";
         $subject = "Foto baixada";

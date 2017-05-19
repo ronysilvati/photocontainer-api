@@ -2,7 +2,6 @@
 
 namespace PhotoContainer\PhotoContainer\Contexts\Photo\Action;
 
-use League\Flysystem\Exception;
 use PhotoContainer\PhotoContainer\Contexts\Photo\Domain\Download;
 use PhotoContainer\PhotoContainer\Contexts\Photo\Domain\Photo;
 use PhotoContainer\PhotoContainer\Contexts\Photo\Domain\PhotoRepository;
@@ -47,7 +46,7 @@ class DownloadPhoto
 
             $this->dbRepo->download($download);
 
-            $this->sendEmail($photo, $publisher_id);
+            $this->sendEmailToPhotographer($photo, $publisher_id);
 
             return new DownloadResponse($download);
         } catch (\Exception $e) {
@@ -55,26 +54,25 @@ class DownloadPhoto
         }
     }
 
-    public function sendEmail(Photo $photo, int $publisher_id)
+    /**
+     * @param Photo $photo
+     * @param int $publisher_id
+     */
+    public function sendEmailToPhotographer(Photo $photo, int $publisher_id)
     {
-        try {
-            $photographer = $this->dbRepo->findPhotoOwner($photo);
-            $publisher = $this->dbRepo->findPublisher($publisher_id);
+        $photographer = $this->dbRepo->findPhotoOwner($photo);
+        $publisher = $this->dbRepo->findPublisher($publisher_id);
 
-            $data = [
-                '{TAG}' => 'TESTE DE TAG',
-                '{PUBLISHER}' => $publisher->getName()
-            ];
+        $data = [
+            '{TAG}' => 'TESTE DE TAG',
+            '{PUBLISHER}' => $publisher->getName()
+        ];
 
-            $email = new DownloadedPhoto(
-                $data,
-                ['name' => $photographer->getName(), 'email' => $photographer->getEmail()],
-                ['name' => getenv('PHOTOCONTAINER_EMAIL_NAME'), 'email' => getenv('PHOTOCONTAINER_EMAIL')]
-            );
+        $email = new DownloadedPhoto(
+            $data,
+            ['name' => $photographer->getName(), 'email' => $photographer->getEmail()]
+        );
 
-            $this->emailHelper->send($email);
-        } catch (\Exception $e) {
-            //TODO Logar o erro no monolog, fazer nada para não impedir o download.
-        }
+        $this->emailHelper->send($email);
     }
 }
