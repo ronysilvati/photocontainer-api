@@ -9,8 +9,15 @@ use PhotoContainer\PhotoContainer\Infrastructure\Persistence\RestDatabaseProvide
 
 class RestCepRepository implements CepRepository
 {
+    /**
+     * @var RestDatabaseProvider
+     */
     private $provider;
 
+    /**
+     * RestCepRepository constructor.
+     * @param RestDatabaseProvider $provider
+     */
     public function __construct(RestDatabaseProvider $provider)
     {
         $this->provider = $provider;

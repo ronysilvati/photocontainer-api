@@ -11,6 +11,11 @@ class EventResponse implements \JsonSerializable
      */
     private $event;
 
+    /**
+     * @var string
+     */
+    private $context;
+
     public function __construct(Event $event, string $context)
     {
         $this->event = $event;
