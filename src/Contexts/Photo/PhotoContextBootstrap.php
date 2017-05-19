@@ -15,6 +15,7 @@ use PhotoContainer\PhotoContainer\Infrastructure\ContextBootstrap;
 use PhotoContainer\PhotoContainer\Infrastructure\Web\WebApp;
 use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\ServerRequestInterface;
+use Slim\Http\Stream;
 
 class PhotoContextBootstrap implements ContextBootstrap
 {
@@ -45,8 +46,6 @@ class PhotoContextBootstrap implements ContextBootstrap
 
         $slimApp->app->get('/photo/{photo_id}/user/{user_id}/download', function (ServerRequestInterface $request, ResponseInterface $response, $args) use ($container) {
             try {
-                $data = $request->getParsedBody();
-
                 $action = new DownloadPhoto(new EloquentPhotoRepository($container['DatabaseProvider']), $container['EmailHelper']);
                 $actionResponse = $action->handle((int) $args['photo_id'], (int) $args['user_id']);
 
@@ -54,7 +53,7 @@ class PhotoContextBootstrap implements ContextBootstrap
                     return $response->withJson($actionResponse->jsonSerialize(), $actionResponse->getHttpStatus());
                 }
 
-                $stream = new \Slim\Http\Stream($actionResponse->getFileToStream()); // create a stream instance for the response body
+                $stream = new Stream($actionResponse->getFileToStream()); // create a stream instance for the response body
                 return $response->withHeader('Content-Type', 'application/force-download')
                     ->withHeader('Content-Type', 'application/octet-stream')
                     ->withHeader('Content-Type', 'application/download')

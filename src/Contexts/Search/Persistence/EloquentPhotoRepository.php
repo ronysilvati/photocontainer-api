@@ -2,7 +2,6 @@
 
 namespace PhotoContainer\PhotoContainer\Contexts\Search\Persistence;
 
-use PhotoContainer\PhotoContainer\Contexts\Search\Domain\Download;
 use PhotoContainer\PhotoContainer\Contexts\Search\Domain\Historic;
 use PhotoContainer\PhotoContainer\Contexts\Search\Domain\PhotoRepository;
 use PhotoContainer\PhotoContainer\Infrastructure\Persistence\Eloquent\EventSearchPublisherDownload;

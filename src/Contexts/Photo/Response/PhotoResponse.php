@@ -2,8 +2,6 @@
 
 namespace PhotoContainer\PhotoContainer\Contexts\Photo\Response;
 
-use PhotoContainer\PhotoContainer\Contexts\Photo\Domain\Photo;
-
 class PhotoResponse implements \JsonSerializable
 {
     private $photos;

@@ -3,7 +3,6 @@
 namespace PhotoContainer\PhotoContainer\Contexts\Search\Action;
 
 use PhotoContainer\PhotoContainer\Contexts\Search\Domain\PhotoRepository;
-use PhotoContainer\PhotoContainer\Contexts\Search\Response\DownloadedCollectionResponse;
 use PhotoContainer\PhotoContainer\Contexts\Search\Response\HistoricCollectionResponse;
 use PhotoContainer\PhotoContainer\Infrastructure\Web\DomainExceptionResponse;
 

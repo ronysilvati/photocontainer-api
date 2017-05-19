@@ -3,11 +3,8 @@
 namespace PhotoContainer\PhotoContainer\Contexts\Event\Action;
 
 use PhotoContainer\PhotoContainer\Contexts\Event\Domain\EventRepository;
-use PhotoContainer\PhotoContainer\Contexts\Event\Response\EventFoundResponse;
-use PhotoContainer\PhotoContainer\Contexts\Event\Response\EventUpdateResponse;
 use PhotoContainer\PhotoContainer\Contexts\Event\Response\TagUpdateResponse;
-use PhotoContainer\PhotoContainer\Contexts\User\Response\DomainExceptionResponse;
-use Symfony\Component\Config\Definition\Exception\Exception;
+use PhotoContainer\PhotoContainer\Infrastructure\Web\DomainExceptionResponse;
 
 class UpdateTags
 {

@@ -3,7 +3,6 @@
 namespace PhotoContainer\PhotoContainer\Contexts\User\Response;
 
 use PhotoContainer\PhotoContainer\Contexts\User\Domain\User;
-use PhotoContainer\PhotoContainer\Infrastructure\Entity;
 
 class UserResponse implements \JsonSerializable
 {
