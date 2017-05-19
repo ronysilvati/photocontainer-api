@@ -18,6 +18,8 @@ use PhotoContainer\PhotoContainer\Contexts\Event\Domain\Photographer;
 use PhotoContainer\PhotoContainer\Contexts\Event\Domain\Publisher;
 use PhotoContainer\PhotoContainer\Contexts\Event\Domain\Suppliers;
 use PhotoContainer\PhotoContainer\Contexts\Event\Persistence\EloquentEventRepository;
+use PhotoContainer\PhotoContainer\Contexts\Event\Persistence\EloquentFavoriteRepository;
+use PhotoContainer\PhotoContainer\Contexts\Event\Persistence\EloquentUserRepository;
 use PhotoContainer\PhotoContainer\Infrastructure\ContextBootstrap;
 use PhotoContainer\PhotoContainer\Infrastructure\Web\WebApp;
 use Psr\Http\Message\ResponseInterface;
@@ -61,7 +63,10 @@ class EventContextBootstrap implements ContextBootstrap
                     (bool) $data['approval_photographer'], (bool) $data['approval_bride'], $allCategories,
                     $allTags, new Suppliers(null, null, null));
 
-                $action = new CreateEvent(new EloquentEventRepository($container['DatabaseProvider']));
+                $action = new CreateEvent(
+                    new EloquentEventRepository($container['DatabaseProvider']),
+                    new EloquentUserRepository($container['DatabaseProvider'])
+                );
                 $actionResponse = $action->handle($event);
 
                 return $response->withJson($actionResponse, $actionResponse->getHttpStatus());
@@ -72,7 +77,6 @@ class EventContextBootstrap implements ContextBootstrap
 
         $slimApp->app->delete('/events/{id}', function (ServerRequestInterface $request, ResponseInterface $response, $args) use ($container) {
             try {
-                $data = $request->getParsedBody();
                 $id = isset($args['id']) ? $args['id'] : null;
 
                 $action = new DeleteEvent(new EloquentEventRepository($container['DatabaseProvider']));
@@ -89,7 +93,7 @@ class EventContextBootstrap implements ContextBootstrap
                 $data = $request->getParsedBody();
                 $id = isset($args['id']) ? $args['id'] : null;
 
-                $action = new UpdateEvent(new EloquentEventRepository($container['DbalDatabaseProvider']));
+                $action = new UpdateEvent(new EloquentEventRepository($container['DatabaseProvider']));
                 $actionResponse = $action->handle($id, $data);
 
                 return $response->withJson($actionResponse, $actionResponse->getHttpStatus());
@@ -102,7 +106,10 @@ class EventContextBootstrap implements ContextBootstrap
             $publisher = new Publisher($args['publisher_id'], null, null);
             $favorite = new Favorite(null, $publisher, $args['event_id']);
 
-            $action = new CreateFavorite(new EloquentEventRepository($container['DbalDatabaseProvider']));
+            $action = new CreateFavorite(
+                new EloquentFavoriteRepository($container['DatabaseProvider']),
+                new EloquentUserRepository($container['DatabaseProvider'])
+            );
             $actionResponse = $action->handle($favorite);
 
             return $response->withJson($actionResponse, $actionResponse->getHttpStatus());
@@ -112,7 +119,7 @@ class EventContextBootstrap implements ContextBootstrap
             $publisher = new Publisher($args['publisher_id'], null, null);
             $favorite = new Favorite(null, $publisher, $args['event_id']);
 
-            $action = new DeleteFavorite(new EloquentEventRepository($container['DatabaseProvider']));
+            $action = new DeleteFavorite(new EloquentFavoriteRepository($container['DatabaseProvider']));
             $actionResponse = $action->handle($favorite);
 
             return $response->withJson($actionResponse, $actionResponse->getHttpStatus());

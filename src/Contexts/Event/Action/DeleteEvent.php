@@ -4,7 +4,7 @@ namespace PhotoContainer\PhotoContainer\Contexts\Event\Action;
 
 use PhotoContainer\PhotoContainer\Contexts\Event\Domain\EventRepository;
 use PhotoContainer\PhotoContainer\Contexts\Event\Response\EventRemovedResponse;
-use PhotoContainer\PhotoContainer\Contexts\User\Response\DomainExceptionResponse;
+use PhotoContainer\PhotoContainer\Infrastructure\Web\DomainExceptionResponse;
 
 class DeleteEvent
 {
@@ -18,7 +18,7 @@ class DeleteEvent
     public function handle(int $id)
     {
         try {
-            $removed = $this->repository->delete($id);
+            $this->repository->delete($id);
             return new EventRemovedResponse($id);
         } catch (\Exception $e) {
             return new DomainExceptionResponse($e->getMessage());

@@ -2,16 +2,16 @@
 
 namespace PhotoContainer\PhotoContainer\Contexts\Event\Action;
 
-use PhotoContainer\PhotoContainer\Contexts\Event\Domain\EventRepository;
 use PhotoContainer\PhotoContainer\Contexts\Event\Domain\Favorite;
+use PhotoContainer\PhotoContainer\Contexts\Event\Domain\FavoriteRepository;
 use PhotoContainer\PhotoContainer\Contexts\Event\Response\FavoriteRemovedResponse;
-use PhotoContainer\PhotoContainer\Contexts\User\Response\DomainExceptionResponse;
+use PhotoContainer\PhotoContainer\Infrastructure\Web\DomainExceptionResponse;
 
 class DeleteFavorite
 {
     protected $repository;
 
-    public function __construct(EventRepository $repository)
+    public function __construct(FavoriteRepository $repository)
     {
         $this->repository = $repository;
     }
