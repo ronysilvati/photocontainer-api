@@ -110,7 +110,7 @@ class SearchContextBootstrap implements ContextBootstrap
 
         $slimApp->app->get('/search/events/{id}/photos', function (ServerRequestInterface $request, ResponseInterface $response, $args) use ($container) {
             try {
-                $action = new FindEventPhotosPhotographer(new EloquentEventRepository($container['DbalDatabaseProvider']));
+                $action = new FindEventPhotosPhotographer(new EloquentEventRepository($container['DatabaseProvider']));
                 $actionResponse = $action->handle($args['id']);
 
                 return $response->withJson($actionResponse, $actionResponse->getHttpStatus());
