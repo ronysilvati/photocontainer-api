@@ -50,10 +50,14 @@ class UserContextBootstrap implements ContextBootstrap
                 $profile = new Profile(null, null, (int) $data['profile'], null);
                 $user = new User(null, $data['name'], $data['email'], $data['password'], $details, $profile);
 
-                $crypto = empty($data['password']) ? '' : $container['CryptoMethod']->hash($data['password']);
+                $action = new CreateUser(
+                    new EloquentUserRepository($container['DatabaseProvider']),
+                    $container['CryptoMethod']
+                );
 
-                $action = new CreateUser(new EloquentUserRepository($container['DatabaseProvider']));
-                $actionResponse = $action->handle($user, $crypto);
+                $actionResponse = $action->handle($user);
+
+                $container['EventEmitter']->addContextEvents($action->getEvents());
 
                 return $response->withJson($actionResponse, $actionResponse->getHttpStatus());
             } catch (\Exception $e) {
@@ -65,13 +69,11 @@ class UserContextBootstrap implements ContextBootstrap
             try {
                 $data = $request->getParsedBody();
 
-                $crypto = null;
-                if (isset($data['password'])) {
-                    $crypto = empty($data['password']) ? '' : $container['CryptoMethod']->hash($data['password']);
-                }
-
-                $action = new UpdateUser(new EloquentUserRepository($container['DatabaseProvider']));
-                $actionResponse = $action->handle($args['id'], $data, $crypto);
+                $action = new UpdateUser(
+                    new EloquentUserRepository($container['DatabaseProvider']),
+                    $container['CryptoMethod']
+                );
+                $actionResponse = $action->handle($args['id'], $data);
 
                 return $response->withJson($actionResponse, $actionResponse->getHttpStatus());
             } catch (\Exception $e) {
