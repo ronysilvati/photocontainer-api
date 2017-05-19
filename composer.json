@@ -15,7 +15,9 @@
         "league/flysystem-cached-adapter": "^1.0",
         "vlucas/phpdotenv": "^2.4",
         "slim/http-cache": "^0.3.0",
-        "league/csv": "^8.0"
+        "league/csv": "^8.0",
+        "doctrine/dbal": "^2.5",
+        "evenement/evenement": "^2.0"
     },
 
     "autoload": {
