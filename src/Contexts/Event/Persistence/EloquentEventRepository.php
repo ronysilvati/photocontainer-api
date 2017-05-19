@@ -61,7 +61,7 @@ class EloquentEventRepository implements EventRepository
 
             return $event;
         } catch (\Exception $e) {
-            throw new PersistenceException($e->getMessage());
+            throw new PersistenceException('Erro na criação do evento.', $e->getMessage());
         }
     }
 
@@ -76,7 +76,7 @@ class EloquentEventRepository implements EventRepository
 
             return $eventTags;
         } catch (\Exception $e) {
-            throw new PersistenceException($e->getMessage());
+            throw new PersistenceException('Erro na criação das tags.', $e->getMessage());
         }
     }
 
@@ -95,7 +95,7 @@ class EloquentEventRepository implements EventRepository
 
             return new Suppliers($model->id, $id, $model->suppliers);
         } catch (\Exception $e) {
-            throw new PersistenceException($e->getMessage());
+            throw new PersistenceException('Erro no salvamento dos fornecedores.', $e->getMessage());
         }
     }
 
@@ -108,7 +108,7 @@ class EloquentEventRepository implements EventRepository
 
             return true;
         } catch (\Exception $e) {
-            throw new PersistenceException($e->getMessage());
+            throw new PersistenceException('Erro na remoção lógica do evento.', $e->getMessage());
         }
     }
 
@@ -159,7 +159,7 @@ class EloquentEventRepository implements EventRepository
 
             return $event;
         } catch (\Exception $e) {
-            throw new PersistenceException($e->getMessage());
+            throw new PersistenceException('Erro na atualização do Evento.', $e->getMessage());
         }
     }
 
@@ -204,7 +204,7 @@ class EloquentEventRepository implements EventRepository
                 $suppliers
             );
         } catch (\Exception $e) {
-            throw new PersistenceException($e->getMessage());
+            throw new PersistenceException('Erro na busca de evento.', $e->getMessage());
         }
     }
 }

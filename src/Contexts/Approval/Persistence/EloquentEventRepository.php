@@ -39,7 +39,7 @@ class EloquentEventRepository implements ApprovalRepository
 
             return $request;
         } catch (\Exception $e) {
-            throw new PersistenceException("Erro na criação do pedido para acesso!");
+            throw new PersistenceException("Erro na criação do pedido para acesso!", $e->getMessage());
         }
     }
 
@@ -63,7 +63,7 @@ class EloquentEventRepository implements ApprovalRepository
                 $request->active
             );
         } catch (\Exception $e) {
-            throw new PersistenceException("Erro na criação do pedido para acesso!");
+            throw new PersistenceException("Erro na criação do pedido para acesso!", $e->getMessage());
         }
     }
 
@@ -80,7 +80,7 @@ class EloquentEventRepository implements ApprovalRepository
 
             return $request;
         } catch (\Exception $e) {
-            throw new PersistenceException("Não foi possível autorizar o pedido.");
+            throw new PersistenceException("Não foi possível autorizar o pedido.", $e->getMessage());
         }
     }
 
@@ -97,7 +97,7 @@ class EloquentEventRepository implements ApprovalRepository
 
             return $request;
         } catch (\Exception $e) {
-            throw new PersistenceException("Não foi possível autorizar o pedido.");
+            throw new PersistenceException("Não foi possível autorizar o pedido.", $e->getMessage());
         }
     }
 
@@ -107,7 +107,7 @@ class EloquentEventRepository implements ApprovalRepository
             $data = EventModel::find($event_id);
             return new Event($data->title, $data->user_id);
         } catch (\Exception $e) {
-            throw new PersistenceException("Não foi buscar o Evento.");
+            throw new PersistenceException("Não foi buscar o Evento.", $e->getMessage());
         }
     }
 
@@ -117,7 +117,7 @@ class EloquentEventRepository implements ApprovalRepository
             $data = UserModel::find($user_id);
             return new User($data->name, $data->email);
         } catch (\Exception $e) {
-            throw new PersistenceException("Não foi possível buscar o publisher.");
+            throw new PersistenceException("Não foi possível buscar o publisher.", $e->getMessage());
         }
     }
 }

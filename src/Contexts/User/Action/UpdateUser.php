@@ -47,7 +47,7 @@ class UpdateUser
         }
 
         if (isset($data['address'])) {
-            $address = $this->updateAddress($user->getAddress(), $data['address']);
+            $address = $this->updateAddress($user, $data['address']);
             $user->changeAddress($address);
         }
 
@@ -73,8 +73,10 @@ class UpdateUser
         return new UserResponse($user);
     }
 
-    private function updateAddress(Address $address, array $dataAddress): Address
+    private function updateAddress(User $user, array $dataAddress): Address
     {
+        $address = $user->getAddress() ?? new Address();
+
         $address->changeCountry($dataAddress['country']);
         $address->changeZipcode($dataAddress['zipcode']);
         $address->changeState($dataAddress['state']);

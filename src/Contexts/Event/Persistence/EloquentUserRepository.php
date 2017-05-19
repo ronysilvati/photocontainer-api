@@ -34,7 +34,7 @@ class EloquentUserRepository implements UserRepository
 
             return $photographer;
         } catch (\Exception $e) {
-            throw new PersistenceException($e->getMessage());
+            throw new PersistenceException('Erro na pesquisa do fotógrafo.', $e->getMessage());
         }
     }
 
@@ -51,7 +51,7 @@ class EloquentUserRepository implements UserRepository
 
             return $publisher;
         } catch (\Exception $e) {
-            throw new PersistenceException($e->getMessage());
+            throw new PersistenceException('Erro na busca de publisher', $e->getMessage());
         }
     }
 
@@ -62,7 +62,7 @@ class EloquentUserRepository implements UserRepository
             $userModel->load('userprofile');
             return $userModel->toArray();
         } catch (\Exception $e) {
-            throw new PersistenceException("O usuário não existe!");
+            throw new PersistenceException("O usuário não existe!", $e->getMessage());
         }
     }
 }

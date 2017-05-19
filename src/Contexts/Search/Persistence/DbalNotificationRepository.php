@@ -31,7 +31,10 @@ class DbalNotificationRepository implements NotificationRepository
 
             return $result['total'];
         } catch (\Exception $e) {
-            throw new PersistenceException('Não foi possível recuperar a contagem para esse tipo de notificação.');
+            throw new PersistenceException(
+                'Não foi possível recuperar a contagem para esse tipo de notificação.',
+                $e->getMessage()
+            );
         }
     }
 }

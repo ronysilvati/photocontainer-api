@@ -15,6 +15,7 @@ use PhotoContainer\PhotoContainer\Infrastructure\Persistence\Eloquent\Detail;
 use PhotoContainer\PhotoContainer\Infrastructure\Persistence\Eloquent\User as UserModel;
 use PhotoContainer\PhotoContainer\Infrastructure\Persistence\Eloquent\UserProfile;
 use PhotoContainer\PhotoContainer\Infrastructure\Persistence\EloquentDatabaseProvider;
+use Whoops\Example\Exception;
 
 class EloquentUserRepository implements UserRepository
 {
@@ -81,70 +82,76 @@ class EloquentUserRepository implements UserRepository
             return $user;
         } catch (\DomainException $e) {
             DB::rollback();
-            throw $e;
+            throw new PersistenceException($e->getMessage(), "Alguma regra de domínio não foi satisfeita!");
         } catch (\Exception $e) {
             DB::rollback();
-            throw new PersistenceException("Erro na criação do usuário!");
+            throw new PersistenceException("Erro na criação do usuário!", $e->getMessage());
         }
     }
 
     public function findUser(?int $id = null, ?string $email = null): User
     {
-        $userModel = $id ? UserModel::find($id) : UserModel::where('email', $email)->first();
+        try {
+            $userModel = $id ? UserModel::find($id) : UserModel::where('email', $email)->first();
 
-        $userModel->load('detail', 'userprofile', 'address');
-        $userData = $userModel->toArray();
+            $userModel->load('detail', 'userprofile', 'address');
+            $userData = $userModel->toArray();
 
-        $user = new User($userData['id'], $userData['name'], $userData['email']);
+            $user = new User($userData['id'], $userData['name'], $userData['email']);
 
-        $userProfile = new Profile(
-            null,
-            $userData['userprofile']['user_id'],
-            $userData['userprofile']['profile_id'],
-            $userData['userprofile']['active']
-        );
-        $user->changeProfile($userProfile);
-
-        if (isset($userData['detail']) && $userData['detail']['id'] > 0) {
-            $details = new Details(
-                $userData['detail']['id'],
-                $userData['detail']['blog'] ?? $userData['detail']['blog'],
-                $userData['detail']['instagram'],
-                $userData['detail']['facebook'],
-                $userData['detail']['pinterest'],
-                $userData['detail']['site'],
-                $userData['detail']['phone'],
-                $userData['detail']['birth']
+            $userProfile = new Profile(
+                null,
+                $userData['userprofile']['user_id'],
+                $userData['userprofile']['profile_id'],
+                $userData['userprofile']['active']
             );
+            $user->changeProfile($userProfile);
 
-            if ($userProfile->getProfileId() === Profile::PHOTOGRAPHER) {
-                $photographerDetails = new PhotographerDetails(
-                    $userData['detail']['bio'],
-                    $userData['detail']['studio_name'],
-                    $userData['detail']['name_by']
+            if (isset($userData['detail']) && $userData['detail']['id'] > 0) {
+                $details = new Details(
+                    $userData['detail']['id'],
+                    $userData['detail']['blog'] ?? $userData['detail']['blog'],
+                    $userData['detail']['instagram'],
+                    $userData['detail']['facebook'],
+                    $userData['detail']['pinterest'],
+                    $userData['detail']['site'],
+                    $userData['detail']['phone'],
+                    $userData['detail']['birth']
                 );
 
-                $details->changePhographerDetails($photographerDetails);
+                if ($userProfile->getProfileId() === Profile::PHOTOGRAPHER) {
+                    $photographerDetails = new PhotographerDetails(
+                        $userData['detail']['bio'],
+                        $userData['detail']['studio_name'],
+                        $userData['detail']['name_by']
+                    );
+
+                    $details->changePhographerDetails($photographerDetails);
+                }
+
+                $user->changeDetails($details);
             }
 
-            $user->changeDetails($details);
-        }
+            if (isset($userData['address']) && $userData['address']['id'] > 0) {
+                $address = new Address(null, null, null, null, null, null, null, null, null);
 
-        $address = new Address(null, null, null, null, null, null, null, null, null);
-        if (isset($userData['address']) && $userData['address']['id'] > 0) {
-            $address->changeId($userData['address']['id']);
-            $address->changeUserId($userData['address']['user_id']);
-            $address->changeCountry($userData['address']['country']);
-            $address->changeZipcode($userData['address']['zipcode']);
-            $address->changeState($userData['address']['state']);
-            $address->changeCity($userData[ 'address']['city']);
-            $address->changeStreet($userData[ 'address']['street']);
-            $address->changeNeighborhood($userData['address']['neighborhood']);
-            $address->changeComplement($userData['address']['complement']);
-        }
-        $user->changeAddress($address);
+                $address->changeId($userData['address']['id']);
+                $address->changeUserId($userData['address']['user_id']);
+                $address->changeCountry($userData['address']['country']);
+                $address->changeZipcode($userData['address']['zipcode']);
+                $address->changeState($userData['address']['state']);
+                $address->changeCity($userData[ 'address']['city']);
+                $address->changeStreet($userData[ 'address']['street']);
+                $address->changeNeighborhood($userData['address']['neighborhood']);
+                $address->changeComplement($userData['address']['complement']);
 
-        return $user;
+                $user->changeAddress($address);
+            }
+
+            return $user;
+        } catch (\Exception $e) {
+            throw new PersistenceException("Erro na criação do usuário!", $e->getMessage());
+        }
     }
 
     public function updateUser(User $user, ?string $encryptedPwd)
@@ -217,10 +224,10 @@ class EloquentUserRepository implements UserRepository
             return $user;
         } catch (\DomainException $e) {
             DB::rollback();
-            throw $e;
+            throw new PersistenceException($e->getMessage(), "Alguma regra de domínio não foi satisfeita!");
         } catch (\Exception $e) {
             DB::rollback();
-            throw new PersistenceException("Erro na criação do usuário!");
+            throw new PersistenceException("Erro na criação do usuário!", $e->getMessage());
         }
     }
 }

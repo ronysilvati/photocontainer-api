@@ -43,7 +43,7 @@ class RestCepRepository implements CepRepository
 
             return $cep;
         } catch (\Exception $e) {
-            throw new PersistenceException("CEP não encontrado.");
+            throw new PersistenceException("CEP não encontrado.", $e->getMessage());
         }
     }
 

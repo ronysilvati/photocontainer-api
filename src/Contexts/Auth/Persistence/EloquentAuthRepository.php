@@ -7,6 +7,7 @@ use PhotoContainer\PhotoContainer\Infrastructure\Exception\PersistenceException;
 use PhotoContainer\PhotoContainer\Infrastructure\Persistence\Eloquent\AccessLog;
 use PhotoContainer\PhotoContainer\Infrastructure\Persistence\Eloquent\User;
 use PhotoContainer\PhotoContainer\Infrastructure\Persistence\EloquentDatabaseProvider;
+use Whoops\Example\Exception;
 
 class EloquentAuthRepository implements AuthRepository
 {
@@ -22,13 +23,17 @@ class EloquentAuthRepository implements AuthRepository
 
     public function find(string $user)
     {
-        $user = User::where('email', $user)->first();
+        try {
+            $user = User::where('email', $user)->first();
 
-        if ($user === null) {
-            throw new PersistenceException("Usuário inexistente.");
+            if ($user === null) {
+                throw new \Exception("Usuário inexistente.");
+            }
+
+            return $user;
+        } catch (\Exception $e) {
+            throw new PersistenceException("Usuário não encontrado", $e->getMessage());
         }
-
-        return $user;
     }
 
     public function logAccess(int $user_id)
@@ -38,7 +43,7 @@ class EloquentAuthRepository implements AuthRepository
             $log->user_id = $user_id;
             $log->save();
         } catch (\Exception $e) {
-            throw new PersistenceException("Erro na criação de log.");
+            throw new PersistenceException("Erro na criação de log.", $e->getMessage());
         }
     }
 }

@@ -13,6 +13,7 @@ use PhotoContainer\PhotoContainer\Contexts\Photo\Domain\Photo;
 use PhotoContainer\PhotoContainer\Contexts\Photo\Domain\Photographer;
 use PhotoContainer\PhotoContainer\Contexts\Photo\Domain\PhotoRepository;
 use PhotoContainer\PhotoContainer\Contexts\Photo\Domain\Publisher;
+use PhotoContainer\PhotoContainer\Infrastructure\Exception\PersistenceException;
 
 class FilesystemPhotoRepository implements PhotoRepository
 {
@@ -70,7 +71,7 @@ class FilesystemPhotoRepository implements PhotoRepository
 
             return $photo;
         } catch (\Exception $e) {
-            throw $e;
+            throw new PersistenceException('Não foi possível gravar a foto.', $e->getMessage());
         }
     }
 
@@ -81,7 +82,7 @@ class FilesystemPhotoRepository implements PhotoRepository
             unlink($photo->getFilePath('protected', true, true));
             unlink($photo->getFilePath('watermark', true, true));
         } catch (\Exception $e) {
-            throw $e;
+            throw new PersistenceException('Não foi possível apagar a foto.', $e->getMessage());
         }
     }
 

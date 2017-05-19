@@ -27,15 +27,15 @@ class Address
      * @param $complement
      */
     public function __construct(
-        ?int $id,
-        ?int $user_id,
-        ?string $zipcode,
-        ?string $country,
-        ?string $state,
-        ?string $city,
-        ?string $neighborhood,
-        ?string $street,
-        ?string $complement)
+        ?int $id = null,
+        ?int $user_id = null,
+        ?string $zipcode = null,
+        ?string $country = null,
+        ?string $state = null,
+        ?string $city = null,
+        ?string $neighborhood = null,
+        ?string $street = null,
+        ?string $complement = null)
     {
         $this->id = $id;
         $this->user_id = $user_id;

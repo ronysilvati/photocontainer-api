@@ -117,7 +117,7 @@ class EloquentEventRepository implements EventRepository
 
             return $out;
         } catch (\Exception $e) {
-            throw $e;
+            throw new PersistenceException('Erro na pesquisa de eventos.', $e->getMessage());
         }
     }
 
@@ -170,7 +170,7 @@ class EloquentEventRepository implements EventRepository
 
             return $event;
         } catch (\Exception $e) {
-            throw new PersistenceException($e->getMessage());
+            throw new PersistenceException('Erro na busca eventos, usando o papel de publisher.', $e->getMessage());
         }
     }
 
@@ -207,7 +207,7 @@ class EloquentEventRepository implements EventRepository
                 $photos
             );
         } catch (\Exception $e) {
-            throw new PersistenceException($e->getMessage());
+            throw new PersistenceException('Erro na busca eventos, usando o papel de fotógrafo.', $e->getMessage());
         }
     }
 
@@ -241,7 +241,7 @@ class EloquentEventRepository implements EventRepository
                 );
             })->toArray();
         } catch (\Exception $e) {
-            throw new PersistenceException("Erro na listagem das aprovações pendentes.");
+            throw new PersistenceException("Erro na listagem das aprovações pendentes.", $e->getMessage());
         }
     }
 }

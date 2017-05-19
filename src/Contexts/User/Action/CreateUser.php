@@ -38,7 +38,7 @@ class CreateUser
 
     /**
      * @param User $user
-     * @return UserCreatedResponse|DomainExceptionResponse
+     * @return UserCreatedResponse
      */
     public function handle(User $user)
     {

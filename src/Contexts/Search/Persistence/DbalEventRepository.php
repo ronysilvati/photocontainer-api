@@ -7,6 +7,7 @@ use PhotoContainer\PhotoContainer\Contexts\Search\Domain\Event;
 use PhotoContainer\PhotoContainer\Contexts\Search\Domain\EventRepository;
 use PhotoContainer\PhotoContainer\Contexts\Search\Domain\EventSearch;
 use PhotoContainer\PhotoContainer\Contexts\Search\Domain\Photographer;
+use PhotoContainer\PhotoContainer\Infrastructure\Exception\PersistenceException;
 use PhotoContainer\PhotoContainer\Infrastructure\Persistence\DatabaseProvider;
 
 class DbalEventRepository implements EventRepository
@@ -108,7 +109,7 @@ class DbalEventRepository implements EventRepository
 
             return $out;
         } catch (\Exception $e) {
-            throw $e;
+            throw new PersistenceException('Erro na pesquisa de eventos.', $e->getMessage());
         }
     }
 

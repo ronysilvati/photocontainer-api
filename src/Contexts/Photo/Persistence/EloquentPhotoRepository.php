@@ -42,7 +42,7 @@ class EloquentPhotoRepository implements PhotoRepository
 
             return $photo;
         } catch (\Exception $e) {
-            throw new PersistenceException($e->getMessage());
+            throw new PersistenceException('Foto não criada.', $e->getMessage());
         }
     }
 
@@ -58,7 +58,7 @@ class EloquentPhotoRepository implements PhotoRepository
 
             return $download;
         } catch (\Exception $e) {
-            throw new PersistenceException($e->getMessage());
+            throw new PersistenceException('Download não realizado.', $e->getMessage());
         }
     }
 
@@ -68,7 +68,7 @@ class EloquentPhotoRepository implements PhotoRepository
             $photoData = PhotoModel::find($id);
 
             if ($photoData == null) {
-                throw new \Exception("A foto nâo existe.");
+                throw new \Exception("A foto não existe.");
             }
 
             $photo = new Photo($photoData->id, $photoData->event_id, null);
@@ -76,7 +76,7 @@ class EloquentPhotoRepository implements PhotoRepository
 
             return $photo;
         } catch (\Exception $e) {
-            throw new PersistenceException($e->getMessage());
+            throw new PersistenceException('A foto não existe.', $e->getMessage());
         }
     }
 
@@ -98,7 +98,7 @@ class EloquentPhotoRepository implements PhotoRepository
 
             return $like;
         } catch (\Exception $e) {
-            throw new PersistenceException($e->getMessage());
+            throw new PersistenceException('Foto já é favorita', $e->getMessage());
         }
     }
 
@@ -115,7 +115,7 @@ class EloquentPhotoRepository implements PhotoRepository
 
             return $like;
         } catch (\Exception $e) {
-            throw new PersistenceException($e->getMessage());
+            throw new PersistenceException('Não foi possível remover favorito.', $e->getMessage());
         }
     }
 
@@ -125,7 +125,7 @@ class EloquentPhotoRepository implements PhotoRepository
             $user = Event::find($photo->getEventId())->with('User')->first()->toArray();
             return new Photographer($user['user']['name'], $user['user']['email']);
         } catch (\Exception $e) {
-            throw new PersistenceException($e->getMessage());
+            throw new PersistenceException('Não foi possível encontrar o dono da foto.', $e->getMessage());
         }
     }
 
@@ -135,7 +135,7 @@ class EloquentPhotoRepository implements PhotoRepository
             $user = User::find($publisher_id)->toArray();
             return new Publisher($user['name'], $user['email']);
         } catch (\Exception $e) {
-            throw new PersistenceException($e->getMessage());
+            throw new PersistenceException('Não foi possível encontrar o publisher.', $e->getMessage());
         }
     }
 
@@ -163,7 +163,7 @@ class EloquentPhotoRepository implements PhotoRepository
             return $photoDomain;
         } catch (\Exception $e) {
             DB::rollback();
-            throw new PersistenceException($e->getMessage());
+            throw new PersistenceException($e->getMessage(), $e->getMessage());
         }
     }
 
@@ -172,7 +172,7 @@ class EloquentPhotoRepository implements PhotoRepository
         try {
             return PhotoModel::where('event_id', $event_id)->get()->toArray();
         } catch (\Exception $e) {
-            throw new PersistenceException($e->getMessage());
+            throw new PersistenceException('Não foi possível encontrar fotos do evento.', $e->getMessage());
         }
     }
 }

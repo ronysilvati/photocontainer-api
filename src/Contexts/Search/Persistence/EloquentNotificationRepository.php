@@ -26,7 +26,10 @@ class EloquentNotificationRepository implements NotificationRepository
                 ->where('visualized', 0)
                 ->count();
         } catch (\Exception $e) {
-            throw new PersistenceException('Não foi possível recuperar a contagem para esse tipo de notificação.');
+            throw new PersistenceException(
+                'Não foi possível recuperar a contagem para esse tipo de notificação.',
+                $e->getMessage()
+            );
         }
     }
 }
