@@ -29,6 +29,7 @@ class Suppliers
     {
         $this->id = $id;
         $this->suppliers = $suppliers;
+        $this->event_id = $event_id;
     }
 
     /**
