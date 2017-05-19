@@ -6,7 +6,7 @@ use PhotoContainer\PhotoContainer\Contexts\Event\Domain\Favorite;
 use PhotoContainer\PhotoContainer\Contexts\Event\Domain\FavoriteRepository;
 use PhotoContainer\PhotoContainer\Contexts\Event\Domain\UserRepository;
 use PhotoContainer\PhotoContainer\Contexts\Event\Response\FavoriteCreatedResponse;
-use PhotoContainer\PhotoContainer\Infrastructure\Web\DomainExceptionResponse;
+
 
 class CreateFavorite
 {

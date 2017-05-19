@@ -6,7 +6,7 @@ use PhotoContainer\PhotoContainer\Contexts\Approval\Domain\ApprovalRepository;
 use PhotoContainer\PhotoContainer\Contexts\Approval\Email\ApprovedEmail;
 use PhotoContainer\PhotoContainer\Contexts\Approval\Response\ApprovalRequestResponse;
 use PhotoContainer\PhotoContainer\Infrastructure\Event\EventGeneratorTrait;
-use PhotoContainer\PhotoContainer\Infrastructure\Web\DomainExceptionResponse;
+
 
 class ApprovalDownload
 {

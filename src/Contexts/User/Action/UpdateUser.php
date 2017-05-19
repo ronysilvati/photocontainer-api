@@ -9,7 +9,7 @@ use PhotoContainer\PhotoContainer\Contexts\User\Domain\User;
 use PhotoContainer\PhotoContainer\Contexts\User\Domain\UserRepository;
 use PhotoContainer\PhotoContainer\Contexts\User\Response\UserResponse;
 use PhotoContainer\PhotoContainer\Infrastructure\Crypto\CryptoMethod;
-use PhotoContainer\PhotoContainer\Infrastructure\Web\DomainExceptionResponse;
+
 
 class UpdateUser
 {

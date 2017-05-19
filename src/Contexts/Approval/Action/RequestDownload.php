@@ -7,7 +7,7 @@ use PhotoContainer\PhotoContainer\Contexts\Approval\Domain\DownloadRequest;
 use PhotoContainer\PhotoContainer\Contexts\Approval\Email\ApprovalRequestEmail;
 use PhotoContainer\PhotoContainer\Contexts\Approval\Response\DownloadRequestResponse;
 use PhotoContainer\PhotoContainer\Infrastructure\Event\EventGeneratorTrait;
-use PhotoContainer\PhotoContainer\Infrastructure\Web\DomainExceptionResponse;
+
 
 class RequestDownload
 {

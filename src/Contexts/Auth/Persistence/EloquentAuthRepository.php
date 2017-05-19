@@ -7,7 +7,7 @@ use PhotoContainer\PhotoContainer\Infrastructure\Exception\PersistenceException;
 use PhotoContainer\PhotoContainer\Infrastructure\Persistence\Eloquent\AccessLog;
 use PhotoContainer\PhotoContainer\Infrastructure\Persistence\Eloquent\User;
 use PhotoContainer\PhotoContainer\Infrastructure\Persistence\EloquentDatabaseProvider;
-use Whoops\Example\Exception;
+
 
 class EloquentAuthRepository implements AuthRepository
 {

@@ -5,7 +5,7 @@ namespace PhotoContainer\PhotoContainer\Contexts\Cep\Action;
 use PhotoContainer\PhotoContainer\Contexts\Cep\Domain\Cep;
 use PhotoContainer\PhotoContainer\Contexts\Cep\Domain\CepRepository;
 use PhotoContainer\PhotoContainer\Contexts\Cep\Response\StateCollectionResponse;
-use PhotoContainer\PhotoContainer\Infrastructure\Web\DomainExceptionResponse;
+
 
 class FindCities
 {

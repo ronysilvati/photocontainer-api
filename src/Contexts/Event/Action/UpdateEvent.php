@@ -5,9 +5,7 @@ namespace PhotoContainer\PhotoContainer\Contexts\Event\Action;
 
 use PhotoContainer\PhotoContainer\Contexts\Event\Domain\EventRepository;
 use PhotoContainer\PhotoContainer\Contexts\Event\Response\EventUpdateResponse;
-use PhotoContainer\PhotoContainer\Infrastructure\Exception\PersistenceException;
-use PhotoContainer\PhotoContainer\Infrastructure\Web\DomainExceptionResponse;
-use Whoops\Example\Exception;
+
 
 class UpdateEvent
 {

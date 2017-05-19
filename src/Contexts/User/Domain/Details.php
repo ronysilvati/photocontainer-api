@@ -45,38 +45,18 @@ class Details implements Entity
     {
         $this->id = $id;
 
-        if ($blog) {
-            $this->changeBlog($blog);
-        }
-
-        if ($instagram) {
-            $this->changeInstagram($instagram);
-        }
-
-        if ($facebook) {
-            $this->changeFacebook($facebook);
-        }
-
-        if ($pinterest) {
-            $this->changePinterest($pinterest);
-        }
-
-        if ($site) {
-            $this->changeSite($site);
-        }
-
-        if ($phone) {
-            $this->changePhone($phone);
-        }
-
-        if ($birth) {
-            $this->changeBirth($birth);
-        }
+        $this->changeBlog($blog);
+        $this->changeInstagram($instagram);
+        $this->changeFacebook($facebook);
+        $this->changePinterest($pinterest);
+        $this->changeSite($site);
+        $this->changePhone($phone);
+        $this->changeBirth($birth);
     }
 
-    public function changeBlog(string $blog)
+    public function changeBlog(?string $blog)
     {
-        if (!empty($blog) && !$this->validateUrl($blog)) {
+        if ($blog && !$this->validateUrl($blog)) {
             throw new \DomainException("A URL é inválida!");
         }
 
@@ -89,9 +69,9 @@ class Details implements Entity
     }
 
     /**
-     * @return mixed
+     * @return null|string
      */
-    public function getBlog()
+    public function getBlog(): ?string
     {
         return $this->blog;
     }
@@ -105,19 +85,19 @@ class Details implements Entity
     }
 
     /**
-     * @return mixed
+     * @return null|string
      */
-    public function getInstagram()
+    public function getInstagram(): ?string
     {
         return $this->instagram;
     }
 
     /**
-     * @param mixed $instagram
+     * @param null|string $instagram
      */
-    public function changeInstagram($instagram)
+    public function changeInstagram(?string $instagram)
     {
-        if (!empty($instagram) && !$this->validateUrl($instagram)) {
+        if ($instagram && !$this->validateUrl($instagram)) {
             throw new \DomainException("A URL do Instagram é inválida!");
         }
 
@@ -125,19 +105,19 @@ class Details implements Entity
     }
 
     /**
-     * @return mixed
+     * @return null|string
      */
-    public function getFacebook()
+    public function getFacebook(): ?string
     {
         return $this->facebook;
     }
 
     /**
-     * @param mixed $facebook
+     * @param null|string $facebook
      */
-    public function changeFacebook($facebook)
+    public function changeFacebook(?string $facebook)
     {
-        if ($facebook != "" && !$this->validateUrl($facebook)) {
+        if ($facebook && !$this->validateUrl($facebook)) {
             throw new \DomainException("A URL do Facebook é inválida!");
         }
 
@@ -145,19 +125,19 @@ class Details implements Entity
     }
 
     /**
-     * @return mixed
+     * @return null|string
      */
-    public function getPinterest()
+    public function getPinterest(): ?string
     {
         return $this->pinterest;
     }
 
     /**
-     * @param $pinterest
+     * @param null|string $pinterest
      */
-    public function changePinterest($pinterest)
+    public function changePinterest(?string $pinterest)
     {
-        if ($pinterest != "" && !$this->validateUrl($pinterest)) {
+        if ($pinterest && !$this->validateUrl($pinterest)) {
             throw new \DomainException("A URL do Pinterest é inválida!");
         }
 
@@ -165,19 +145,19 @@ class Details implements Entity
     }
 
     /**
-     * @return mixed
+     * @return null|string
      */
-    public function getSite()
+    public function getSite(): ?string
     {
         return $this->site;
     }
 
     /**
-     * @param mixed $site
+     * @param null|string $site
      */
-    public function changeSite($site)
+    public function changeSite(?string $site)
     {
-        if ($site != "" && !$this->validateUrl($site)) {
+        if ($site && !$this->validateUrl($site)) {
             throw new \DomainException("A URL do Site é inválida!");
         }
 
@@ -185,9 +165,9 @@ class Details implements Entity
     }
 
     /**
-     * @return mixed
+     * @return null|string
      */
-    public function getPhone()
+    public function getPhone(): ?string
     {
         return $this->phone;
     }
@@ -195,15 +175,15 @@ class Details implements Entity
     /**
      * @param mixed $phone
      */
-    public function changePhone($phone)
+    public function changePhone(?string $phone)
     {
-        $this->phone = $phone;
+        $this->phone = $phone ?? '';
     }
 
     /**
-     * @return mixed
+     * @return null|string
      */
-    public function getBirth()
+    public function getBirth(): ?string
     {
         return $this->birth;
     }
@@ -211,9 +191,9 @@ class Details implements Entity
     /**
      * @param mixed $birth
      */
-    public function changeBirth($birth)
+    public function changeBirth(?string $birth)
     {
-        $this->birth = $birth;
+        $this->birth = $birth ?? '';
     }
 
     /**

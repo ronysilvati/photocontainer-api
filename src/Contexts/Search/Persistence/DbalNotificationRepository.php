@@ -4,7 +4,7 @@ namespace PhotoContainer\PhotoContainer\Contexts\Search\Persistence;
 
 use PhotoContainer\PhotoContainer\Contexts\Search\Domain\NotificationRepository;
 use PhotoContainer\PhotoContainer\Infrastructure\Exception\PersistenceException;
-use PhotoContainer\PhotoContainer\Infrastructure\Persistence\DatabaseProvider;
+
 use PhotoContainer\PhotoContainer\Infrastructure\Persistence\DbalDatabaseProvider;
 
 class DbalNotificationRepository implements NotificationRepository

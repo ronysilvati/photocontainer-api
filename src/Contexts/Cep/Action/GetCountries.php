@@ -4,7 +4,7 @@ namespace PhotoContainer\PhotoContainer\Contexts\Cep\Action;
 
 use PhotoContainer\PhotoContainer\Contexts\Cep\Domain\CepRepository;
 use PhotoContainer\PhotoContainer\Contexts\Cep\Response\CountryCollectionResponse;
-use PhotoContainer\PhotoContainer\Infrastructure\Web\DomainExceptionResponse;
+
 
 class GetCountries
 {

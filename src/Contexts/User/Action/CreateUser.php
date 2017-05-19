@@ -9,7 +9,7 @@ use PhotoContainer\PhotoContainer\Contexts\User\Email\NewUserEmail;
 use PhotoContainer\PhotoContainer\Contexts\User\Response\UserCreatedResponse;
 use PhotoContainer\PhotoContainer\Infrastructure\Crypto\CryptoMethod;
 use PhotoContainer\PhotoContainer\Infrastructure\Event\EventGeneratorTrait;
-use PhotoContainer\PhotoContainer\Infrastructure\Web\DomainExceptionResponse;
+
 
 class CreateUser
 {

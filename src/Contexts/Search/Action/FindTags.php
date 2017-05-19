@@ -4,7 +4,7 @@ namespace PhotoContainer\PhotoContainer\Contexts\Search\Action;
 
 use PhotoContainer\PhotoContainer\Contexts\Search\Domain\TagRepository;
 use PhotoContainer\PhotoContainer\Contexts\Search\Response\TagCollectionResponse;
-use PhotoContainer\PhotoContainer\Infrastructure\Web\DomainExceptionResponse;
+
 
 class FindTags
 {
