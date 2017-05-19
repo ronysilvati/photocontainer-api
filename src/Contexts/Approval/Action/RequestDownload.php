@@ -79,6 +79,6 @@ class RequestDownload
             $data,
             ['name' => $photographer->getName(), 'email' => $photographer->getEmail()]
         );
-        $this->addEvent('generic.sendemail', $email);
+        $this->addEvent('generic.sendmail', $email);
     }
 }

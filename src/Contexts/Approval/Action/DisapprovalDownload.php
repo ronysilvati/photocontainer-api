@@ -70,6 +70,6 @@ class DisapprovalDownload
             $data,
             ['name' => $publisher->getName(), 'email' => $publisher->getEmail()]
         );
-        $this->addEvent('generic.sendemail', $email);
+        $this->addEvent('generic.sendmail', $email);
     }
 }
