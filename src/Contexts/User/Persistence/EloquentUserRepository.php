@@ -221,6 +221,8 @@ class EloquentUserRepository implements UserRepository
                 $user->changeAddress($address);
             }
 
+            DB::commit();
+
             return $user;
         } catch (\DomainException $e) {
             DB::rollback();
