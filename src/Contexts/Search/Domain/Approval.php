@@ -44,6 +44,7 @@ class Approval
      * @param string $created
      * @param string $name
      * @param string $publisher_name
+     * @param string $blog
      */
     public function __construct(
         int $event_id,

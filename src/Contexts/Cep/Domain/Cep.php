@@ -14,15 +14,13 @@ class Cep
 
     /**
      * Cep constructor.
-     * @param $id
-     * @param $user_id
-     * @param $zipcode
-     * @param $country
-     * @param $state
-     * @param $city
-     * @param $neighborhood
-     * @param $street
-     * @param $complement
+     * @param null|string $zipcode
+     * @param null|string $country
+     * @param null|string $state
+     * @param null|string $city
+     * @param null|string $neighborhood
+     * @param null|string $street
+     * @param null|string $complement
      */
     public function __construct(
         ?string $zipcode,
