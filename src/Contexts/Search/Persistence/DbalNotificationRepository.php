@@ -5,12 +5,17 @@ namespace PhotoContainer\PhotoContainer\Contexts\Search\Persistence;
 use PhotoContainer\PhotoContainer\Contexts\Search\Domain\NotificationRepository;
 use PhotoContainer\PhotoContainer\Infrastructure\Exception\PersistenceException;
 use PhotoContainer\PhotoContainer\Infrastructure\Persistence\DatabaseProvider;
+use PhotoContainer\PhotoContainer\Infrastructure\Persistence\DbalDatabaseProvider;
 
 class DbalNotificationRepository implements NotificationRepository
 {
     private $conn;
 
-    public function __construct(DatabaseProvider $provider)
+    /**
+     * DbalNotificationRepository constructor.
+     * @param DbalDatabaseProvider $provider
+     */
+    public function __construct(DbalDatabaseProvider $provider)
     {
         $this->conn = $provider->conn;
     }
