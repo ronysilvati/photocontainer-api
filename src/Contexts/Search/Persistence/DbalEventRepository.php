@@ -62,44 +62,49 @@ class DbalEventRepository implements EventRepository
                   GROUP BY id, category_id, category
                   ORDER BY id DESC");
             $stmt->execute();
-            $result = $stmt->fetchAll();
 
-            $out = ['total' => count($result)];
+            $fillData = function ($datasource) use ($publisher) {
+                while ($item = $datasource->fetch()) {
+                    $category = new Category($item['category_id'], $item['category']);
+                    $photographer = new Photographer($item['user_id'], $item['name']);
 
-            foreach ($result as $key => $item) {
-                $category = new Category($item['category_id'], $item['category']);
-                $photographer = new Photographer($item['user_id'], $item['name']);
+                    $search = new EventSearch($item['id'], $photographer, $item['title'], [$category], null);
+                    $search->changeEventdate($item['eventdate']);
+                    $search->changePhotos($item['photos']);
+                    $search->changeLikes($item['likes'] == null ? 0 : $item['likes']);
 
-                $search = new EventSearch($item['id'], $photographer, $item['title'], [$category], null);
-                $search->changeEventdate($item['eventdate']);
-                $search->changePhotos($item['photos']);
-                $search->changeLikes($item['likes'] == null ? 0 : $item['likes']);
-
-                if ($item->photos > 0) {
-                    $sql = "SELECT filename FROM photos WHERE event_id = {$item['id']}";
-                    $stmt = $this->conn->prepare($sql);
-                    $stmt->execute();
-                    $photo = $stmt->fetch();
-
-                    $search->changeFilename($photo['filename']);
-                }
-
-                if ($publisher) {
-                    $search->changePublisher($publisher);
-
-                    if ($item->likes > 0) {
-                        $sql = "SELECT count(*) as total 
-                                  FROM event_favorites 
-                                 WHERE event_id = {$item['id']} AND user_id = {$publisher->getId()}";
+                    if ($item->photos > 0) {
+                        $sql = "SELECT filename FROM photos WHERE event_id = {$item['id']}";
                         $stmt = $this->conn->prepare($sql);
                         $stmt->execute();
-                        $eventFavorite = $stmt->fetch();
+                        $photo = $stmt->fetch();
 
-                        $search->changePublisherLike($eventFavorite['total'] > 0);
+                        $search->changeFilename($photo['filename']);
                     }
+
+                    if ($publisher) {
+                        $search->changePublisher($publisher);
+
+                        if ($item->likes > 0) {
+                            $sql = "SELECT count(*) as total 
+                                  FROM event_favorites 
+                                 WHERE event_id = {$item['id']} AND user_id = {$publisher->getId()}";
+                            $stmt = $this->conn->prepare($sql);
+                            $stmt->execute();
+                            $eventFavorite = $stmt->fetch();
+
+                            $search->changePublisherLike($eventFavorite['total'] > 0);
+                        }
+                    }
+                    yield $search;
                 }
+            };
+
+            $out = ['total' => 0, 'result' => []];
+            foreach ($fillData($stmt) as $search) {
                 $out['result'][] = $search;
             }
+            $out['total'] = count($out['result']);
 
             return $out;
         } catch (\Exception $e) {
