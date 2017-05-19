@@ -6,9 +6,20 @@ use PhotoContainer\PhotoContainer\Contexts\Search\Domain\Historic;
 use PhotoContainer\PhotoContainer\Contexts\Search\Domain\PhotoRepository;
 use PhotoContainer\PhotoContainer\Infrastructure\Persistence\Eloquent\EventSearchPublisherDownload;
 use PhotoContainer\PhotoContainer\Infrastructure\Persistence\Eloquent\EventSearchPublisherFavorite;
+use PhotoContainer\PhotoContainer\Infrastructure\Persistence\EloquentDatabaseProvider;
 
 class EloquentPhotoRepository implements PhotoRepository
 {
+    /**
+     * @var EloquentDatabaseProvider
+     */
+    private $conn;
+
+    public function __construct(EloquentDatabaseProvider $conn)
+    {
+        $this->conn = $conn;
+    }
+
     public function searchDownloaded(int $user_id, ?string $keyword, ?array $tags)
     {
         $where = $this->buildWhere($user_id, $keyword, $tags);

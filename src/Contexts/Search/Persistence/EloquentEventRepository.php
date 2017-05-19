@@ -8,6 +8,7 @@ use PhotoContainer\PhotoContainer\Contexts\Search\Domain\Event;
 use PhotoContainer\PhotoContainer\Contexts\Search\Domain\EventRepository;
 use PhotoContainer\PhotoContainer\Contexts\Search\Domain\EventSearch;
 use PhotoContainer\PhotoContainer\Contexts\Search\Domain\Photographer;
+use PhotoContainer\PhotoContainer\Contexts\Search\Domain\Tag;
 use PhotoContainer\PhotoContainer\Infrastructure\Exception\PersistenceException;
 use PhotoContainer\PhotoContainer\Infrastructure\Persistence\Eloquent\Detail;
 use PhotoContainer\PhotoContainer\Infrastructure\Persistence\Eloquent\DownloadRequest;
@@ -18,9 +19,20 @@ use PhotoContainer\PhotoContainer\Infrastructure\Persistence\Eloquent\EventSearc
 use PhotoContainer\PhotoContainer\Infrastructure\Persistence\Eloquent\EventSearchPublisher;
 use PhotoContainer\PhotoContainer\Infrastructure\Persistence\Eloquent\Photo;
 use PhotoContainer\PhotoContainer\Infrastructure\Persistence\Eloquent\PhotoFavorite;
+use PhotoContainer\PhotoContainer\Infrastructure\Persistence\EloquentDatabaseProvider;
 
 class EloquentEventRepository implements EventRepository
 {
+    /**
+     * @var EloquentDatabaseProvider
+     */
+    private $conn;
+
+    public function __construct(EloquentDatabaseProvider $conn)
+    {
+        $this->conn = $conn;
+    }
+
     /**
      * @param EventSearch $search
      * @return array
@@ -42,6 +54,7 @@ class EloquentEventRepository implements EventRepository
             $allCategories = $search->getCategories();
             if ($allCategories) {
                 $categories = [];
+                /** @var Category $category */
                 foreach ($allCategories as $category) {
                     $categories[] = $category->getId();
                 }
@@ -52,6 +65,7 @@ class EloquentEventRepository implements EventRepository
             $allTags = $search->getTags();
             if ($allTags) {
                 $tags = [];
+                /** @var Tag $tag */
                 foreach ($allTags as $tag) {
                     $tags[] = $tag->getId();
                 }

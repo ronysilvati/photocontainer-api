@@ -16,9 +16,20 @@ use PhotoContainer\PhotoContainer\Infrastructure\Persistence\Eloquent\Event;
 use PhotoContainer\PhotoContainer\Infrastructure\Persistence\Eloquent\Photo as PhotoModel;
 use PhotoContainer\PhotoContainer\Infrastructure\Persistence\Eloquent\PhotoFavorite;
 use PhotoContainer\PhotoContainer\Infrastructure\Persistence\Eloquent\User;
+use PhotoContainer\PhotoContainer\Infrastructure\Persistence\EloquentDatabaseProvider;
 
 class EloquentPhotoRepository implements PhotoRepository
 {
+    /**
+     * @var EloquentDatabaseProvider
+     */
+    private $conn;
+
+    public function __construct(EloquentDatabaseProvider $conn)
+    {
+        $this->conn = $conn;
+    }
+
     public function create(Photo $photo): Photo
     {
         try {

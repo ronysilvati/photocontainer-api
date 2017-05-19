@@ -13,9 +13,20 @@ use PhotoContainer\PhotoContainer\Infrastructure\Persistence\Eloquent\Event as E
 use PhotoContainer\PhotoContainer\Infrastructure\Persistence\Eloquent\EventCategory as EventCategoryModel;
 use PhotoContainer\PhotoContainer\Infrastructure\Persistence\Eloquent\EventSuppliers;
 use PhotoContainer\PhotoContainer\Infrastructure\Persistence\Eloquent\EventTag as EventTagModel;
+use PhotoContainer\PhotoContainer\Infrastructure\Persistence\EloquentDatabaseProvider;
 
 class EloquentEventRepository implements EventRepository
 {
+    /**
+     * @var EloquentDatabaseProvider
+     */
+    private $conn;
+
+    public function __construct(EloquentDatabaseProvider $conn)
+    {
+        $this->conn = $conn;
+    }
+
     public function create(Event $event)
     {
         try {

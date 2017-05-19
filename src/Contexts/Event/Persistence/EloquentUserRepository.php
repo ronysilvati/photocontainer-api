@@ -7,9 +7,20 @@ use PhotoContainer\PhotoContainer\Contexts\Event\Domain\Publisher;
 use PhotoContainer\PhotoContainer\Contexts\Event\Domain\UserRepository;
 use PhotoContainer\PhotoContainer\Infrastructure\Exception\PersistenceException;
 use PhotoContainer\PhotoContainer\Infrastructure\Persistence\Eloquent\User;
+use PhotoContainer\PhotoContainer\Infrastructure\Persistence\EloquentDatabaseProvider;
 
 class EloquentUserRepository implements UserRepository
 {
+    /**
+     * @var EloquentDatabaseProvider
+     */
+    private $conn;
+
+    public function __construct(EloquentDatabaseProvider $conn)
+    {
+        $this->conn = $conn;
+    }
+
     /**
      * @param Photographer $photographer
      * @return Photographer

@@ -7,9 +7,20 @@ use PhotoContainer\PhotoContainer\Contexts\Cep\Domain\CepRepository;
 use PhotoContainer\PhotoContainer\Infrastructure\Persistence\Eloquent\City;
 use PhotoContainer\PhotoContainer\Infrastructure\Persistence\Eloquent\Country;
 use PhotoContainer\PhotoContainer\Infrastructure\Persistence\Eloquent\State;
+use PhotoContainer\PhotoContainer\Infrastructure\Persistence\EloquentDatabaseProvider;
 
 class EloquentCepRepository implements CepRepository
 {
+    /**
+     * @var EloquentDatabaseProvider
+     */
+    private $conn;
+
+    public function __construct(EloquentDatabaseProvider $conn)
+    {
+        $this->conn = $conn;
+    }
+
     public function findCep(Cep $cep)
     {
         throw new \Exception("Nâo implementado.");

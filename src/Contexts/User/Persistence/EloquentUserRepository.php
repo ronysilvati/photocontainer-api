@@ -14,9 +14,20 @@ use PhotoContainer\PhotoContainer\Infrastructure\Persistence\Eloquent\Address as
 use PhotoContainer\PhotoContainer\Infrastructure\Persistence\Eloquent\Detail;
 use PhotoContainer\PhotoContainer\Infrastructure\Persistence\Eloquent\User as UserModel;
 use PhotoContainer\PhotoContainer\Infrastructure\Persistence\Eloquent\UserProfile;
+use PhotoContainer\PhotoContainer\Infrastructure\Persistence\EloquentDatabaseProvider;
 
 class EloquentUserRepository implements UserRepository
 {
+    /**
+     * @var EloquentDatabaseProvider
+     */
+    private $conn;
+
+    public function __construct(EloquentDatabaseProvider $conn)
+    {
+        $this->conn = $conn;
+    }
+
     public function createUser(User $user, ?string $encryptedPwd)
     {
         try {

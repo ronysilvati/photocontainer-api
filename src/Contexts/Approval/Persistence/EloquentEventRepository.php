@@ -10,9 +10,20 @@ use PhotoContainer\PhotoContainer\Infrastructure\Exception\PersistenceException;
 use PhotoContainer\PhotoContainer\Infrastructure\Persistence\Eloquent\DownloadRequest as RequestModel;
 use PhotoContainer\PhotoContainer\Infrastructure\Persistence\Eloquent\Event as EventModel;
 use PhotoContainer\PhotoContainer\Infrastructure\Persistence\Eloquent\User as UserModel;
+use PhotoContainer\PhotoContainer\Infrastructure\Persistence\EloquentDatabaseProvider;
 
 class EloquentEventRepository implements ApprovalRepository
 {
+    /**
+     * @var EloquentDatabaseProvider
+     */
+    private $conn;
+
+    public function __construct(EloquentDatabaseProvider $conn)
+    {
+        $this->conn = $conn;
+    }
+
     public function createDownloadRequest(DownloadRequest $request): DownloadRequest
     {
         try {

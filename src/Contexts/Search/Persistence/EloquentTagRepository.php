@@ -5,9 +5,20 @@ namespace PhotoContainer\PhotoContainer\Contexts\Search\Persistence;
 use PhotoContainer\PhotoContainer\Contexts\Search\Domain\Tag;
 use PhotoContainer\PhotoContainer\Contexts\Search\Domain\TagRepository;
 use PhotoContainer\PhotoContainer\Infrastructure\Persistence\Eloquent\TagCategory;
+use PhotoContainer\PhotoContainer\Infrastructure\Persistence\EloquentDatabaseProvider;
 
 class EloquentTagRepository implements TagRepository
 {
+    /**
+     * @var EloquentDatabaseProvider
+     */
+    private $conn;
+
+    public function __construct(EloquentDatabaseProvider $conn)
+    {
+        $this->conn = $conn;
+    }
+
     public function findAll(): array
     {
         $all = TagCategory::all()->load('tags');
