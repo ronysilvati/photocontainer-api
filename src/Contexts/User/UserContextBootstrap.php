@@ -33,52 +33,44 @@ class UserContextBootstrap implements ContextBootstrap
         });
 
         $slimApp->app->post('/users', function (ServerRequestInterface $request, ResponseInterface $response) use ($container) {
-            try {
-                $data = $request->getParsedBody();
+            $data = $request->getParsedBody();
 
-                $details = new Details(
-                    null,
-                    isset($data['details']['blog']) ? $data['details']['blog'] : '',
-                    isset($data['details']['instagram']) ? $data['details']['instagram'] : '',
-                    isset($data['details']['facebook']) ? $data['details']['facebook'] : '',
-                    isset($data['details']['pinterest']) ? $data['details']['pinterest'] : '',
-                    isset($data['details']['site']) ? $data['details']['site'] : '',
-                    isset($data['details']['phone']) ? $data['details']['phone'] : '',
-                    isset($data['details']['birth']) ? $data['details']['birth'] : ''
-                );
+            $details = new Details(
+                null,
+                isset($data['details']['blog']) ? $data['details']['blog'] : '',
+                isset($data['details']['instagram']) ? $data['details']['instagram'] : '',
+                isset($data['details']['facebook']) ? $data['details']['facebook'] : '',
+                isset($data['details']['pinterest']) ? $data['details']['pinterest'] : '',
+                isset($data['details']['site']) ? $data['details']['site'] : '',
+                isset($data['details']['phone']) ? $data['details']['phone'] : '',
+                isset($data['details']['birth']) ? $data['details']['birth'] : ''
+            );
 
-                $profile = new Profile(null, null, (int) $data['profile'], null);
-                $user = new User(null, $data['name'], $data['email'], $data['password'], $details, $profile);
+            $profile = new Profile(null, null, (int) $data['profile'], null);
+            $user = new User(null, $data['name'], $data['email'], $data['password'], $details, $profile);
 
-                $action = new CreateUser(
-                    new EloquentUserRepository($container['DatabaseProvider']),
-                    $container['CryptoMethod']
-                );
+            $action = new CreateUser(
+                new EloquentUserRepository($container['DatabaseProvider']),
+                $container['CryptoMethod']
+            );
 
-                $actionResponse = $action->handle($user);
+            $actionResponse = $action->handle($user);
 
-                $container['EventEmitter']->addContextEvents($action->getEvents());
+            $container['EventEmitter']->addContextEvents($action->getEvents());
 
-                return $response->withJson($actionResponse, $actionResponse->getHttpStatus());
-            } catch (\Exception $e) {
-                return $response->withJson(['message' => $e->getMessage()], 500);
-            }
+            return $response->withJson($actionResponse, $actionResponse->getHttpStatus());
         });
 
         $slimApp->app->patch('/users/{id}', function (ServerRequestInterface $request, ResponseInterface $response, $args) use ($container) {
-            try {
-                $data = $request->getParsedBody();
+            $data = $request->getParsedBody();
 
-                $action = new UpdateUser(
-                    new EloquentUserRepository($container['DatabaseProvider']),
-                    $container['CryptoMethod']
-                );
-                $actionResponse = $action->handle($args['id'], $data);
+            $action = new UpdateUser(
+                new EloquentUserRepository($container['DatabaseProvider']),
+                $container['CryptoMethod']
+            );
+            $actionResponse = $action->handle($args['id'], $data);
 
-                return $response->withJson($actionResponse, $actionResponse->getHttpStatus());
-            } catch (\Exception $e) {
-                return $response->withJson(['message' => $e->getMessage()], 500);
-            }
+            return $response->withJson($actionResponse, $actionResponse->getHttpStatus());
         });
 
         return $slimApp;

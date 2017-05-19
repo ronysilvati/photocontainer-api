@@ -2,6 +2,7 @@
 
 namespace PhotoContainer\PhotoContainer\Contexts\Search\Action;
 
+use League\Flysystem\Exception;
 use PhotoContainer\PhotoContainer\Contexts\Search\Domain\CategoryRepository;
 use PhotoContainer\PhotoContainer\Contexts\Search\Response\CategoryCollectionResponse;
 use PhotoContainer\PhotoContainer\Infrastructure\Web\DomainExceptionResponse;
@@ -17,11 +18,7 @@ class FindCategories
 
     public function handle()
     {
-        try {
-            $result = $this->repository->findAll();
-            return new CategoryCollectionResponse($result);
-        } catch (\Exception $e) {
-            return new DomainExceptionResponse($e->getMessage());
-        }
+        $result = $this->repository->findAll();
+        return new CategoryCollectionResponse($result);
     }
 }

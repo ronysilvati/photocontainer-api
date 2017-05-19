@@ -29,11 +29,7 @@ class FindUser
      */
     public function handle(int $id = null, string $email = null)
     {
-        try {
-            $user = $this->userRepository->findUser($id, $email);
-            return new UserResponse($user);
-        } catch (\Exception $e) {
-            return new DomainExceptionResponse($e->getMessage());
-        }
+        $user = $this->userRepository->findUser($id, $email);
+        return new UserResponse($user);
     }
 }

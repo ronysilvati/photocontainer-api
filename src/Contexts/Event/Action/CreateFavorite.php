@@ -33,17 +33,13 @@ class CreateFavorite
 
     /**
      * @param Favorite $favorite
-     * @return FavoriteCreatedResponse|DomainExceptionResponse
+     * @return FavoriteCreatedResponse
      */
     public function handle(Favorite $favorite)
     {
-        try {
-            $favorite->changePublisher($this->userRepo->findPublisher($favorite->getPublisher()));
-            $favorite = $this->repository->createFavorite($favorite);
+        $favorite->changePublisher($this->userRepo->findPublisher($favorite->getPublisher()));
+        $favorite = $this->repository->createFavorite($favorite);
 
-            return new FavoriteCreatedResponse($favorite);
-        } catch (\Exception $e) {
-            return new DomainExceptionResponse($e->getMessage());
-        }
+        return new FavoriteCreatedResponse($favorite);
     }
 }

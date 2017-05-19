@@ -28,13 +28,9 @@ class DeletePhoto
      */
     public function handle(string $guid)
     {
-        try {
-            $photo = $this->dbRepo->deletePhoto($guid);
-            $this->fsRepo->deletePhoto($photo);
+        $photo = $this->dbRepo->deletePhoto($guid);
+        $this->fsRepo->deletePhoto($photo);
 
-            return new DeletedPhotoResponse($photo);
-        } catch (\Exception $e) {
-            return new DomainExceptionResponse($e->getMessage());
-        }
+        return new DeletedPhotoResponse($photo);
     }
 }

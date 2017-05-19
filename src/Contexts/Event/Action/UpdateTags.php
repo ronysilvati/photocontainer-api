@@ -17,11 +17,7 @@ class UpdateTags
 
     public function handle(array $tags, int $id)
     {
-        try {
-            $tags = $this->repository->saveEventTags($tags, $id);
-            return new TagUpdateResponse($tags);
-        } catch (\Exception $e) {
-            return new DomainExceptionResponse($e->getMessage());
-        }
+        $tags = $this->repository->saveEventTags($tags, $id);
+        return new TagUpdateResponse($tags);
     }
 }

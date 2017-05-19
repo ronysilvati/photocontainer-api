@@ -42,64 +42,52 @@ class EventContextBootstrap implements ContextBootstrap
         });
 
         $slimApp->app->post('/events', function (ServerRequestInterface $request, ResponseInterface $response) use ($container) {
-            try {
-                $data = $request->getParsedBody();
+            $data = $request->getParsedBody();
 
-                $user = new Photographer($data['user_id']);
+            $user = new Photographer($data['user_id']);
 
-                $allCategories = [];
-                foreach ($data['categories'] as $category) {
-                    $allCategories[] = new EventCategory(null, $category);
-                }
-
-                $allTags = [];
-                foreach ($data['tags'] as $tag) {
-                    $allTags[] = new EventTag(null, $tag);
-                }
-
-                $event = new Event(null, $user, $data['bride'], $data['groom'], $data['eventDate'],
-                    $data['title'], $data['description'], $data['country'], $data['state'], $data['city'],
-                    (bool) $data['terms'], (bool) $data['approval_general'],
-                    (bool) $data['approval_photographer'], (bool) $data['approval_bride'], $allCategories,
-                    $allTags, new Suppliers(null, null, null));
-
-                $action = new CreateEvent(
-                    new EloquentEventRepository($container['DatabaseProvider']),
-                    new EloquentUserRepository($container['DatabaseProvider'])
-                );
-                $actionResponse = $action->handle($event);
-
-                return $response->withJson($actionResponse, $actionResponse->getHttpStatus());
-            } catch (\Exception $e) {
-                return $response->withJson(['message' => $e->getMessage()], 500);
+            $allCategories = [];
+            foreach ($data['categories'] as $category) {
+                $allCategories[] = new EventCategory(null, $category);
             }
+
+            $allTags = [];
+            foreach ($data['tags'] as $tag) {
+                $allTags[] = new EventTag(null, $tag);
+            }
+
+            $event = new Event(null, $user, $data['bride'], $data['groom'], $data['eventDate'],
+                $data['title'], $data['description'], $data['country'], $data['state'], $data['city'],
+                (bool) $data['terms'], (bool) $data['approval_general'],
+                (bool) $data['approval_photographer'], (bool) $data['approval_bride'], $allCategories,
+                $allTags, new Suppliers(null, null, null));
+
+            $action = new CreateEvent(
+                new EloquentEventRepository($container['DatabaseProvider']),
+                new EloquentUserRepository($container['DatabaseProvider'])
+            );
+            $actionResponse = $action->handle($event);
+
+            return $response->withJson($actionResponse, $actionResponse->getHttpStatus());
         });
 
         $slimApp->app->delete('/events/{id}', function (ServerRequestInterface $request, ResponseInterface $response, $args) use ($container) {
-            try {
-                $id = isset($args['id']) ? $args['id'] : null;
+            $id = isset($args['id']) ? $args['id'] : null;
 
-                $action = new DeleteEvent(new EloquentEventRepository($container['DatabaseProvider']));
-                $actionResponse = $action->handle($id);
+            $action = new DeleteEvent(new EloquentEventRepository($container['DatabaseProvider']));
+            $actionResponse = $action->handle($id);
 
-                return $response->withJson($actionResponse, $actionResponse->getHttpStatus());
-            } catch (\Exception $e) {
-                return $response->withJson(['message' => $e->getMessage()], 500);
-            }
+            return $response->withJson($actionResponse, $actionResponse->getHttpStatus());
         });
 
         $slimApp->app->put('/events/{id}', function (ServerRequestInterface $request, ResponseInterface $response, $args) use ($container) {
-            try {
-                $data = $request->getParsedBody();
-                $id = isset($args['id']) ? $args['id'] : null;
+            $data = $request->getParsedBody();
+            $id = isset($args['id']) ? $args['id'] : null;
 
-                $action = new UpdateEvent(new EloquentEventRepository($container['DatabaseProvider']));
-                $actionResponse = $action->handle($id, $data);
+            $action = new UpdateEvent(new EloquentEventRepository($container['DatabaseProvider']));
+            $actionResponse = $action->handle($id, $data);
 
-                return $response->withJson($actionResponse, $actionResponse->getHttpStatus());
-            } catch (\Exception $e) {
-                return $response->withJson(['message' => $e->getMessage()], 500);
-            }
+            return $response->withJson($actionResponse, $actionResponse->getHttpStatus());
         });
 
         $slimApp->app->post('/events/{event_id}/favorite/publisher/{publisher_id}', function (ServerRequestInterface $request, ResponseInterface $response, $args) use ($container) {
@@ -126,43 +114,35 @@ class EventContextBootstrap implements ContextBootstrap
         });
 
         $slimApp->app->post('/events/{id}/tags', function (ServerRequestInterface $request, ResponseInterface $response, $args) use ($container) {
-            try {
-                $data = $request->getParsedBody();
+            $data = $request->getParsedBody();
 
-                if (empty($data['tags'])) {
-                    return $response->withJson(['message' => 'Tags não enviadas.'], 204);
-                }
-
-                $action = new UpdateTags(new EloquentEventRepository($container['DatabaseProvider']));
-
-                $allTags = [];
-                foreach ($data['tags'] as $tag) {
-                    $allTags[] = new EventTag($args["id"], $tag);
-                }
-
-                $actionResponse = $action->handle($allTags, $args["id"]);
-
-                return $response->withJson($actionResponse, $actionResponse->getHttpStatus());
-            } catch (\Exception $e) {
-                return $response->withJson(['message' => $e->getMessage()], 500);
+            if (empty($data['tags'])) {
+                return $response->withJson(['message' => 'Tags não enviadas.'], 204);
             }
+
+            $action = new UpdateTags(new EloquentEventRepository($container['DatabaseProvider']));
+
+            $allTags = [];
+            foreach ($data['tags'] as $tag) {
+                $allTags[] = new EventTag($args["id"], $tag);
+            }
+
+            $actionResponse = $action->handle($allTags, $args["id"]);
+
+            return $response->withJson($actionResponse, $actionResponse->getHttpStatus());
         });
 
         $slimApp->app->post('/events/{id}/suppliers', function (ServerRequestInterface $request, ResponseInterface $response, $args) use ($container) {
-            try {
-                $data = $request->getParsedBody();
+            $data = $request->getParsedBody();
 
-                if (empty($data)) {
-                    return $response->withJson(['message' => 'Fornecedores não enviados.'], 204);
-                }
-
-                $action = new UpdateSuppliers(new EloquentEventRepository($container['DatabaseProvider']));
-                $actionResponse = $action->handle($data, $args["id"]);
-
-                return $response->withJson($actionResponse, $actionResponse->getHttpStatus());
-            } catch (\Exception $e) {
-                return $response->withJson(['message' => $e->getMessage()], 500);
+            if (empty($data)) {
+                return $response->withJson(['message' => 'Fornecedores não enviados.'], 204);
             }
+
+            $action = new UpdateSuppliers(new EloquentEventRepository($container['DatabaseProvider']));
+            $actionResponse = $action->handle($data, $args["id"]);
+
+            return $response->withJson($actionResponse, $actionResponse->getHttpStatus());
         });
 
         return $slimApp;

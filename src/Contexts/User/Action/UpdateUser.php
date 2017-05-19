@@ -31,50 +31,46 @@ class UpdateUser
 
     public function handle(int $id, array $data)
     {
-        try {
-            /** @var User $user */
-            $user = $this->userRepository->findUser($id);
+        /** @var User $user */
+        $user = $this->userRepository->findUser($id);
 
-            if (isset($data['name'])) {
-                $user->changeName($data['name']);
-            }
-
-            if (isset($data['email'])) {
-                $user->changeEmail($data['email']);
-            }
-
-            if (isset($data['details']['blog'])) {
-                $user->changeBlog($data['details']['blog']);
-            }
-
-            if (isset($data['address'])) {
-                $address = $this->updateAddress($user->getAddress(), $data['address']);
-                $user->changeAddress($address);
-            }
-
-            if ($data['profile_id'] == 2) {
-                $photographerDetails = new PhotographerDetails(
-                    isset($data['details']['bio']) ? $data['details']['bio'] : '',
-                    isset($data['details']['studio']) ? $data['details']['studio'] : '',
-                    isset($data['details']['name_type']) ? $data['details']['name_type'] : ''
-                );
-
-                $user->getDetails()->changePhographerDetails($photographerDetails);
-            }
-
-            $details = $this->updateDetails($user->getDetails(), $data['details']);
-            $user->changeDetails($details);
-
-            $crypto = null;
-            if (isset($data['password'])) {
-                $crypto = empty($data['password']) ? '' : $this->cryptoMethod->hash($data['password']);
-            }
-
-            $user = $this->userRepository->updateUser($user, $crypto);
-            return new UserResponse($user);
-        } catch (\Exception $e) {
-            return new DomainExceptionResponse($e->getMessage());
+        if (isset($data['name'])) {
+            $user->changeName($data['name']);
         }
+
+        if (isset($data['email'])) {
+            $user->changeEmail($data['email']);
+        }
+
+        if (isset($data['details']['blog'])) {
+            $user->changeBlog($data['details']['blog']);
+        }
+
+        if (isset($data['address'])) {
+            $address = $this->updateAddress($user->getAddress(), $data['address']);
+            $user->changeAddress($address);
+        }
+
+        if ($data['profile_id'] == 2) {
+            $photographerDetails = new PhotographerDetails(
+                isset($data['details']['bio']) ? $data['details']['bio'] : '',
+                isset($data['details']['studio']) ? $data['details']['studio'] : '',
+                isset($data['details']['name_type']) ? $data['details']['name_type'] : ''
+            );
+
+            $user->getDetails()->changePhographerDetails($photographerDetails);
+        }
+
+        $details = $this->updateDetails($user->getDetails(), $data['details']);
+        $user->changeDetails($details);
+
+        $crypto = null;
+        if (isset($data['password'])) {
+            $crypto = empty($data['password']) ? '' : $this->cryptoMethod->hash($data['password']);
+        }
+
+        $user = $this->userRepository->updateUser($user, $crypto);
+        return new UserResponse($user);
     }
 
     private function updateAddress(Address $address, array $dataAddress): Address

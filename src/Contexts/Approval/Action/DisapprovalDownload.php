@@ -29,28 +29,25 @@ class DisapprovalDownload
     /**
      * @param int $event_id
      * @param int $publisher_id
-     * @return DisapprovalRequestResponse|DomainExceptionResponse
+     * @return DisapprovalRequestResponse
+     * @throws \Exception
      */
     public function handle(int $event_id, int $publisher_id)
     {
-        try {
-            $request = $this->repository->findDownloadRequest($event_id, $publisher_id);
-            if ($request == null) {
-                throw new \Exception('Pedido não localizado.');
-            }
-
-            if ($request->isActive() == false) {
-                throw new \Exception('Pedido já negado.');
-            }
-
-            $request = $this->repository->disapproval($request);
-
-            $this->sendEmailToPublisher($event_id, $publisher_id);
-
-            return new DisapprovalRequestResponse($request);
-        } catch (\Exception $e) {
-            return new DomainExceptionResponse($e->getMessage());
+        $request = $this->repository->findDownloadRequest($event_id, $publisher_id);
+        if ($request == null) {
+            throw new \Exception('Pedido não localizado.');
         }
+
+        if ($request->isActive() == false) {
+            throw new \Exception('Pedido já negado.');
+        }
+
+        $request = $this->repository->disapproval($request);
+
+        $this->sendEmailToPublisher($event_id, $publisher_id);
+
+        return new DisapprovalRequestResponse($request);
     }
 
     /**

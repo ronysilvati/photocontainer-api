@@ -17,11 +17,7 @@ class WaitingForApproval
 
     public function handle(int $photographer_id)
     {
-        try {
-            $waitingList = $this->repository->findWaitingRequests($photographer_id);
-            return new ApprovalCollectionResponse($waitingList);
-        } catch (\Exception $e) {
-            return new DomainExceptionResponse($e->getMessage());
-        }
+        $waitingList = $this->repository->findWaitingRequests($photographer_id);
+        return new ApprovalCollectionResponse($waitingList);
     }
 }

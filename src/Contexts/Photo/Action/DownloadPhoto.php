@@ -35,18 +35,14 @@ class DownloadPhoto
      */
     public function handle(int $photo_id, int $publisher_id)
     {
-        try {
-            $photo = $this->dbRepo->find($photo_id);
-            $download = new Download(null, $publisher_id, $photo);
+        $photo = $this->dbRepo->find($photo_id);
+        $download = new Download(null, $publisher_id, $photo);
 
-            $this->dbRepo->download($download);
+        $this->dbRepo->download($download);
 
-            $this->sendEmailToPhotographer($photo, $publisher_id);
+        $this->sendEmailToPhotographer($photo, $publisher_id);
 
-            return new DownloadResponse($download);
-        } catch (\Exception $e) {
-            return new DomainExceptionResponse($e->getMessage());
-        }
+        return new DownloadResponse($download);
     }
 
     /**

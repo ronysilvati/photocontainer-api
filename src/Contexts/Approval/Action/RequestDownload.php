@@ -30,34 +30,31 @@ class RequestDownload
     /**
      * @param int $event_id
      * @param int $publisher_id
-     * @return DownloadRequestResponse|DomainExceptionResponse
+     * @return DownloadRequestResponse
+     * @throws \Exception
      */
     public function handle(int $event_id, int $publisher_id)
     {
-        try {
-            $dlRequest = $this->repository->findDownloadRequest($event_id, $publisher_id);
-            if ($dlRequest) {
-                $msg = !$dlRequest->isActive() && !$dlRequest->isAuthorized() ? "Seu pedido não foi autorizado." : 'Seu pedido para download ainda está sendo analisado.';
-                throw new \Exception($msg);
-            }
-
-            $dlRequest = new DownloadRequest(
-                null,
-                $event_id,
-                $publisher_id,
-                false,
-                false,
-                true
-            );
-
-            $event = $this->repository->createDownloadRequest($dlRequest);
-
-            $this->sendEmailToPhotographer($event_id, $publisher_id);
-
-            return new DownloadRequestResponse($event);
-        } catch (\Exception $e) {
-            return new DomainExceptionResponse($e->getMessage());
+        $dlRequest = $this->repository->findDownloadRequest($event_id, $publisher_id);
+        if ($dlRequest) {
+            $msg = !$dlRequest->isActive() && !$dlRequest->isAuthorized() ? "Seu pedido não foi autorizado." : 'Seu pedido para download ainda está sendo analisado.';
+            throw new \Exception($msg);
         }
+
+        $dlRequest = new DownloadRequest(
+            null,
+            $event_id,
+            $publisher_id,
+            false,
+            false,
+            true
+        );
+
+        $event = $this->repository->createDownloadRequest($dlRequest);
+
+        $this->sendEmailToPhotographer($event_id, $publisher_id);
+
+        return new DownloadRequestResponse($event);
     }
 
     /**

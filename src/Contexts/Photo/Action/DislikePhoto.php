@@ -18,11 +18,7 @@ class DislikePhoto
 
     public function handle(Like $like)
     {
-        try {
-            $like = $this->repository->dislike($like);
-            return new DislikeResponse($like);
-        } catch (\Exception $e) {
-            return new DomainExceptionResponse($e->getMessage());
-        }
+        $like = $this->repository->dislike($like);
+        return new DislikeResponse($like);
     }
 }

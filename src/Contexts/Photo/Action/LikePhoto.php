@@ -18,11 +18,7 @@ class LikePhoto
 
     public function handle(Like $like)
     {
-        try {
-            $like = $this->repository->like($like);
-            return new LikeResponse($like);
-        } catch (\Exception $e) {
-            return new DomainExceptionResponse($e->getMessage());
-        }
+        $like = $this->repository->like($like);
+        return new LikeResponse($like);
     }
 }

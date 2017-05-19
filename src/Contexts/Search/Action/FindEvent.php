@@ -18,11 +18,7 @@ class FindEvent
 
     public function handle(EventSearch $search)
     {
-        try {
-            $result = $this->repository->find($search);
-            return new EventCollectionResponse($result);
-        } catch (\Exception $e) {
-            return new DomainExceptionResponse($e->getMessage());
-        }
+        $result = $this->repository->find($search);
+        return new EventCollectionResponse($result);
     }
 }

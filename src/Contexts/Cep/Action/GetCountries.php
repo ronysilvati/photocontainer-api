@@ -23,15 +23,11 @@ class GetCountries
     }
 
     /**
-     * @return CountryCollectionResponse|DomainExceptionResponse
+     * @return CountryCollectionResponse
      */
     public function handle()
     {
-        try {
-            $states = $this->repository->getCountries();
-            return new CountryCollectionResponse($states);
-        } catch (\Exception $e) {
-            return new DomainExceptionResponse($e->getMessage());
-        }
+        $states = $this->repository->getCountries();
+        return new CountryCollectionResponse($states);
     }
 }

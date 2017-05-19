@@ -9,20 +9,27 @@ use PhotoContainer\PhotoContainer\Infrastructure\Web\DomainExceptionResponse;
 
 class FindCep
 {
+    /**
+     * @var CepRepository
+     */
     protected $repository;
 
+    /**
+     * FindCep constructor.
+     * @param CepRepository $repository
+     */
     public function __construct(CepRepository $repository)
     {
         $this->repository = $repository;
     }
 
+    /**
+     * @param Cep $cep
+     * @return CepResponse
+     */
     public function handle(Cep $cep)
     {
-        try {
-            $cep = $this->repository->findCep($cep);
-            return new CepResponse($cep);
-        } catch (\Exception $e) {
-            return new DomainExceptionResponse($e->getMessage());
-        }
+        $cep = $this->repository->findCep($cep);
+        return new CepResponse($cep);
     }
 }

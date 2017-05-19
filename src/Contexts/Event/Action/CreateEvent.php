@@ -28,17 +28,13 @@ class CreateEvent
 
     /**
      * @param Event $event
-     * @return EventCreatedResponse|DomainExceptionResponse
+     * @return EventCreatedResponse
      */
     public function handle(Event $event)
     {
-        try {
-            $event->changePhotographer($this->userRepo->findPhotographer($event->getPhotographer()));
-            $this->repository->create($event);
+        $event->changePhotographer($this->userRepo->findPhotographer($event->getPhotographer()));
+        $this->repository->create($event);
 
-            return new EventCreatedResponse($event);
-        } catch (\Exception $e) {
-            return new DomainExceptionResponse($e->getMessage());
-        }
+        return new EventCreatedResponse($event);
     }
 }

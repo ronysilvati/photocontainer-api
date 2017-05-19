@@ -33,136 +33,104 @@ class SearchContextBootstrap implements ContextBootstrap
         $container = $slimApp->app->getContainer();
 
         $slimApp->app->get('/search/events', function (ServerRequestInterface $request, ResponseInterface $response) use ($container) {
-            try {
-                $args = $request->getQueryParams();
+            $args = $request->getQueryParams();
 
-                $keyword = isset($args['keyword']) ? $args['keyword'] : null;
-                $photographer = new Photographer((int) $args['photographer'] ?? $args['photographer']);
-                $page = isset($args['page']) ? $args['page'] : 1 ;
+            $keyword = isset($args['keyword']) ? $args['keyword'] : null;
+            $photographer = new Photographer((int) $args['photographer'] ?? $args['photographer']);
+            $page = isset($args['page']) ? $args['page'] : 1 ;
 
-                $allCategories = null;
-                if (!empty($args['categories'])) {
-                    $allCategories = [];
-                    foreach ($args['categories'] as $category) {
-                        $allCategories[] = new Category((int) $category);
-                    }
+            $allCategories = null;
+            if (!empty($args['categories'])) {
+                $allCategories = [];
+                foreach ($args['categories'] as $category) {
+                    $allCategories[] = new Category((int) $category);
                 }
-
-                $allTags = null;
-                if (!empty($args['tags'])) {
-                    $allTags = [];
-                    foreach ($args['tags'] as $tag) {
-                        $allTags[] = new Tag((int) $tag, null);
-                    }
-                }
-
-                $search = new EventSearch(null, $photographer, $keyword, $allCategories, $allTags, 1);
-
-                if (!empty($args['publisher'])) {
-                    $search->changePublisher(new Publisher((int) $args['publisher'] ?? $args['publisher']));
-                }
-
-                $action = new FindEvent(new DbalEventRepository($container['DbalDatabaseProvider']));
-                $actionResponse = $action->handle($search);
-
-                return $response->withJson($actionResponse, $actionResponse->getHttpStatus());
-            } catch (\Exception $e) {
-                return $response->withJson(['message' => $e->getMessage()], 500);
             }
+
+            $allTags = null;
+            if (!empty($args['tags'])) {
+                $allTags = [];
+                foreach ($args['tags'] as $tag) {
+                    $allTags[] = new Tag((int) $tag, null);
+                }
+            }
+
+            $search = new EventSearch(null, $photographer, $keyword, $allCategories, $allTags, 1);
+
+            if (!empty($args['publisher'])) {
+                $search->changePublisher(new Publisher((int) $args['publisher'] ?? $args['publisher']));
+            }
+
+            $action = new FindEvent(new DbalEventRepository($container['DbalDatabaseProvider']));
+            $actionResponse = $action->handle($search);
+
+            return $response->withJson($actionResponse, $actionResponse->getHttpStatus());
         });
 
         $slimApp->app->get('/search/categories', function (ServerRequestInterface $request, ResponseInterface $response) use ($container) {
-            try {
-                $action = new FindCategories(new EloquentCategoryRepository($container['DatabaseProvider']));
-                $actionResponse = $action->handle();
+            $action = new FindCategories(new EloquentCategoryRepository($container['DatabaseProvider']));
+            $actionResponse = $action->handle();
 
-                $response = $container->cache->withExpires($response, time() + getenv('HEAD_EXPIRES'));
+            $response = $container->cache->withExpires($response, time() + getenv('HEAD_EXPIRES'));
 
-                return $response->withJson($actionResponse, $actionResponse->getHttpStatus());
-            } catch (\Exception $e) {
-                return $response->withJson(['message' => $e->getMessage()], 500);
-            }
+            return $response->withJson($actionResponse, $actionResponse->getHttpStatus());
         });
 
         $slimApp->app->get('/search/tags', function (ServerRequestInterface $request, ResponseInterface $response) use ($container) {
-            try {
-                $action = new FindTags(new EloquentTagRepository($container['DatabaseProvider']));
-                $actionResponse = $action->handle();
+            $action = new FindTags(new EloquentTagRepository($container['DatabaseProvider']));
+            $actionResponse = $action->handle();
 
-                $response = $container->cache->withExpires($response, time() + getenv('HEAD_EXPIRES'));
+            $response = $container->cache->withExpires($response, time() + getenv('HEAD_EXPIRES'));
 
-                return $response->withJson($actionResponse, $actionResponse->getHttpStatus());
-            } catch (\Exception $e) {
-                return $response->withJson(['message' => $e->getMessage()], 500);
-            }
+            return $response->withJson($actionResponse, $actionResponse->getHttpStatus());
         });
 
         $slimApp->app->get('/search/events/{id}/photos/user/{user_id}', function (ServerRequestInterface $request, ResponseInterface $response, $args) use ($container) {
-            try {
-                $action = new FindEventPhotosPublisher(new EloquentEventRepository($container['DatabaseProvider']));
-                $actionResponse = $action->handle($args['id'], $args['user_id']);
+            $action = new FindEventPhotosPublisher(new EloquentEventRepository($container['DatabaseProvider']));
+            $actionResponse = $action->handle($args['id'], $args['user_id']);
 
-                return $response->withJson($actionResponse, $actionResponse->getHttpStatus());
-            } catch (\Exception $e) {
-                return $response->withJson(['message' => $e->getMessage()], 500);
-            }
+            return $response->withJson($actionResponse, $actionResponse->getHttpStatus());
         });
 
         $slimApp->app->get('/search/events/{id}/photos', function (ServerRequestInterface $request, ResponseInterface $response, $args) use ($container) {
-            try {
-                $action = new FindEventPhotosPhotographer(new EloquentEventRepository($container['DatabaseProvider']));
-                $actionResponse = $action->handle($args['id']);
+            $action = new FindEventPhotosPhotographer(new EloquentEventRepository($container['DatabaseProvider']));
+            $actionResponse = $action->handle($args['id']);
 
-                return $response->withJson($actionResponse, $actionResponse->getHttpStatus());
-            } catch (\Exception $e) {
-                return $response->withJson(['message' => $e->getMessage()], 500);
-            }
+            return $response->withJson($actionResponse, $actionResponse->getHttpStatus());
         });
 
         $slimApp->app->get('/search/photo/user/{publisher_id}/{type:downloads|favorites}', function (ServerRequestInterface $request, ResponseInterface $response, $args) use ($container) {
-            try {
-                $qsParams = $request->getQueryParams();
-                $keyword = isset($qsParams['keyword']) ? $qsParams['keyword'] : null;
+            $qsParams = $request->getQueryParams();
+            $keyword = isset($qsParams['keyword']) ? $qsParams['keyword'] : null;
 
-                $allTags = null;
-                if (!empty($qsParams['tags'])) {
-                    $allTags = [];
-                    foreach ($qsParams['tags'] as $tag) {
-                        if ($tag != "") {
-                            $allTags[] = new Tag((int) $tag, null);
-                        }
+            $allTags = null;
+            if (!empty($qsParams['tags'])) {
+                $allTags = [];
+                foreach ($qsParams['tags'] as $tag) {
+                    if ($tag != "") {
+                        $allTags[] = new Tag((int) $tag, null);
                     }
                 }
-
-                $action = new FindHistoric(new EloquentPhotoRepository($container['DatabaseProvider']));
-                $actionResponse = $action->handle($args['publisher_id'], $keyword, $allTags, $args['type']);
-
-                return $response->withJson($actionResponse, $actionResponse->getHttpStatus());
-            } catch (\Exception $e) {
-                return $response->withJson(['message' => $e->getMessage()], 500);
             }
+
+            $action = new FindHistoric(new EloquentPhotoRepository($container['DatabaseProvider']));
+            $actionResponse = $action->handle($args['publisher_id'], $keyword, $allTags, $args['type']);
+
+            return $response->withJson($actionResponse, $actionResponse->getHttpStatus());
         });
 
         $slimApp->app->get('/search/waiting_approval/user/{photographer_id}', function (ServerRequestInterface $request, ResponseInterface $response, $args) use ($container) {
-            try {
-                $action = new WaitingForApproval(new EloquentEventRepository($container['DatabaseProvider']));
-                $actionResponse = $action->handle($args['photographer_id']);
+            $action = new WaitingForApproval(new EloquentEventRepository($container['DatabaseProvider']));
+            $actionResponse = $action->handle($args['photographer_id']);
 
-                return $response->withJson($actionResponse, $actionResponse->getHttpStatus());
-            } catch (\Exception $e) {
-                return $response->withJson(['message' => $e->getMessage()], 500);
-            }
+            return $response->withJson($actionResponse, $actionResponse->getHttpStatus());
         });
 
         $slimApp->app->get('/search/notifications/user/{user_id}', function (ServerRequestInterface $request, ResponseInterface $response, $args) use ($container) {
-            try {
-                $action = new GetNotifications(new DbalNotificationRepository($container['DbalDatabaseProvider']));
-                $actionResponse = $action->handle($args['user_id']);
+            $action = new GetNotifications(new DbalNotificationRepository($container['DbalDatabaseProvider']));
+            $actionResponse = $action->handle($args['user_id']);
 
-                return $response->withJson($actionResponse, $actionResponse->getHttpStatus());
-            } catch (\Exception $e) {
-                return $response->withJson(['message' => $e->getMessage()], 500);
-            }
+            return $response->withJson($actionResponse, $actionResponse->getHttpStatus());
         });
 
         return $slimApp;

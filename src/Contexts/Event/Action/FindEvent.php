@@ -9,20 +9,27 @@ use PhotoContainer\PhotoContainer\Infrastructure\Web\DomainExceptionResponse;
 
 class FindEvent
 {
+    /**
+     * @var EventRepository
+     */
     protected $repository;
 
+    /**
+     * FindEvent constructor.
+     * @param EventRepository $repository
+     */
     public function __construct(EventRepository $repository)
     {
         $this->repository = $repository;
     }
 
+    /**
+     * @param int $id
+     * @return EventFoundResponse
+     */
     public function handle(int $id)
     {
-        try {
-            $event = $this->repository->find($id);
-            return new EventFoundResponse($event);
-        } catch (\Exception $e) {
-            return new DomainExceptionResponse($e->getMessage());
-        }
+        $event = $this->repository->find($id);
+        return new EventFoundResponse($event);
     }
 }

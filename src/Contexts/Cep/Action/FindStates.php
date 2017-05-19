@@ -9,20 +9,27 @@ use PhotoContainer\PhotoContainer\Infrastructure\Web\DomainExceptionResponse;
 
 class FindStates
 {
+    /**
+     * @var CepRepository
+     */
     protected $repository;
 
+    /**
+     * FindStates constructor.
+     * @param CepRepository $repository
+     */
     public function __construct(CepRepository $repository)
     {
         $this->repository = $repository;
     }
 
+    /**
+     * @param Cep $cep
+     * @return StateCollectionResponse
+     */
     public function handle(Cep $cep)
     {
-        try {
-            $states = $this->repository->findStates($cep);
-            return new StateCollectionResponse($states);
-        } catch (\Exception $e) {
-            return new DomainExceptionResponse($e->getMessage());
-        }
+        $states = $this->repository->findStates($cep);
+        return new StateCollectionResponse($states);
     }
 }

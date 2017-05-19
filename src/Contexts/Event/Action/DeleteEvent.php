@@ -8,20 +8,27 @@ use PhotoContainer\PhotoContainer\Infrastructure\Web\DomainExceptionResponse;
 
 class DeleteEvent
 {
+    /**
+     * @var EventRepository
+     */
     protected $repository;
 
+    /**
+     * DeleteEvent constructor.
+     * @param EventRepository $repository
+     */
     public function __construct(EventRepository $repository)
     {
         $this->repository = $repository;
     }
 
+    /**
+     * @param int $id
+     * @return EventRemovedResponse
+     */
     public function handle(int $id)
     {
-        try {
-            $this->repository->delete($id);
-            return new EventRemovedResponse($id);
-        } catch (\Exception $e) {
-            return new DomainExceptionResponse($e->getMessage());
-        }
+        $this->repository->delete($id);
+        return new EventRemovedResponse($id);
     }
 }

@@ -17,12 +17,7 @@ class FindEventPhotosPhotographer
 
     public function handle(int $id)
     {
-        try {
-            $result = $this->repository->findEventPhotosPhotographer($id);
-
-            return new EventResponse($result, 'gallery_photos_photographer');
-        } catch (\Exception $e) {
-            return new DomainExceptionResponse($e->getMessage());
-        }
+        $result = $this->repository->findEventPhotosPhotographer($id);
+        return new EventResponse($result, 'gallery_photos_photographer');
     }
 }

@@ -29,28 +29,25 @@ class ApprovalDownload
     /**
      * @param int $event_id
      * @param int $publisher_id
-     * @return ApprovalRequestResponse|DomainExceptionResponse
+     * @return ApprovalRequestResponse
+     * @throws \Exception
      */
     public function handle(int $event_id, int $publisher_id)
     {
-        try {
-            $request = $this->repository->findDownloadRequest($event_id, $publisher_id);
-            if ($request == null) {
-                throw new \Exception('Pedido não localizado.');
-            }
-
-            if ($request->isAuthorized()) {
-                throw new \Exception('Pedido já autorizado.');
-            }
-
-            $request = $this->repository->approval($request);
-
-            $this->sendEmailToPublisher($event_id, $publisher_id);
-
-            return new ApprovalRequestResponse($request);
-        } catch (\Exception $e) {
-            return new DomainExceptionResponse($e->getMessage());
+        $request = $this->repository->findDownloadRequest($event_id, $publisher_id);
+        if ($request == null) {
+            throw new \Exception('Pedido não localizado.');
         }
+
+        if ($request->isAuthorized()) {
+            throw new \Exception('Pedido já autorizado.');
+        }
+
+        $request = $this->repository->approval($request);
+
+        $this->sendEmailToPublisher($event_id, $publisher_id);
+
+        return new ApprovalRequestResponse($request);
     }
 
     /**

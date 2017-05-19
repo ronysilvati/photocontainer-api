@@ -25,51 +25,43 @@ class PhotoContextBootstrap implements ContextBootstrap
         $container = $slimApp->app->getContainer();
 
         $slimApp->app->post('/photo', function (ServerRequestInterface $request, ResponseInterface $response) use ($container) {
-            try {
-                $data = $request->getParsedBody();
+            $data = $request->getParsedBody();
 
-                $action = new CreatePhoto(new EloquentPhotoRepository($container['DatabaseProvider']), new FilesystemPhotoRepository());
+            $action = new CreatePhoto(new EloquentPhotoRepository($container['DatabaseProvider']), new FilesystemPhotoRepository());
 
-                $event_id = (int) $data['event_id'];
+            $event_id = (int) $data['event_id'];
 
-                $allPhotos = [];
-                foreach ($_FILES as $photo) {
-                    $allPhotos[] = new Photo(null, $event_id, $photo, $photo['tmp_name']);
-                }
-
-                $actionResponse = $action->handle($allPhotos, $event_id);
-
-                return $response->withJson($actionResponse->jsonSerialize(), $actionResponse->getHttpStatus());
-            } catch (\Exception $e) {
-                return $response->withJson(['message' => $e->getMessage()], 500);
+            $allPhotos = [];
+            foreach ($_FILES as $photo) {
+                $allPhotos[] = new Photo(null, $event_id, $photo, $photo['tmp_name']);
             }
+
+            $actionResponse = $action->handle($allPhotos, $event_id);
+
+            return $response->withJson($actionResponse->jsonSerialize(), $actionResponse->getHttpStatus());
         });
 
         $slimApp->app->get('/photo/{photo_id}/user/{user_id}/download', function (ServerRequestInterface $request, ResponseInterface $response, $args) use ($container) {
-            try {
-                $action = new DownloadPhoto(new EloquentPhotoRepository($container['DatabaseProvider']));
-                $actionResponse = $action->handle((int) $args['photo_id'], (int) $args['user_id']);
+            $action = new DownloadPhoto(new EloquentPhotoRepository($container['DatabaseProvider']));
+            $actionResponse = $action->handle((int) $args['photo_id'], (int) $args['user_id']);
 
-                if (get_class($actionResponse) == DomainExceptionResponse::class) {
-                    return $response->withJson($actionResponse->jsonSerialize(), $actionResponse->getHttpStatus());
-                }
-
-                $container['EventEmitter']->addContextEvents($action->getEvents());
-
-                $stream = new Stream($actionResponse->getFileToStream()); // create a stream instance for the response body
-                return $response->withHeader('Content-Type', 'application/force-download')
-                    ->withHeader('Content-Type', 'application/octet-stream')
-                    ->withHeader('Content-Type', 'application/download')
-                    ->withHeader('Content-Description', 'File Transfer')
-                    ->withHeader('Content-Transfer-Encoding', 'binary')
-                    ->withHeader('Content-Disposition', 'attachment; filename="' . $actionResponse->getDownload()->getPhoto()->getPhysicalName() . '"')
-                    ->withHeader('Expires', '0')
-                    ->withHeader('Cache-Control', 'must-revalidate, post-check=0, pre-check=0')
-                    ->withHeader('Pragma', 'public')
-                    ->withBody($stream); // all stream contents will be sent to the response
-            } catch (\Exception $e) {
-                return $response->withJson(['message' => $e->getMessage()], 500);
+            if (get_class($actionResponse) == DomainExceptionResponse::class) {
+                return $response->withJson($actionResponse->jsonSerialize(), $actionResponse->getHttpStatus());
             }
+
+            $container['EventEmitter']->addContextEvents($action->getEvents());
+
+            $stream = new Stream($actionResponse->getFileToStream()); // create a stream instance for the response body
+            return $response->withHeader('Content-Type', 'application/force-download')
+                ->withHeader('Content-Type', 'application/octet-stream')
+                ->withHeader('Content-Type', 'application/download')
+                ->withHeader('Content-Description', 'File Transfer')
+                ->withHeader('Content-Transfer-Encoding', 'binary')
+                ->withHeader('Content-Disposition', 'attachment; filename="' . $actionResponse->getDownload()->getPhoto()->getPhysicalName() . '"')
+                ->withHeader('Expires', '0')
+                ->withHeader('Cache-Control', 'must-revalidate, post-check=0, pre-check=0')
+                ->withHeader('Pragma', 'public')
+                ->withBody($stream); // all stream contents will be sent to the response
         });
 
         $slimApp->app->post('/photo/{photo_id}/like/publisher/{publisher_id}', function (ServerRequestInterface $request, ResponseInterface $response, $args) use ($container) {

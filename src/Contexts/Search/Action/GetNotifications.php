@@ -18,13 +18,9 @@ class GetNotifications
 
     public function handle(int $user_id)
     {
-        try {
-            $notification = new Notification();
-            $notification->setApprovalWaitList($this->repository->approvalWaitList($user_id));
+        $notification = new Notification();
+        $notification->setApprovalWaitList($this->repository->approvalWaitList($user_id));
 
-            return new NotificationResponse($notification);
-        } catch (\Exception $e) {
-            return new DomainExceptionResponse($e->getMessage());
-        }
+        return new NotificationResponse($notification);
     }
 }

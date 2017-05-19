@@ -42,16 +42,12 @@ class CreateUser
      */
     public function handle(User $user)
     {
-        try {
-            $encrypted = empty($user->getPwd()) ? '' : $this->cryptoMethod->hash($user->getPwd());
-            $user = $this->userRepository->createUser($user, $encrypted);
+        $encrypted = empty($user->getPwd()) ? '' : $this->cryptoMethod->hash($user->getPwd());
+        $user = $this->userRepository->createUser($user, $encrypted);
 
-            $this->sendEmail($user);
+        $this->sendEmail($user);
 
-            return new UserCreatedResponse($user);
-        } catch (\Exception $e) {
-            return new DomainExceptionResponse($e->getMessage());
-        }
+        return new UserCreatedResponse($user);
     }
 
     /**
