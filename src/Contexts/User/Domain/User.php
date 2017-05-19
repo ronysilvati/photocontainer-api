@@ -2,8 +2,8 @@
 
 namespace PhotoContainer\PhotoContainer\Contexts\User\Domain;
 
-use PhotoContainer\PhotoContainer\Infrastructure\Exception\DomainViolationException;
 use PhotoContainer\PhotoContainer\Infrastructure\Entity;
+use PhotoContainer\PhotoContainer\Infrastructure\Exception\DomainViolationException;
 use PhotoContainer\PhotoContainer\Infrastructure\Validation\Validator;
 
 class User implements Entity
@@ -161,9 +161,9 @@ class User implements Entity
     }
 
     /**
-     * @return mixed
+     * @return Profile
      */
-    public function getProfile()
+    public function getProfile(): Profile
     {
         return $this->profile;
     }

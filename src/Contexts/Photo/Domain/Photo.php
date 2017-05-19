@@ -92,7 +92,7 @@ class Photo implements Entity
     }
 
     /**
-     * @return mixed
+     * @param string $physicalName
      */
     public function setPhysicalName(string $physicalName)
     {

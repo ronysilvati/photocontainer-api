@@ -17,6 +17,7 @@ class Event
     /**
      * Event constructor.
      * @param string $name
+     * @param string $user_id
      */
     public function __construct(string $name, string $user_id)
     {

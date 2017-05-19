@@ -107,8 +107,7 @@ class Event
     }
 
     /**
-     * @param string $groom
-     * @return string
+     * @param string|null $groom
      */
     public function changeGroom(string $groom = null)
     {
