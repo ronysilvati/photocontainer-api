@@ -6,20 +6,32 @@ use PhotoContainer\PhotoContainer\Contexts\Approval\Domain\ApprovalRepository;
 use PhotoContainer\PhotoContainer\Contexts\Approval\Domain\DownloadRequest;
 use PhotoContainer\PhotoContainer\Contexts\Approval\Email\ApprovalRequestEmail;
 use PhotoContainer\PhotoContainer\Contexts\Approval\Response\DownloadRequestResponse;
-use PhotoContainer\PhotoContainer\Infrastructure\Email\EmailHelper;
+use PhotoContainer\PhotoContainer\Infrastructure\Event\EventGeneratorTrait;
 use PhotoContainer\PhotoContainer\Infrastructure\Web\DomainExceptionResponse;
 
 class RequestDownload
 {
-    private $repository;
-    private $emailHelper;
+    use EventGeneratorTrait;
 
-    public function __construct(ApprovalRepository $repository, EmailHelper $emailHelper)
+    /**
+     * @var ApprovalRepository
+     */
+    private $repository;
+
+    /**
+     * RequestDownload constructor.
+     * @param ApprovalRepository $repository
+     */
+    public function __construct(ApprovalRepository $repository)
     {
         $this->repository = $repository;
-        $this->emailHelper = $emailHelper;
     }
 
+    /**
+     * @param int $event_id
+     * @param int $publisher_id
+     * @return DownloadRequestResponse|DomainExceptionResponse
+     */
     public function handle(int $event_id, int $publisher_id)
     {
         try {
@@ -40,7 +52,7 @@ class RequestDownload
 
             $event = $this->repository->createDownloadRequest($dlRequest);
 
-            $this->sendEmail($event_id, $publisher_id);
+            $this->sendEmailToPhotographer($event_id, $publisher_id);
 
             return new DownloadRequestResponse($event);
         } catch (\Exception $e) {
@@ -48,26 +60,25 @@ class RequestDownload
         }
     }
 
-    public function sendEmail(int $event_id, int $publisher_id): void
+    /**
+     * @param int $event_id
+     * @param int $publisher_id
+     */
+    public function sendEmailToPhotographer(int $event_id, int $publisher_id): void
     {
-        try {
-            $event = $this->repository->findEvent($event_id);
-            $publisher = $this->repository->findUser($publisher_id);
-            $photographer = $this->repository->findUser($event->getUserId());
+        $event = $this->repository->findEvent($event_id);
+        $publisher = $this->repository->findUser($publisher_id);
+        $photographer = $this->repository->findUser($event->getUserId());
 
-            $data = [
-                '{EVENT_NAME}' => $event->getName(),
-                '{PUBLISHER}' => $publisher->getName()
-            ];
+        $data = [
+            '{EVENT_NAME}' => $event->getName(),
+            '{PUBLISHER}' => $publisher->getName()
+        ];
 
-            $email = new ApprovalRequestEmail(
-                $data,
-                ['name' => $photographer->getName(), 'email' => $photographer->getEmail()],
-                ['name' => getenv('PHOTOCONTAINER_EMAIL_NAME'), 'email' => getenv('PHOTOCONTAINER_EMAIL')]
-            );
-            $this->emailHelper->send($email);
-        } catch (\Exception $e) {
-            //TODO Logar o erro no monolog, fazer nada para não impedir a ação.
-        }
+        $email = new ApprovalRequestEmail(
+            $data,
+            ['name' => $photographer->getName(), 'email' => $photographer->getEmail()]
+        );
+        $this->addEvent('generic.sendemail', $email);
     }
 }

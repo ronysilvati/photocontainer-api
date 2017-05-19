@@ -42,12 +42,20 @@ abstract class Email
      * @param array $to
      * @param array $from
      */
-    public function __construct(array $data, string $file, string $subject, array $to, array $from)
+    public function __construct(array $data, string $file, string $subject, array $to, ?array $from = null)
     {
         $this->data = $data;
         $this->file = $file;
         $this->subject = $subject;
         $this->to = $to;
+
+        if (!$from) {
+            $from = [
+                'name' => getenv('PHOTOCONTAINER_EMAIL_NAME'),
+                'email' => getenv('PHOTOCONTAINER_EMAIL')
+            ];
+        }
+
         $this->from = $from;
     }
 

@@ -11,6 +11,7 @@ use PhotoContainer\PhotoContainer\Infrastructure\Web\WebApp;
 use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\ServerRequestInterface;
 
+
 class ApprovalContextBootstrap implements ContextBootstrap
 {
     public function wireSlimRoutes(WebApp $slimApp): WebApp
@@ -19,8 +20,10 @@ class ApprovalContextBootstrap implements ContextBootstrap
 
         $slimApp->app->post('/events/{event_id}/request/user/{publisher_id}', function (ServerRequestInterface $request, ResponseInterface $response, $args) use ($container) {
             try {
-                $action = new RequestDownload(new EloquentEventRepository($container['DatabaseProvider']), $container['EmailHelper']);
+                $action = new RequestDownload(new EloquentEventRepository($container['DatabaseProvider']));
                 $actionResponse = $action->handle($args['event_id'], $args['publisher_id']);
+
+                $container['EventEmitter']->addContextEvents($action->getEvents());
 
                 return $response->withJson($actionResponse, $actionResponse->getHttpStatus());
             } catch (\Exception $e) {
@@ -30,8 +33,10 @@ class ApprovalContextBootstrap implements ContextBootstrap
 
         $slimApp->app->put('/events/{event_id}/approval/user/{publisher_id}', function (ServerRequestInterface $request, ResponseInterface $response, $args) use ($container) {
             try {
-                $action = new ApprovalDownload(new EloquentEventRepository($container['DatabaseProvider']), $container['EmailHelper']);
+                $action = new ApprovalDownload(new EloquentEventRepository($container['DatabaseProvider']));
                 $actionResponse = $action->handle($args['event_id'], $args['publisher_id']);
+
+                $container['EventEmitter']->addContextEvents($action->getEvents());
 
                 return $response->withJson($actionResponse, $actionResponse->getHttpStatus());
             } catch (\Exception $e) {
@@ -41,8 +46,10 @@ class ApprovalContextBootstrap implements ContextBootstrap
 
         $slimApp->app->put('/events/{event_id}/disapproval/user/{publisher_id}', function (ServerRequestInterface $request, ResponseInterface $response, $args) use ($container) {
             try {
-                $action = new DisapprovalDownload(new EloquentEventRepository($container['DatabaseProvider']), $container['EmailHelper']);
+                $action = new DisapprovalDownload(new EloquentEventRepository($container['DatabaseProvider']));
                 $actionResponse = $action->handle($args['event_id'], $args['publisher_id']);
+
+                $container['EventEmitter']->addContextEvents($action->getEvents());
 
                 return $response->withJson($actionResponse, $actionResponse->getHttpStatus());
             } catch (\Exception $e) {
