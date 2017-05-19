@@ -2,23 +2,37 @@
 
 namespace PhotoContainer\PhotoContainer\Contexts\User\Action;
 
+use PhotoContainer\PhotoContainer\Contexts\User\Domain\Address;
+use PhotoContainer\PhotoContainer\Contexts\User\Domain\Details;
 use PhotoContainer\PhotoContainer\Contexts\User\Domain\PhotographerDetails;
+use PhotoContainer\PhotoContainer\Contexts\User\Domain\User;
 use PhotoContainer\PhotoContainer\Contexts\User\Domain\UserRepository;
 use PhotoContainer\PhotoContainer\Contexts\User\Response\UserResponse;
+use PhotoContainer\PhotoContainer\Infrastructure\Crypto\CryptoMethod;
 use PhotoContainer\PhotoContainer\Infrastructure\Web\DomainExceptionResponse;
 
 class UpdateUser
 {
+    /**
+     * @var UserRepository
+     */
     protected $userRepository;
 
-    public function __construct(UserRepository $userRepository)
+    /**
+     * @var CryptoMethod
+     */
+    private $cryptoMethod;
+
+    public function __construct(UserRepository $userRepository, CryptoMethod $cryptoMethod)
     {
         $this->userRepository = $userRepository;
+        $this->cryptoMethod = $cryptoMethod;
     }
 
-    public function handle(int $id, array $data, ?string $crypto)
+    public function handle(int $id, array $data)
     {
         try {
+            /** @var User $user */
             $user = $this->userRepository->findUser($id);
 
             if (isset($data['name'])) {
@@ -34,16 +48,7 @@ class UpdateUser
             }
 
             if (isset($data['address'])) {
-                $address = $user->getAddress();
-
-                $address->changeCountry($data['address']['country']);
-                $address->changeZipcode($data['address']['zipcode']);
-                $address->changeState($data['address']['state']);
-                $address->changeCity($data['address']['city']);
-                $address->changeNeighborhood($data['address']['neighborhood']);
-                $address->changeStreet($data['address']['street']);
-                $address->changeComplement($data['address']['complement']);
-
+                $address = $this->updateAddress($user->getAddress(), $data['address']);
                 $user->changeAddress($address);
             }
 
@@ -57,28 +62,12 @@ class UpdateUser
                 $user->getDetails()->changePhographerDetails($photographerDetails);
             }
 
-            if (isset($data['details']['facebook'])) {
-                $user->getDetails()->changeFacebook($data['details']['facebook']);
-            }
+            $details = $this->updateDetails($user->getDetails(), $data['details']);
+            $user->changeDetails($details);
 
-            if (isset($data['details']['pinterest'])) {
-                $user->getDetails()->changePinterest($data['details']['pinterest']);
-            }
-
-            if (isset($data['details']['instagram'])) {
-                $user->getDetails()->changeInstagram($data['details']['instagram']);
-            }
-
-            if (isset($data['details']['phone'])) {
-                $user->getDetails()->changePhone($data['details']['phone']);
-            }
-
-            if (isset($data['details']['birth'])) {
-                $user->getDetails()->changeBirth($data['details']['birth']);
-            }
-
-            if (isset($data['details']['site'])) {
-                $user->getDetails()->changeSite($data['details']['site']);
+            $crypto = null;
+            if (isset($data['password'])) {
+                $crypto = empty($data['password']) ? '' : $this->cryptoMethod->hash($data['password']);
             }
 
             $user = $this->userRepository->updateUser($user, $crypto);
@@ -86,5 +75,47 @@ class UpdateUser
         } catch (\Exception $e) {
             return new DomainExceptionResponse($e->getMessage());
         }
+    }
+
+    private function updateAddress(Address $address, array $dataAddress): Address
+    {
+        $address->changeCountry($dataAddress['country']);
+        $address->changeZipcode($dataAddress['zipcode']);
+        $address->changeState($dataAddress['state']);
+        $address->changeCity($dataAddress['city']);
+        $address->changeNeighborhood($dataAddress['neighborhood']);
+        $address->changeStreet($dataAddress['street']);
+        $address->changeComplement($dataAddress['complement']);
+
+        return $address;
+    }
+
+    private function updateDetails(Details $details, array $dataDetails): Details
+    {
+        if (isset($dataDetails['facebook'])) {
+            $details->changeFacebook($dataDetails['facebook']);
+        }
+
+        if (isset($dataDetails['pinterest'])) {
+            $details->changePinterest($dataDetails['pinterest']);
+        }
+
+        if (isset($dataDetails['instagram'])) {
+            $details->changeInstagram($dataDetails['instagram']);
+        }
+
+        if (isset($dataDetails['phone'])) {
+            $details->changePhone($dataDetails['phone']);
+        }
+
+        if (isset($dataDetails['birth'])) {
+            $details->changeBirth($dataDetails['birth']);
+        }
+
+        if (isset($dataDetails['site'])) {
+            $details->changeSite($dataDetails['site']);
+        }
+
+        return $details;
     }
 }
