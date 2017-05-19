@@ -15,29 +15,33 @@ class EventCollectionResponse implements \JsonSerializable
     public function jsonSerialize()
     {
         $out = ['total' => $this->collection['total'], 'result' => []];
-        foreach ($this->collection['result'] as $search) {
-            $data = [
-                "id" => $search->getId(),
-                "photographer" => $search->getPhotographer()->getName(),
-                "photographer_id" => $search->getPhotographer()->getId(),
-                "title" => $search->getTitle(),
-                "eventdate" => $search->getEventdate(),
-                "category" => $search->getCategories()[0]->getDescription(),
-                'thumb' => $search->getThumb() ? $search->getThumb() : "sem-foto.png",
-                'watermark' => $search->getWatermark() ? $search->getWatermark() : "sem-foto.png",
-                "photos" => $search->getPhotos(),
-                "likes" => $search->getLikes(),
-                "context" => $search->getSearchContext(),
-                "_links" => [
-                    "_self" => ['href' => '/events/'.$search->getId()],
-                ],
-            ];
 
-            if ($search->getPublisher()) {
-                $data['publisher_like'] = $search->isPublisherLike();
+        $formatData = function ($searchData) {
+            foreach ($searchData as $search) {
+                $data = [
+                    "id" => $search->getId(),
+                    "photographer" => $search->getPhotographer()->getName(),
+                    "photographer_id" => $search->getPhotographer()->getId(),
+                    "title" => $search->getTitle(),
+                    "eventdate" => $search->getEventdate(),
+                    "category" => $search->getCategories()[0]->getDescription(),
+                    'thumb' => $search->getThumb() ? $search->getThumb() : "sem-foto.png",
+                    'watermark' => $search->getWatermark() ? $search->getWatermark() : "sem-foto.png",
+                    "photos" => $search->getPhotos(),
+                    "likes" => $search->getLikes(),
+                    "context" => $search->getSearchContext(),
+                ];
+
+                if ($search->getPublisher()) {
+                    $data['publisher_like'] = $search->isPublisherLike();
+                }
+
+                yield $data;
             }
+        };
 
-            $out['result'][] = $data;
+        foreach ($formatData($this->collection['result']) as $search) {
+            $out['result'][] = $search;
         }
 
         return $out;
