@@ -54,6 +54,8 @@ class PhotoContextBootstrap implements ContextBootstrap
                     return $response->withJson($actionResponse->jsonSerialize(), $actionResponse->getHttpStatus());
                 }
 
+                $container['EventEmitter']->addContextEvents($action->getEvents());
+
                 $stream = new Stream($actionResponse->getFileToStream()); // create a stream instance for the response body
                 return $response->withHeader('Content-Type', 'application/force-download')
                     ->withHeader('Content-Type', 'application/octet-stream')
