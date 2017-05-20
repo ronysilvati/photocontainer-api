@@ -58,10 +58,11 @@ class DbalEventRepository implements EventRepository
 
             $where = empty($where) ? '' : " WHERE ".implode(" ", $where);
 
-            $stmt = $this->conn->prepare("SELECT id, user_id, name, title, eventdate, category_id, category, photos, likes as total 
+            $sql = "SELECT id, user_id, name, title, eventdate, category_id, category, photos, likes as total 
                       FROM {$table} {$where}
                   GROUP BY id, category_id, category
-                  ORDER BY id DESC");
+                  ORDER BY id DESC";
+            $stmt = $this->conn->prepare($sql);
             $stmt->execute();
 
             $fillData = function ($datasource) use ($publisher) {
@@ -74,7 +75,7 @@ class DbalEventRepository implements EventRepository
                     $search->changePhotos($item['photos']);
                     $search->changeLikes($item['likes'] == null ? 0 : $item['likes']);
 
-                    if ($item->photos > 0) {
+                    if ($item['photos'] > 0) {
                         $sql = "SELECT filename FROM photos WHERE event_id = {$item['id']}";
                         $stmt = $this->conn->prepare($sql);
                         $stmt->execute();
@@ -86,7 +87,7 @@ class DbalEventRepository implements EventRepository
                     if ($publisher) {
                         $search->changePublisher($publisher);
 
-                        if ($item->likes > 0) {
+                        if ($item['likes'] > 0) {
                             $sql = "SELECT count(*) as total 
                                   FROM event_favorites 
                                  WHERE event_id = {$item['id']} AND user_id = {$publisher->getId()}";
