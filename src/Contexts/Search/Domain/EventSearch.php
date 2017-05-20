@@ -229,18 +229,17 @@ class EventSearch
         $this->publisherLike = $publisherLike;
     }
 
-    public function getSearchContext(): string
+    public function getSearchContext(): ?string
     {
-        $out = "";
         if ($this->publisher) {
-            $out = "gallery_publisher";
+            return "gallery_publisher";
         }
 
         if ($this->photographer) {
-            $out = "gallery_photographer";
+            return "gallery_photographer";
         }
 
-        return $out;
+        return null;
     }
 
     /**
