@@ -26,6 +26,8 @@ class EventResponse implements \JsonSerializable
     {
         $out = [];
         if ($this->context == 'gallery_photos_publisher') {
+            $thumb = !empty($this->event->getPhotos()) ? $this->event->getPhotos()[0]['thumb'] : 'sem_foto.png';
+
             $out = [
                 'id' => $this->event->getId(),
                 'authorized' => $this->event->isApprovedForPublisher(),
@@ -33,7 +35,7 @@ class EventResponse implements \JsonSerializable
                 'photographer' => $this->event->getPhotographer(),
                 'category' => $this->event->getCategory(),
                 'photos' => $this->event->getPhotos(),
-                'thumb' => '/user/themes/photo-container-site/_temp/photos/1.jpg',
+                'thumb' => $thumb,
                 'context' => $this->context
             ];
         }
