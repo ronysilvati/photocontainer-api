@@ -39,11 +39,6 @@ class EloquentUserRepository implements UserRepository
             }
 
             $userModel = new UserModel();
-            if ($userModel->where("email", $user->getEmail())->first()) {
-                throw new \DomainException("O email nâo está disponível.");
-            }
-
-            $userModel = new UserModel();
             $userModel->name = $user->getName();
             $userModel->email = $user->getEmail();
             $userModel->password = $encryptedPwd;
@@ -87,6 +82,16 @@ class EloquentUserRepository implements UserRepository
             DB::rollback();
             throw new PersistenceException("Erro na criação do usuário!", $e->getMessage());
         }
+    }
+
+    public function isUserUnique(string $email): bool
+    {
+        return UserModel::where("email", $email)->count() === 0;
+    }
+
+    public function isUserSlotsAvailable(int $maxSlots): bool
+    {
+        return UserModel::count() <= $maxSlots;
     }
 
     public function findUser(?int $id = null, ?string $email = null): User
