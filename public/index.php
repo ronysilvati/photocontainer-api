@@ -124,6 +124,10 @@ $container['CryptoMethod'] = function ($c) {
     return new BcryptHashing();
 };
 
+$container['AtomicWorker'] = function ($c) {
+    return new EloquentAtomicWorker();
+};
+
 $container['EmailHelper'] = function ($c) {
     return new SwiftMailerHelper(Swift_SendmailTransport::newInstance('/usr/lib/sendmail -bs'));
 };
