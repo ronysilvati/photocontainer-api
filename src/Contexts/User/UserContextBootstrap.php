@@ -51,7 +51,8 @@ class UserContextBootstrap implements ContextBootstrap
 
             $action = new CreateUser(
                 new EloquentUserRepository($container['DatabaseProvider']),
-                $container['CryptoMethod']
+                $container['CryptoMethod'],
+                $container['AtomicWorker']
             );
 
             $actionResponse = $action->handle($user);
