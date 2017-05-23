@@ -39,20 +39,6 @@ class SlimApp implements WebApp
             "passthrough" => $conf["auth_whitelist"],
         ]));
 
-        $this->app->options('/{routes:.+}', function (ServerRequestInterface $req, ResponseInterface $res) {
-            return $res;
-        });
-
-        $this->app->add(function (ServerRequestInterface $req, ResponseInterface $res, $next) {
-            /** @var ResponseInterface $response */
-            $response = $next($req, $res);
-            return $response
-                ->withHeader('Access-Control-Allow-Origin', '*')
-                ->withHeader('Access-Control-Allow-Headers', 'X-Requested-With, Content-Type, Accept, Origin, Authorization, Cache-Control')
-                ->withHeader('Access-Control-Allow-Methods', 'GET, POST, PUT, DELETE, OPTIONS, PATCH')
-                ->withHeader('Access-Control-Max-Age', '604800');
-        });
-
         /** @var EvenementEventProvider $eventEmitter */
         $eventEmitter = $this->app->getContainer()->get('EventEmitter');
         $this->app->add(function (ServerRequestInterface $req, ResponseInterface $res, $next) use ($eventEmitter) {
@@ -63,6 +49,20 @@ class SlimApp implements WebApp
         });
 
         $this->addGenericEvents();
+
+        $this->app->options('/{routes:.+}', function (ServerRequestInterface $req, ResponseInterface $res) {
+            return $res;
+        });
+
+        $this->app->add(function (ServerRequestInterface $req, ResponseInterface $res, $next) {
+            /** @var ResponseInterface $response */
+            $response = $next($req, $res);
+            return $response
+                ->withHeader('Access-Control-Allow-Origin', '*')
+                ->withHeader('Access-Control-Allow-Headers', 'Access-Control-Allow-Origin, X-Requested-With, Content-Type, Accept, Origin, Authorization, Cache-Control')
+                ->withHeader('Access-Control-Allow-Methods', 'GET, POST, PUT, DELETE, OPTIONS, PATCH')
+                ->withHeader('Access-Control-Max-Age', '604800');
+        });
     }
 
     public function addGenericEvents()
