@@ -3,6 +3,7 @@
 namespace PhotoContainer\PhotoContainer\Contexts\User;
 
 use PhotoContainer\PhotoContainer\Contexts\User\Action\CreateUser;
+use PhotoContainer\PhotoContainer\Contexts\User\Action\FindFreeSlotForUser;
 use PhotoContainer\PhotoContainer\Contexts\User\Action\FindUser;
 use PhotoContainer\PhotoContainer\Contexts\User\Action\UpdateUser;
 use PhotoContainer\PhotoContainer\Contexts\User\Domain\Details;
@@ -28,6 +29,13 @@ class UserContextBootstrap implements ContextBootstrap
 
             $action = new FindUser(new EloquentUserRepository($container['DatabaseProvider']));
             $actionResponse = $action->handle($id, $email);
+
+            return $response->withJson($actionResponse, $actionResponse->getHttpStatus());
+        });
+
+        $slimApp->app->get('/users/satisfyPreConditions', function (ServerRequestInterface $request, ResponseInterface $response) use ($container) {
+            $action = new FindFreeSlotForUser(new EloquentUserRepository($container['DatabaseProvider']));
+            $actionResponse = $action->handle();
 
             return $response->withJson($actionResponse, $actionResponse->getHttpStatus());
         });
