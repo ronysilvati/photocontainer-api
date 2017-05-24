@@ -16,6 +16,7 @@ use PhotoContainer\PhotoContainer\Infrastructure\Web\Slim\SlimApp;
 use PhotoContainer\PhotoContainer\Contexts\Contact\ContactContextBootstrap;
 use PhotoContainer\PhotoContainer\Infrastructure\Event\EvenementEventProvider;
 use PhotoContainer\PhotoContainer\Infrastructure\Exception\PersistenceException;
+use PhotoContainer\PhotoContainer\Infrastructure\Persistence\EloquentAtomicWorker;
 
 define('ROOT_DIR', dirname(__DIR__));
 define('CACHE_DIR', ROOT_DIR.'/cache');
@@ -81,7 +82,12 @@ $container['errorHandler'] = function ($c) {
         $message = get_class($e) == PersistenceException::class ? $e->getInfraLayerError() : $e->getMessage();
 
         $c->logger->addCritical($message, $data);
-        return $c['response']->withJson(['message' => $e->getMessage()], 500);
+        return $response
+            ->withHeader('Access-Control-Allow-Origin', '*')
+            ->withHeader('Access-Control-Allow-Headers', 'Access-Control-Allow-Origin, X-Requested-With, Content-Type, Accept, Origin, Authorization, Cache-Control')
+            ->withHeader('Access-Control-Allow-Methods', 'GET, POST, PUT, DELETE, OPTIONS, PATCH')
+            ->withHeader('Access-Control-Max-Age', '604800')
+            ->withJson(['message' => $e->getMessage()], 500);
     };
 };
 
