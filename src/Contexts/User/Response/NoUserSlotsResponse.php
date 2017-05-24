@@ -9,7 +9,7 @@ class NoUserSlotsResponse implements \JsonSerializable
      */
     public function getHttpStatus(): int
     {
-        return 500;
+        return 300;
     }
 
     public function jsonSerialize(): array
