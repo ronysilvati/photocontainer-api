@@ -56,7 +56,7 @@ class Details implements Entity
 
     public function changeBlog(?string $blog)
     {
-        if (empty($blog)) {
+        if ($blog && empty($blog)) {
             throw new \DomainException("A URL do blog deve ser enviada!");
         }
 
