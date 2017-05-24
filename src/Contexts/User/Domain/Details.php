@@ -56,8 +56,8 @@ class Details implements Entity
 
     public function changeBlog(?string $blog)
     {
-        if ($blog && !$this->validateUrl($blog)) {
-            throw new \DomainException("A URL é inválida!");
+        if (empty($blog)) {
+            throw new \DomainException("A URL do blog deve ser enviada!");
         }
 
         $this->blog = $blog;
@@ -97,10 +97,6 @@ class Details implements Entity
      */
     public function changeInstagram(?string $instagram)
     {
-        if ($instagram && !$this->validateUrl($instagram)) {
-            throw new \DomainException("A URL do Instagram é inválida!");
-        }
-
         $this->instagram = $instagram;
     }
 
@@ -117,10 +113,6 @@ class Details implements Entity
      */
     public function changeFacebook(?string $facebook)
     {
-        if ($facebook && !$this->validateUrl($facebook)) {
-            throw new \DomainException("A URL do Facebook é inválida!");
-        }
-
         $this->facebook = $facebook;
     }
 
@@ -137,10 +129,6 @@ class Details implements Entity
      */
     public function changePinterest(?string $pinterest)
     {
-        if ($pinterest && !$this->validateUrl($pinterest)) {
-            throw new \DomainException("A URL do Pinterest é inválida!");
-        }
-
         $this->pinterest = $pinterest;
     }
 
@@ -157,10 +145,6 @@ class Details implements Entity
      */
     public function changeSite(?string $site)
     {
-        if ($site && !$this->validateUrl($site)) {
-            throw new \DomainException("A URL do Site é inválida!");
-        }
-
         $this->site = $site;
     }
 
