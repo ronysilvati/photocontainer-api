@@ -120,4 +120,14 @@ class FilesystemPhotoRepository implements PhotoRepository
     {
         // TODO: Implement findPublisher() method.
     }
+
+    public function setAsAlbumCover(string $guid): bool
+    {
+        // TODO: Implement setAsAlbumCover() method.
+    }
+
+    public function findEventPhotos(int $event_id): ?array
+    {
+        // TODO: Implement findEventPhotos() method.
+    }
 }
