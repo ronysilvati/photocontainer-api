@@ -196,6 +196,7 @@ class EloquentEventRepository implements EventRepository
                     "protected" => "/events/{$id}/protected/".$photo['filename'],
                     "filename" => $photo['filename'],
                     'context' => 'gallery_photos_photographer',
+                    'cover' => $photo['cover']
                 ];
             }
 
