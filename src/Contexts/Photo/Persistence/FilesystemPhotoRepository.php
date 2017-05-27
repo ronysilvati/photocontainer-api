@@ -7,15 +7,11 @@ use League\Flysystem\Adapter\Local;
 use League\Flysystem\Cached\CachedAdapter;
 use League\Flysystem\Cached\Storage\Memory as CacheStore;
 use League\Flysystem\Filesystem;
-use PhotoContainer\PhotoContainer\Contexts\Photo\Domain\Download;
-use PhotoContainer\PhotoContainer\Contexts\Photo\Domain\Like;
+use PhotoContainer\PhotoContainer\Contexts\Photo\Domain\FSPhotoRepository;
 use PhotoContainer\PhotoContainer\Contexts\Photo\Domain\Photo;
-use PhotoContainer\PhotoContainer\Contexts\Photo\Domain\Photographer;
-use PhotoContainer\PhotoContainer\Contexts\Photo\Domain\PhotoRepository;
-use PhotoContainer\PhotoContainer\Contexts\Photo\Domain\Publisher;
 use PhotoContainer\PhotoContainer\Infrastructure\Exception\PersistenceException;
 
-class FilesystemPhotoRepository implements PhotoRepository
+class FilesystemPhotoRepository implements FSPhotoRepository
 {
     private $filesystem;
 
@@ -89,45 +85,5 @@ class FilesystemPhotoRepository implements PhotoRepository
     public function rollback(Photo $photo)
     {
         //TODO: rollback
-    }
-
-    public function find(int $id): Photo
-    {
-        // TODO: Implement find() method.
-    }
-
-    public function download(Download $download): Download
-    {
-        // TODO: Implement download() method.
-    }
-
-    public function like(Like $like): Like
-    {
-        // TODO: Implement like() method.
-    }
-
-    public function dislike(Like $like): Like
-    {
-        // TODO: Implement dislike() method.
-    }
-
-    public function findPhotoOwner(Photo $photo): Photographer
-    {
-        // TODO: Implement findPhotoOwner() method.
-    }
-
-    public function findPublisher(int $publisher_id): Publisher
-    {
-        // TODO: Implement findPublisher() method.
-    }
-
-    public function setAsAlbumCover(string $guid): bool
-    {
-        // TODO: Implement setAsAlbumCover() method.
-    }
-
-    public function findEventPhotos(int $event_id): ?array
-    {
-        // TODO: Implement findEventPhotos() method.
     }
 }

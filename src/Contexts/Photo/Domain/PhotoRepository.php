@@ -20,7 +20,7 @@ interface PhotoRepository
 
     public function setAsAlbumCover(string $guid): bool;
 
-//    public function deletePhoto(string $guid): Photo;
-
+    public function deletePhoto(string $guid): Photo;
+    
     public function findEventPhotos(int $event_id): ?array;
 }
