@@ -76,11 +76,7 @@ class DbalEventRepository implements EventRepository
                     $search->changeLikes($item['likes'] == null ? 0 : $item['likes']);
 
                     if ($item['photos'] > 0) {
-                        $sql = "SELECT filename FROM photos WHERE event_id = {$item['id']}";
-                        $stmt = $this->conn->prepare($sql);
-                        $stmt->execute();
-                        $photo = $stmt->fetch();
-
+                        $photo = $this->findCoverPhoto($item['id']);
                         $search->changeFilename($photo['filename']);
                     }
 
@@ -112,6 +108,23 @@ class DbalEventRepository implements EventRepository
         } catch (\Exception $e) {
             throw new PersistenceException('Erro na pesquisa de eventos.', $e->getMessage());
         }
+    }
+
+    private function findCoverPhoto(int $event_id): array
+    {
+        $sql = "SELECT filename FROM photos WHERE cover = 1 AND event_id = {$event_id}";
+        $stmt = $this->conn->prepare($sql);
+        $stmt->execute();
+        $photo = $stmt->fetch();
+
+        if ($photo) {
+            return $photo;
+        }
+
+        $sql = "SELECT filename FROM photos WHERE event_id = {$event_id} LIMIT 1";
+        $stmt = $this->conn->prepare($sql);
+        $stmt->execute();
+        return $stmt->fetch();
     }
 
     public function findWaitingRequests(int $photographer_id): ?array
