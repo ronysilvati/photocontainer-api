@@ -70,10 +70,12 @@ class DbalEventRepository implements EventRepository
                     $category = new Category($item['category_id'], $item['category']);
                     $photographer = new Photographer($item['user_id'], $item['name']);
 
+                    $likes = $item['likes'] ?? 0;
+
                     $search = new EventSearch($item['id'], $photographer, $item['title'], [$category], null);
                     $search->changeEventdate($item['eventdate']);
                     $search->changePhotos($item['photos']);
-                    $search->changeLikes($item['likes'] == null ? 0 : $item['likes']);
+                    $search->changeLikes($likes);
 
                     if ($item['photos'] > 0) {
                         $photo = $this->findCoverPhoto($item['id']);
@@ -83,7 +85,7 @@ class DbalEventRepository implements EventRepository
                     if ($publisher) {
                         $search->changePublisher($publisher);
 
-                        if ($item['likes'] > 0) {
+                        if ($likes > 0) {
                             $sql = "SELECT count(*) as total 
                                   FROM event_favorites 
                                  WHERE event_id = {$item['id']} AND user_id = {$publisher->getId()}";
