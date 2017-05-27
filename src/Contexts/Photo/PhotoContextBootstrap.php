@@ -7,6 +7,7 @@ use PhotoContainer\PhotoContainer\Contexts\Photo\Action\DeletePhoto;
 use PhotoContainer\PhotoContainer\Contexts\Photo\Action\DislikePhoto;
 use PhotoContainer\PhotoContainer\Contexts\Photo\Action\DownloadPhoto;
 use PhotoContainer\PhotoContainer\Contexts\Photo\Action\LikePhoto;
+use PhotoContainer\PhotoContainer\Contexts\Photo\Action\SetPhotoAsCover;
 use PhotoContainer\PhotoContainer\Contexts\Photo\Domain\Like;
 use PhotoContainer\PhotoContainer\Contexts\Photo\Domain\Photo;
 use PhotoContainer\PhotoContainer\Contexts\Photo\Persistence\EloquentPhotoRepository;
@@ -84,6 +85,13 @@ class PhotoContextBootstrap implements ContextBootstrap
 
         $slimApp->app->delete('/photo/{guid}', function (ServerRequestInterface $request, ResponseInterface $response, $args) use ($container) {
             $action = new DeletePhoto(new EloquentPhotoRepository($container['DatabaseProvider']), new FilesystemPhotoRepository());
+            $actionResponse = $action->handle($args['guid']);
+
+            return $response->withJson($actionResponse, $actionResponse->getHttpStatus());
+        });
+
+        $slimApp->app->patch('/photo/cover/{guid}', function (ServerRequestInterface $request, ResponseInterface $response, $args) use ($container) {
+            $action = new SetPhotoAsCover(new EloquentPhotoRepository($container['DatabaseProvider']));
             $actionResponse = $action->handle($args['guid']);
 
             return $response->withJson($actionResponse, $actionResponse->getHttpStatus());

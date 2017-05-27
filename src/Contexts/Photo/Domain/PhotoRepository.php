@@ -18,5 +18,9 @@ interface PhotoRepository
 
     public function findPublisher(int $publisher_id): Publisher;
 
-//    public function deletePhoto(string $guid, int $photographer_id);
+    public function setAsAlbumCover(string $guid): bool;
+
+    public function deletePhoto(string $guid): Photo;
+
+    public function findEventPhotos(int $event_id): ?array;
 }

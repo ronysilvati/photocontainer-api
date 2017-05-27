@@ -4,6 +4,7 @@ namespace PhotoContainer\PhotoContainer\Contexts\Photo\Persistence;
 
 use Illuminate\Database\Capsule\Manager as DB;
 use League\Flysystem\Exception;
+use PhotoContainer\PhotoContainer\Contexts\Photo\Domain\boo;
 use PhotoContainer\PhotoContainer\Contexts\Photo\Domain\Download;
 use PhotoContainer\PhotoContainer\Contexts\Photo\Domain\Like;
 use PhotoContainer\PhotoContainer\Contexts\Photo\Domain\Photo;
@@ -173,6 +174,26 @@ class EloquentPhotoRepository implements PhotoRepository
             return PhotoModel::where('event_id', $event_id)->get()->toArray();
         } catch (\Exception $e) {
             throw new PersistenceException('Não foi possível encontrar fotos do evento.', $e->getMessage());
+        }
+    }
+
+    public function setAsAlbumCover(string $guid): bool
+    {
+        try {
+            $photoModel = PhotoModel::where('filename', 'like', "{$guid}.%")->first();
+
+            if ($photoModel->cover) {
+                return true;
+            }
+
+            PhotoModel::where('event_id', $photoModel->event_id)->update(['cover' => 0]);
+
+            $photoModel->cover = 1;
+            $photoModel->save();
+
+            return true;
+        } catch (\Exception $e) {
+            throw new PersistenceException('Não foi possível configurar a foto como capa.', $e->getMessage());
         }
     }
 }
