@@ -53,8 +53,8 @@ class CreateUser
      */
     public function handle(User $user)
     {
-        if (getenv('MAX_USER_SLOTS') !== false) {
-            return $this->featureLimitUserSlots(getenv('MAX_USER_SLOTS'));
+        if (getenv('MAX_USER_SLOTS') !== false && !$this->userRepository->isUserSlotsAvailable(getenv('MAX_USER_SLOTS'))) {
+            return new NoUserSlotsResponse();
         }
 
         if(!$this->userRepository->isUserUnique($user->getEmail())) {
@@ -69,17 +69,6 @@ class CreateUser
         $this->sendEmail($user);
 
         return new UserCreatedResponse($user);
-    }
-
-    /**
-     * @param int $maxUserSlots
-     * @return NoUserSlotsResponse
-     */
-    public function featureLimitUserSlots(int $maxUserSlots)
-    {
-        if(!$this->userRepository->isUserSlotsAvailable($maxUserSlots)) {
-            return new NoUserSlotsResponse();
-        }
     }
 
     /**
