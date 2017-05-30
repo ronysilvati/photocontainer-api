@@ -145,9 +145,9 @@ class User implements Entity
     }
 
     /**
-     * @return string
+     * @return null|string
      */
-    public function getPwd(): string
+    public function getPwd(): ?string
     {
         return $this->pwd;
     }

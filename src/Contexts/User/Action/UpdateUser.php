@@ -51,6 +51,10 @@ class UpdateUser
             $user->changeAddress($address);
         }
 
+        if (isset($data['details'])) {
+            $user->changeDetails($this->updateDetails($user->getDetails(), $data['details']));
+        }
+
         if ($data['profile_id'] == 2) {
             $photographerDetails = new PhotographerDetails(
                 isset($data['details']['bio']) ? $data['details']['bio'] : '',
@@ -61,15 +65,11 @@ class UpdateUser
             $user->getDetails()->changePhographerDetails($photographerDetails);
         }
 
-        $details = $this->updateDetails($user->getDetails(), $data['details']);
-        $user->changeDetails($details);
-
-        $crypto = null;
-        if (isset($data['password'])) {
-            $crypto = empty($data['password']) ? '' : $this->cryptoMethod->hash($data['password']);
+        if (isset($data['password']) && !empty($data['password'])) {
+            $user->changePwd($this->cryptoMethod->hash($data['password']));
         }
 
-        $user = $this->userRepository->updateUser($user, $crypto);
+        $user = $this->userRepository->updateUser($user);
         return new UserResponse($user);
     }
 

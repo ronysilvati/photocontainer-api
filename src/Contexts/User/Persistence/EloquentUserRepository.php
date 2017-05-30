@@ -159,7 +159,7 @@ class EloquentUserRepository implements UserRepository
         }
     }
 
-    public function updateUser(User $user, ?string $encryptedPwd)
+    public function updateUser(User $user)
     {
         try {
             DB::beginTransaction();
@@ -169,8 +169,8 @@ class EloquentUserRepository implements UserRepository
             $userModel->name = $user->getName();
             $userModel->email = $user->getEmail();
 
-            if ($encryptedPwd !== null) {
-                $user->changePwd($encryptedPwd);
+            if ($user->getPwd()) {
+                $userModel->password = $user->getPwd();
             }
 
             $userModel->save();
