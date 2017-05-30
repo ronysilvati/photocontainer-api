@@ -30,7 +30,9 @@ if (is_file('.env')) {
     $dotenv->overload();
 }
 
-$slimParams = [];
+$slimParams = [
+    'settings' => ['determineRouteBeforeAppMiddleware' => true]
+];
 if (!is_dir(CACHE_DIR)) {
     mkdir(CACHE_DIR, 0777);
 }
@@ -148,6 +150,16 @@ $container['EventEmitter'] = function () {
 
 $webApp = new SlimApp($app);
 
+$webApp
+    ->addContext(AuthContextBootstrap::class)
+    ->addContext(EventContextBootstrap::class)
+    ->addContext(UserContextBootstrap::class)
+    ->addContext(SearchContextBootstrap::class)
+    ->addContext(CepContextBootstrap::class)
+    ->addContext(PhotoContextBootstrap::class)
+    ->addContext(ApprovalContextBootstrap::class)
+    ->addContext(ContactContextBootstrap::class);
+
 $webApp->bootstrap(
     [
         'secret' => 'secret',
@@ -165,13 +177,5 @@ $webApp->bootstrap(
     ]
 );
 
-$webApp->addContext(new AuthContextBootstrap())
-    ->addContext(new EventContextBootstrap())
-    ->addContext(new UserContextBootstrap())
-    ->addContext(new SearchContextBootstrap())
-    ->addContext(new CepContextBootstrap())
-    ->addContext(new PhotoContextBootstrap())
-    ->addContext(new ApprovalContextBootstrap())
-    ->addContext(new ContactContextBootstrap());
 
 $webApp->app->run();
