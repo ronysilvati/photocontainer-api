@@ -12,6 +12,8 @@ use Psr\Http\Message\ServerRequestInterface;
 
 class ContactContextBootstrap implements ContextBootstrap
 {
+    CONST ResourceRoot = 'contact';
+
     CONST MAX_CONTACTS = 200;
     CONST CONTACTS_SEND_MAIL = 200;
 

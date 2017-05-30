@@ -27,6 +27,8 @@ use Psr\Http\Message\ServerRequestInterface;
 
 class EventContextBootstrap implements ContextBootstrap
 {
+    CONST ResourceRoot = 'events';
+
     public function wireSlimRoutes(WebApp $slimApp): WebApp
     {
         $container = $slimApp->app->getContainer();

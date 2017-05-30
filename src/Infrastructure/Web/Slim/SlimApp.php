@@ -20,6 +20,11 @@ class SlimApp implements WebApp
     public $app;
 
     /**
+     * @var array
+     */
+    private $contexts;
+
+    /**
      * SlimApp constructor.
      * @param App $app
      */
@@ -63,6 +68,23 @@ class SlimApp implements WebApp
                 ->withHeader('Access-Control-Allow-Methods', 'GET, POST, PUT, DELETE, OPTIONS, PATCH')
                 ->withHeader('Access-Control-Max-Age', '604800');
         });
+
+        $contexts = $this->contexts;
+        $app = $this;
+        $this->app->add(function (ServerRequestInterface $req, ResponseInterface $res, $next) use ($contexts, $app) {
+            $resourcePart = explode("/", $req->getUri()->getPath())[1];
+
+            foreach ($contexts as $classname) {
+                if ($classname::ResourceRoot === $resourcePart) {
+                    $contextObj = new $classname();
+                    $app->app = ($contextObj->wireSlimRoutes($app))->app;
+                }
+            }
+
+            /** @var ResponseInterface $response */
+            $response = $next($req, $res);
+            return $response;
+        });
     }
 
     public function addGenericEvents()
@@ -74,17 +96,18 @@ class SlimApp implements WebApp
     }
 
     /**
-     * @param ContextBootstrap $context
+     * @param string $contextClass
      * @return $this
      */
-    public function addContext(ContextBootstrap $context)
+    public function addContext(string $contextClass)
     {
-        $this->app = ($context->wireSlimRoutes($this))->app;
+        $this->contexts[] = $contextClass;
         return $this;
     }
 
     public function run()
     {
+        $this->app['Contexts'] = $this->contexts;
         $this->app->run();
     }
 }

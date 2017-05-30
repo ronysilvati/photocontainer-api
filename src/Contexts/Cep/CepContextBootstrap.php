@@ -16,6 +16,8 @@ use Psr\Http\Message\ServerRequestInterface;
 
 class CepContextBootstrap implements ContextBootstrap
 {
+    CONST ResourceRoot = 'location';
+
     public function wireSlimRoutes(WebApp $slimApp): WebApp
     {
         $container = $slimApp->app->getContainer();

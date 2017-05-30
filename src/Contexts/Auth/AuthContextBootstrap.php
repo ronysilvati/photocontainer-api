@@ -13,6 +13,8 @@ use Psr\Http\Message\ServerRequestInterface;
 
 class AuthContextBootstrap implements ContextBootstrap
 {
+    CONST ResourceRoot = 'login';
+
     public function wireSlimRoutes(WebApp $slimApp): WebApp
     {
         $container = $slimApp->app->getContainer();

@@ -28,6 +28,8 @@ use Psr\Http\Message\ServerRequestInterface;
 
 class SearchContextBootstrap implements ContextBootstrap
 {
+    CONST ResourceRoot = 'search';
+
     public function wireSlimRoutes(WebApp $slimApp): WebApp
     {
         $container = $slimApp->app->getContainer();

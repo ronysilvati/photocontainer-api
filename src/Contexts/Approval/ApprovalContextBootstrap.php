@@ -14,6 +14,8 @@ use Psr\Http\Message\ServerRequestInterface;
 
 class ApprovalContextBootstrap implements ContextBootstrap
 {
+    CONST ResourceRoot = 'events';
+
     public function wireSlimRoutes(WebApp $slimApp): WebApp
     {
         $container = $slimApp->app->getContainer();

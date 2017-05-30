@@ -17,6 +17,8 @@ use Psr\Http\Message\ServerRequestInterface;
 
 class UserContextBootstrap implements ContextBootstrap
 {
+    CONST ResourceRoot = 'users';
+
     public function wireSlimRoutes(WebApp $slimApp): WebApp
     {
         $container = $slimApp->app->getContainer();

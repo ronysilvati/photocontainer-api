@@ -21,6 +21,8 @@ use Slim\Http\Stream;
 
 class PhotoContextBootstrap implements ContextBootstrap
 {
+    CONST ResourceRoot = 'photo';
+
     public function wireSlimRoutes(WebApp $slimApp): WebApp
     {
         $container = $slimApp->app->getContainer();
