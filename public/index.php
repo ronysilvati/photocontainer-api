@@ -27,7 +27,7 @@ require '../vendor/autoload.php';
 
 if (is_file('.env')) {
     $dotenv = new Dotenv\Dotenv(__DIR__);
-    $dotenv->load();
+    $dotenv->overload();
 }
 
 $slimParams = [];
