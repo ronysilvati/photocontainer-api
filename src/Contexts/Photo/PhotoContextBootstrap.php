@@ -33,13 +33,23 @@ class PhotoContextBootstrap implements ContextBootstrap
             $event_id = (int) $data['event_id'];
 
             $allPhotos = [];
-            foreach ($_FILES as $photo) {
-                $allPhotos[] = new Photo(null, $event_id, $photo, $photo['tmp_name']);
+            foreach ($_FILES as $photos) {
+                foreach ($photos['tmp_name'] as $key => $name) {
+                    $filedata = [
+                        'error' => $photos['error'][$key],
+                        'name' => $photos['name'][$key],
+                        'size' => $photos['size'][$key],
+                        'tmp_name' => $photos['tmp_name'][$key],
+                        'type' => $photos['type'][$key],
+                    ];
+
+                    $allPhotos[] = new Photo(null, $event_id, $filedata, $name);
+                }
             }
 
             $actionResponse = $action->handle($allPhotos, $event_id);
 
-            return $response->withJson($actionResponse->jsonSerialize(), $actionResponse->getHttpStatus());
+            return $response->withJson($actionResponse, $actionResponse->getHttpStatus());
         });
 
         $slimApp->app->get('/photo/{photo_id}/user/{user_id}/download', function (ServerRequestInterface $request, ResponseInterface $response, $args) use ($container) {
