@@ -2,6 +2,7 @@
 
 namespace PhotoContainer\PhotoContainer\Contexts\Photo\Action;
 
+use PhotoContainer\PhotoContainer\Contexts\Photo\Domain\FSPhotoRepository;
 use PhotoContainer\PhotoContainer\Contexts\Photo\Domain\PhotoRepository;
 use PhotoContainer\PhotoContainer\Contexts\Photo\Response\DeletedPhotoResponse;
 use PhotoContainer\PhotoContainer\Infrastructure\Web\DomainExceptionResponse;
@@ -12,11 +13,11 @@ class DeletePhoto
     private $fsRepo;
 
     /**
-     * CreatePhoto constructor.
+     * DeletePhoto constructor.
      * @param PhotoRepository $dbRepo
-     * @param PhotoRepository $fsRepo
+     * @param FSPhotoRepository $fsRepo
      */
-    public function __construct(PhotoRepository $dbRepo, PhotoRepository $fsRepo)
+    public function __construct(PhotoRepository $dbRepo, FSPhotoRepository $fsRepo)
     {
         $this->dbRepo = $dbRepo;
         $this->fsRepo = $fsRepo;
