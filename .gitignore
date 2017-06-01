@@ -53,3 +53,6 @@ shared/events/*
 db/.data/
 *.phar
 cache/
+
+public/shared
+docker/.data
