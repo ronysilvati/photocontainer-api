@@ -7,6 +7,7 @@ use PhotoContainer\PhotoContainer\Contexts\User\Domain\Address;
 use PhotoContainer\PhotoContainer\Contexts\User\Domain\Details;
 use PhotoContainer\PhotoContainer\Contexts\User\Domain\PhotographerDetails;
 use PhotoContainer\PhotoContainer\Contexts\User\Domain\Profile;
+use PhotoContainer\PhotoContainer\Contexts\User\Domain\RequestPassword;
 use PhotoContainer\PhotoContainer\Contexts\User\Domain\User;
 use PhotoContainer\PhotoContainer\Contexts\User\Domain\UserRepository;
 use PhotoContainer\PhotoContainer\Infrastructure\Exception\PersistenceException;
@@ -15,6 +16,7 @@ use PhotoContainer\PhotoContainer\Infrastructure\Persistence\Eloquent\Detail;
 use PhotoContainer\PhotoContainer\Infrastructure\Persistence\Eloquent\User as UserModel;
 use PhotoContainer\PhotoContainer\Infrastructure\Persistence\Eloquent\UserProfile;
 use PhotoContainer\PhotoContainer\Infrastructure\Persistence\EloquentDatabaseProvider;
+use PhotoContainer\PhotoContainer\Infrastructure\Persistence\Eloquent\RequestPassword as RequestPasswordModel;
 
 
 class EloquentUserRepository implements UserRepository
@@ -235,6 +237,70 @@ class EloquentUserRepository implements UserRepository
         } catch (\Exception $e) {
             DB::rollback();
             throw new PersistenceException("Erro na criação do usuário!", $e->getMessage());
+        }
+    }
+
+    public function findPwdRequest(User $user): ?RequestPassword
+    {
+        try {
+            /** @var RequestPasswordModel $data */
+            $data = RequestPasswordModel::where('user_id', $user->getId())->first();
+
+            if (!$data) {
+                return null;
+            }
+
+            return new RequestPassword($data->id, $data->token, $data->user_id, new \DateTime($data->valid_until));
+        } catch (\Exception $e) {
+            throw new PersistenceException('Erro no carregamento de pedido de senha.', $e->getMessage());
+        }
+    }
+
+    public function createPwdRequest(RequestPassword $requestPassword): RequestPassword
+    {
+        try {
+            $reqPwd = new RequestPasswordModel();
+            $reqPwd->token = $requestPassword->getToken();
+            $reqPwd->user_id = $requestPassword->getUserId();
+            $reqPwd->valid_until = $requestPassword->getValidUntil();
+
+            $reqPwd->save();
+
+            return $requestPassword;
+        } catch (\Exception $e) {
+            throw new PersistenceException('Erro na criação de pedido de senha.', $e->getMessage());
+        }
+    }
+
+    public function removePwdRequest(RequestPassword $requestPassword): void
+    {
+        try {
+            /** @var RequestPasswordModel $req */
+            $req = RequestPasswordModel::find($requestPassword->getId());
+            $req->delete();
+        } catch (\Exception $e) {
+            throw new PersistenceException('Erro na criação de pedido de senha.', $e->getMessage());
+        }
+    }
+
+    public function getValidToken(string $token): ?RequestPassword
+    {
+        try {
+            /** @var RequestPasswordModel $data */
+            $data = RequestPasswordModel::where('token', $token)->first();
+            if (!$data) {
+                return null;
+            }
+
+            $reqPwd = new RequestPassword($data->id, $data->token, $data->user_id, new \DateTime($data->valid_until));
+
+            if (!$reqPwd->isActive()) {
+                return null;
+            }
+
+            return $reqPwd;
+        } catch (\Exception $e) {
+            throw new PersistenceException('Erro no carregamento de pedido de senha.', $e->getMessage());
         }
     }
 }

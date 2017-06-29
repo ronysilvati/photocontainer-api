@@ -5,12 +5,16 @@ namespace PhotoContainer\PhotoContainer\Contexts\User;
 use PhotoContainer\PhotoContainer\Contexts\User\Action\CreateUser;
 use PhotoContainer\PhotoContainer\Contexts\User\Action\FindFreeSlotForUser;
 use PhotoContainer\PhotoContainer\Contexts\User\Action\FindUser;
+use PhotoContainer\PhotoContainer\Contexts\User\Action\RequestPwdChange;
+use PhotoContainer\PhotoContainer\Contexts\User\Action\UpdatePassword;
 use PhotoContainer\PhotoContainer\Contexts\User\Action\UpdateUser;
 use PhotoContainer\PhotoContainer\Contexts\User\Domain\Details;
 use PhotoContainer\PhotoContainer\Contexts\User\Domain\Profile;
 use PhotoContainer\PhotoContainer\Contexts\User\Domain\User;
 use PhotoContainer\PhotoContainer\Contexts\User\Persistence\EloquentUserRepository;
 use PhotoContainer\PhotoContainer\Infrastructure\ContextBootstrap;
+use PhotoContainer\PhotoContainer\Infrastructure\Exception\DomainViolationException;
+use PhotoContainer\PhotoContainer\Infrastructure\Helper\TokenGeneratorHelper;
 use PhotoContainer\PhotoContainer\Infrastructure\Web\WebApp;
 use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\ServerRequestInterface;
@@ -78,6 +82,38 @@ class UserContextBootstrap implements ContextBootstrap
                 $container['CryptoMethod']
             );
             $actionResponse = $action->handle($args['id'], $data);
+
+            return $response->withJson($actionResponse, $actionResponse->getHttpStatus());
+        });
+
+
+        $slimApp->app->post('/users/requestPasswordChange', function (ServerRequestInterface $request, ResponseInterface $response) use ($container) {
+            $data = $request->getParsedBody();
+
+            if (!isset($data['email'])) {
+                throw new DomainViolationException('O email deve ser enviado.');
+            }
+
+            $action = new RequestPwdChange(
+                new EloquentUserRepository($container['DatabaseProvider']),
+                new TokenGeneratorHelper(),
+                $container['EmailHelper'],
+                $container['AtomicWorker']
+            );
+            $actionResponse = $action->handle($data['email']);
+
+            return $response->withJson($actionResponse, $actionResponse->getHttpStatus());
+        });
+
+        $slimApp->app->post('/users/updatePassword', function (ServerRequestInterface $request, ResponseInterface $response) use ($container) {
+            $data = $request->getParsedBody();
+
+            $action = new UpdatePassword(
+                new EloquentUserRepository($container['DatabaseProvider']),
+                $container['CryptoMethod'],
+                $container['AtomicWorker']
+            );
+            $actionResponse = $action->handle($data['token'], $data['password']);
 
             return $response->withJson($actionResponse, $actionResponse->getHttpStatus());
         });

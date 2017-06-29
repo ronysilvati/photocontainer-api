@@ -1,0 +1,107 @@
+<?php
+
+namespace PhotoContainer\PhotoContainer\Contexts\User\Action;
+
+use PhotoContainer\PhotoContainer\Contexts\User\Domain\RequestPassword;
+use PhotoContainer\PhotoContainer\Contexts\User\Domain\User;
+use PhotoContainer\PhotoContainer\Contexts\User\Domain\UserRepository;
+use PhotoContainer\PhotoContainer\Contexts\User\Email\PasswordRequestEmail;
+use PhotoContainer\PhotoContainer\Contexts\User\Response\RequestPasswordCreated;
+use PhotoContainer\PhotoContainer\Infrastructure\Email\EmailHelper;
+use PhotoContainer\PhotoContainer\Infrastructure\Exception\DomainViolationException;
+use PhotoContainer\PhotoContainer\Infrastructure\Helper\TokenGeneratorHelper;
+use PhotoContainer\PhotoContainer\Infrastructure\Persistence\AtomicWorker;
+
+class RequestPwdChange
+{
+    /**
+     * @var UserRepository
+     */
+    protected $userRepository;
+
+    /**
+     * @var TokenGeneratorHelper
+     */
+    private $tokenGeneratorHelper;
+
+    /**
+     * @var EmailHelper
+     */
+    private $emailHelper;
+
+    /**
+     * @var AtomicWorker
+     */
+    private $atomicWorker;
+
+    /**
+     * RequestPwdChange constructor.
+     * @param UserRepository $userRepository
+     * @param TokenGeneratorHelper $tokenGeneratorHelper
+     * @param EmailHelper $emailHelper
+     */
+    public function __construct(
+        UserRepository $userRepository,
+        TokenGeneratorHelper $tokenGeneratorHelper,
+        EmailHelper $emailHelper,
+        AtomicWorker $atomicWorker
+    )
+    {
+        $this->userRepository = $userRepository;
+        $this->tokenGeneratorHelper = $tokenGeneratorHelper;
+        $this->emailHelper = $emailHelper;
+        $this->atomicWorker = $atomicWorker;
+    }
+
+    /**
+     * @param string $email
+     * @return RequestPasswordCreated
+     * @throws DomainViolationException
+     */
+    public function handle(string $email)
+    {
+        $user = $this->userRepository->findUser(null, $email);
+        if(!$user) {
+            throw new DomainViolationException('O email não foi encontrado na base de usuários.');
+        }
+
+        $pwdReq = $this->userRepository->findPwdRequest($user);
+
+        if ($pwdReq && $pwdReq->isActive()) {
+            $this->userRepository->removePwdRequest($pwdReq);
+        }
+
+        $reqPwd = $this->atomicWorker->execute(function() use ($user) {
+            $reqPwd = new RequestPassword(null, $this->tokenGeneratorHelper->generate(), $user->getId());
+            $this->userRepository->createPwdRequest($reqPwd);
+
+            $this->sendEmail($user, $reqPwd);
+            return $reqPwd;
+        }, function() {
+            throw new \RuntimeException('Falha no pedido de troca de senha.');
+        });
+
+        return new RequestPasswordCreated($reqPwd);
+    }
+
+    /**
+     * @param User $user
+     * @param RequestPassword $reqPwd
+     */
+    private function sendEmail(User $user, RequestPassword $reqPwd)
+    {
+        $data = [
+            '{NAME}' => $user->getName(),
+            '{TOKEN}' => $reqPwd->getToken(),
+            '{VALID_UNTIL}' => $reqPwd->getValidUntil()->format('d/m/Y H:i'),
+            '{CREATION_DATE}' => date('d/m/y H:i:s'),
+        ];
+
+        $email = new PasswordRequestEmail(
+            $data,
+            ['name' => getenv('ADMIN_EMAIL_NAME'), 'email' => getenv('ADMIN_EMAIL')]
+        );
+
+        $this->emailHelper->send($email);
+    }
+}

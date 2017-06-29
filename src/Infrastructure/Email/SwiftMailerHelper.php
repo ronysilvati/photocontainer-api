@@ -2,6 +2,8 @@
 
 namespace PhotoContainer\PhotoContainer\Infrastructure\Email;
 
+use Whoops\Example\Exception;
+
 class SwiftMailerHelper implements EmailHelper
 {
     private $transport;
@@ -18,11 +20,11 @@ class SwiftMailerHelper implements EmailHelper
 
             // Create an instance of the plugin and register it
             $plugin = new \Swift_Plugins_DecoratorPlugin($replacements);
-            $mailer = \Swift_Mailer::newInstance($this->transport);
+            $mailer = new \Swift_Mailer($this->transport);
             $mailer->registerPlugin($plugin);
 
             // Create the message
-            $message = \Swift_Message::newInstance();
+            $message = new \Swift_Message();
             $message->setSubject($email->getSubject());
             $message->setBody($email->getTemplate(), 'text/html');
             $message->setFrom($email->getFrom()['email'], $email->getFrom()['name']);
