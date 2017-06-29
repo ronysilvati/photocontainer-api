@@ -75,7 +75,7 @@ class RequestPwdChange
             $reqPwd = new RequestPassword(null, $this->tokenGeneratorHelper->generate(), $user->getId());
             $this->userRepository->createPwdRequest($reqPwd);
 
-//            $this->sendEmail($user, $reqPwd);
+            $this->sendEmail($user, $reqPwd);
             return $reqPwd;
         }, function() {
             throw new \RuntimeException('Falha no pedido de troca de senha.');
