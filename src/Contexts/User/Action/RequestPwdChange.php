@@ -92,7 +92,7 @@ class RequestPwdChange
     {
         $data = [
             '{NAME}' => $user->getName(),
-            '{TOKEN}' => $reqPwd->getToken(),
+            '{TOKEN}' => getenv('SITE_DOMAIN').'/password-update?token='.$reqPwd->getToken(),
             '{VALID_UNTIL}' => $reqPwd->getValidUntil()->format('d/m/Y H:i'),
             '{CREATION_DATE}' => date('d/m/y H:i:s'),
         ];
