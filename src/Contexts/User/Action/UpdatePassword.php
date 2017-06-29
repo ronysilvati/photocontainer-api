@@ -7,6 +7,7 @@ use PhotoContainer\PhotoContainer\Contexts\User\Response\UserResponse;
 use PhotoContainer\PhotoContainer\Infrastructure\Crypto\CryptoMethod;
 use PhotoContainer\PhotoContainer\Infrastructure\Exception\DomainViolationException;
 use PhotoContainer\PhotoContainer\Infrastructure\Persistence\AtomicWorker;
+use PhotoContainer\PhotoContainer\Infrastructure\Web\DomainExceptionResponse;
 
 class UpdatePassword
 {
@@ -45,11 +46,15 @@ class UpdatePassword
     /**
      * @param string $token
      * @param string $password
-     * @return UserResponse
+     * @return UserResponse|DomainExceptionResponse
      * @throws DomainViolationException
      */
     public function handle(string $token, string $password)
     {
+        if (empty($password)) {
+            return new DomainExceptionResponse('A senha deve possuir um valor.');
+        }
+
         $reqPwd = $this->userRepository->getValidToken($token);
         if(!$reqPwd) {
             throw new DomainViolationException('O seu pedido para troca de senha está inválido. Favor requisitar novamente.');

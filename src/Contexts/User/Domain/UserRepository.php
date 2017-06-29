@@ -6,7 +6,7 @@ interface UserRepository
 {
     public function createUser(User $user, ?string $encryptedPwd);
     public function updateUser(User $user);
-    public function findUser(?int $id = null, ?string $email = null): User;
+    public function findUser(?int $id = null, ?string $email = null): ?User;
     public function isUserUnique(string $email): bool;
     public function isUserSlotsAvailable(int $maxSlots): bool;
     public function findPwdRequest(User $user): ?RequestPassword;

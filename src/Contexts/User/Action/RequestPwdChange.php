@@ -11,6 +11,7 @@ use PhotoContainer\PhotoContainer\Infrastructure\Email\EmailHelper;
 use PhotoContainer\PhotoContainer\Infrastructure\Exception\DomainViolationException;
 use PhotoContainer\PhotoContainer\Infrastructure\Helper\TokenGeneratorHelper;
 use PhotoContainer\PhotoContainer\Infrastructure\Persistence\AtomicWorker;
+use PhotoContainer\PhotoContainer\Infrastructure\Web\DomainExceptionResponse;
 
 class RequestPwdChange
 {
@@ -55,14 +56,13 @@ class RequestPwdChange
 
     /**
      * @param string $email
-     * @return RequestPasswordCreated
-     * @throws DomainViolationException
+     * @return RequestPasswordCreated|DomainExceptionResponse
      */
     public function handle(string $email)
     {
         $user = $this->userRepository->findUser(null, $email);
         if(!$user) {
-            throw new DomainViolationException('O email não foi encontrado na base de usuários.');
+            return new DomainExceptionResponse('O email não foi encontrado na base de usuários.');
         }
 
         $pwdReq = $this->userRepository->findPwdRequest($user);
@@ -75,7 +75,7 @@ class RequestPwdChange
             $reqPwd = new RequestPassword(null, $this->tokenGeneratorHelper->generate(), $user->getId());
             $this->userRepository->createPwdRequest($reqPwd);
 
-            $this->sendEmail($user, $reqPwd);
+//            $this->sendEmail($user, $reqPwd);
             return $reqPwd;
         }, function() {
             throw new \RuntimeException('Falha no pedido de troca de senha.');

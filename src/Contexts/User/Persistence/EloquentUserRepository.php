@@ -96,10 +96,14 @@ class EloquentUserRepository implements UserRepository
         return UserModel::count() <= $maxSlots;
     }
 
-    public function findUser(?int $id = null, ?string $email = null): User
+    public function findUser(?int $id = null, ?string $email = null): ?User
     {
         try {
             $userModel = $id ? UserModel::find($id) : UserModel::where('email', $email)->first();
+
+            if (!$userModel) {
+                return null;
+            }
 
             $userModel->load('detail', 'userprofile', 'address');
             $userData = $userModel->toArray();
