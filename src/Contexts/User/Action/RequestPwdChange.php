@@ -99,7 +99,7 @@ class RequestPwdChange
 
         $email = new PasswordRequestEmail(
             $data,
-            ['name' => getenv('ADMIN_EMAIL_NAME'), 'email' => getenv('ADMIN_EMAIL')]
+            ['name' => $user->getName(), 'email' => $user->getEmail()]
         );
 
         $this->emailHelper->send($email);
