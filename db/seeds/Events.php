@@ -22,8 +22,8 @@ class Events extends AbstractSeed
         (2, 1, 'Abraham', 'Rosita', '2017-04-21 00:00:00', 'Abraham e Rosita', 'Descrição.', 1, 1, 1, 1, 1, '2017-03-25 21:55:59', '2017-03-25 21:53:52');
 
         INSERT INTO `event_categories` (`id`, `event_id`, `category_id`, `created_at`, `updated_at`) VALUES
-        (1, 1, 1, '2017-03-25 21:53:46', '2017-03-25 21:53:46'),
-        (2, 2, 1, '2017-03-25 21:53:52', '2017-03-25 21:53:52');
+        (1, 2, 2, '2017-03-25 21:53:46', '2017-03-25 21:53:46'),
+        (2, 2, 3, '2017-03-25 21:53:52', '2017-03-25 21:53:52');
 
         INSERT INTO `event_tags` (`id`, `event_id`, `tag_id`, `created_at`, `updated_at`) VALUES
         (1, 1, 70, '2017-03-25 21:53:47', '2017-03-25 21:53:47'),
