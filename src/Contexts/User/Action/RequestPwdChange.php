@@ -67,7 +67,7 @@ class RequestPwdChange
 
         $pwdReq = $this->userRepository->findPwdRequest($user);
 
-        if ($pwdReq && $pwdReq->isActive()) {
+        if ($pwdReq) {
             $this->userRepository->removePwdRequest($pwdReq);
         }
 
