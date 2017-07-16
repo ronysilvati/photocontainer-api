@@ -11,8 +11,9 @@ class UserResponse implements \JsonSerializable
     private $detailReference;
     private $httpStatus = 200;
     private $user;
+    private $profileImageUri;
 
-    public function __construct(User $user)
+    public function __construct(User $user, ?string $profileImageUri)
     {
         $this->user = $user;
         $this->selfReference = "users/{$this->user->getId()}";
@@ -24,6 +25,8 @@ class UserResponse implements \JsonSerializable
         if ($user->getAddress() && $user->getAddress()->getId() > 0) {
             $this->addressReference = "details/{$user->getAddress()->getId()}";
         }
+
+        $this->profileImageUri = $profileImageUri;
     }
 
     /**
@@ -45,6 +48,10 @@ class UserResponse implements \JsonSerializable
             ],
             'profile' => ['profile_id' => $this->user->getProfile()->getProfileId()],
         ];
+
+        if ($this->profileImageUri) {
+            $out['profile_image'] = $this->profileImageUri;
+        }
 
         if ($this->detailReference) {
             $out['_links']['details'] = ['href' => $this->detailReference];
