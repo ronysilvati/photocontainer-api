@@ -25,9 +25,9 @@ class EloquentAtomicWorker implements AtomicWorker
 
             if ($onException) {
                 $onException($e);
+            } else {
+                throw $e;
             }
-
-            throw $e;
         }
     }
 }
