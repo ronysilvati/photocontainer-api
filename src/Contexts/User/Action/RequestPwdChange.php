@@ -68,10 +68,13 @@ class RequestPwdChange
         $pwdReq = $this->userRepository->findPwdRequest($user);
 
         if ($pwdReq) {
-            $this->userRepository->removePwdRequest($pwdReq);
+            if (!$pwdReq->isActive()) {
+                $this->userRepository->removePwdRequest($pwdReq);
+            }
+            return new RequestPasswordCreated($pwdReq);
         }
 
-        $reqPwd = $this->atomicWorker->execute(function() use ($user) {
+        $pwdReq = $this->atomicWorker->execute(function() use ($user) {
             $reqPwd = new RequestPassword(null, $this->tokenGeneratorHelper->generate(), $user->getId());
             $this->userRepository->createPwdRequest($reqPwd);
 
@@ -81,7 +84,7 @@ class RequestPwdChange
             throw new \RuntimeException('Falha no pedido de troca de senha.');
         });
 
-        return new RequestPasswordCreated($reqPwd);
+        return new RequestPasswordCreated($pwdReq);
     }
 
     /**
