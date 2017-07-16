@@ -2,17 +2,15 @@
 
 namespace PhotoContainer\PhotoContainer\Contexts\User\Action;
 
-use PhotoContainer\PhotoContainer\Contexts\User\Domain\Profile;
-use PhotoContainer\PhotoContainer\Contexts\User\Domain\User;
+
+
 use PhotoContainer\PhotoContainer\Contexts\User\Domain\UserRepository;
-use PhotoContainer\PhotoContainer\Contexts\User\Email\NewUserEmail;
+
 use PhotoContainer\PhotoContainer\Contexts\User\Response\HasSlotsResponse;
 use PhotoContainer\PhotoContainer\Contexts\User\Response\NoUserSlotsResponse;
-use PhotoContainer\PhotoContainer\Contexts\User\Response\UserCreatedResponse;
-use PhotoContainer\PhotoContainer\Infrastructure\Crypto\CryptoMethod;
+
+
 use PhotoContainer\PhotoContainer\Infrastructure\Event\EventGeneratorTrait;
-use PhotoContainer\PhotoContainer\Infrastructure\Exception\DomainViolationException;
-use PhotoContainer\PhotoContainer\Infrastructure\Persistence\AtomicWorker;
 
 
 class FindFreeSlotForUser

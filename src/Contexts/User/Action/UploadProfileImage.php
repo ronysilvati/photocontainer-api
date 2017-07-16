@@ -2,13 +2,13 @@
 
 namespace PhotoContainer\PhotoContainer\Contexts\User\Action;
 
-use PhotoContainer\PhotoContainer\Contexts\User\Domain\ProfileImage;
+
 use PhotoContainer\PhotoContainer\Contexts\User\Domain\UserRepository;
 use PhotoContainer\PhotoContainer\Contexts\User\Response\ProfileImageUploaded;
 use PhotoContainer\PhotoContainer\Infrastructure\Exception\DomainViolationException;
 use PhotoContainer\PhotoContainer\Infrastructure\Helper\ImageHelper;
 use PhotoContainer\PhotoContainer\Infrastructure\Helper\ProfileImageHelper;
-use Ramsey\Uuid\Uuid;
+
 
 class UploadProfileImage
 {

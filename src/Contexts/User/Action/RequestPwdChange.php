@@ -8,7 +8,7 @@ use PhotoContainer\PhotoContainer\Contexts\User\Domain\UserRepository;
 use PhotoContainer\PhotoContainer\Contexts\User\Email\PasswordRequestEmail;
 use PhotoContainer\PhotoContainer\Contexts\User\Response\RequestPasswordCreated;
 use PhotoContainer\PhotoContainer\Infrastructure\Email\EmailHelper;
-use PhotoContainer\PhotoContainer\Infrastructure\Exception\DomainViolationException;
+
 use PhotoContainer\PhotoContainer\Infrastructure\Helper\TokenGeneratorHelper;
 use PhotoContainer\PhotoContainer\Infrastructure\Persistence\AtomicWorker;
 use PhotoContainer\PhotoContainer\Infrastructure\Web\DomainExceptionResponse;

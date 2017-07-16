@@ -4,7 +4,6 @@ namespace PhotoContainer\PhotoContainer\Contexts\Photo\Persistence;
 
 use Illuminate\Database\Capsule\Manager as DB;
 use League\Flysystem\Exception;
-use PhotoContainer\PhotoContainer\Contexts\Photo\Domain\boo;
 use PhotoContainer\PhotoContainer\Contexts\Photo\Domain\Download;
 use PhotoContainer\PhotoContainer\Contexts\Photo\Domain\Like;
 use PhotoContainer\PhotoContainer\Contexts\Photo\Domain\Photo;

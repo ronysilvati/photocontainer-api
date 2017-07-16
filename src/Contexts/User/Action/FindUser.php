@@ -5,7 +5,7 @@ namespace PhotoContainer\PhotoContainer\Contexts\User\Action;
 use PhotoContainer\PhotoContainer\Contexts\User\Domain\UserRepository;
 use PhotoContainer\PhotoContainer\Contexts\User\Response\UserResponse;
 use PhotoContainer\PhotoContainer\Infrastructure\Helper\ProfileImageHelper;
-use PhotoContainer\PhotoContainer\Infrastructure\Helper\TokenGeneratorHelper;
+
 use PhotoContainer\PhotoContainer\Infrastructure\Web\DomainExceptionResponse;
 
 class FindUser

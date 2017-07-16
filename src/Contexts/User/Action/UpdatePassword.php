@@ -69,7 +69,7 @@ class UpdatePassword
             $this->userRepository->removePwdRequest($reqPwd);
         });
 
-        $user = $this->userRepository->updateUser($user);
+        $this->userRepository->updateUser($user);
         return new PasswordUpdatedResponse();
     }
 }
