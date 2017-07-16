@@ -71,6 +71,7 @@ class RequestPwdChange
             if (!$pwdReq->isActive()) {
                 $this->userRepository->removePwdRequest($pwdReq);
             } else {
+                $this->sendEmail($user, $pwdReq);
                 return new RequestPasswordCreated($pwdReq);
             }
         }
