@@ -62,6 +62,9 @@ class UploadProfileImage
         );
 
         $name = $this->profileImageHelper->generateName($user_id, $file);
+
+        $this->profileImageHelper->removeOldVersions($user_id);
+
         $result = $this->imageHelper->createImage($file['tmp_name'], $name);
 
         if (!$result) {
