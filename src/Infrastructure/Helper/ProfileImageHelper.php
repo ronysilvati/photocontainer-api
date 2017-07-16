@@ -29,7 +29,7 @@ class ProfileImageHelper
         return $user_id.'-'.Uuid::uuid4()->toString();
     }
 
-    private function removeOldVersions($user_id)
+    public function removeOldVersions($user_id)
     {
         $list = glob(getenv('SHARED_PATH').'/profile_images/'.$user_id.'-*.*');
         if (empty($list)) {
