@@ -19,7 +19,9 @@
         "doctrine/dbal": "^2.5",
         "evenement/evenement": "^2.0",
         "monolog/monolog": "^1.22",
-        "zeuxisoo/slim-whoops": "0.6.*"
+        "zeuxisoo/slim-whoops": "0.6.*",
+        "tuupola/cors-middleware": "*",
+        "zendframework/zend-cache": "^2.7"
     },
 
     "autoload": {
