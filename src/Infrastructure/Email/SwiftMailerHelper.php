@@ -2,8 +2,6 @@
 
 namespace PhotoContainer\PhotoContainer\Infrastructure\Email;
 
-use Whoops\Example\Exception;
-
 class SwiftMailerHelper implements EmailHelper
 {
     private $transport;
