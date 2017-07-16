@@ -24,7 +24,7 @@ class EloquentAtomicWorker implements AtomicWorker
             DB::rollback();
 
             if ($onException) {
-                $onException();
+                $onException($e);
             }
 
             throw $e;

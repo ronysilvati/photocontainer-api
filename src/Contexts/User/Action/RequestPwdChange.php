@@ -77,7 +77,7 @@ class RequestPwdChange
 
             $this->sendEmail($user, $reqPwd);
             return $reqPwd;
-        }, function() {
+        }, function($e) {
             throw new \RuntimeException('Falha no pedido de troca de senha.');
         });
 
