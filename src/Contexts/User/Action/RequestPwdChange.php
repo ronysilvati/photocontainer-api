@@ -70,8 +70,9 @@ class RequestPwdChange
         if ($pwdReq) {
             if (!$pwdReq->isActive()) {
                 $this->userRepository->removePwdRequest($pwdReq);
+            } else {
+                return new RequestPasswordCreated($pwdReq);
             }
-            return new RequestPasswordCreated($pwdReq);
         }
 
         $pwdReq = $this->atomicWorker->execute(function() use ($user) {
