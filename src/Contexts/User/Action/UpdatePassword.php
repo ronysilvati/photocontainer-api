@@ -3,7 +3,7 @@
 namespace PhotoContainer\PhotoContainer\Contexts\User\Action;
 
 use PhotoContainer\PhotoContainer\Contexts\User\Domain\UserRepository;
-use PhotoContainer\PhotoContainer\Contexts\User\Response\UserResponse;
+use PhotoContainer\PhotoContainer\Contexts\User\Response\PasswordUpdatedResponse;
 use PhotoContainer\PhotoContainer\Infrastructure\Crypto\CryptoMethod;
 use PhotoContainer\PhotoContainer\Infrastructure\Exception\DomainViolationException;
 use PhotoContainer\PhotoContainer\Infrastructure\Persistence\AtomicWorker;
@@ -46,7 +46,7 @@ class UpdatePassword
     /**
      * @param string $token
      * @param string $password
-     * @return UserResponse|DomainExceptionResponse
+     * @return PasswordUpdatedResponse|DomainExceptionResponse
      * @throws DomainViolationException
      */
     public function handle(string $token, string $password)
@@ -70,6 +70,6 @@ class UpdatePassword
         });
 
         $user = $this->userRepository->updateUser($user);
-        return new UserResponse($user);
+        return new PasswordUpdatedResponse();
     }
 }
