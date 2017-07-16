@@ -10,4 +10,9 @@ class TokenGeneratorHelper
     {
         return Uuid::uuid4()->toString();
     }
+
+    public function generateByString(string $string): string
+    {
+        return Uuid::uuid5(Uuid::NAMESPACE_DNS, $string)->toString();
+    }
 }
