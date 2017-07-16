@@ -80,7 +80,7 @@ class CreateUser
             '{NAME}' => $user->getName(),
             '{EMAIL}' => $user->getEmail(),
             '{PROFILE}' => $user->getProfile()->getProfileId() === Profile::PHOTOGRAPHER ? 'Fotografo' : 'Publisher',
-            '{CREATIONDATE}' => date('D/m/y H:i:s')
+            '{CREATIONDATE}' => date('d/m/y H:i:s')
         ];
 
         $email = new NewUserEmail(
