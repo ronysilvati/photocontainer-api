@@ -13,7 +13,7 @@ class UserResponse implements \JsonSerializable
     private $user;
     private $profileImageUri;
 
-    public function __construct(User $user, ?string $profileImageUri)
+    public function __construct(User $user, ?string $profileImageUri = null)
     {
         $this->user = $user;
         $this->selfReference = "users/{$this->user->getId()}";
