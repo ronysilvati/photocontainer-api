@@ -46,12 +46,16 @@ class DbalEventRepository implements EventRepository
             $allTags = $search->getTags();
             if ($allTags) {
                 $tags = [];
+                $tagCategory = [];
                 /** @var Tag $tag */
-                foreach ($allTags as $tag) {
-                    $tags[] = "'(?=.*".$tag->getId().")'";
+                foreach ($allTags as $tagCategory) {
+                    foreach ($tagCategory as $tag) {
+                        $tags[] = "'(?=.*".$tag->getId().")'";
+                    }
+                    $tagCategory[] = implode('', $tags);
                 }
 
-                $where[] = 'all_tags REGEXP '.implode('', $tags);
+                $where[] = 'all_tags REGEXP '.implode(' OR ', $tagCategory);
             }
 
             $publisher = $search->getPublisher();
