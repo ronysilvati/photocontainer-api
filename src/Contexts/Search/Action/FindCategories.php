@@ -2,13 +2,14 @@
 
 namespace PhotoContainer\PhotoContainer\Contexts\Search\Action;
 
-
 use PhotoContainer\PhotoContainer\Contexts\Search\Domain\CategoryRepository;
 use PhotoContainer\PhotoContainer\Contexts\Search\Response\CategoryCollectionResponse;
 
-
 class FindCategories
 {
+    /**
+     * @var CategoryRepository
+     */
     protected $repository;
 
     public function __construct(CategoryRepository $repository)

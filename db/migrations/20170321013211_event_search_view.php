@@ -15,8 +15,8 @@ class EventSearchView extends AbstractMigration
                    title,
                    date(eventdate) as eventdate,
                    c.id as category_id,
-                   GROUP_CONCAT(c.description) as category,
-                   t.id as tag_id,
+                   c.description as category,
+                   GROUP_CONCAT(t.id) as all_tags,
                    (SELECT COUNT(id) as total FROM photos WHERE e.id = event_id) as photos,
                    (SELECT COUNT(pf.id) as total FROM photo_favorites pf INNER JOIN photos p on pf.photo_id = p.id  WHERE e.id = event_id) as likes
             FROM users as u
@@ -33,7 +33,7 @@ class EventSearchView extends AbstractMigration
               LEFT JOIN tags as t
                 ON t.id = et.tag_id
             WHERE e.active = 1      	 
-             GROUP BY e.id, c.id, t.id;
+             GROUP BY e.id, c.id;
         ");
 
         $this->execute("
@@ -45,8 +45,8 @@ class EventSearchView extends AbstractMigration
                    title,
                    date(eventdate) as eventdate,
                    c.id as category_id,
-                   GROUP_CONCAT(c.description) as category,
-                   t.id as tag_id,
+                   c.description as category,
+                   GROUP_CONCAT(t.id) as all_tags,
                    (SELECT COUNT(id) as total FROM photos WHERE e.id = event_id) as photos,
                    (SELECT COUNT(id) as total FROM event_favorites WHERE e.id = event_id) as likes
             FROM users as u
@@ -63,7 +63,7 @@ class EventSearchView extends AbstractMigration
                LEFT JOIN tags as t
                  ON t.id = et.tag_id
             WHERE e.active = 1 and exists (SELECT COUNT(id) as total FROM photos WHERE e.id = event_id GROUP BY id)
-            GROUP BY e.id, c.id, t.id;
+            GROUP BY e.id, c.id;
         ");
 
         $this->execute("
