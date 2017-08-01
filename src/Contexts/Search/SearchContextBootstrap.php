@@ -10,10 +10,8 @@ use PhotoContainer\PhotoContainer\Contexts\Search\Action\FindHistoric;
 use PhotoContainer\PhotoContainer\Contexts\Search\Action\FindTags;
 use PhotoContainer\PhotoContainer\Contexts\Search\Action\GetNotifications;
 use PhotoContainer\PhotoContainer\Contexts\Search\Action\WaitingForApproval;
-use PhotoContainer\PhotoContainer\Contexts\Search\Domain\Category;
-use PhotoContainer\PhotoContainer\Contexts\Search\Domain\EventSearch;
-use PhotoContainer\PhotoContainer\Contexts\Search\Domain\Photographer;
-use PhotoContainer\PhotoContainer\Contexts\Search\Domain\Publisher;
+
+
 use PhotoContainer\PhotoContainer\Contexts\Search\Domain\Tag;
 use PhotoContainer\PhotoContainer\Contexts\Search\Persistence\DbalEventRepository;
 use PhotoContainer\PhotoContainer\Contexts\Search\Persistence\DbalNotificationRepository;
@@ -35,41 +33,23 @@ class SearchContextBootstrap implements ContextBootstrap
         $slimApp->app->get('/search/events', function (ServerRequestInterface $request, ResponseInterface $response) use ($container) {
             $args = $request->getQueryParams();
 
-            $keyword = isset($args['keyword']) ? $args['keyword'] : null;
-            $photographer = new Photographer((int) $args['photographer'] ?? $args['photographer']);
-            $page = isset($args['page']) ? $args['page'] : 1 ;
-
-            $allCategories = null;
-            if (!empty($args['categories'])) {
-                $allCategories = [];
-                foreach ($args['categories'] as $category) {
-                    $allCategories[] = new Category((int) $category);
-                }
-            }
-
-            $allTags = null;
-            if (!empty($args['tags'])) {
-                $allTags = [];
-                foreach ($args['tags'] as $tag) {
-                    $allTags[] = new Tag((int) $tag, null);
-                }
-            }
-
-            $search = new EventSearch(null, $photographer, $keyword, $allCategories, $allTags, 1);
-
-            if (!empty($args['publisher'])) {
-                $search->changePublisher(new Publisher((int) $args['publisher'] ?? $args['publisher']));
-            }
+            $key = 'search_'.md5(serialize($args));
 
             $action = new FindEvent(new DbalEventRepository($container['DbalDatabaseProvider']));
-            $actionResponse = $action->handle($search);
+
+            $actionResponse = $container['CacheHelper']->remember($key, function () use ($action, $args) {
+                return $action->handle($args);
+            });
 
             return $response->withJson($actionResponse, $actionResponse->getHttpStatus());
         });
 
         $slimApp->app->get('/search/categories', function (ServerRequestInterface $request, ResponseInterface $response) use ($container) {
             $action = new FindCategories(new EloquentCategoryRepository($container['DatabaseProvider']));
-            $actionResponse = $action->handle();
+
+            $actionResponse = $container['CacheHelper']->remember('categories', function () use ($action) {
+                return $action->handle();
+            });
 
             $response = $container->cache->withExpires($response, time() + getenv('HEAD_EXPIRES'));
 
@@ -78,7 +58,10 @@ class SearchContextBootstrap implements ContextBootstrap
 
         $slimApp->app->get('/search/tags', function (ServerRequestInterface $request, ResponseInterface $response) use ($container) {
             $action = new FindTags(new EloquentTagRepository($container['DatabaseProvider']));
-            $actionResponse = $action->handle();
+
+            $actionResponse = $container['CacheHelper']->remember('tags', function () use ($action) {
+                return $action->handle();
+            });
 
             $response = $container->cache->withExpires($response, time() + getenv('HEAD_EXPIRES'));
 
