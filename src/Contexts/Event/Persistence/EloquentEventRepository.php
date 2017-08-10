@@ -169,7 +169,7 @@ class EloquentEventRepository implements EventRepository
             $eventModel = EventModel::find($id);
             $eventData = $eventModel->load('EventCategory', 'EventTag', 'User')->toArray();
 
-            $photographer = new Photographer($eventData['user']['id'], null, null);
+            $photographer = new Photographer($eventData['user']['id'], null, $eventData['user']['name']);
 
             $categories = [];
             foreach ($eventData['event_category'] as $category) {
