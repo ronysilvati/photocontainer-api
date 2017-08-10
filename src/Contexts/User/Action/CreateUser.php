@@ -2,10 +2,8 @@
 
 namespace PhotoContainer\PhotoContainer\Contexts\User\Action;
 
-use PhotoContainer\PhotoContainer\Contexts\User\Domain\Profile;
 use PhotoContainer\PhotoContainer\Contexts\User\Domain\User;
 use PhotoContainer\PhotoContainer\Contexts\User\Domain\UserRepository;
-use PhotoContainer\PhotoContainer\Contexts\User\Email\NewUserEmail;
 use PhotoContainer\PhotoContainer\Contexts\User\Response\NoUserSlotsResponse;
 use PhotoContainer\PhotoContainer\Contexts\User\Response\UserCreatedResponse;
 use PhotoContainer\PhotoContainer\Infrastructure\Crypto\CryptoMethod;
@@ -66,28 +64,6 @@ class CreateUser
             return $this->userRepository->createUser($user, $encrypted);
         });
 
-        $this->sendEmail($user);
-
         return new UserCreatedResponse($user);
-    }
-
-    /**
-     * @param User $user
-     */
-    private function sendEmail(User $user)
-    {
-        $data = [
-            '{NAME}' => $user->getName(),
-            '{EMAIL}' => $user->getEmail(),
-            '{PROFILE}' => $user->getProfile()->getProfileId() === Profile::PHOTOGRAPHER ? 'Fotografo' : 'Publisher',
-            '{CREATIONDATE}' => date('d/m/y H:i:s')
-        ];
-
-        $email = new NewUserEmail(
-            $data,
-            ['name' => getenv('ADMIN_EMAIL_NAME'), 'email' => getenv('ADMIN_EMAIL')]
-        );
-
-        $this->addEvent('generic.sendmail', $email);
     }
 }
