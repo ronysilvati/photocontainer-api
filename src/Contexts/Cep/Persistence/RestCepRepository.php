@@ -23,10 +23,10 @@ class RestCepRepository implements CepRepository
         $this->provider = $provider;
     }
 
-    public function findCep(Cep $cep): Cep
+    public function findCep(string $zipcode): Cep
     {
         try {
-            $response = $this->provider->client->get("{$cep->getZipcode()}/json");
+            $response = $this->provider->client->get("{$zipcode}/json");
 
             $cepData = json_decode($response->getBody()->getContents());
 
@@ -34,25 +34,26 @@ class RestCepRepository implements CepRepository
                 throw new \Exception("Erro no retorno do CEP.");
             }
 
-            $cep->changeCountry('Brasil');
-            $cep->changeState($cepData->uf);
-            $cep->changeCity($cepData->localidade);
-            $cep->changeNeighborhood($cepData->bairro);
-            $cep->changeStreet($cepData->logradouro);
-            $cep->changeComplement($cepData->complemento);
-
-            return $cep;
+            return new Cep(
+                $zipcode,
+                'Brasil',
+                $cepData->uf,
+                $cepData->localidade,
+                $cepData->bairro,
+                $cepData->logradouro,
+                $cepData->complemento
+            );
         } catch (\Exception $e) {
             throw new PersistenceException("CEP não encontrado.", $e->getMessage());
         }
     }
 
-    public function findStates(Cep $cep)
+    public function findStates(int $country_id): array
     {
         throw new \Exception("Nâo implementado.");
     }
 
-    public function findCities(Cep $cep)
+    public function findCities(int $state_id): array
     {
         throw new \Exception("Nâo implementado.");
     }

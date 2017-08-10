@@ -24,12 +24,12 @@ class FindStates
     }
 
     /**
-     * @param Cep $cep
+     * @param int $coutry_id
      * @return StateCollectionResponse
      */
-    public function handle(Cep $cep)
+    public function handle(int $coutry_id)
     {
-        $states = $this->repository->findStates($cep);
+        $states = $this->repository->findStates($coutry_id);
         return new StateCollectionResponse($states);
     }
 }

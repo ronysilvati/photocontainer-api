@@ -24,12 +24,12 @@ class FindCities
     }
 
     /**
-     * @param Cep $cep
+     * @param int $state_id
      * @return StateCollectionResponse
      */
-    public function handle(Cep $cep)
+    public function handle(int $state_id)
     {
-        $states = $this->repository->findCities($cep);
+        $states = $this->repository->findCities($state_id);
         return new StateCollectionResponse($states);
     }
 }

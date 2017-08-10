@@ -23,29 +23,26 @@ class EloquentCepRepository implements CepRepository
         $this->conn = $conn;
     }
 
-    public function findCep(Cep $cep)
+    public function findCep(string $zipcode): Cep
     {
         throw new \Exception("Nâo implementado.");
     }
 
-    public function findStates(Cep $cep): array
+    public function findStates(int $country_id): array
     {
         try {
-            $states = State::where('country_id', $cep->getCountry())->get(['id', 'name', 'statecode'])->toArray();
-            return $states;
+            return State::where('country_id', $country_id)->get(['id', 'name', 'statecode'])->toArray();
         } catch (\Exception $e) {
             throw new PersistenceException("Estados não encontrados.", $e->getMessage());
         }
     }
 
-    public function findCities(Cep $cep)
+    public function findCities(int $state_id): array
     {
         try {
-            $cities = City::where('state_id', $cep->getState())->get(['name'])->toArray();
-            return $cities;
+            return City::where('state_id', $state_id)->get(['name'])->toArray();
         } catch (\Exception $e) {
             throw new PersistenceException("Cidades não encontradas.", $e->getMessage());
-
         }
     }
 
@@ -53,7 +50,7 @@ class EloquentCepRepository implements CepRepository
     {
         try {
             return Country::orderBy('name')->get(['id', 'name'])->toArray();
-        } catch (Exception $e) {
+        } catch (\Exception $e) {
             throw new PersistenceException("Países não encontrados.", $e->getMessage());
         }
     }
