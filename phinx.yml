@@ -7,7 +7,7 @@ environments:
     default_database: development
     production:
         adapter: mysql
-        host: localhost
+        host: mariadb
         name: production_db
         user: root
         pass: ''
@@ -16,10 +16,10 @@ environments:
 
     development:
         adapter: mysql
-        host: mysql
-        name: photocontainer
-        user: root
-        pass: root
+        host: %%PHINX_HOST%%
+        name: %%PHINX_DATABASE%%
+        user: %%PHINX_USER%%
+        pass: %%PHINX_PASSWORD%%
         port: 3306
         charset: utf8
 
