@@ -23,15 +23,16 @@ class DoctrineCacheHelper implements CacheHelper
     /**
      * @param string $key
      * @param callable $fn
+     * @param int $ttl
      * @return mixed
      */
-    public function remember(string $key, callable $fn)
+    public function remember(string $key, callable $fn, $ttl = 3600)
     {
         if (!$this->cache->contains($key)) {
             $result = $fn();
-            $this->cache->save($key, serialize($result));
+            $this->cache->save($key, $result, $ttl);
         } else {
-            $result = unserialize($this->cache->fetch($key));
+            $result = $this->cache->fetch($key);
         }
 
         return $result;

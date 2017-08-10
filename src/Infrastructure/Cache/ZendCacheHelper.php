@@ -16,15 +16,16 @@ class ZendCacheHelper implements CacheHelper
     /**
      * @param string $key
      * @param callable $fn
+     * @param int $ttl
      * @return mixed
      */
-    public function remember(string $key, callable $fn)
+    public function remember(string $key, callable $fn, $ttl = 3600)
     {
         if (!$this->cache->hasItem($key)) {
             $result = $fn();
-            $this->cache->setItem($key, serialize($result));
+            $this->cache->setItem($key, $result);
         } else {
-            $result = unserialize($this->cache->getItem($key));
+            $result = $this->cache->getItem($key);
         }
 
         return $result;
