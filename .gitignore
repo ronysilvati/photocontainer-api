@@ -52,7 +52,8 @@ vendor/
 shared/events/*
 db/.data/
 *.phar
-cache/
+/cache/
+/logs
 
 public/shared
 docker/.data
