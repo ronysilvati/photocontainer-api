@@ -2,6 +2,7 @@
 
 namespace PhotoContainer\PhotoContainer\Contexts\Search\Persistence;
 
+use Doctrine\DBAL\Connection;
 use PhotoContainer\PhotoContainer\Contexts\Search\Domain\Category;
 use PhotoContainer\PhotoContainer\Contexts\Search\Domain\Event;
 use PhotoContainer\PhotoContainer\Contexts\Search\Domain\EventRepository;
@@ -13,6 +14,7 @@ use PhotoContainer\PhotoContainer\Infrastructure\Persistence\DbalDatabaseProvide
 
 class DbalEventRepository implements EventRepository
 {
+    /** @var Connection conn */
     private $conn;
 
     public function __construct(DbalDatabaseProvider $provider)
@@ -36,6 +38,7 @@ class DbalEventRepository implements EventRepository
             $allCategories = $search->getCategories();
             if ($allCategories) {
                 $categories = [];
+                /** @var Category $category */
                 foreach ($allCategories as $category) {
                     $categories[] = $category->getId();
                 }

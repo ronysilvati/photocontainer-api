@@ -16,7 +16,7 @@ use PhotoContainer\PhotoContainer\Infrastructure\Event\EventProvider;
 use PhotoContainer\PhotoContainer\Infrastructure\Web\DomainExceptionResponse;
 use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\ServerRequestInterface;
-use Slim\Http\Response;
+
 use Slim\Http\Stream;
 use Slim\Http\UploadedFile;
 

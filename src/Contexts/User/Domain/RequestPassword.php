@@ -33,6 +33,7 @@ class RequestPassword
      * RequestPassword constructor.
      * @param int|null $id
      * @param string $token
+     * @param int $user_id
      * @param DateTime|null $validUntil
      */
     public function __construct(?int $id = null, string $token, int $user_id, ?DateTime $validUntil = null)

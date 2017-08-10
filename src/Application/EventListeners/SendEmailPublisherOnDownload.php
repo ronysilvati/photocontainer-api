@@ -5,7 +5,7 @@ namespace PhotoContainer\PhotoContainer\Application\EventListeners;
 use League\Event\AbstractListener;
 use League\Event\EventInterface;
 use PhotoContainer\PhotoContainer\Application\Resources\Emails\PublisherDownloadEmail;
-use PhotoContainer\PhotoContainer\Contexts\Photo\Domain\Download;
+
 use PhotoContainer\PhotoContainer\Contexts\Photo\Domain\PhotoRepository;
 use PhotoContainer\PhotoContainer\Contexts\Photo\Event\DownloadedPhoto;
 use PhotoContainer\PhotoContainer\Infrastructure\Email\EmailHelper;

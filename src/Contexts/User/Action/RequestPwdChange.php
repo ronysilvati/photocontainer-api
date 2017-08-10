@@ -40,6 +40,7 @@ class RequestPwdChange
      * @param UserRepository $userRepository
      * @param TokenGeneratorHelper $tokenGeneratorHelper
      * @param EmailHelper $emailHelper
+     * @param AtomicWorker $atomicWorker
      */
     public function __construct(
         UserRepository $userRepository,
