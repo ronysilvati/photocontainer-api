@@ -103,12 +103,9 @@ $slimParams[PhotoContainer\PhotoContainer\Infrastructure\Helper\ProfileImageHelp
 );
 
 $slimParams[PhotoContainer\PhotoContainer\Infrastructure\Email\EmailHelper::class] = function ($c) {
-
-    $transport = new Swift_SmtpTransport('192.168.99.100','1025');
-
-    return new \PhotoContainer\PhotoContainer\Infrastructure\Email\SwiftMailerHelper($transport);
-
-//    return new SwiftMailerHelper(new Swift_SendmailTransport('/usr/lib/sendmail -bs'));
+    return new \PhotoContainer\PhotoContainer\Infrastructure\Email\SwiftMailerHelper(
+        new Swift_SendmailTransport('/usr/lib/sendmail -bs')
+    );
 };
 
 $slimParams[PhotoContainer\PhotoContainer\Infrastructure\Event\EventProvider::class] = function () {
