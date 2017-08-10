@@ -9,13 +9,13 @@ use PhotoContainer\PhotoContainer\Contexts\Search\Domain\EventSearch;
 use PhotoContainer\PhotoContainer\Contexts\Search\Domain\Photographer;
 use PhotoContainer\PhotoContainer\Contexts\Search\Domain\Tag;
 use PhotoContainer\PhotoContainer\Infrastructure\Exception\PersistenceException;
-use PhotoContainer\PhotoContainer\Infrastructure\Persistence\DatabaseProvider;
+use PhotoContainer\PhotoContainer\Infrastructure\Persistence\DbalDatabaseProvider;
 
 class DbalEventRepository implements EventRepository
 {
     private $conn;
 
-    public function __construct(DatabaseProvider $provider)
+    public function __construct(DbalDatabaseProvider $provider)
     {
         $this->conn = $provider->conn;
     }
@@ -114,7 +114,6 @@ class DbalEventRepository implements EventRepository
 
             return $out;
         } catch (\Exception $e) {
-            var_dump($e->getMessage());exit;
             throw new PersistenceException('Erro na pesquisa de eventos.', $e->getMessage(), 500, $e);
         }
     }

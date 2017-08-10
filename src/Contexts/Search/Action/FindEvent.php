@@ -8,6 +8,7 @@ use PhotoContainer\PhotoContainer\Contexts\Search\Domain\EventSearch;
 use PhotoContainer\PhotoContainer\Contexts\Search\Domain\Photographer;
 use PhotoContainer\PhotoContainer\Contexts\Search\Domain\Publisher;
 use PhotoContainer\PhotoContainer\Contexts\Search\Domain\Tag;
+use PhotoContainer\PhotoContainer\Contexts\Search\Persistence\DbalEventRepository;
 use PhotoContainer\PhotoContainer\Contexts\Search\Response\EventCollectionResponse;
 
 
@@ -15,7 +16,7 @@ class FindEvent
 {
     protected $repository;
 
-    public function __construct(EventRepository $repository)
+    public function __construct(DbalEventRepository $repository)
     {
         $this->repository = $repository;
     }
