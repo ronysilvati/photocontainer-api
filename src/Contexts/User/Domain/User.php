@@ -2,7 +2,7 @@
 
 namespace PhotoContainer\PhotoContainer\Contexts\User\Domain;
 
-use PhotoContainer\PhotoContainer\Contexts\User\Event\PhotographerCreated;
+
 use PhotoContainer\PhotoContainer\Contexts\User\Event\PublisherCreated;
 use PhotoContainer\PhotoContainer\Infrastructure\Entity;
 use PhotoContainer\PhotoContainer\Infrastructure\Event\EventRecorder;

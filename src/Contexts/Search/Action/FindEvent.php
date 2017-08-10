@@ -3,7 +3,7 @@
 namespace PhotoContainer\PhotoContainer\Contexts\Search\Action;
 
 use PhotoContainer\PhotoContainer\Contexts\Search\Domain\Category;
-use PhotoContainer\PhotoContainer\Contexts\Search\Domain\EventRepository;
+
 use PhotoContainer\PhotoContainer\Contexts\Search\Domain\EventSearch;
 use PhotoContainer\PhotoContainer\Contexts\Search\Domain\Photographer;
 use PhotoContainer\PhotoContainer\Contexts\Search\Domain\Publisher;

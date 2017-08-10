@@ -2,7 +2,7 @@
 
 namespace PhotoContainer\PhotoContainer\Contexts\Photo\Event;
 
-use PhotoContainer\PhotoContainer\Contexts\Photo\Domain\Download;
+
 use PhotoContainer\PhotoContainer\Infrastructure\Event\Event;
 
 class DownloadedPhoto implements Event

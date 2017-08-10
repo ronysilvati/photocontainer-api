@@ -6,7 +6,7 @@ use PhotoContainer\PhotoContainer\Contexts\Event\Domain\EventRepository;
 use PhotoContainer\PhotoContainer\Contexts\Photo\Domain\Download;
 use PhotoContainer\PhotoContainer\Contexts\Photo\Domain\Photo;
 use PhotoContainer\PhotoContainer\Contexts\Photo\Domain\PhotoRepository;
-use PhotoContainer\PhotoContainer\Contexts\Photo\Response\DownloadResponse;
+
 use PhotoContainer\PhotoContainer\Contexts\Photo\Response\DownloadSelectedResponse;
 use PhotoContainer\PhotoContainer\Infrastructure\Event\EventRecorder;
 use PhotoContainer\PhotoContainer\Infrastructure\Exception\DomainViolationException;
