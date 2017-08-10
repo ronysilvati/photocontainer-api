@@ -5,7 +5,7 @@ namespace PhotoContainer\PhotoContainer\Infrastructure\Email;
 abstract class Email
 {
     /**
-     * @var array
+     * @var array|null
      */
     private $data;
 
@@ -36,13 +36,13 @@ abstract class Email
 
     /**
      * Email constructor.
-     * @param array $data
+     * @param array|null $data
      * @param string $file
      * @param string $subject
      * @param array $to
-     * @param array $from
+     * @param array|null $from
      */
-    public function __construct(array $data, string $file, string $subject, array $to, ?array $from = null)
+    public function __construct(?array $data, string $file, string $subject, array $to, ?array $from = null)
     {
         $this->data = $data;
         $this->file = $file;
@@ -62,7 +62,7 @@ abstract class Email
     /**
      * @return array
      */
-    public function getData(): array
+    public function getData(): ?array
     {
         return $this->data;
     }
