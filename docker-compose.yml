@@ -1,0 +1,61 @@
+###############################################################################
+#                          Generated on phpdocker.io                          #
+###############################################################################
+version: "3.1"
+services:
+
+    mariadb:
+      image: mariadb:10.1
+      container_name: photocontainer-mariadb
+      working_dir: /application
+      volumes:
+        - .:/application
+      ports:
+        - 3306:3306
+      environment:
+        - MYSQL_ROOT_PASSWORD=1234
+        - MYSQL_DATABASE=fotocontainer
+        - MYSQL_USER=fotocontainer
+        - MYSQL_PASSWORD=fotocontainer
+
+    webserver:
+      image: nginx:alpine
+      container_name: photocontainer-webserver
+      working_dir: /application
+      volumes:
+          - .:/application
+          - ./phpdocker/nginx/nginx.conf:/etc/nginx/conf.d/default.conf
+      ports:
+       - "8080:80"
+
+    mailcatcher:
+      image: tophfr/mailcatcher
+      container_name: photocontainer-mailcatcher
+      ports:
+       - "1025:25"
+       - "1080:80"
+
+    php-fpm:
+      build: phpdocker/php-fpm
+      container_name: photocontainer-php-fpm
+      working_dir: /application
+      ports:
+        - "9000:9000"
+      volumes:
+        - .:/application
+        - ./phpdocker/php-fpm/php-ini-overrides.ini:/etc/php/7.1/fpm/conf.d/99-overrides.ini
+      environment:
+        - MYSQL_HOST=mariadb
+        - MYSQL_PORT=3306
+        - MYSQL_DATABASE=fotocontainer
+        - MYSQL_USER=fotocontainer
+        - MYSQL_PASSWORD=fotocontainer
+        - PHINX_HOST=mariadb
+        - PHINX_DATABASE=fotocontainer
+        - PHINX_USER=root
+        - PHINX_PASSWORD=1234
+        - SHARED_PATH=/code/shared
+        - PHOTOCONTAINER_EMAIL=fotocontainer@mailinator.com
+        - PHOTOCONTAINER_EMAIL_NAME=fotocontainer
+        - PHP_IDE_CONFIG='serverName=PHPSTORM'
+
