@@ -113,7 +113,7 @@ $slimParams[PhotoContainer\PhotoContainer\Infrastructure\Event\EventProvider::cl
 };
 
 $slimParams[\PhotoContainer\PhotoContainer\Infrastructure\Cache\CacheHelper::class] = function ($c) {
-    $cache = new \Doctrine\Common\Cache\ArrayCache();
+    $cache = new \Doctrine\Common\Cache\ApcuCache();
     $cache->setNamespace('PhotoContainer_userland_');
 
     return new \PhotoContainer\PhotoContainer\Infrastructure\Cache\DoctrineCacheHelper($cache);
