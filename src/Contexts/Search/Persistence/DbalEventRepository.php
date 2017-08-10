@@ -2,7 +2,6 @@
 
 namespace PhotoContainer\PhotoContainer\Contexts\Search\Persistence;
 
-use Doctrine\DBAL\Connection;
 use PhotoContainer\PhotoContainer\Contexts\Search\Domain\Category;
 use PhotoContainer\PhotoContainer\Contexts\Search\Domain\Event;
 use PhotoContainer\PhotoContainer\Contexts\Search\Domain\EventRepository;
@@ -10,14 +9,13 @@ use PhotoContainer\PhotoContainer\Contexts\Search\Domain\EventSearch;
 use PhotoContainer\PhotoContainer\Contexts\Search\Domain\Photographer;
 use PhotoContainer\PhotoContainer\Contexts\Search\Domain\Tag;
 use PhotoContainer\PhotoContainer\Infrastructure\Exception\PersistenceException;
-use PhotoContainer\PhotoContainer\Infrastructure\Persistence\DbalDatabaseProvider;
+use PhotoContainer\PhotoContainer\Infrastructure\Persistence\DatabaseProvider;
 
 class DbalEventRepository implements EventRepository
 {
-    /** @var Connection conn */
     private $conn;
 
-    public function __construct(DbalDatabaseProvider $provider)
+    public function __construct(DatabaseProvider $provider)
     {
         $this->conn = $provider->conn;
     }
@@ -38,7 +36,6 @@ class DbalEventRepository implements EventRepository
             $allCategories = $search->getCategories();
             if ($allCategories) {
                 $categories = [];
-                /** @var Category $category */
                 foreach ($allCategories as $category) {
                     $categories[] = $category->getId();
                 }
@@ -48,18 +45,22 @@ class DbalEventRepository implements EventRepository
 
             $allTags = $search->getTags();
             if ($allTags) {
-                $tags = [];
+                //$tags = [];
                 $tagCategory = [];
                 /** @var Tag $tag */
-                foreach ($allTags as $tagCategory) {
-                    foreach ($tagCategory as $tag) {
-                        $tags[] = "'(?=.*".$tag->getId().")'";
+                foreach ($allTags as $tagCategories) {
+                    $tags = [];
+                    foreach ($tagCategories as $tag) {
+                        //$tags[] = "'(?=.*".$tag->getId().")'";
+                        $tags[] = $tag->getId();
                     }
-                    $tagCategory[] = implode('', $tags);
+                    $tagCategory[] = "all_tags REGEXP '(?=".implode('.*', $tags).")'";
                 }
 
-                $where[] = 'all_tags REGEXP '.implode(' OR ', $tagCategory);
+                $where[] = implode(' AND ', $tagCategory);
             }
+
+//var_dump($where);exit;
 
             $publisher = $search->getPublisher();
 
@@ -117,6 +118,7 @@ class DbalEventRepository implements EventRepository
 
             return $out;
         } catch (\Exception $e) {
+            var_dump($e->getMessage());exit;
             throw new PersistenceException('Erro na pesquisa de eventos.', $e->getMessage(), 500, $e);
         }
     }
