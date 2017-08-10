@@ -2,10 +2,10 @@
 
 namespace PhotoContainer\PhotoContainer\Infrastructure\Web\Slim;
 
-use PhotoContainer\PhotoContainer\Infrastructure\ContextBootstrap;
-use PhotoContainer\PhotoContainer\Infrastructure\Email\Email;
-use PhotoContainer\PhotoContainer\Infrastructure\Event\EvenementEventProvider;
-use PhotoContainer\PhotoContainer\Infrastructure\Listeners\SendEmail;
+use League\Event\Emitter;
+use PhotoContainer\PhotoContainer\Infrastructure\Event\EventProvider;
+use PhotoContainer\PhotoContainer\Infrastructure\Event\EventRecorder;
+use PhotoContainer\PhotoContainer\Infrastructure\Event\EventWrapper;
 use PhotoContainer\PhotoContainer\Infrastructure\Web\WebApp;
 use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\ServerRequestInterface;
@@ -39,16 +39,23 @@ class SlimApp implements WebApp
             "passthrough" => $conf["auth_whitelist"],
         ]));
 
-        /** @var EvenementEventProvider $eventEmitter */
-        $eventEmitter = $this->app->getContainer()->get('EventEmitter');
-        $this->app->add(function (ServerRequestInterface $req, ResponseInterface $res, $next) use ($eventEmitter) {
+        $this->app->add(function (ServerRequestInterface $req, ResponseInterface $res, $next) {
             /** @var ResponseInterface $response */
             $response = $next($req, $res);
-            $eventEmitter->releaseAllEvents();
+            $this->get(EventProvider::class)->releaseAllEvents();
+
+            /** @var \League\Event\Emitter $eventEmitter */
+            $eventEmitter = $this->get(Emitter::class);
+
+            $events = EventRecorder::getInstance()->pullEvents();
+            if (count($events) > 0) {
+                foreach ($events as $event) {
+                    $eventEmitter->emit(new EventWrapper($event));
+                }
+            }
+
             return $response;
         });
-
-        $this->addGenericEvents();
 
         $this->app->options('/{routes:.+}', function (ServerRequestInterface $req, ResponseInterface $res) {
             return $res;
@@ -63,24 +70,6 @@ class SlimApp implements WebApp
                 ->withHeader('Access-Control-Allow-Methods', 'GET, POST, PUT, DELETE, OPTIONS, PATCH')
                 ->withHeader('Access-Control-Max-Age', '604800');
         });
-    }
-
-    public function addGenericEvents()
-    {
-        $listener = new SendEmail($this->app->getContainer()->get('EmailHelper'));
-        $this->app->getContainer()->get('EventEmitter')->on('generic.sendmail', function (Email $mail) use ($listener) {
-            $listener($mail);
-        });
-    }
-
-    /**
-     * @param ContextBootstrap $context
-     * @return $this
-     */
-    public function addContext(ContextBootstrap $context)
-    {
-        $this->app = ($context->wireSlimRoutes($this))->app;
-        return $this;
     }
 
     public function run()
