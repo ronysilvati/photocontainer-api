@@ -116,5 +116,18 @@ class TagsSeed extends AbstractSeed
             INSERT INTO `tags` (`id`, `tag_category_id`, `description`, `created_at`, `updated_at`) VALUES (83, 12, 'Linho', '2017-03-23 18:17:26', '2017-03-23 14:44:12');
         ";
         $this->execute($sql);
+
+        $data = [
+            [
+                'tag_category_id' => 10,
+                'description'     => 'Nenhuma',
+                'created_at'      => date('Y-m-d H:i:s'),
+            ],
+        ];
+        $profiles = $this->table('tags');
+
+        $profiles->insert($data)->save();
+
+        $this->execute('UPDATE tags SET description = \'Presbiteriano\' where id = 38;');
     }
 }
