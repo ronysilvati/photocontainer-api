@@ -23,4 +23,8 @@ interface PhotoRepository
     public function deletePhoto(string $guid): Photo;
     
     public function findEventPhotos(int $event_id): ?array;
+
+    public function selectAllPhotos(int $event_id, int $publisher_id): ?SelectedPhotos;
+
+    public function selectPhotos(array $photo_ids, int $publisher_id): ?SelectedPhotos;
 }

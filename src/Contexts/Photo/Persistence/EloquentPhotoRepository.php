@@ -10,6 +10,7 @@ use PhotoContainer\PhotoContainer\Contexts\Photo\Domain\Photo;
 use PhotoContainer\PhotoContainer\Contexts\Photo\Domain\Photographer;
 use PhotoContainer\PhotoContainer\Contexts\Photo\Domain\PhotoRepository;
 use PhotoContainer\PhotoContainer\Contexts\Photo\Domain\Publisher;
+use PhotoContainer\PhotoContainer\Contexts\Photo\Domain\SelectedPhotos;
 use PhotoContainer\PhotoContainer\Infrastructure\Exception\PersistenceException;
 use PhotoContainer\PhotoContainer\Infrastructure\Persistence\Eloquent\Download as DownloadModel;
 use PhotoContainer\PhotoContainer\Infrastructure\Persistence\Eloquent\Event;
@@ -174,6 +175,46 @@ class EloquentPhotoRepository implements PhotoRepository
         } catch (\Exception $e) {
             throw new PersistenceException('Não foi possível encontrar fotos do evento.', $e->getMessage());
         }
+    }
+
+    public function selectAllPhotos(int $event_id, int $publisher_id): ?SelectedPhotos
+    {
+        try {
+            $photosEvent = PhotoModel::where('event_id', $event_id)->get()->toArray();
+            $selected = new SelectedPhotos($publisher_id, $event_id);
+
+            return $this->convertToDomainModel($selected, $photosEvent);
+        } catch (\Exception $e) {
+            throw new PersistenceException('Não foi possível encontrar fotos do evento.', $e->getMessage());
+        }
+    }
+
+    public function selectPhotos(array $photo_ids, int $publisher_id): ?SelectedPhotos
+    {
+        try {
+            $photosEvent = PhotoModel::where('id', $photo_ids)->get()->toArray();
+            $selected = new SelectedPhotos($publisher_id);
+
+            return $this->convertToDomainModel($selected, $photosEvent);
+        } catch (\Exception $e) {
+            throw new PersistenceException('Não foi possível encontrar fotos do evento.', $e->getMessage());
+        }
+    }
+
+    public function convertToDomainModel(SelectedPhotos $selected, ?array $photosEvent): ?SelectedPhotos
+    {
+        if (count($photosEvent) == 0) {
+            return null;
+        }
+
+        foreach ($photosEvent as $photo) {
+            $photoModel = new Photo($photo['id'], $photo['event_id'], null);
+            $photoModel->setPhysicalName($photo['filename']);
+
+            $selected->add($photoModel);
+        }
+
+        return $selected;
     }
 
     public function setAsAlbumCover(string $guid): bool

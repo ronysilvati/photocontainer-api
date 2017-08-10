@@ -2,7 +2,9 @@
 
 namespace PhotoContainer\PhotoContainer\Contexts\Photo\Domain;
 
+use PhotoContainer\PhotoContainer\Contexts\Photo\Event\DownloadedPhoto;
 use PhotoContainer\PhotoContainer\Infrastructure\Entity;
+use PhotoContainer\PhotoContainer\Infrastructure\Event\EventRecorder;
 
 class Download implements Entity
 {
@@ -32,6 +34,9 @@ class Download implements Entity
         $this->id = $id;
         $this->user_id = $user_id;
         $this->photo = $photo;
+
+        EventRecorder::getInstance()
+            ->record(new DownloadedPhoto($user_id, $photo->getEventId(), [$photo]));
     }
 
     /**
