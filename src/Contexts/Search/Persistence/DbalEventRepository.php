@@ -2,6 +2,7 @@
 
 namespace PhotoContainer\PhotoContainer\Contexts\Search\Persistence;
 
+use Doctrine\DBAL\Connection;
 use PhotoContainer\PhotoContainer\Contexts\Search\Domain\Category;
 use PhotoContainer\PhotoContainer\Contexts\Search\Domain\Event;
 use PhotoContainer\PhotoContainer\Contexts\Search\Domain\EventRepository;
@@ -10,12 +11,16 @@ use PhotoContainer\PhotoContainer\Contexts\Search\Domain\Photographer;
 use PhotoContainer\PhotoContainer\Contexts\Search\Domain\Tag;
 use PhotoContainer\PhotoContainer\Infrastructure\Exception\PersistenceException;
 use PhotoContainer\PhotoContainer\Infrastructure\Persistence\DatabaseProvider;
+use PhotoContainer\PhotoContainer\Infrastructure\Persistence\DbalDatabaseProvider;
 
 class DbalEventRepository implements EventRepository
 {
+    /**
+     * @var Connection
+     */
     private $conn;
 
-    public function __construct(DatabaseProvider $provider)
+    public function __construct(DbalDatabaseProvider $provider)
     {
         $this->conn = $provider->conn;
     }
@@ -59,8 +64,6 @@ class DbalEventRepository implements EventRepository
 
                 $where[] = implode(' AND ', $tagCategory);
             }
-
-//var_dump($where);exit;
 
             $publisher = $search->getPublisher();
 

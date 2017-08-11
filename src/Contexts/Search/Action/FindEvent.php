@@ -3,7 +3,6 @@
 namespace PhotoContainer\PhotoContainer\Contexts\Search\Action;
 
 use PhotoContainer\PhotoContainer\Contexts\Search\Domain\Category;
-
 use PhotoContainer\PhotoContainer\Contexts\Search\Domain\EventSearch;
 use PhotoContainer\PhotoContainer\Contexts\Search\Domain\Photographer;
 use PhotoContainer\PhotoContainer\Contexts\Search\Domain\Publisher;
@@ -11,9 +10,11 @@ use PhotoContainer\PhotoContainer\Contexts\Search\Domain\Tag;
 use PhotoContainer\PhotoContainer\Contexts\Search\Persistence\DbalEventRepository;
 use PhotoContainer\PhotoContainer\Contexts\Search\Response\EventCollectionResponse;
 
-
 class FindEvent
 {
+    /**
+     * @var DbalEventRepository
+     */
     protected $repository;
 
     public function __construct(DbalEventRepository $repository)
