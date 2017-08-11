@@ -57,3 +57,4 @@ db/.data/
 
 public/shared
 docker/.data
+.env
