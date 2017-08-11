@@ -4,6 +4,7 @@ namespace PhotoContainer\PhotoContainer\Contexts\User\Domain;
 
 
 use PhotoContainer\PhotoContainer\Contexts\User\Event\PublisherCreated;
+use PhotoContainer\PhotoContainer\Contexts\User\Event\UserCreated;
 use PhotoContainer\PhotoContainer\Infrastructure\Entity;
 use PhotoContainer\PhotoContainer\Infrastructure\Event\EventRecorder;
 use PhotoContainer\PhotoContainer\Infrastructure\Exception\DomainViolationException;
@@ -116,6 +117,8 @@ class User implements Entity
     public function changeId(int $id)
     {
         $this->id = $id;
+
+        EventRecorder::getInstance()->record(new UserCreated($this));
 
         if ($this->getProfile()->getProfileId() === Profile::PUBLISHER) {
             EventRecorder::getInstance()->record(new PublisherCreated($this));
