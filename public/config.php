@@ -103,19 +103,27 @@ $slimParams[PhotoContainer\PhotoContainer\Infrastructure\Helper\ProfileImageHelp
 );
 
 $slimParams[PhotoContainer\PhotoContainer\Infrastructure\Email\EmailHelper::class] = function ($c) {
-    return new \PhotoContainer\PhotoContainer\Infrastructure\Email\SwiftMailerHelper(
-        new Swift_SendmailTransport('/usr/lib/sendmail -bs')
-    );
+    if (getenv('ENVIRONMENT') === 'prod') {
+        $transport = new Swift_SendmailTransport('/usr/lib/sendmail -bs');
+    } else {
+        $transport = new Swift_SmtpTransport('192.168.99.100','1025');
+    }
+
+    return new \PhotoContainer\PhotoContainer\Infrastructure\Email\SwiftMailerHelper($transport);
 };
 
 $slimParams[PhotoContainer\PhotoContainer\Infrastructure\Event\EventProvider::class] = function () {
     return new \PhotoContainer\PhotoContainer\Infrastructure\Event\EvenementEventProvider();
 };
 
-$slimParams[\PhotoContainer\PhotoContainer\Infrastructure\Cache\CacheHelper::class] = function ($c) {
-    $cache = new \Doctrine\Common\Cache\ApcuCache();
-    $cache->setNamespace('PhotoContainer_userland_');
+$slimParams[PhotoContainer\PhotoContainer\Infrastructure\Cache\CacheHelper::class] = function () {
+    if (getenv('ENVIRONMENT') === 'prod') {
+        $cache = new \Doctrine\Common\Cache\ApcuCache();
+    } else {
+        $cache = new \Doctrine\Common\Cache\ArrayCache();
+    }
 
+    $cache->setNamespace('PhotoContainer_userland_');
     return new \PhotoContainer\PhotoContainer\Infrastructure\Cache\DoctrineCacheHelper($cache);
 };
 
@@ -128,13 +136,13 @@ $slimParams[PhotoContainer\PhotoContainer\Infrastructure\Persistence\RestDatabas
     return $database;
 };
 
-$slimParams['PhotoContainer\PhotoContainer\Contexts\*\Domain\*Repository'] = DI\object(
-    'PhotoContainer\PhotoContainer\Contexts\*\Persistence\Eloquent*Repository'
-);
-
 $slimParams[PhotoContainer\PhotoContainer\Contexts\Photo\Domain\FSPhotoRepository::class] = function ($c) {
     return new \PhotoContainer\PhotoContainer\Contexts\Photo\Persistence\FilesystemPhotoRepository();
 };
+
+$slimParams['PhotoContainer\PhotoContainer\Contexts\*\Domain\*Repository'] = DI\object(
+    'PhotoContainer\PhotoContainer\Contexts\*\Persistence\Eloquent*Repository'
+);
 
 $slimParams[League\Event\Emitter::class] = DI\object(\League\Event\Emitter::class);
 
