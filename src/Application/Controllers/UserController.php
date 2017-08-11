@@ -12,28 +12,12 @@ use PhotoContainer\PhotoContainer\Contexts\User\Action\UploadProfileImage;
 use PhotoContainer\PhotoContainer\Contexts\User\Domain\Details;
 use PhotoContainer\PhotoContainer\Contexts\User\Domain\Profile;
 use PhotoContainer\PhotoContainer\Contexts\User\Domain\User;
-use PhotoContainer\PhotoContainer\Infrastructure\Event\EvenementEventProvider;
-use PhotoContainer\PhotoContainer\Infrastructure\Event\EventProvider;
 use PhotoContainer\PhotoContainer\Infrastructure\Exception\DomainViolationException;
 use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\ServerRequestInterface;
 
 class UserController
 {
-    /**
-     * @var EvenementEventProvider|EventProvider
-     */
-    private $provider;
-
-    /**
-     * UserController constructor.
-     * @param EventProvider $provider
-     */
-    public function __construct(EventProvider $provider)
-    {
-        $this->provider = $provider;
-    }
-
     /**
      * @param ServerRequestInterface $request
      * @param ResponseInterface $response
@@ -89,8 +73,6 @@ class UserController
         $user = new User(null, $data['name'], $data['email'], $data['password'], $details, $profile);
 
         $actionResponse = $action->handle($user);
-
-        //$this->provider->addContextEvents($action->getEvents());
 
         return $response->withJson($actionResponse, $actionResponse->getHttpStatus());
     }
