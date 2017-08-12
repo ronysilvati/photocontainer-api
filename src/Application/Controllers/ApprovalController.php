@@ -5,26 +5,11 @@ namespace PhotoContainer\PhotoContainer\Application\Controllers;
 use PhotoContainer\PhotoContainer\Contexts\Approval\Action\ApprovalDownload;
 use PhotoContainer\PhotoContainer\Contexts\Approval\Action\DisapprovalDownload;
 use PhotoContainer\PhotoContainer\Contexts\Approval\Action\RequestDownload;
-use PhotoContainer\PhotoContainer\Infrastructure\Event\EventProvider;
 use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\ServerRequestInterface;
 
 class ApprovalController
 {
-    /**
-     * @var EventProvider
-     */
-    private $provider;
-
-    /**
-     * ApprovalController constructor.
-     * @param EventProvider $provider
-     */
-    public function __construct(EventProvider $provider)
-    {
-        $this->provider = $provider;
-    }
-
     /**
      * @param ServerRequestInterface $request
      * @param ResponseInterface $response
@@ -41,9 +26,6 @@ class ApprovalController
         RequestDownload $action)
     {
         $actionResponse = $action->handle($event_id, $publisher_id);
-
-        $this->provider->addContextEvents($action->getEvents());
-
         return $response->withJson($actionResponse, $actionResponse->getHttpStatus());
     }
 
@@ -63,9 +45,6 @@ class ApprovalController
         ApprovalDownload $action
     ) {
         $actionResponse = $action->handle($event_id, $publisher_id);
-
-        $this->provider->addContextEvents($action->getEvents());
-
         return $response->withJson($actionResponse, $actionResponse->getHttpStatus());
     }
 
@@ -85,9 +64,6 @@ class ApprovalController
         DisapprovalDownload $action
     ) {
         $actionResponse = $action->handle($event_id, $publisher_id);
-
-        $this->provider->addContextEvents($action->getEvents());
-
         return $response->withJson($actionResponse, $actionResponse->getHttpStatus());
     }
 }

@@ -2,6 +2,10 @@
 
 namespace PhotoContainer\PhotoContainer\Contexts\Approval\Domain;
 
+use PhotoContainer\PhotoContainer\Contexts\Approval\Event\DownloadApproval;
+use PhotoContainer\PhotoContainer\Contexts\Approval\Event\DownloadRequested;
+use PhotoContainer\PhotoContainer\Infrastructure\Event\EventRecorder;
+
 class DownloadRequest
 {
     /**
@@ -67,6 +71,7 @@ class DownloadRequest
     public function changeId(int $id)
     {
         $this->id = $id;
+        EventRecorder::getInstance()->record(new DownloadRequested($this->event_id, $this->user_id));
     }
 
     /**
@@ -115,6 +120,8 @@ class DownloadRequest
     public function changeAuthorized(bool $authorized)
     {
         $this->authorized = $authorized;
+
+        EventRecorder::getInstance()->record(new DownloadApproval($this->event_id, $this->user_id, $this->authorized));
     }
 
     /**

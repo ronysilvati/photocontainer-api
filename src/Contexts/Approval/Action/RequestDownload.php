@@ -4,15 +4,10 @@ namespace PhotoContainer\PhotoContainer\Contexts\Approval\Action;
 
 use PhotoContainer\PhotoContainer\Contexts\Approval\Domain\ApprovalRepository;
 use PhotoContainer\PhotoContainer\Contexts\Approval\Domain\DownloadRequest;
-use PhotoContainer\PhotoContainer\Contexts\Approval\Email\ApprovalRequestEmail;
 use PhotoContainer\PhotoContainer\Contexts\Approval\Response\DownloadRequestResponse;
-use PhotoContainer\PhotoContainer\Infrastructure\Event\EventGeneratorTrait;
-
 
 class RequestDownload
 {
-    use EventGeneratorTrait;
-
     /**
      * @var ApprovalRepository
      */
@@ -51,31 +46,7 @@ class RequestDownload
         );
 
         $event = $this->repository->createDownloadRequest($dlRequest);
-
-        $this->sendEmailToPhotographer($event_id, $publisher_id);
-
         return new DownloadRequestResponse($event);
     }
 
-    /**
-     * @param int $event_id
-     * @param int $publisher_id
-     */
-    public function sendEmailToPhotographer(int $event_id, int $publisher_id): void
-    {
-        $event = $this->repository->findEvent($event_id);
-        $publisher = $this->repository->findUser($publisher_id);
-        $photographer = $this->repository->findUser($event->getUserId());
-
-        $data = [
-            '{EVENT_NAME}' => $event->getName(),
-            '{PUBLISHER}' => $publisher->getName()
-        ];
-
-        $email = new ApprovalRequestEmail(
-            $data,
-            ['name' => $photographer->getName(), 'email' => $photographer->getEmail()]
-        );
-        $this->addEvent('generic.sendmail', $email);
-    }
 }

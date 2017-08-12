@@ -12,7 +12,7 @@ use PhotoContainer\PhotoContainer\Infrastructure\Persistence\Eloquent\Event as E
 use PhotoContainer\PhotoContainer\Infrastructure\Persistence\Eloquent\User as UserModel;
 use PhotoContainer\PhotoContainer\Infrastructure\Persistence\EloquentDatabaseProvider;
 
-class EloquentEventRepository implements ApprovalRepository
+class EloquentApprovalRepository implements ApprovalRepository
 {
     /**
      * @var EloquentDatabaseProvider

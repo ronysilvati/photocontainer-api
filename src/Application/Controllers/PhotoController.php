@@ -11,31 +11,14 @@ use PhotoContainer\PhotoContainer\Contexts\Photo\Action\LikePhoto;
 use PhotoContainer\PhotoContainer\Contexts\Photo\Action\SetPhotoAsCover;
 use PhotoContainer\PhotoContainer\Contexts\Photo\Domain\Like;
 use PhotoContainer\PhotoContainer\Contexts\Photo\Domain\Photo;
-
-use PhotoContainer\PhotoContainer\Infrastructure\Event\EventProvider;
 use PhotoContainer\PhotoContainer\Infrastructure\Web\DomainExceptionResponse;
 use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\ServerRequestInterface;
-
 use Slim\Http\Stream;
 use Slim\Http\UploadedFile;
 
 class PhotoController
 {
-    /**
-     * @var EventProvider
-     */
-    private $provider;
-
-    /**
-     * PhotoController constructor.
-     * @param EventProvider $provider
-     */
-    public function __construct(EventProvider $provider)
-    {
-        $this->provider = $provider;
-    }
-
     /**
      * @param ServerRequestInterface $request
      * @param ResponseInterface $response

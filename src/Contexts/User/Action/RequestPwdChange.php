@@ -2,13 +2,12 @@
 
 namespace PhotoContainer\PhotoContainer\Contexts\User\Action;
 
+use PhotoContainer\PhotoContainer\Application\Resources\Emails\PasswordRequestEmail;
 use PhotoContainer\PhotoContainer\Contexts\User\Domain\RequestPassword;
 use PhotoContainer\PhotoContainer\Contexts\User\Domain\User;
 use PhotoContainer\PhotoContainer\Contexts\User\Domain\UserRepository;
-use PhotoContainer\PhotoContainer\Contexts\User\Email\PasswordRequestEmail;
 use PhotoContainer\PhotoContainer\Contexts\User\Response\RequestPasswordCreated;
 use PhotoContainer\PhotoContainer\Infrastructure\Email\EmailHelper;
-
 use PhotoContainer\PhotoContainer\Infrastructure\Helper\TokenGeneratorHelper;
 use PhotoContainer\PhotoContainer\Infrastructure\Persistence\AtomicWorker;
 use PhotoContainer\PhotoContainer\Infrastructure\Web\DomainExceptionResponse;

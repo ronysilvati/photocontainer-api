@@ -3,15 +3,10 @@
 namespace PhotoContainer\PhotoContainer\Contexts\Approval\Action;
 
 use PhotoContainer\PhotoContainer\Contexts\Approval\Domain\ApprovalRepository;
-use PhotoContainer\PhotoContainer\Contexts\Approval\Email\ReprovedEmail;
 use PhotoContainer\PhotoContainer\Contexts\Approval\Response\DisapprovalRequestResponse;
-use PhotoContainer\PhotoContainer\Infrastructure\Event\EventGeneratorTrait;
-
 
 class DisapprovalDownload
 {
-    use EventGeneratorTrait;
-
     /**
      * @var ApprovalRepository
      */
@@ -45,28 +40,6 @@ class DisapprovalDownload
 
         $request = $this->repository->disapproval($request);
 
-        $this->sendEmailToPublisher($event_id, $publisher_id);
-
         return new DisapprovalRequestResponse($request);
-    }
-
-    /**
-     * @param int $event_id
-     * @param int $publisher_id
-     */
-    public function sendEmailToPublisher(int $event_id, int $publisher_id): void
-    {
-        $event = $this->repository->findEvent($event_id);
-        $publisher = $this->repository->findUser($publisher_id);
-
-        $data = [
-            '{EVENT_NAME}' => $event->getName(),
-        ];
-
-        $email = new ReprovedEmail(
-            $data,
-            ['name' => $publisher->getName(), 'email' => $publisher->getEmail()]
-        );
-        $this->addEvent('generic.sendmail', $email);
     }
 }
