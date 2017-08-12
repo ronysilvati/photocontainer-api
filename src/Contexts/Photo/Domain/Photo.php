@@ -2,10 +2,10 @@
 
 namespace PhotoContainer\PhotoContainer\Contexts\Photo\Domain;
 
-use PhotoContainer\PhotoContainer\Infrastructure\Entity;
+
 use Ramsey\Uuid\Uuid;
 
-class Photo implements Entity
+class Photo
 {
     public $file;
 

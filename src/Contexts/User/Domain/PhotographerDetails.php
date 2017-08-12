@@ -3,10 +3,10 @@
 namespace PhotoContainer\PhotoContainer\Contexts\User\Domain;
 
 use League\Flysystem\Exception;
-use PhotoContainer\PhotoContainer\Infrastructure\Entity;
+
 use PhotoContainer\PhotoContainer\Infrastructure\Validation\Validator;
 
-class PhotographerDetails implements Entity
+class PhotographerDetails
 {
     use Validator;
 

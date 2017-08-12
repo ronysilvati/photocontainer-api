@@ -6,7 +6,6 @@ use PhotoContainer\PhotoContainer\Contexts\Cep\Action\FindCep;
 use PhotoContainer\PhotoContainer\Contexts\Cep\Action\FindCities;
 use PhotoContainer\PhotoContainer\Contexts\Cep\Action\FindStates;
 use PhotoContainer\PhotoContainer\Contexts\Cep\Action\GetCountries;
-
 use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\ServerRequestInterface;
 use Slim\HttpCache\CacheProvider;

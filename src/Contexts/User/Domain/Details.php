@@ -2,10 +2,10 @@
 
 namespace PhotoContainer\PhotoContainer\Contexts\User\Domain;
 
-use PhotoContainer\PhotoContainer\Infrastructure\Entity;
+
 use PhotoContainer\PhotoContainer\Infrastructure\Validation\Validator;
 
-class Details implements Entity
+class Details
 {
     use Validator;
 

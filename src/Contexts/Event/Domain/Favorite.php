@@ -2,9 +2,9 @@
 
 namespace PhotoContainer\PhotoContainer\Contexts\Event\Domain;
 
-use PhotoContainer\PhotoContainer\Infrastructure\Entity;
 
-class Favorite implements Entity
+
+class Favorite
 {
     private $id;
     private $publisher;

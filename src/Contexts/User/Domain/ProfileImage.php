@@ -2,11 +2,11 @@
 
 namespace PhotoContainer\PhotoContainer\Contexts\User\Domain;
 
-use PhotoContainer\PhotoContainer\Infrastructure\Entity;
+
 use PhotoContainer\PhotoContainer\Infrastructure\Exception\DomainViolationException;
 use Ramsey\Uuid\Uuid;
 
-class ProfileImage implements Entity
+class ProfileImage
 {
     /**
      * @var int

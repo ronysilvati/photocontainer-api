@@ -5,12 +5,12 @@ namespace PhotoContainer\PhotoContainer\Contexts\User\Domain;
 
 use PhotoContainer\PhotoContainer\Contexts\User\Event\PublisherCreated;
 use PhotoContainer\PhotoContainer\Contexts\User\Event\UserCreated;
-use PhotoContainer\PhotoContainer\Infrastructure\Entity;
+
 use PhotoContainer\PhotoContainer\Infrastructure\Event\EventRecorder;
 use PhotoContainer\PhotoContainer\Infrastructure\Exception\DomainViolationException;
 use PhotoContainer\PhotoContainer\Infrastructure\Validation\Validator;
 
-class User implements Entity
+class User
 {
     use Validator;
 

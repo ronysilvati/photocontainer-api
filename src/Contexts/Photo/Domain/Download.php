@@ -3,10 +3,10 @@
 namespace PhotoContainer\PhotoContainer\Contexts\Photo\Domain;
 
 use PhotoContainer\PhotoContainer\Contexts\Photo\Event\DownloadedPhoto;
-use PhotoContainer\PhotoContainer\Infrastructure\Entity;
+
 use PhotoContainer\PhotoContainer\Infrastructure\Event\EventRecorder;
 
-class Download implements Entity
+class Download
 {
     /**
      * @var int

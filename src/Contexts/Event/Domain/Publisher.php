@@ -2,9 +2,9 @@
 
 namespace PhotoContainer\PhotoContainer\Contexts\Event\Domain;
 
-use PhotoContainer\PhotoContainer\Infrastructure\Entity;
 
-class Publisher implements Entity
+
+class Publisher
 {
     private $id;
     private $profile_id;

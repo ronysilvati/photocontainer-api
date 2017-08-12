@@ -2,9 +2,7 @@
 
 namespace PhotoContainer\PhotoContainer\Contexts\Auth\Domain;
 
-use PhotoContainer\PhotoContainer\Infrastructure\Entity;
-
-class Auth implements Entity
+class Auth
 {
     private $user;
     private $password;
