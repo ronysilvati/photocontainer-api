@@ -112,10 +112,6 @@ $slimParams[PhotoContainer\PhotoContainer\Infrastructure\Email\EmailHelper::clas
     return new \PhotoContainer\PhotoContainer\Infrastructure\Email\SwiftMailerHelper($transport);
 };
 
-$slimParams[PhotoContainer\PhotoContainer\Infrastructure\Event\EventProvider::class] = function () {
-    return new \PhotoContainer\PhotoContainer\Infrastructure\Event\EvenementEventProvider();
-};
-
 $slimParams[PhotoContainer\PhotoContainer\Infrastructure\Cache\CacheHelper::class] = function () {
     if (getenv('ENVIRONMENT') === 'prod') {
         $cache = new \Doctrine\Common\Cache\ApcuCache();

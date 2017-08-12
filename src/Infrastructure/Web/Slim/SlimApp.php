@@ -42,7 +42,6 @@ class SlimApp implements WebApp
         $this->app->add(function (ServerRequestInterface $req, ResponseInterface $res, $next) {
             /** @var ResponseInterface $response */
             $response = $next($req, $res);
-            $this->get(EventProvider::class)->releaseAllEvents();
 
             /** @var \League\Event\Emitter $eventEmitter */
             $eventEmitter = $this->get(Emitter::class);
