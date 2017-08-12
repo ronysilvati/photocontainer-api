@@ -1,6 +1,6 @@
 <?php
 
-namespace PhotoContainer\PhotoContainer\Contexts\Approval\Email;
+namespace PhotoContainer\PhotoContainer\Application\Resources\Emails;
 
 use PhotoContainer\PhotoContainer\Infrastructure\Email\Email;
 
