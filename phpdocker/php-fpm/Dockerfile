@@ -2,9 +2,9 @@ FROM phpdockerio/php71-fpm:latest
 
 # Install selected extensions and other stuff
 RUN apt-get update \
-    && apt-get -y --no-install-recommends install  php7.1-mysql php7.1-gd php7.1-intl php7.1-mbstring php7.1-xsl php-yaml php-xdebug \
+    && apt-get -y --no-install-recommends install php7.1-mysql php7.1-gd php7.1-intl php7.1-mbstring php7.1-xsl \
+    && php-yaml php-xdebug php-mcrypt \
     && apt-get clean; rm -rf /var/lib/apt/lists/* /tmp/* /var/tmp/* /usr/share/doc/*
-
 
 WORKDIR "/application"
 RUN composer global require hirak/prestissimo
