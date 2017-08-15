@@ -25,14 +25,14 @@ if (DEBUG_MODE) {
     ];
 }
 
-$slimParams['settings.logger'] = function($c) {
+$slimParams['logger'] = function($c) {
     $logger = new \Monolog\Logger('API_LOG');
     $file_handler = new \Monolog\Handler\StreamHandler("../logs/api.log");
     $logger->pushHandler($file_handler);
     return $logger;
 };
 
-$slimParams['settings.errorHandler'] = function ($c) {
+$slimParams['errorHandler'] = function ($c) {
     return function (\Psr\Http\Message\ServerRequestInterface $request, $response, Exception $e) use ($c) {
         $trace = $e->getTrace();
 
