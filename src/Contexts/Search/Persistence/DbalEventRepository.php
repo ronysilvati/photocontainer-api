@@ -69,7 +69,7 @@ class DbalEventRepository implements EventRepository
 
             $table = $publisher ? 'event_search_publisher' : 'event_search';
 
-            $where = empty($where) ? '' : " WHERE ".implode(" ", $where);
+            $where = empty($where) ? '' : " WHERE ".implode(" AND ", $where);
 
             $sql = "SELECT id, user_id, name, title, eventdate, category_id, category, photos, likes as total 
                       FROM {$table} {$where}
