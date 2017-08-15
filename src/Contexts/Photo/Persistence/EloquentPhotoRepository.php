@@ -192,7 +192,7 @@ class EloquentPhotoRepository implements PhotoRepository
     public function selectPhotos(array $photo_ids, int $publisher_id): ?SelectedPhotos
     {
         try {
-            $photosEvent = PhotoModel::where('id', $photo_ids)->get()->toArray();
+            $photosEvent = PhotoModel::whereIn('id', $photo_ids)->get()->toArray();
             $selected = new SelectedPhotos($publisher_id);
 
             return $this->convertToDomainModel($selected, $photosEvent);
