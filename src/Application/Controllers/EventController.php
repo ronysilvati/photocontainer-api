@@ -8,6 +8,7 @@ use PhotoContainer\PhotoContainer\Contexts\Event\Action\DeleteEvent;
 use PhotoContainer\PhotoContainer\Contexts\Event\Action\DeleteFavorite;
 use PhotoContainer\PhotoContainer\Contexts\Event\Action\FindEvent;
 use PhotoContainer\PhotoContainer\Contexts\Event\Action\UpdateEvent;
+use PhotoContainer\PhotoContainer\Contexts\Event\Action\UpdateSuppliers;
 use PhotoContainer\PhotoContainer\Contexts\Event\Action\UpdateTags;
 use PhotoContainer\PhotoContainer\Contexts\Event\Domain\Event;
 use PhotoContainer\PhotoContainer\Contexts\Event\Domain\EventCategory;
@@ -177,14 +178,14 @@ class EventController
     /**
      * @param ServerRequestInterface $request
      * @param ResponseInterface $response
-     * @param UpdateTags $action
+     * @param UpdateSuppliers $action
      * @param int $id
      * @return mixed
      */
     public function updateSuppliers(
         ServerRequestInterface $request,
         ResponseInterface $response,
-        UpdateTags $action,
+        UpdateSuppliers $action,
         int $id
     ) {
         $data = $request->getParsedBody();
