@@ -78,7 +78,7 @@ class DownloadSelected
             $filesForZip[] = $currentPhoto->getFilePath('protected', true, true);
         }
 
-        $zipname = getenv('SHARED_PATH').'/event_'.time().'.zip';
+        $zipname = getenv('ZIP_PATH').'/event_'.time().'.zip';
         if (!$this->zipCreatorHelper->createFromFiles($zipname, $filesForZip)) {
             throw new DomainViolationException('Falha no envio das fotos.');
         };
