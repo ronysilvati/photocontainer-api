@@ -23,8 +23,8 @@ class ApprovalController
         ResponseInterface $response,
         int $event_id,
         int $publisher_id,
-        RequestDownload $action)
-    {
+        RequestDownload $action
+    ) {
         $actionResponse = $action->handle($event_id, $publisher_id);
         return $response->withJson($actionResponse, $actionResponse->getHttpStatus());
     }
