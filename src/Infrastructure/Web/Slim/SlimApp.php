@@ -3,7 +3,6 @@
 namespace PhotoContainer\PhotoContainer\Infrastructure\Web\Slim;
 
 use League\Event\Emitter;
-use PhotoContainer\PhotoContainer\Infrastructure\Event\EventProvider;
 use PhotoContainer\PhotoContainer\Infrastructure\Event\EventRecorder;
 use PhotoContainer\PhotoContainer\Infrastructure\Event\EventWrapper;
 use PhotoContainer\PhotoContainer\Infrastructure\Web\WebApp;
@@ -56,13 +55,13 @@ class SlimApp implements WebApp
             return $response;
         });
 
-        $this->app->options('/{routes:.+}', function (ServerRequestInterface $req, ResponseInterface $res) {
-            return $res;
+        $this->app->options('/{routes:.+}', function (ServerRequestInterface $request, ResponseInterface $response) {
+            return $response;
         });
 
-        $this->app->add(function (ServerRequestInterface $req, ResponseInterface $res, $next) {
+        $this->app->add(function (ServerRequestInterface $request, ResponseInterface $response, $next) {
             /** @var ResponseInterface $response */
-            $response = $next($req, $res);
+            $response = $next($request, $response);
             return $response
                 ->withHeader('Access-Control-Allow-Origin', '*')
                 ->withHeader('Access-Control-Allow-Headers', 'Access-Control-Allow-Origin, X-Requested-With, Content-Type, Accept, Origin, Authorization, Cache-Control')
