@@ -25,9 +25,9 @@ $app->get('/search/photo/user/{publisher_id}/{type:downloads|favorites}', [Searc
 $app->get('/search/waiting_approval/user/{photographer_id}', [SearchController::class, 'waitingForApproval']);
 $app->get('/search/notifications/user/{user_id}', [SearchController::class, 'notifications']);
 
-$app->get('/events/{event_id}/request/user/{publisher_id}', [ApprovalController::class, 'requestDownload']);
-$app->get('/events/{event_id}/approval/user/{publisher_id}', [ApprovalController::class, 'approvalDownload']);
-$app->get('/events/{event_id}/disapproval/user/{publisher_id}', [ApprovalController::class, 'disapprovalDownload']);
+$app->post('/events/{event_id}/request/user/{publisher_id}', [ApprovalController::class, 'requestDownload']);
+$app->put('/events/{event_id}/approval/user/{publisher_id}', [ApprovalController::class, 'approvalDownload']);
+$app->put('/events/{event_id}/disapproval/user/{publisher_id}', [ApprovalController::class, 'disapprovalDownload']);
 
 $app->post('/contact', [ContactController::class, 'createContact']);
 $app->get('/contact/total', [ContactController::class, 'total']);
