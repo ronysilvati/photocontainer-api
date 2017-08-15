@@ -31,7 +31,7 @@ class DbalEventRepository implements EventRepository
             $where = [];
 
             if ($search->getTitle()) {
-                $where[] = "title like %{$search->getTitle()}%";
+                $where[] = "title like '%{$search->getTitle()}%'";
             }
 
             if ($search->getPhotographer()->getId()) {
@@ -121,7 +121,6 @@ class DbalEventRepository implements EventRepository
 
             return $out;
         } catch (\Exception $e) {
-            var_dump($e->getMessage());exit;
             throw new PersistenceException('Erro na pesquisa de eventos.', $e->getMessage(), 500, $e);
         }
     }
