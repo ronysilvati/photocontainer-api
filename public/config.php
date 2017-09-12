@@ -132,14 +132,6 @@ $slimParams[PhotoContainer\PhotoContainer\Infrastructure\Persistence\RestDatabas
     return $database;
 };
 
-$slimParams[PhotoContainer\PhotoContainer\Contexts\Photo\Domain\FSPhotoRepository::class] = function ($c) {
-    return new \PhotoContainer\PhotoContainer\Contexts\Photo\Persistence\FilesystemPhotoRepository();
-};
-
-$slimParams['PhotoContainer\PhotoContainer\Contexts\*\Domain\*Repository'] = DI\object(
-    'PhotoContainer\PhotoContainer\Contexts\*\Persistence\Eloquent*Repository'
-);
-
-$slimParams[League\Event\Emitter::class] = DI\object(\League\Event\Emitter::class);
+$slimParams['EventDispatcher'] = DI\object(\League\Event\Emitter::class);
 
 return $slimParams;

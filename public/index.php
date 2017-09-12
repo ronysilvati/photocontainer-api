@@ -1,5 +1,4 @@
 <?php
-
 use PhotoContainer\PhotoContainer\Infrastructure\Web\Slim\SlimApp;
 
 define('ROOT_DIR', dirname(__DIR__));
@@ -28,13 +27,11 @@ class SlimPHPDI extends \DI\Bridge\Slim\App
         $builder->setDefinitionCache($cache);
 
         $builder->addDefinitions('config.php');
+        $builder->addDefinitions('../src/Application/Resources/services.php');
     }
 }
 
 $app = new SlimPHPDI;
-
-require 'routes.php';
-require 'listeners.php';
 
 $app->add(new \Zeuxisoo\Whoops\Provider\Slim\WhoopsMiddleware);
 

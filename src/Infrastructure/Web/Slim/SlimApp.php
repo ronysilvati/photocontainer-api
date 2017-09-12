@@ -32,6 +32,12 @@ class SlimApp implements WebApp
      */
     public function bootstrap(array $conf)
     {
+        $app = $this->app;
+        $container = $app->getContainer();        
+
+        require ROOT_DIR.'/src/Application/Resources/routes.php';
+        require ROOT_DIR.'/src/Application/Resources/listeners.php';
+
         $this->app->add(new JwtAuthentication([
             "secret" => $conf["secret"],
             "path" => $conf["api_path"],
