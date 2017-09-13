@@ -4,6 +4,7 @@ namespace PhotoContainer\PhotoContainer\Contexts\Cep\Action;
 
 use PhotoContainer\PhotoContainer\Contexts\Cep\Domain\CepRepository;
 use PhotoContainer\PhotoContainer\Contexts\Cep\Response\CountryCollectionResponse;
+use PhotoContainer\PhotoContainer\Infrastructure\Cache\CacheHelper;
 
 
 class GetCountries
@@ -14,12 +15,19 @@ class GetCountries
     protected $repository;
 
     /**
+     * @var CacheHelper
+     */
+    private $cacheHelper;
+
+    /**
      * GetCountries constructor.
      * @param CepRepository $repository
+     * @param CacheHelper $cacheHelper
      */
-    public function __construct(CepRepository $repository)
+    public function __construct(CepRepository $repository, CacheHelper $cacheHelper)
     {
         $this->repository = $repository;
+        $this->cacheHelper = $cacheHelper;
     }
 
     /**
@@ -27,7 +35,14 @@ class GetCountries
      */
     public function handle()
     {
-        $states = $this->repository->getCountries();
+        $states = $this->cacheHelper->remember(
+            'countries',
+            function () {
+                return $this->repository->getCountries();
+            },
+            48000
+        );
+
         return new CountryCollectionResponse($states);
     }
 }
