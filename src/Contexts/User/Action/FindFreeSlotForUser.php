@@ -2,21 +2,13 @@
 
 namespace PhotoContainer\PhotoContainer\Contexts\User\Action;
 
-
-
 use PhotoContainer\PhotoContainer\Contexts\User\Domain\UserRepository;
-
 use PhotoContainer\PhotoContainer\Contexts\User\Response\HasSlotsResponse;
 use PhotoContainer\PhotoContainer\Contexts\User\Response\NoUserSlotsResponse;
 
 
-use PhotoContainer\PhotoContainer\Infrastructure\Event\EventGeneratorTrait;
-
-
 class FindFreeSlotForUser
 {
-    use EventGeneratorTrait;
-
     /**
      * @var UserRepository
      */

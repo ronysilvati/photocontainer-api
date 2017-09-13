@@ -7,15 +7,12 @@ use PhotoContainer\PhotoContainer\Contexts\User\Domain\UserRepository;
 use PhotoContainer\PhotoContainer\Contexts\User\Response\NoUserSlotsResponse;
 use PhotoContainer\PhotoContainer\Contexts\User\Response\UserCreatedResponse;
 use PhotoContainer\PhotoContainer\Infrastructure\Crypto\CryptoMethod;
-use PhotoContainer\PhotoContainer\Infrastructure\Event\EventGeneratorTrait;
 use PhotoContainer\PhotoContainer\Infrastructure\Exception\DomainViolationException;
 use PhotoContainer\PhotoContainer\Infrastructure\Persistence\AtomicWorker;
 
 
 class CreateUser
 {
-    use EventGeneratorTrait;
-
     /**
      * @var UserRepository
      */
