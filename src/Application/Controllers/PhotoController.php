@@ -11,6 +11,7 @@ use PhotoContainer\PhotoContainer\Contexts\Photo\Action\LikePhoto;
 use PhotoContainer\PhotoContainer\Contexts\Photo\Action\SetPhotoAsCover;
 use PhotoContainer\PhotoContainer\Contexts\Photo\Domain\Like;
 use PhotoContainer\PhotoContainer\Contexts\Photo\Domain\Photo;
+use PhotoContainer\PhotoContainer\Infrastructure\NoContentResponse;
 use PhotoContainer\PhotoContainer\Infrastructure\Web\DomainExceptionResponse;
 use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\ServerRequestInterface;
@@ -190,7 +191,7 @@ class PhotoController
     ) {
         $actionResponse = $action->handle($type, $publisher_id, $ids);
 
-        if (get_class($actionResponse) == DomainExceptionResponse::class) {
+        if (in_array(get_class($actionResponse), [DomainExceptionResponse::class, NoContentResponse::class])) {
             return $response->withJson($actionResponse->jsonSerialize(), $actionResponse->getHttpStatus());
         }
 
