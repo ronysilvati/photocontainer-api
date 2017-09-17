@@ -5,17 +5,24 @@ namespace PhotoContainer\PhotoContainer\Contexts\Search\Domain;
 class Notification
 {
     /**
-     * @var int
+     * @var array
      */
-    private $approvalWaitList;
+    private $values = [];
 
-    public function setApprovalWaitList(int $approvalWaitList)
+    public function addNotification(string $name, int $value)
     {
-        $this->approvalWaitList = $approvalWaitList;
+        $this->values[$name] = $value;
     }
 
-    public function getTotal()
+    public function getTotal(): int
     {
-        return $this->approvalWaitList;
+        return array_reduce(
+            $this->values,
+            function ($carry, $item) {
+                $carry += $item;
+                return $carry;
+            },
+            0
+        );
     }
 }

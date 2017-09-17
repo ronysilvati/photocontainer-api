@@ -19,7 +19,8 @@ class GetNotifications
     public function handle(int $user_id)
     {
         $notification = new Notification();
-        $notification->setApprovalWaitList($this->repository->approvalWaitList($user_id));
+        $notification->addNotification('wait_list', $this->repository->approvalWaitList($user_id));
+        $notification->addNotification('event_notification', $this->repository->eventNotification($user_id));
 
         return new NotificationResponse($notification);
     }
