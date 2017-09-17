@@ -3,6 +3,7 @@
 namespace PhotoContainer\PhotoContainer\Infrastructure\Persistence\Eloquent;
 
 use Illuminate\Database\Eloquent\Model as EloquentModel;
+use PhotoContainer\PhotoContainer\Contexts\Event\Domain\EventNotification;
 
 class Event extends EloquentModel
 {
@@ -31,5 +32,10 @@ class Event extends EloquentModel
     public function downloadRequest()
     {
         return $this->hasMany(DownloadRequest::class);
+    }
+
+    public function notifications()
+    {
+        return $this->hasMany(EventNotification::class);
     }
 }
