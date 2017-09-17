@@ -58,11 +58,20 @@ class BroadcastEvent
 
         $publishers = $this->userRepository->findByProfile(Publisher::APPROVED_PROFILE);
 
+        $this->queueEmails($publishers, $event);
+
+        return new BroadcastResponse();
+    }
+
+    public function queueEmails($publishers, $event)
+    {
         $to = ['name' => getenv('PHOTOCONTAINER_EMAIL_NAME'), 'email' => getenv('PHOTOCONTAINER_EMAIL')];
 
         $funEmails = function ($publishers, $event) use ($to) {
             /** @var Publisher $publisher */
             foreach ($publishers as $publisher) {
+                $this->eventRepository->createNotification($event, $publisher);
+
                 $data = [
                     '{EVENT_NAME}' => $event->getTitle()
                 ];
@@ -82,7 +91,5 @@ class BroadcastEvent
                 //@TODO logar os erros no monolog
             }
         }
-
-        return new BroadcastResponse();
     }
 }
