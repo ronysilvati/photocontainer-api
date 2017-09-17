@@ -15,7 +15,7 @@ class UpdateSuppliers
         $this->repository = $repository;
     }
 
-    public function handle(array $suppliers, int $id)
+    public function handle(array $suppliers, int $id): SuppliersUpdateResponse
     {
         $result = $this->repository->saveEventSuppliers(json_encode((object) $suppliers), $id);
         return new SuppliersUpdateResponse($result);
