@@ -9,9 +9,17 @@ class SwiftMailerHelper implements EmailHelper
      */
     private $transport;
 
+    /**
+     * @var \Swift_Mailer
+     */
+    private $mailer;
+
     public function __construct(\Swift_Transport $transport)
     {
         $this->transport = $transport;
+
+        $this->mailer = new \Swift_Mailer($this->transport);
+        $this->mailer->registerPlugin(new \Swift_Plugins_AntiFloodPlugin(100, 1));
     }
 
     /**
@@ -24,14 +32,12 @@ class SwiftMailerHelper implements EmailHelper
             $from = $email->getFrom();
             $to = $email->getTo();
 
-            $mailer = new \Swift_Mailer($this->transport);
-
             if ($email->getData()) {
                 $replacements = [$to['email'] => $email->getData()];
 
                 // Create an instance of the plugin and register it
                 $plugin = new \Swift_Plugins_DecoratorPlugin($replacements);
-                $mailer->registerPlugin($plugin);
+                $this->mailer->registerPlugin($plugin);
             }
 
             // Create the message
@@ -41,7 +47,7 @@ class SwiftMailerHelper implements EmailHelper
             $message->setFrom($from['email'], $from['name']);
 
             $message->setTo($to['email'], $to['name']);
-            $mailer->send($message);
+            $this->mailer->send($message);
 
         } catch (\Exception $e) {
             throw $e;

@@ -1,11 +1,4 @@
 <?php
-$slimParams = [
-    'settings.responseChunkSize' => 4096,
-    'settings.outputBuffering' => 'append',
-    'settings.determineRouteBeforeAppMiddleware' => false,
-    'settings.displayErrorDetails' => false,
-];
-
 if (!is_dir(CACHE_DIR)) {
     mkdir(CACHE_DIR, 0777);
 }
@@ -14,53 +7,9 @@ if (!is_dir(LOG_DIR)) {
     mkdir(LOG_DIR, 0777);
 }
 
-if (!is_file(CACHE_DIR.'/routes.cache')) {
-    $slimParams = ['settings.routerCacheFile' => CACHE_DIR.'/routes.cache'];
-}
+$defaultDI = [];
 
-if (DEBUG_MODE) {
-    $slimParams = [
-        'settings.displayErrorDetails' => true,
-        'settings.debug' => true,
-    ];
-}
-
-$slimParams['logger'] = function($c) {
-    $logger = new \Monolog\Logger('API_LOG');
-    $file_handler = new \Monolog\Handler\StreamHandler("../logs/api.log");
-    $logger->pushHandler($file_handler);
-    return $logger;
-};
-
-$slimParams['errorHandler'] = function ($c) {
-    return function (\Psr\Http\Message\ServerRequestInterface $request, $response, Exception $e) use ($c) {
-        $trace = $e->getTrace();
-
-        $data = [
-            'file' => $e->getFile() . ': '. $e->getLine(),
-            'route' => $request->getMethod(). ' ' . $request->getUri()->getPath(),
-            'actionClass' => $trace[0],
-            'contextClass' => $trace[1],
-        ];
-
-        $body = $request->getParsedBody();
-        if (!empty($body)) {
-            $data['payload'] = $body;
-        }
-
-        $message = get_class($e) == \PhotoContainer\PhotoContainer\Infrastructure\Exception\PersistenceException::class ? $e->getInfraLayerError() : $e->getMessage();
-
-        $c->get('logger')->addCritical($message, $data);
-        return $response
-            ->withHeader('Access-Control-Allow-Origin', '*')
-            ->withHeader('Access-Control-Allow-Headers', 'Access-Control-Allow-Origin, X-Requested-With, Content-Type, Accept, Origin, Authorization, Cache-Control, Expires')
-            ->withHeader('Access-Control-Allow-Methods', 'GET, POST, PUT, DELETE, OPTIONS, PATCH')
-            ->withHeader('Access-Control-Max-Age', '604800')
-            ->withJson(['message' => $e->getMessage()], 500);
-    };
-};
-
-$slimParams[PhotoContainer\PhotoContainer\Infrastructure\Persistence\EloquentDatabaseProvider::class] = function ($c) {
+$defaultDI[PhotoContainer\PhotoContainer\Infrastructure\Persistence\EloquentDatabaseProvider::class] = function ($c) {
     $database = new \PhotoContainer\PhotoContainer\Infrastructure\Persistence\EloquentDatabaseProvider([
         'host'      => getenv('MYSQL_HOST'),
         'database'  => getenv('MYSQL_DATABASE'),
@@ -73,7 +22,7 @@ $slimParams[PhotoContainer\PhotoContainer\Infrastructure\Persistence\EloquentDat
     return $database;
 };
 
-$slimParams[PhotoContainer\PhotoContainer\Infrastructure\Persistence\DbalDatabaseProvider::class] = function ($c) {
+$defaultDI[PhotoContainer\PhotoContainer\Infrastructure\Persistence\DbalDatabaseProvider::class] = function ($c) {
     $database = new \PhotoContainer\PhotoContainer\Infrastructure\Persistence\DbalDatabaseProvider([
         'host'      => getenv('MYSQL_HOST'),
         'database'  => getenv('MYSQL_DATABASE'),
@@ -86,23 +35,33 @@ $slimParams[PhotoContainer\PhotoContainer\Infrastructure\Persistence\DbalDatabas
     return $database;
 };
 
-$slimParams[PhotoContainer\PhotoContainer\Infrastructure\Crypto\CryptoMethod::class] = function ($c) {
+$defaultDI[PhotoContainer\PhotoContainer\Infrastructure\Crypto\CryptoMethod::class] = function ($c) {
     return new \PhotoContainer\PhotoContainer\Infrastructure\Crypto\BcryptHashing();
 };
 
-$slimParams[PhotoContainer\PhotoContainer\Infrastructure\Persistence\AtomicWorker::class] = function ($c) {
+$defaultDI[PhotoContainer\PhotoContainer\Infrastructure\Persistence\AtomicWorker::class] = function ($c) {
     return new \PhotoContainer\PhotoContainer\Infrastructure\Persistence\EloquentAtomicWorker();
 };
 
-$slimParams[PhotoContainer\PhotoContainer\Infrastructure\Helper\TokenGeneratorHelper::class] = function ($c) {
+$defaultDI[PhotoContainer\PhotoContainer\Infrastructure\Helper\TokenGeneratorHelper::class] = function ($c) {
     return new \PhotoContainer\PhotoContainer\Infrastructure\Helper\TokenGeneratorHelper();
 };
 
-$slimParams[PhotoContainer\PhotoContainer\Infrastructure\Helper\ProfileImageHelper::class] = DI\object(
+$defaultDI[PhotoContainer\PhotoContainer\Infrastructure\Helper\ProfileImageHelper::class] = DI\object(
     PhotoContainer\PhotoContainer\Infrastructure\Helper\ProfileImageHelper::class
 );
 
-$slimParams[PhotoContainer\PhotoContainer\Infrastructure\Email\EmailHelper::class] = function ($c) {
+$defaultDI[\PhotoContainer\PhotoContainer\Infrastructure\Email\SwiftPoolMailerHelper::class] = function ($c) {
+    $context = $c->get(\Interop\Queue\PsrContext::class);
+
+    $transport = new Swift_SpoolTransport(
+        new \PhotoContainer\PhotoContainer\Infrastructure\Email\SwiftQueueSpool($context)
+    );
+
+    return new \PhotoContainer\PhotoContainer\Infrastructure\Email\SwiftPoolMailerHelper($transport);
+};
+
+$defaultDI[PhotoContainer\PhotoContainer\Infrastructure\Email\EmailHelper::class] = function ($c) {
     if (getenv('ENVIRONMENT') === 'prod') {
         $transport = new Swift_SendmailTransport('/usr/lib/sendmail -bs');
     } else {
@@ -112,7 +71,7 @@ $slimParams[PhotoContainer\PhotoContainer\Infrastructure\Email\EmailHelper::clas
     return new \PhotoContainer\PhotoContainer\Infrastructure\Email\SwiftMailerHelper($transport);
 };
 
-$slimParams[PhotoContainer\PhotoContainer\Infrastructure\Cache\CacheHelper::class] = function () {
+$defaultDI[PhotoContainer\PhotoContainer\Infrastructure\Cache\CacheHelper::class] = function () {
     if (getenv('ENVIRONMENT') === 'prod') {
         $cache = new \Doctrine\Common\Cache\ApcuCache();
     } else {
@@ -123,7 +82,7 @@ $slimParams[PhotoContainer\PhotoContainer\Infrastructure\Cache\CacheHelper::clas
     return new \PhotoContainer\PhotoContainer\Infrastructure\Cache\DoctrineCacheHelper($cache);
 };
 
-$slimParams[PhotoContainer\PhotoContainer\Infrastructure\Persistence\RestDatabaseProvider::class] = function ($c) {
+$defaultDI[PhotoContainer\PhotoContainer\Infrastructure\Persistence\RestDatabaseProvider::class] = function ($c) {
     $database = new \PhotoContainer\PhotoContainer\Infrastructure\Persistence\RestDatabaseProvider([
         'host' => 'https://viacep.com.br/ws/',
     ]);
@@ -132,6 +91,20 @@ $slimParams[PhotoContainer\PhotoContainer\Infrastructure\Persistence\RestDatabas
     return $database;
 };
 
-$slimParams['EventDispatcher'] = DI\object(\League\Event\Emitter::class);
+$defaultDI['EventDispatcher'] = DI\object(\League\Event\Emitter::class);
 
-return $slimParams;
+$defaultDI[\Interop\Queue\PsrContext::class] = function ($c) {
+    $dsn = 'mysql://'.getenv('MYSQL_USER').':'.getenv('MYSQL_PASSWORD').
+        '@'.getenv('MYSQL_HOST').':3306/'.getenv('MYSQL_DATABASE');
+
+    $factory = new \Enqueue\Dbal\DbalConnectionFactory($dsn);
+    return $factory->createContext();
+};
+
+$defaultDI['EmailPoolProcessor'] = function ($c) {
+    return new \PhotoContainer\PhotoContainer\Infrastructure\Email\SwiftQueueSpool(
+        $c->get(\Interop\Queue\PsrContext::class)
+    );
+};
+
+return $defaultDI;

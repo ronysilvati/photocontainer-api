@@ -7,6 +7,7 @@ use PhotoContainer\PhotoContainer\Contexts\Event\Domain\Publisher;
 use PhotoContainer\PhotoContainer\Contexts\Event\Domain\UserRepository;
 use PhotoContainer\PhotoContainer\Infrastructure\Exception\PersistenceException;
 use PhotoContainer\PhotoContainer\Infrastructure\Persistence\Eloquent\User;
+use PhotoContainer\PhotoContainer\Infrastructure\Persistence\Eloquent\UserProfile;
 use PhotoContainer\PhotoContainer\Infrastructure\Persistence\EloquentDatabaseProvider;
 
 class EloquentUserRepository implements UserRepository
@@ -55,6 +56,11 @@ class EloquentUserRepository implements UserRepository
         }
     }
 
+    /**
+     * @param int $id
+     * @return mixed
+     * @throws PersistenceException
+     */
     private function findUser(int $id)
     {
         try {
@@ -63,6 +69,30 @@ class EloquentUserRepository implements UserRepository
             return $userModel->toArray();
         } catch (\Exception $e) {
             throw new PersistenceException("O usuário não existe!", $e->getMessage());
+        }
+    }
+
+    /**
+     * @param int $profile
+     * @return mixed
+     * @throws PersistenceException
+     */
+    public function findByProfile(int $profile)
+    {
+        try {
+            $users = UserProfile::where('profile_id', $profile)
+                ->with('user')
+                ->get()
+                ->toArray();
+
+            $out = [];
+            foreach ($users as $user) {
+                $out[] = new Publisher($user['user']['id'], $profile, $user['user']['name'], $user['user']['email']);
+            }
+
+            return $out;
+        } catch (\Exception $e) {
+            throw new PersistenceException("Usuários não carregados.", $e->getMessage());
         }
     }
 }

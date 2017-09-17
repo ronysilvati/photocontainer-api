@@ -2,6 +2,7 @@
 
 namespace PhotoContainer\PhotoContainer\Application\Controllers;
 
+use PhotoContainer\PhotoContainer\Contexts\Event\Action\BroadcastEvent;
 use PhotoContainer\PhotoContainer\Contexts\Event\Action\CreateEvent;
 use PhotoContainer\PhotoContainer\Contexts\Event\Action\CreateFavorite;
 use PhotoContainer\PhotoContainer\Contexts\Event\Action\DeleteEvent;
@@ -195,6 +196,24 @@ class EventController
         }
 
         $actionResponse = $action->handle($data, $id);
+
+        return $response->withJson($actionResponse, $actionResponse->getHttpStatus());
+    }
+
+    /**
+     * @param ServerRequestInterface $request
+     * @param ResponseInterface $response
+     * @param BroadcastEvent $action
+     * @param int $event_id
+     * @return mixed
+     */
+    public function broadcastNewEvent(
+        ServerRequestInterface $request,
+        ResponseInterface $response,
+        BroadcastEvent $action,
+        int $event_id
+    ) {
+        $actionResponse = $action->handle($event_id);
 
         return $response->withJson($actionResponse, $actionResponse->getHttpStatus());
     }

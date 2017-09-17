@@ -1,4 +1,5 @@
 <?php
+
 use PhotoContainer\PhotoContainer\Infrastructure\Web\Slim\SlimApp;
 
 define('ROOT_DIR', dirname(__DIR__));
@@ -26,6 +27,7 @@ class SlimPHPDI extends \DI\Bridge\Slim\App
         $cache->setNamespace('PhotoContainer');
         $builder->setDefinitionCache($cache);
 
+        $builder->addDefinitions('slim_config.php');
         $builder->addDefinitions('config.php');
         $builder->addDefinitions('../src/Application/Resources/services.php');
     }

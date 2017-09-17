@@ -9,11 +9,12 @@ use PhotoContainer\PhotoContainer\Application\Resources\Emails\PublisherDownload
 use PhotoContainer\PhotoContainer\Contexts\Photo\Domain\PhotoRepository;
 use PhotoContainer\PhotoContainer\Contexts\Photo\Event\DownloadedPhoto;
 use PhotoContainer\PhotoContainer\Infrastructure\Email\EmailHelper;
+use PhotoContainer\PhotoContainer\Infrastructure\Email\SwiftPoolMailerHelper;
 
 class SendEmailPublisherOnDownload extends AbstractListener
 {
     /**
-     * @var EmailHelper
+     * @var SwiftPoolMailerHelper
      */
     private $emailHelper;
 
@@ -24,10 +25,10 @@ class SendEmailPublisherOnDownload extends AbstractListener
 
     /**
      * SendEmailPublisherOnDownload constructor.
-     * @param EmailHelper $emailHelper
+     * @param SwiftPoolMailerHelper $emailHelper
      * @param PhotoRepository $dbRepo
      */
-    public function __construct(EmailHelper $emailHelper, PhotoRepository $dbRepo)
+    public function __construct(SwiftPoolMailerHelper $emailHelper, PhotoRepository $dbRepo)
     {
         $this->emailHelper = $emailHelper;
         $this->dbRepo = $dbRepo;

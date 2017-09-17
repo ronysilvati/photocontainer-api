@@ -1,0 +1,40 @@
+#!/usr/bin/env php
+
+<?php
+require 'vendor/autoload.php';
+
+use Symfony\Component\Console\Application;
+use PhotoContainer\PhotoContainer\Application\Shell\EmailPoolConsumer;
+
+define('ROOT_DIR', __DIR__);
+define('CACHE_DIR', ROOT_DIR.'/cache');
+define('LOG_DIR', ROOT_DIR.'/logs');
+define('DEBUG_MODE', true);
+
+if (is_file(ROOT_DIR.'/public/.env')) {
+    $dotenv = new Dotenv\Dotenv(ROOT_DIR.'/public');
+    $dotenv->overload();
+}
+
+$builder = new \DI\ContainerBuilder();
+
+if (getenv('ENVIRONMENT') === 'prod') {
+    $cache = new \Doctrine\Common\Cache\ApcuCache();
+} else {
+    $cache = new \Doctrine\Common\Cache\ArrayCache();
+}
+$cache->setNamespace('PhotoContainer_cli');
+
+$builder->setDefinitionCache($cache);
+
+$builder->addDefinitions(ROOT_DIR.'/public/config.php');
+$builder->addDefinitions(ROOT_DIR.'/src/Application/Resources/services.php');
+
+$builder->writeProxiesToFile(true, ROOT_DIR.'/cache/proxies');
+
+$container = $builder->build();
+
+$application = new Application();
+
+$application->add(new EmailPoolConsumer('EmailPool', $container->get(\Interop\Queue\PsrContext::class)));
+$application->run();

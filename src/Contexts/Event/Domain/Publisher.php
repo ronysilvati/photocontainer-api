@@ -2,17 +2,35 @@
 
 namespace PhotoContainer\PhotoContainer\Contexts\Event\Domain;
 
-
-
 class Publisher
 {
+    /**
+     * @var int
+     */
     private $id;
+
+    /**
+     * @var int
+     */
     private $profile_id;
+
+    /**
+     * @var string
+     */
     private $name;
+
+    private $email;
 
     const APPROVED_PROFILE = 3;
 
-    public function __construct(?int $id, ?int $profile_id, ?string $name)
+    /**
+     * Publisher constructor.
+     * @param int|null $id
+     * @param int|null $profile_id
+     * @param null|string $name
+     * @param null|string $email
+     */
+    public function __construct(?int $id, ?int $profile_id, ?string $name, ?string $email = null)
     {
         $this->changeId($id);
 
@@ -20,6 +38,8 @@ class Publisher
             $this->changeProfileId($profile_id);
         }
         $this->changeName($name);
+
+        $this->email = $email;
     }
 
     /**
@@ -72,5 +92,13 @@ class Publisher
     public function changeName(?string $name)
     {
         $this->name = $name;
+    }
+
+    /**
+     * @return null|string
+     */
+    public function getEmail(): ?string
+    {
+        return $this->email;
     }
 }

@@ -41,6 +41,7 @@ $app->post('/events/{event_id}/favorite/publisher/{publisher_id}', [EventControl
 $app->delete('/events/{event_id}/favorite/publisher/{publisher_id}', [EventController::class, 'deleteFavorite']);
 $app->post('/events/{id}/tags', [EventController::class, 'updateTags']);
 $app->post('/events/{id}/suppliers', [EventController::class, 'updateSuppliers']);
+$app->post('/events/{event_id}/broadcastPublishers', [EventController::class, 'broadcastNewEvent']);
 
 $app->post('/users', [UserController::class, 'createUser']);
 $app->get('/users', [UserController::class, 'findUser']);
