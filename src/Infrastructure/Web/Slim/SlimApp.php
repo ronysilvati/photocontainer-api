@@ -33,7 +33,7 @@ class SlimApp implements WebApp
     public function bootstrap(array $conf)
     {
         $app = $this->app;
-        $container = $app->getContainer();        
+        $container = $app->getContainer();
 
         require ROOT_DIR.'/src/Application/Resources/routes.php';
         require ROOT_DIR.'/src/Application/Resources/listeners.php';

@@ -4,13 +4,10 @@ namespace PhotoContainer\PhotoContainer\Application\Shell;
 
 use Interop\Queue\PsrContext;
 use Intervention\Image\ImageManager;
-use PhotoContainer\PhotoContainer\Contexts\Photo\Persistence\EventPhotoHelper;
-use PhotoContainer\PhotoContainer\Infrastructure\Email\SwiftQueueSpool;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
-use \Swift_SpoolTransport;
 
 class ImageProcessorConsumer extends Command
 {

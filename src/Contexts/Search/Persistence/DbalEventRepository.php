@@ -10,7 +10,7 @@ use PhotoContainer\PhotoContainer\Contexts\Search\Domain\EventSearch;
 use PhotoContainer\PhotoContainer\Contexts\Search\Domain\Photographer;
 use PhotoContainer\PhotoContainer\Contexts\Search\Domain\Tag;
 use PhotoContainer\PhotoContainer\Infrastructure\Exception\PersistenceException;
-use PhotoContainer\PhotoContainer\Infrastructure\Persistence\DatabaseProvider;
+
 use PhotoContainer\PhotoContainer\Infrastructure\Persistence\DbalDatabaseProvider;
 
 class DbalEventRepository implements EventRepository

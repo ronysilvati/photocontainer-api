@@ -2,25 +2,32 @@
 
 namespace PhotoContainer\PhotoContainer\Contexts\Photo\Action;
 
-use PhotoContainer\PhotoContainer\Contexts\Photo\Domain\FSPhotoRepository;
+use PhotoContainer\PhotoContainer\Infrastructure\Helper\EventPhotoHelper;
 use PhotoContainer\PhotoContainer\Contexts\Photo\Domain\PhotoRepository;
 use PhotoContainer\PhotoContainer\Contexts\Photo\Response\DeletedPhotoResponse;
 use PhotoContainer\PhotoContainer\Infrastructure\Web\DomainExceptionResponse;
 
 class DeletePhoto
 {
+    /**
+     * @var PhotoRepository
+     */
     private $dbRepo;
-    private $fsRepo;
+
+    /**
+     * @var EventPhotoHelper
+     */
+    private $photoHelper;
 
     /**
      * DeletePhoto constructor.
      * @param PhotoRepository $dbRepo
-     * @param FSPhotoRepository $fsRepo
+     * @param EventPhotoHelper $photoHelper
      */
-    public function __construct(PhotoRepository $dbRepo, FSPhotoRepository $fsRepo)
+    public function __construct(PhotoRepository $dbRepo, EventPhotoHelper $photoHelper)
     {
         $this->dbRepo = $dbRepo;
-        $this->fsRepo = $fsRepo;
+        $this->photoHelper = $photoHelper;
     }
 
     /**
@@ -30,7 +37,7 @@ class DeletePhoto
     public function handle(string $guid)
     {
         $photo = $this->dbRepo->deletePhoto($guid);
-        $this->fsRepo->deletePhoto($photo);
+        $this->photoHelper->deletePhoto($photo);
 
         return new DeletedPhotoResponse($photo);
     }

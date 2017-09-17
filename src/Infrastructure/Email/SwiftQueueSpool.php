@@ -86,10 +86,8 @@ class SwiftQueueSpool extends \Swift_ConfigurableSpool
 
             return $count;
         } catch (\Exception $e) {
-            var_dump($e->getTraceAsString());
-            sleep(20);
+            //@TODO Logar o erro
         }
-
     }
 
     /**
