@@ -2,9 +2,9 @@
 
 namespace PhotoContainer\PhotoContainer\Contexts\Photo\Action;
 
-use PhotoContainer\PhotoContainer\Contexts\Photo\Domain\FSPhotoRepository;
 use PhotoContainer\PhotoContainer\Contexts\Photo\Domain\PhotoRepository;
 use PhotoContainer\PhotoContainer\Contexts\Photo\Response\PhotoResponse;
+use PhotoContainer\PhotoContainer\Infrastructure\Helper\EventPhotoHelper;
 use PhotoContainer\PhotoContainer\Infrastructure\Web\DomainExceptionResponse;
 
 class CreatePhoto
@@ -15,9 +15,9 @@ class CreatePhoto
     /**
      * CreatePhoto constructor.
      * @param PhotoRepository $dbRepo
-     * @param FSPhotoRepository $fsRepo
+     * @param EventPhotoHelper $fsRepo
      */
-    public function __construct(PhotoRepository $dbRepo, FSPhotoRepository $fsRepo)
+    public function __construct(PhotoRepository $dbRepo, EventPhotoHelper $fsRepo)
     {
         $this->dbRepo = $dbRepo;
         $this->fsRepo = $fsRepo;
@@ -40,7 +40,6 @@ class CreatePhoto
                 $this->fsRepo->create($item);
                 $this->dbRepo->create($item);
             } catch (\Exception $e) {
-                $this->fsRepo->rollback($item);
                 return new DomainExceptionResponse($e->getMessage());
             }
         }

@@ -1,4 +1,14 @@
 <?php
+
+use Interop\Queue\PsrContext;
+use League\Event\Emitter;
+use PhotoContainer\PhotoContainer\Infrastructure\Helper\EnqueueHelper;
+use PhotoContainer\PhotoContainer\Infrastructure\Email\SwiftQueueSpool;
+use Enqueue\Dbal\DbalConnectionFactory;
+use PhotoContainer\PhotoContainer\Infrastructure\Persistence\EloquentDatabaseProvider;
+use PhotoContainer\PhotoContainer\Infrastructure\Persistence\DbalDatabaseProvider;
+use PhotoContainer\PhotoContainer\Infrastructure\Helper\EventPhotoHelper;
+
 if (!is_dir(CACHE_DIR)) {
     mkdir(CACHE_DIR, 0777);
 }
@@ -7,30 +17,24 @@ if (!is_dir(LOG_DIR)) {
     mkdir(LOG_DIR, 0777);
 }
 
-$defaultDI = [];
-
-$defaultDI[PhotoContainer\PhotoContainer\Infrastructure\Persistence\EloquentDatabaseProvider::class] = function ($c) {
-    $database = new \PhotoContainer\PhotoContainer\Infrastructure\Persistence\EloquentDatabaseProvider([
+$defaultDI = [
+    'database_config' => [
         'host'      => getenv('MYSQL_HOST'),
         'database'  => getenv('MYSQL_DATABASE'),
         'user'      => getenv('MYSQL_USER'),
         'pwd'       => getenv('MYSQL_PASSWORD'),
         'port'      => getenv('MYSQL_PORT'),
-    ]);
+    ]
+];
 
+$defaultDI[EloquentDatabaseProvider::class] = function ($c) {
+    $database = new EloquentDatabaseProvider($c->get('database_config'));
     $database->boot();
     return $database;
 };
 
-$defaultDI[PhotoContainer\PhotoContainer\Infrastructure\Persistence\DbalDatabaseProvider::class] = function ($c) {
-    $database = new \PhotoContainer\PhotoContainer\Infrastructure\Persistence\DbalDatabaseProvider([
-        'host'      => getenv('MYSQL_HOST'),
-        'database'  => getenv('MYSQL_DATABASE'),
-        'user'      => getenv('MYSQL_USER'),
-        'pwd'       => getenv('MYSQL_PASSWORD'),
-        'port'      => getenv('MYSQL_PORT'),
-    ]);
-
+$defaultDI[DbalDatabaseProvider::class] = function ($c) {
+    $database = new DbalDatabaseProvider($c['database_config']);
     $database->boot();
     return $database;
 };
@@ -52,7 +56,7 @@ $defaultDI[PhotoContainer\PhotoContainer\Infrastructure\Helper\ProfileImageHelpe
 );
 
 $defaultDI[\PhotoContainer\PhotoContainer\Infrastructure\Email\SwiftPoolMailerHelper::class] = function ($c) {
-    $context = $c->get(\Interop\Queue\PsrContext::class);
+    $context = $c->get(PsrContext::class);
 
     $transport = new Swift_SpoolTransport(
         new \PhotoContainer\PhotoContainer\Infrastructure\Email\SwiftQueueSpool($context)
@@ -91,20 +95,26 @@ $defaultDI[PhotoContainer\PhotoContainer\Infrastructure\Persistence\RestDatabase
     return $database;
 };
 
-$defaultDI['EventDispatcher'] = DI\object(\League\Event\Emitter::class);
+$defaultDI['EventDispatcher'] = DI\object(Emitter::class);
 
-$defaultDI[\Interop\Queue\PsrContext::class] = function ($c) {
+$defaultDI[PsrContext::class] = function ($c) {
     $dsn = 'mysql://'.getenv('MYSQL_USER').':'.getenv('MYSQL_PASSWORD').
         '@'.getenv('MYSQL_HOST').':3306/'.getenv('MYSQL_DATABASE');
 
-    $factory = new \Enqueue\Dbal\DbalConnectionFactory($dsn);
+    $factory = new DbalConnectionFactory($dsn);
     return $factory->createContext();
 };
 
 $defaultDI['EmailPoolProcessor'] = function ($c) {
-    return new \PhotoContainer\PhotoContainer\Infrastructure\Email\SwiftQueueSpool(
-        $c->get(\Interop\Queue\PsrContext::class)
-    );
+    return new SwiftQueueSpool($c->get(PsrContext::class));
+};
+
+$defaultDI[EnqueueHelper::class] = function ($c) {
+    return new EnqueueHelper($c->get(PsrContext::class));
+};
+
+$defaultDI[EventPhotoHelper::class] = function ($c) {
+    return new EventPhotoHelper($c->get(EnqueueHelper::class));
 };
 
 return $defaultDI;

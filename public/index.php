@@ -1,5 +1,8 @@
 <?php
 
+ini_set('display_errors', true);
+error_reporting(E_ALL);
+
 use PhotoContainer\PhotoContainer\Infrastructure\Web\Slim\SlimApp;
 
 define('ROOT_DIR', dirname(__DIR__));

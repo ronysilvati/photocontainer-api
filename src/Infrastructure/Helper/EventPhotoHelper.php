@@ -1,21 +1,32 @@
 <?php
 
-namespace PhotoContainer\PhotoContainer\Contexts\Photo\Persistence;
+namespace PhotoContainer\PhotoContainer\Infrastructure\Helper;
 
 use Intervention\Image\ImageManager;
 use League\Flysystem\Adapter\Local;
 use League\Flysystem\Cached\CachedAdapter;
 use League\Flysystem\Cached\Storage\Memory as CacheStore;
 use League\Flysystem\Filesystem;
-use PhotoContainer\PhotoContainer\Contexts\Photo\Domain\FSPhotoRepository;
 use PhotoContainer\PhotoContainer\Contexts\Photo\Domain\Photo;
 use PhotoContainer\PhotoContainer\Infrastructure\Exception\PersistenceException;
 
-class FilesystemPhotoRepository implements FSPhotoRepository
+class EventPhotoHelper
 {
+    /**
+     * @var Filesystem
+     */
     private $filesystem;
 
-    public function __construct()
+    /**
+     * @var EnqueueHelper
+     */
+    private $enqueueHelper;
+
+    /**
+     * EventPhotoHelper constructor.
+     * @param null|EnqueueHelper $enqueueHelper
+     */
+    public function __construct(?EnqueueHelper $enqueueHelper = null)
     {
         $shared_path    = getenv('SHARED_PATH');
         $localAdapter = new Local($shared_path, LOCK_EX, Local::DISALLOW_LINKS, [
@@ -33,8 +44,15 @@ class FilesystemPhotoRepository implements FSPhotoRepository
         $cachedAdapter = new CachedAdapter($localAdapter, $cacheStore);
 
         $this->filesystem = new Filesystem($cachedAdapter);
+
+        $this->enqueueHelper = $enqueueHelper;
     }
 
+    /**
+     * @param Photo $photo
+     * @return Photo
+     * @throws PersistenceException
+     */
     public function create(Photo $photo): Photo
     {
         try {
@@ -61,9 +79,15 @@ class FilesystemPhotoRepository implements FSPhotoRepository
             $image->save($thumb_target_file, 40);
 
             // watermark
-            $watermark_target_file =  $photo->getFilePath('watermark', true, true);
-            $image = $manager->make($thumb_target_file)->insert($photo->getWatermarkFile(), 'center-center', 0, 0);
-            $image->save($watermark_target_file, 40);
+            $this->enqueueHelper->queueMessage(
+                json_encode([
+                    'type' => 'watermark',
+                    'watermark_target_file' => $photo->getFilePath('watermark', true, true),
+                    'thumb_target_file' => $thumb_target_file,
+                    'watermark_file' => $photo->getWatermarkFile()
+                ]),
+                'image_processor'
+            );
 
             return $photo;
         } catch (\Exception $e) {
@@ -71,6 +95,10 @@ class FilesystemPhotoRepository implements FSPhotoRepository
         }
     }
 
+    /**
+     * @param Photo $photo
+     * @throws PersistenceException
+     */
     public function deletePhoto(Photo $photo)
     {
         try {
@@ -80,10 +108,5 @@ class FilesystemPhotoRepository implements FSPhotoRepository
         } catch (\Exception $e) {
             throw new PersistenceException('Não foi possível apagar a foto.', $e->getMessage());
         }
-    }
-
-    public function rollback(Photo $photo)
-    {
-        //TODO: rollback
     }
 }

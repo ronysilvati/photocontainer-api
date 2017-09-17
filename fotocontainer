@@ -5,6 +5,7 @@ require 'vendor/autoload.php';
 
 use Symfony\Component\Console\Application;
 use PhotoContainer\PhotoContainer\Application\Shell\EmailPoolConsumer;
+use PhotoContainer\PhotoContainer\Application\Shell\ImageProcessorConsumer;
 
 define('ROOT_DIR', __DIR__);
 define('CACHE_DIR', ROOT_DIR.'/cache');
@@ -37,4 +38,6 @@ $container = $builder->build();
 $application = new Application();
 
 $application->add(new EmailPoolConsumer('EmailPool', $container->get(\Interop\Queue\PsrContext::class)));
+$application->add(new ImageProcessorConsumer('ImagePool', $container->get(\Interop\Queue\PsrContext::class)));
+
 $application->run();
