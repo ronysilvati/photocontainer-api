@@ -7,21 +7,39 @@ use PhotoContainer\PhotoContainer\Contexts\Auth\Domain\AuthRepository;
 use PhotoContainer\PhotoContainer\Contexts\Auth\Response\AuthenticatedResponse;
 use PhotoContainer\PhotoContainer\Contexts\Auth\Response\NotPermittedResponse;
 use PhotoContainer\PhotoContainer\Infrastructure\Crypto\CryptoMethod;
+use PhotoContainer\PhotoContainer\Infrastructure\Crypto\JwtGenerator;
+use Psr\Http\Message\ServerRequestInterface;
 
 class AuthenticateUser
 {
+    /**
+     * @var AuthRepository
+     */
     protected $repository;
+
+    /**
+     * @var CryptoMethod
+     */
     protected $cryptoMethod;
 
-    public function __construct(AuthRepository $repository, CryptoMethod $cryptoMethod)
+    /**
+     * @var JwtGenerator
+     */
+    protected $jwtGenerator;
+
+    public function __construct(AuthRepository $repository, CryptoMethod $cryptoMethod, JwtGenerator $jwtGenerator)
     {
         $this->repository = $repository;
         $this->cryptoMethod = $cryptoMethod;
+        $this->jwtGenerator = $jwtGenerator;
     }
 
-    public function handle(Auth $auth, CryptoMethod $tokenGenerator)
+    public function handle(ServerRequestInterface $request)
     {
         try {
+            $data = $request->getParsedBody();
+            $auth = new Auth($data['user'], $data['password']);
+
             $user = $this->repository->find($auth->getUser());
 
             if ($this->cryptoMethod->verify($auth->getPassword(), $user->password) === false) {
@@ -34,7 +52,7 @@ class AuthenticateUser
                 "iat" => 1356999524,
                 "nbf" => 1357000000
             );
-            $token = $tokenGenerator->hash($token);
+            $token = $this->jwtGenerator->hash($token);
 
             $this->saveLog($user->id);
 
@@ -49,6 +67,7 @@ class AuthenticateUser
         try {
             $this->repository->logAccess($user_id);
         } catch (\Exception $e) {
+            var_dump($e->getMessage());exit;
             //TODO Controle de exceção.
         }
     }

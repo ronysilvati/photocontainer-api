@@ -8,6 +8,7 @@ use Enqueue\Dbal\DbalConnectionFactory;
 use PhotoContainer\PhotoContainer\Infrastructure\Persistence\EloquentDatabaseProvider;
 use PhotoContainer\PhotoContainer\Infrastructure\Persistence\DbalDatabaseProvider;
 use PhotoContainer\PhotoContainer\Infrastructure\Helper\EventPhotoHelper;
+use PhotoContainer\PhotoContainer\Infrastructure\Crypto\JwtGenerator;
 
 if (!is_dir(CACHE_DIR)) {
     mkdir(CACHE_DIR, 0777);
@@ -41,6 +42,10 @@ $defaultDI[DbalDatabaseProvider::class] = function ($c) {
 
 $defaultDI[PhotoContainer\PhotoContainer\Infrastructure\Crypto\CryptoMethod::class] = function ($c) {
     return new \PhotoContainer\PhotoContainer\Infrastructure\Crypto\BcryptHashing();
+};
+
+$defaultDI[JwtGenerator::class] = function ($c) {
+    return new JwtGenerator('secret');
 };
 
 $defaultDI[PhotoContainer\PhotoContainer\Infrastructure\Persistence\AtomicWorker::class] = function ($c) {
