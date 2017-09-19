@@ -53,4 +53,18 @@ class EloquentNotificationRepository implements NotificationRepository
 
         return count($results);
     }
+
+    public function publisherPublication(int $publisher_id): int
+    {
+        $results = DB::select(
+            'SELECT *
+             FROM publisher_publications pp
+                  INNER JOIN events e
+                    ON e.id = pp.event_id	
+            WHERE user_id = ? AND approved = 1 AND visualized = 0',
+            [$publisher_id]
+        );
+
+        return count($results);
+    }
 }

@@ -42,12 +42,5 @@ interface EventRepository
      * @param int $id
      * @return Event
      */
-    public function find(int $id): Event;
-
-    /**
-     * @param Event $event
-     * @param Publisher $publisher
-     * @return mixed
-     */
-    public function createNotification(Event $event, Publisher $publisher);
+    public function find(int $id): ?Event;
 }

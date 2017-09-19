@@ -12,8 +12,13 @@ interface NotificationRepository
 
     /**
      * @param int $publisher_id
-     * @param int $event_id
      * @return int
      */
     public function eventNotification(int $publisher_id): int;
+
+    /**
+     * @param int $photographer_id
+     * @return int
+     */
+    public function publisherPublication(int $photographer_id): int;
 }

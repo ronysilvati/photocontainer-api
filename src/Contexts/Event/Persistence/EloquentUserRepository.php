@@ -48,6 +48,11 @@ class EloquentUserRepository implements UserRepository
     {
         try {
             $userData = $this->findUser($publisher->getId());
+
+            if (!$userData) {
+                return null;
+            }
+
             $publisher->changeProfileId($userData['userprofile']['profile_id']);
 
             return $publisher;
@@ -61,10 +66,15 @@ class EloquentUserRepository implements UserRepository
      * @return mixed
      * @throws PersistenceException
      */
-    private function findUser(int $id)
+    private function findUser(int $id): ?array
     {
         try {
             $userModel = User::find($id);
+
+            if (!$userModel) {
+                return null;
+            }
+
             $userModel->load('userprofile');
             return $userModel->toArray();
         } catch (\Exception $e) {

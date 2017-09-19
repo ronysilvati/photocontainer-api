@@ -6,14 +6,11 @@ use PhotoContainer\PhotoContainer\Contexts\Event\Domain\Event;
 use PhotoContainer\PhotoContainer\Contexts\Event\Domain\EventCategory;
 use PhotoContainer\PhotoContainer\Contexts\Event\Domain\EventRepository;
 use PhotoContainer\PhotoContainer\Contexts\Event\Domain\EventTag;
-use PhotoContainer\PhotoContainer\Contexts\Event\Domain\EventNotification;
 use PhotoContainer\PhotoContainer\Contexts\Event\Domain\Photographer;
-use PhotoContainer\PhotoContainer\Contexts\Event\Domain\Publisher;
 use PhotoContainer\PhotoContainer\Contexts\Event\Domain\Suppliers;
 use PhotoContainer\PhotoContainer\Infrastructure\Exception\PersistenceException;
 use PhotoContainer\PhotoContainer\Infrastructure\Persistence\Eloquent\Event as EventModel;
 use PhotoContainer\PhotoContainer\Infrastructure\Persistence\Eloquent\EventCategory as EventCategoryModel;
-use PhotoContainer\PhotoContainer\Infrastructure\Persistence\Eloquent\EventNotification as EventNotificationModel;
 use PhotoContainer\PhotoContainer\Infrastructure\Persistence\Eloquent\EventSuppliers;
 use PhotoContainer\PhotoContainer\Infrastructure\Persistence\Eloquent\EventTag as EventTagModel;
 use PhotoContainer\PhotoContainer\Infrastructure\Persistence\EloquentDatabaseProvider;
@@ -187,10 +184,15 @@ class EloquentEventRepository implements EventRepository
     /**
      * @inheritdoc
      */
-    public function find(int $id): Event
+    public function find(int $id): ?Event
     {
         try {
             $eventModel = EventModel::find($id);
+
+            if (!$eventModel) {
+                return null;
+            }
+
             $eventData = $eventModel->load('EventCategory', 'EventTag', 'User')->toArray();
 
             $photographer = new Photographer($eventData['user']['id'], null, $eventData['user']['name']);
@@ -230,19 +232,5 @@ class EloquentEventRepository implements EventRepository
         } catch (\Exception $e) {
             throw new PersistenceException('Erro na busca de evento.', $e->getMessage());
         }
-    }
-
-    /**
-     * @inheritdoc
-     */
-    public function createNotification(Event $event, Publisher $publisher)
-    {
-        $notification = new EventNotificationModel();
-        $notification->publisher_id = $publisher->getId();
-        $notification->event_id = $event->getId();
-
-        $notification->save();
-
-        return new EventNotification($event, $publisher);
     }
 }

@@ -5,6 +5,7 @@ namespace PhotoContainer\PhotoContainer\Application\Controllers;
 use PhotoContainer\PhotoContainer\Contexts\Event\Action\BroadcastEvent;
 use PhotoContainer\PhotoContainer\Contexts\Event\Action\CreateEvent;
 use PhotoContainer\PhotoContainer\Contexts\Event\Action\CreateFavorite;
+use PhotoContainer\PhotoContainer\Contexts\Event\Action\CreatePublisherPublication;
 use PhotoContainer\PhotoContainer\Contexts\Event\Action\DeleteEvent;
 use PhotoContainer\PhotoContainer\Contexts\Event\Action\DeleteFavorite;
 use PhotoContainer\PhotoContainer\Contexts\Event\Action\FindEvent;
@@ -214,6 +215,22 @@ class EventController
         int $event_id
     ) {
         $actionResponse = $action->handle($event_id);
+
+        return $response->withJson($actionResponse, $actionResponse->getHttpStatus());
+    }
+
+    /**
+     * @param ServerRequestInterface $request
+     * @param ResponseInterface $response
+     * @param CreatePublisherPublication $action
+     * @return mixed
+     */
+    public function publisherPublish(
+        ServerRequestInterface $request,
+        ResponseInterface $response,
+        CreatePublisherPublication $action
+    ) {
+        $actionResponse = $action->handle($request);
 
         return $response->withJson($actionResponse, $actionResponse->getHttpStatus());
     }
