@@ -42,14 +42,14 @@ class ImageProcessorConsumer extends Command
     protected function configure()
     {
         $this
-            ->setName('image_pool:process')
+            ->setName('queue_process:images')
             ->setDescription('Processa as imagens enviadas pelos fotógrafos.');
 
         $this->addArgument(
             'timeout',
             InputArgument::OPTIONAL,
             'Tempo (em segundos) em que o processo escuta novas imagens a serem processadas.',
-            20
+            60
         );
     }
 

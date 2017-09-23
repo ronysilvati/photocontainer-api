@@ -34,14 +34,14 @@ class EmailPoolConsumer extends Command
     protected function configure()
     {
         $this
-            ->setName('email_pool:dispatch')
+            ->setName('queue_process:emails')
             ->setDescription('Escuta e envia os emails na fila.');
 
         $this->addArgument(
             'timelimit',
             InputArgument::OPTIONAL,
             'Tempo (em segundos) em que o processo escuta os emails.',
-            20
+            60
         );
     }
 
