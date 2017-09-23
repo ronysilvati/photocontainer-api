@@ -3,6 +3,7 @@
 namespace PhotoContainer\PhotoContainer\Contexts\Event\Action;
 
 use PhotoContainer\PhotoContainer\Application\Resources\Emails\BroadcastEventEmail;
+use PhotoContainer\PhotoContainer\Contexts\Event\Domain\EventNotificationRepository;
 use PhotoContainer\PhotoContainer\Contexts\Event\Domain\EventRepository;
 use PhotoContainer\PhotoContainer\Contexts\Event\Domain\Publisher;
 use PhotoContainer\PhotoContainer\Contexts\Event\Domain\UserRepository;
@@ -13,6 +14,11 @@ use PhotoContainer\PhotoContainer\Infrastructure\Exception\DomainViolationExcept
 
 class BroadcastEvent
 {
+    /**
+     * @var EventNotificationRepository
+     */
+    private $notificationRepository;
+
     /**
      * @var EventRepository
      */
@@ -30,16 +36,18 @@ class BroadcastEvent
 
     /**
      * BroadcastEvent constructor.
-     * @param EventRepository $eventRepository
+     * @param EventNotificationRepository $notificationRepository
      * @param UserRepository $userRepository
      * @param SwiftPoolMailerHelper $emailHelper
      */
     public function __construct(
         EventRepository $eventRepository,
+        EventNotificationRepository $notificationRepository,
         UserRepository $userRepository,
         SwiftPoolMailerHelper $emailHelper
     ) {
         $this->eventRepository = $eventRepository;
+        $this->notificationRepository = $notificationRepository;
         $this->userRepository = $userRepository;
         $this->emailHelper = $emailHelper;
     }
@@ -70,7 +78,7 @@ class BroadcastEvent
         $funEmails = function ($publishers, $event) use ($to) {
             /** @var Publisher $publisher */
             foreach ($publishers as $publisher) {
-                $this->eventRepository->createNotification($event, $publisher);
+                $this->notificationRepository->createNotification($event, $publisher);
 
                 $data = [
                     '{EVENT_NAME}' => $event->getTitle()
