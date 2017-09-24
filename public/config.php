@@ -35,7 +35,7 @@ $defaultDI[EloquentDatabaseProvider::class] = function ($c) {
 };
 
 $defaultDI[DbalDatabaseProvider::class] = function ($c) {
-    $database = new DbalDatabaseProvider($c['database_config']);
+    $database = new DbalDatabaseProvider($c->get('database_config'));
     $database->boot();
     return $database;
 };
