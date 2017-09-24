@@ -143,8 +143,14 @@ class EloquentEventRepository implements EventRepository
             $event->changeApprovalPhotographer($data['approval_photographer']);
             $event->changeApprovalBride($data['approval_bride']);
             $event->changeCountry($data['country']);
-            $event->changeState($data['state']);
-            $event->changeCity($data['city']);
+
+            if (isset($data['state'])) {
+                $event->changeState($data['state']);
+            }
+
+            if (isset($data['city'])) {
+                $event->changeCity($data['city']);
+            }
 
             $allCategories = [];
             foreach ($data['categories'] as $category) {
