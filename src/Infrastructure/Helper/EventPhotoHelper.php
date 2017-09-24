@@ -67,23 +67,11 @@ class EventPhotoHelper
             $this->filesystem->writeStream($file_path, $stream);
             fclose($stream);
 
-            // create an image manager instance with favored driver
-            $manager = new ImageManager();
-
-            // thumb
-            $protected_target_file = $photo->getFilePath('protected', true, true);
-            $image = $manager->make($protected_target_file)->resize(null, 847, function ($constraint) {
-                $constraint->aspectRatio();
-            });
-            $thumb_target_file = $photo->getFilePath('thumb', true, true);
-            $image->save($thumb_target_file, 40);
-
-            // watermark
             $this->enqueueHelper->queueMessage(
                 json_encode([
-                    'type' => 'watermark',
                     'watermark_target_file' => $photo->getFilePath('watermark', true, true),
-                    'thumb_target_file' => $thumb_target_file,
+                    'protected_target_file' => $photo->getFilePath('protected', true, true),
+                    'thumb_target_file' => $photo->getFilePath('thumb', true, true),
                     'watermark_file' => $photo->getWatermarkFile()
                 ]),
                 'image_processor'

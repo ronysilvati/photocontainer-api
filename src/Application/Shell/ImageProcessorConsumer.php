@@ -3,6 +3,7 @@
 namespace PhotoContainer\PhotoContainer\Application\Shell;
 
 use Interop\Queue\PsrContext;
+use Intervention\Image\Image;
 use Intervention\Image\ImageManager;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputArgument;
@@ -49,7 +50,7 @@ class ImageProcessorConsumer extends Command
             'timeout',
             InputArgument::OPTIONAL,
             'Tempo (em segundos) em que o processo escuta novas imagens a serem processadas.',
-            60
+            61
         );
     }
 
@@ -62,17 +63,18 @@ class ImageProcessorConsumer extends Command
         $time = time();
 
         $output->writeln('<info>Escutando fila de imagens...</info>');
-
         while (true) {
-            if ($psrMessage = $this->consumer->receive(1000)) {
-                $message = json_decode($psrMessage->getBody());
+            try {
+                if ($psrMessage = $this->consumer->receive(1000)) {
+                    $message = json_decode($psrMessage->getBody());
 
-                if ($message->type === 'watermark') {
+                    $this->generateThumb($message);
                     $this->generateWatermark($message);
-                    $output->writeln("<info>Watermark aplicado. Imagem: {$message->watermark_target_file}</info>");
-                }
 
-                $this->consumer->acknowledge($psrMessage);
+                    $this->consumer->acknowledge($psrMessage);
+                }
+            } catch (\Exception $e) {
+                $output->writeln('<info>'.$e->getMessage().'</info>');
             }
 
             if ($timeout && (time() - $time) >= $timeout) {
@@ -81,7 +83,22 @@ class ImageProcessorConsumer extends Command
         }
     }
 
-    public function generateWatermark($message)
+    /**
+     * @param $message
+     */
+    public function generateThumb($message): void
+    {
+        $image = $this->manager
+            ->make($message->protected_target_file)->resize(null, 847, function ($constraint) {
+            $constraint->aspectRatio();
+        });
+        $image->save($message->thumb_target_file, 30);
+    }
+
+    /**
+     * @param $message
+     */
+    public function generateWatermark($message): void
     {
         $image = $this->manager
             ->make($message->thumb_target_file)
