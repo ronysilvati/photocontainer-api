@@ -49,7 +49,7 @@ class SlimApp implements WebApp
             $response = $next($req, $res);
 
             /** @var \League\Event\Emitter $eventEmitter */
-            $eventEmitter = $this->get(Emitter::class);
+            $eventEmitter = $this->get('EventDispatcher');
 
             $events = EventRecorder::getInstance()->pullEvents();
             if (count($events) > 0) {
