@@ -2,12 +2,14 @@
 
 namespace PhotoContainer\PhotoContainer\Contexts\Event\Action;
 
+use PhotoContainer\PhotoContainer\Application\Resources\Emails\PublisherPublicationEmail;
 use PhotoContainer\PhotoContainer\Contexts\Event\Domain\EventRepository;
 use PhotoContainer\PhotoContainer\Contexts\Event\Domain\Publisher;
 use PhotoContainer\PhotoContainer\Contexts\Event\Domain\PublisherPublication;
 use PhotoContainer\PhotoContainer\Contexts\Event\Domain\PublisherPublicationRepository;
 use PhotoContainer\PhotoContainer\Contexts\Event\Domain\UserRepository;
 use PhotoContainer\PhotoContainer\Contexts\Event\Response\PublisherPublicationResponse;
+use PhotoContainer\PhotoContainer\Infrastructure\Email\SwiftPoolMailerHelper;
 use PhotoContainer\PhotoContainer\Infrastructure\Exception\DomainViolationException;
 use Psr\Http\Message\RequestInterface;
 

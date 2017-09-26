@@ -5,6 +5,7 @@ use PhotoContainer\PhotoContainer\Application\EventListeners\SendEmailPhotograph
 use PhotoContainer\PhotoContainer\Application\EventListeners\SendEmailPublisherOnDownload;
 use PhotoContainer\PhotoContainer\Application\EventListeners\SendEmailOnDownloadRequest;
 use PhotoContainer\PhotoContainer\Application\EventListeners\SendEmailOnRequestResponse;
+use PhotoContainer\PhotoContainer\Application\EventListeners\SendEmailOnPublisherPublication;
 
 /** @var \League\Event\Emitter $eventEmitter */
 $eventDispatcher = $container->get('EventDispatcher');
@@ -18,3 +19,5 @@ $eventDispatcher->addListener('downloaded_photo', $container->get(SendEmailPubli
 
 $eventDispatcher->addListener('download_requested', $container->get(SendEmailOnDownloadRequest::class));
 $eventDispatcher->addListener('download_request_response', $container->get(SendEmailOnRequestResponse::class));
+
+$eventDispatcher->addListener('publisher_published', $container->get(SendEmailOnPublisherPublication::class));
