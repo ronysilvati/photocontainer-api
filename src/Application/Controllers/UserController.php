@@ -53,6 +53,7 @@ class UserController
      * @param ResponseInterface $response
      * @param CreateUser $action
      * @return mixed
+     * @throws DomainViolationException
      */
     public function createUser(ServerRequestInterface $request, ResponseInterface $response, CreateUser $action)
     {
@@ -98,24 +99,33 @@ class UserController
      * @param ServerRequestInterface $request
      * @param ResponseInterface $response
      * @param UploadProfileImage $action
-     * @param int $id
+     * @param string $id
      * @return mixed
+     * @throws DomainViolationException
+     * @throws \Exception
      */
     public function createProfileImage(
         ServerRequestInterface $request,
         ResponseInterface $response,
         UploadProfileImage $action,
-        int $id
+        string $id
     ) {
         if (!isset($_FILES['profile_image']['error']) || is_array($_FILES['profile_image']['error'])) {
             return $response->withJson(['message' => 'Erro no recebimento da imagem.'], 500);
         }
 
-        $actionResponse = $action->handle($id, $_FILES['profile_image']);
+        $actionResponse = $action->handle((int) $id, $_FILES['profile_image']);
 
         return  $response->withJson($actionResponse, $actionResponse->getHttpStatus());
     }
 
+    /**
+     * @param ServerRequestInterface $request
+     * @param ResponseInterface $response
+     * @param RequestPwdChange $action
+     * @return mixed
+     * @throws DomainViolationException
+     */
     public function requestPwdChange(
         ServerRequestInterface $request,
         ResponseInterface $response,
@@ -132,6 +142,13 @@ class UserController
         return $response->withJson($actionResponse, $actionResponse->getHttpStatus());
     }
 
+    /**
+     * @param ServerRequestInterface $request
+     * @param ResponseInterface $response
+     * @param UpdatePassword $action
+     * @return mixed
+     * @throws DomainViolationException
+     */
     public function updatePassword(
         ServerRequestInterface $request,
         ResponseInterface $response,

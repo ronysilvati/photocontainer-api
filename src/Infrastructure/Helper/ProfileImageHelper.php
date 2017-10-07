@@ -6,32 +6,71 @@ use Ramsey\Uuid\Uuid;
 
 class ProfileImageHelper
 {
-    public function generateName($user_id, $file): string
+    /**
+     * @var string
+     */
+    private $profile_images_dir;
+
+    /**
+     * ProfileImageHelper constructor.
+     */
+    public function __construct()
+    {
+        $this->profile_images_dir = getenv('PROFILE_IMAGE_PATH');
+    }
+
+    /**
+     * @param int $user_id
+     * @param array $file
+     * @return string
+     */
+    public function generateName(int $user_id, array $file): string
     {
         $extensions = ['image/jpeg' => 'jpg', 'image/png' => 'png'];
         return $this->generateFilename($user_id).'.'.$extensions[$file['type']];
     }
 
-    public function resolveUri($user_id): ?string
+    /**
+     * @param int $user_id
+     * @return null|string
+     */
+    public function resolveUri(int $user_id): ?string
     {
-        $list = glob(getenv('SHARED_PATH').'/profile_images/'.$user_id.'-*.*');
+        $list = $this->findProfileImage($user_id);
         if (empty($list)) {
             return null;
         }
 
         $parts = explode('/', $list[0]);
 
-        return 'profile_images/'.end($parts).'?_t='.time();
+        return 'shared/profile_images/'.end($parts).'?_t='.time();
     }
 
-    private function generateFilename($user_id): string
+    /**
+     * @param int $user_id
+     * @return string
+     */
+    private function generateFilename(int $user_id): string
     {
         return $user_id.'-'.Uuid::uuid4()->toString();
     }
 
-    public function removeOldVersions($user_id)
+    /**
+     * @param int $user_id
+     * @return array|null
+     */
+    public function findProfileImage(int $user_id): ?array
     {
-        $list = glob(getenv('SHARED_PATH').'/profile_images/'.$user_id.'-*.*');
+        $list = glob($this->profile_images_dir.'/'.$user_id.'-*.*');
+        return empty($list) ? null : $list;
+    }
+
+    /**
+     * @param int $user_id
+     */
+    public function removeOldVersions(int $user_id)
+    {
+        $list = $this->findProfileImage($user_id);
         if (empty($list)) {
             return;
         }

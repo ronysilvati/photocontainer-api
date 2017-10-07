@@ -26,23 +26,37 @@ class ImageHelper
      */
     private $dir;
 
+    /**
+     * @var string
+     */
     private $errMessage = "Não foi possível processar a imagem.";
 
     const CRITERIA_DIMENSIONS = 'dimensions';
+
     const CRITERIA_MIMETYPE = 'mimetype';
 
-    public function __construct(string $dir)
+    /**
+     * @param string $dir
+     */
+    public function configure(string $dir)
     {
-        $localAdapter = new Local($dir, LOCK_EX, Local::DISALLOW_LINKS, [
-            'file' => [
-                'public' => 0744,
-                'private' => 0700,
-            ],
-            'dir' => [
-                'public' => 0755,
-                'private' => 0700,
+        $dir .= '/';
+
+        $localAdapter = new Local(
+            $dir,
+            LOCK_EX,
+            Local::DISALLOW_LINKS,
+            [
+                'file' => [
+                    'public' => 0744,
+                    'private' => 0700,
+                ],
+                'dir' => [
+                    'public' => 0755,
+                    'private' => 0700,
+                ]
             ]
-        ]);
+        );
 
         $cacheStore = new CacheStore();
         $cachedAdapter = new CachedAdapter($localAdapter, $cacheStore);
@@ -56,29 +70,34 @@ class ImageHelper
      * @param string $filename
      * @param int $quality
      * @return null|string
+     * @throws \Exception
      */
     public function createImage(string $file, string $filename, int $quality = 40): ?string
     {
-        $targetfile = $this->dir.$filename;
+        try {
+            $targetfile = $this->dir.$filename;
 
-        if ($this->filesystem->has($targetfile)) {
-            $this->filesystem->delete($targetfile);
-        }
+            if ($this->filesystem->has($targetfile)) {
+                $this->filesystem->delete($targetfile);
+            }
 
-        $manager = new ImageManager();
-        $image = $manager->make($file);
+            $manager = new ImageManager();
+            $image = $manager->make($file);
 
-        if ($this->criteria) {
-            foreach ($this->criteria as $type => $data) {
-                if (!$this->executeCriteria($type, $image)) {
-                    return null;
+            if ($this->criteria) {
+                foreach ($this->criteria as $type => $data) {
+                    if (!$this->executeCriteria($type, $image)) {
+                        return null;
+                    }
                 }
             }
+
+            $image->save($targetfile, $quality);
+
+            return $targetfile;
+        } catch (\Exception $e) {
+            throw $e;
         }
-
-        $image->save($targetfile, $quality);
-
-        return $targetfile;
     }
 
     /**
@@ -90,6 +109,12 @@ class ImageHelper
         $this->criteria[$type] = $criteria;
     }
 
+    /**
+     * @param string $type
+     * @param Image $image
+     * @return bool
+     * @throws \Exception
+     */
     private function executeCriteria(string $type, Image $image): bool
     {
         $criteria = $this->criteria[$type];

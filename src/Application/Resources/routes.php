@@ -48,7 +48,7 @@ $app->post('/users', [UserController::class, 'createUser']);
 $app->get('/users', [UserController::class, 'findUser']);
 $app->get('/users/satisfyPreConditions', [UserController::class, 'findFreeSlotForUser']);
 $app->patch('/users/{id}', [UserController::class, 'updateUser']);
-$app->patch('/users/{id}/profileImage', [UserController::class, 'createProfileImage']);
+$app->post('/users/{id}/profileImage', [UserController::class, 'createProfileImage']);
 $app->post('/users/requestPasswordChange', [UserController::class, 'requestPwdChange']);
 $app->post('/users/updatePassword', [UserController::class, 'updatePassword']);
 

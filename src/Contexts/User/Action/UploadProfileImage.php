@@ -40,6 +40,13 @@ class UploadProfileImage
         $this->profileImageHelper = $profileImageHelper;
     }
 
+    /**
+     * @param int $user_id
+     * @param array $file
+     * @return ProfileImageUploaded
+     * @throws DomainViolationException
+     * @throws \Exception
+     */
     public function handle(int $user_id, array $file)
     {
         $user = $this->userRepo->findUser($user_id);
@@ -47,6 +54,8 @@ class UploadProfileImage
         if (!$user) {
             throw new DomainViolationException('Usuário não encontrado');
         }
+
+        $this->imageHelper->configure(getenv('PROFILE_IMAGE_PATH'));
 
         $this->imageHelper->addCriteriaForSaving(
             ImageHelper::CRITERIA_DIMENSIONS,
@@ -61,11 +70,12 @@ class UploadProfileImage
             ]
         );
 
-        $name = $this->profileImageHelper->generateName($user_id, $file);
-
         $this->profileImageHelper->removeOldVersions($user_id);
 
-        $result = $this->imageHelper->createImage($file['tmp_name'], $name);
+        $result = $this->imageHelper->createImage(
+            $file['tmp_name'],
+            $this->profileImageHelper->generateName($user_id, $file)
+        );
 
         if (!$result) {
             throw new DomainViolationException($this->imageHelper->getErrMessage());

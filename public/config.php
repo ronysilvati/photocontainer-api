@@ -107,6 +107,9 @@ $defaultDI[PsrContext::class] = function ($c) {
         '@'.getenv('MYSQL_HOST').':3306/'.getenv('MYSQL_DATABASE');
 
     $factory = new DbalConnectionFactory($dsn);
+
+//    $factory = new FsConnectionFactory('file://dados/www/api.teste.fotocontainer.com.br/cache');
+
     return $factory->createContext();
 };
 
