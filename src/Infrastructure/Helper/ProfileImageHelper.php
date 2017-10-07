@@ -42,8 +42,7 @@ class ProfileImageHelper
         }
 
         $parts = explode('/', $list[0]);
-
-        return 'shared/profile_images/'.end($parts).'?_t='.time();
+        return 'profile_images/'.end($parts).'?_t='.time();
     }
 
     /**
