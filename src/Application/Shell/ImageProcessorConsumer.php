@@ -25,6 +25,12 @@ class ImageProcessorConsumer extends Command
     const QUEUE = 'image_processor';
 
     /**
+     * In milliseconds
+     * @var int
+     */
+    const TIMEOUT = 50;
+
+    /**
      * EmailPoolConsumer constructor.
      * @param null $name
      * @param PsrContext $context
@@ -65,7 +71,7 @@ class ImageProcessorConsumer extends Command
         $output->writeln('<info>Escutando fila de imagens...</info>');
         while (true) {
             try {
-                if ($psrMessage = $this->consumer->receive(1000)) {
+                if ($psrMessage = $this->consumer->receive(self::TIMEOUT)) {
                     $message = json_decode($psrMessage->getBody());
 
                     $this->generateThumb($message);

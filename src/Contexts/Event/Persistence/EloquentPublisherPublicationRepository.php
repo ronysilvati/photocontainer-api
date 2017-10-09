@@ -11,6 +11,11 @@ use PhotoContainer\PhotoContainer\Infrastructure\Persistence\Eloquent\PublisherP
 
 class EloquentPublisherPublicationRepository implements PublisherPublicationRepository
 {
+    /**
+     * @param PublisherPublication $publisherPublication
+     * @return PublisherPublication
+     * @throws PersistenceException
+     */
     public function create(PublisherPublication $publisherPublication)
     {
         try {

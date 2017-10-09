@@ -46,6 +46,11 @@ class CreatePublisherPublication
         $this->userRepository = $userRepository;
     }
 
+    /**
+     * @param RequestInterface $request
+     * @return PublisherPublicationResponse
+     * @throws DomainViolationException
+     */
     public function handle(RequestInterface $request)
     {
         $data = json_decode($request->getBody()->getContents());
