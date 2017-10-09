@@ -75,26 +75,17 @@ class BroadcastEvent
     {
         $to = ['name' => getenv('PHOTOCONTAINER_EMAIL_NAME'), 'email' => getenv('PHOTOCONTAINER_EMAIL')];
 
-        $funEmails = function ($publishers, $event) use ($to) {
-            /** @var Publisher $publisher */
-            foreach ($publishers as $publisher) {
-//                $this->notificationRepository->createNotification($event, $publisher);
-
-                $data = [
-                    '{EVENT_NAME}' => $event->getTitle()
-                ];
-
-                yield new BroadcastEventEmail(
-                    $data,
-                    ['name' => $publisher->getName(), 'email' => $publisher->getEmail()],
-                    $to
-                );
-            }
-        };
-
-        foreach ($funEmails($publishers, $event) as $email) {
+        foreach ($publishers as $publisher) {
             try {
-                $this->emailHelper->send($email);
+                $this->emailHelper->send(
+                    new BroadcastEventEmail(
+                        [
+                            '{EVENT_NAME}' => $event->getTitle()
+                        ],
+                        ['name' => $publisher->getName(), 'email' => $publisher->getEmail()],
+                        $to
+                    )
+                );
             } catch (\Exception $e) {
                 //@TODO logar os erros no monolog
             }
