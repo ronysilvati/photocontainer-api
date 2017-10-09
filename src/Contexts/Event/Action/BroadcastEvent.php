@@ -78,7 +78,7 @@ class BroadcastEvent
         $funEmails = function ($publishers, $event) use ($to) {
             /** @var Publisher $publisher */
             foreach ($publishers as $publisher) {
-                $this->notificationRepository->createNotification($event, $publisher);
+//                $this->notificationRepository->createNotification($event, $publisher);
 
                 $data = [
                     '{EVENT_NAME}' => $event->getTitle()
