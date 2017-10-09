@@ -50,6 +50,7 @@ class EloquentEventRepository implements EventRepository
             $eventModel->country = $event->getCountry();
             $eventModel->state = $event->getState();
             $eventModel->city = $event->getCity();
+            $eventModel->active = 0;
 
             $eventModel->save();
 

@@ -27,4 +27,6 @@ interface PhotoRepository
     public function selectAllPhotos(int $event_id, int $publisher_id): ?SelectedPhotos;
 
     public function selectPhotos(array $photo_ids, int $publisher_id): ?SelectedPhotos;
+
+    public function activateEvent(int $event_id): bool;
 }

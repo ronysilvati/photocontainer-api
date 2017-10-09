@@ -31,6 +31,11 @@ class EloquentPhotoRepository implements PhotoRepository
         $this->conn = $conn;
     }
 
+    /**
+     * @param Photo $photo
+     * @return Photo
+     * @throws PersistenceException
+     */
     public function create(Photo $photo): Photo
     {
         try {
@@ -47,6 +52,11 @@ class EloquentPhotoRepository implements PhotoRepository
         }
     }
 
+    /**
+     * @param Download $download
+     * @return Download
+     * @throws PersistenceException
+     */
     public function download(Download $download): Download
     {
         try {
@@ -63,6 +73,11 @@ class EloquentPhotoRepository implements PhotoRepository
         }
     }
 
+    /**
+     * @param int $id
+     * @return Photo
+     * @throws PersistenceException
+     */
     public function find(int $id): Photo
     {
         try {
@@ -81,6 +96,11 @@ class EloquentPhotoRepository implements PhotoRepository
         }
     }
 
+    /**
+     * @param Like $like
+     * @return Like
+     * @throws PersistenceException
+     */
     public function like(Like $like): Like
     {
         try {
@@ -103,6 +123,11 @@ class EloquentPhotoRepository implements PhotoRepository
         }
     }
 
+    /**
+     * @param Like $like
+     * @return Like
+     * @throws PersistenceException
+     */
     public function dislike(Like $like): Like
     {
         try {
@@ -120,6 +145,11 @@ class EloquentPhotoRepository implements PhotoRepository
         }
     }
 
+    /**
+     * @param Photo $photo
+     * @return Photographer
+     * @throws PersistenceException
+     */
     public function findPhotoOwner(Photo $photo): Photographer
     {
         try {
@@ -130,6 +160,11 @@ class EloquentPhotoRepository implements PhotoRepository
         }
     }
 
+    /**
+     * @param int $publisher_id
+     * @return Publisher
+     * @throws PersistenceException
+     */
     public function findPublisher(int $publisher_id): Publisher
     {
         try {
@@ -140,6 +175,11 @@ class EloquentPhotoRepository implements PhotoRepository
         }
     }
 
+    /**
+     * @param string $guid
+     * @return Photo
+     * @throws PersistenceException
+     */
     public function deletePhoto(string $guid): Photo
     {
         try {
@@ -168,6 +208,11 @@ class EloquentPhotoRepository implements PhotoRepository
         }
     }
 
+    /**
+     * @param int $event_id
+     * @return array|null
+     * @throws PersistenceException
+     */
     public function findEventPhotos(int $event_id): ?array
     {
         try {
@@ -177,6 +222,12 @@ class EloquentPhotoRepository implements PhotoRepository
         }
     }
 
+    /**
+     * @param int $event_id
+     * @param int $publisher_id
+     * @return null|SelectedPhotos
+     * @throws PersistenceException
+     */
     public function selectAllPhotos(int $event_id, int $publisher_id): ?SelectedPhotos
     {
         try {
@@ -189,6 +240,12 @@ class EloquentPhotoRepository implements PhotoRepository
         }
     }
 
+    /**
+     * @param array $photo_ids
+     * @param int $publisher_id
+     * @return null|SelectedPhotos
+     * @throws PersistenceException
+     */
     public function selectPhotos(array $photo_ids, int $publisher_id): ?SelectedPhotos
     {
         try {
@@ -201,6 +258,11 @@ class EloquentPhotoRepository implements PhotoRepository
         }
     }
 
+    /**
+     * @param SelectedPhotos $selected
+     * @param array|null $photosEvent
+     * @return null|SelectedPhotos
+     */
     public function convertToDomainModel(SelectedPhotos $selected, ?array $photosEvent): ?SelectedPhotos
     {
         if (count($photosEvent) == 0) {
@@ -217,6 +279,11 @@ class EloquentPhotoRepository implements PhotoRepository
         return $selected;
     }
 
+    /**
+     * @param string $guid
+     * @return bool
+     * @throws PersistenceException
+     */
     public function setAsAlbumCover(string $guid): bool
     {
         try {
@@ -235,5 +302,14 @@ class EloquentPhotoRepository implements PhotoRepository
         } catch (\Exception $e) {
             throw new PersistenceException('Não foi possível configurar a foto como capa.', $e->getMessage());
         }
+    }
+
+    public function activateEvent(int $event_id): bool
+    {
+        $event = Event::find($event_id);
+        $event->active = 1;
+        $event->save();
+
+        return true;
     }
 }

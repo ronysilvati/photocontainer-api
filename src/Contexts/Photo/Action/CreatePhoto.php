@@ -43,6 +43,9 @@ class CreatePhoto
                 return new DomainExceptionResponse($e->getMessage());
             }
         }
+
+        $this->dbRepo->activateEvent($event_id);
+
         return new PhotoResponse($array);
     }
 }
