@@ -74,7 +74,6 @@ class ImageProcessorConsumer extends Command
                 if ($psrMessage = $this->consumer->receive(self::TIMEOUT)) {
                     $message = json_decode($psrMessage->getBody());
 
-                    $this->generateThumb($message);
                     $this->generateWatermark($message);
 
                     $this->consumer->acknowledge($psrMessage);

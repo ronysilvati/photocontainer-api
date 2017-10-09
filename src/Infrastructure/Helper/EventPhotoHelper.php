@@ -56,7 +56,6 @@ class EventPhotoHelper
     public function create(Photo $photo): Photo
     {
         try {
-
             $this->filesystem->createDir($photo->getFilePath('protected'));
             $this->filesystem->createDir($photo->getFilePath('thumb'));
             $this->filesystem->createDir($photo->getFilePath('watermark'));
@@ -66,6 +65,14 @@ class EventPhotoHelper
             $file_path = $photo->getFilePath('protected', false, true);
             $this->filesystem->writeStream($file_path, $stream);
             fclose($stream);
+
+            $manager = new ImageManager();
+            $image = $manager
+                ->make($photo->getFilePath('protected', true, true))
+                ->resize(null, 847, function ($constraint) {
+                    $constraint->aspectRatio();
+                });
+            $image->save($photo->getFilePath('thumb', true, true), 30);
 
             $this->enqueueHelper->queueMessage(
                 json_encode([
