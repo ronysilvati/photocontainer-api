@@ -14,6 +14,10 @@ class SwiftMailerHelper implements EmailHelper
      */
     private $mailer;
 
+    /**
+     * SwiftMailerHelper constructor.
+     * @param \Swift_Transport $transport
+     */
     public function __construct(\Swift_Transport $transport)
     {
         $this->transport = $transport;

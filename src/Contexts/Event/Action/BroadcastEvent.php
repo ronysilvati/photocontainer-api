@@ -75,17 +75,24 @@ class BroadcastEvent
     {
         $to = ['name' => getenv('PHOTOCONTAINER_EMAIL_NAME'), 'email' => getenv('PHOTOCONTAINER_EMAIL')];
 
+        $template = '';
         foreach ($publishers as $publisher) {
             try {
-                $this->emailHelper->send(
-                    new BroadcastEventEmail(
-                        [
-                            '{EVENT_NAME}' => $event->getTitle()
-                        ],
-                        ['name' => $publisher->getName(), 'email' => $publisher->getEmail()],
-                        $to
-                    )
+                $email = new BroadcastEventEmail(
+                    [
+                        '{EVENT_NAME}' => $event->getTitle()
+                    ],
+                    ['name' => $publisher->getName(), 'email' => $publisher->getEmail()],
+                    $to
                 );
+
+                if ($template === '') {
+                    $template = $email->getTemplate();
+                } else {
+                    $email->setTemplate($template);
+                }
+
+                $this->emailHelper->send($email);
             } catch (\Exception $e) {
                 //@TODO logar os erros no monolog
             }

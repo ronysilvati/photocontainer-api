@@ -19,4 +19,9 @@ class BroadcastEventEmail extends Email
 
         parent::__construct($data, $file, $subject, $to, $from);
     }
+
+    public function setTemplate(string $template)
+    {
+        $this->template = $template;
+    }
 }

@@ -32,7 +32,7 @@ abstract class Email
     /**
      * @var string
      */
-    private $template;
+    protected $template;
 
     /**
      * Email constructor.
