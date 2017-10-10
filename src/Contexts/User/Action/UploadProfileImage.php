@@ -27,6 +27,12 @@ class UploadProfileImage
      */
     private $profileImageHelper;
 
+    // Largura máxima da imagem.
+    const MAX_WIDTH = 1200;
+
+    //Altura máxima da imagem.
+    const MAX_HEIGHT = 300;
+
     /**
      * UploadProfileImage constructor.
      * @param UserRepository $userRepo
@@ -59,7 +65,11 @@ class UploadProfileImage
 
         $this->imageHelper->addCriteriaForSaving(
             ImageHelper::CRITERIA_DIMENSIONS,
-            ['width' => 1153, 'height' => 300, 'errMsg' => 'A imagem está fora das dimensões especificadas. Esperado: 1153 x 300.']
+            [
+                'width' => self::MAX_WIDTH,
+                'height' => self::MAX_HEIGHT,
+                'errMsg' => 'A imagem está fora das dimensões esperadas: '.self::MAX_WIDTH.' x '.self::MAX_HEIGHT.'.'
+            ]
         );
 
         $this->imageHelper->addCriteriaForSaving(
