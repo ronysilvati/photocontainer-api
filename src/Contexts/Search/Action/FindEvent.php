@@ -9,6 +9,7 @@ use PhotoContainer\PhotoContainer\Contexts\Search\Domain\Publisher;
 use PhotoContainer\PhotoContainer\Contexts\Search\Domain\Tag;
 use PhotoContainer\PhotoContainer\Contexts\Search\Persistence\DbalEventRepository;
 use PhotoContainer\PhotoContainer\Contexts\Search\Response\EventCollectionResponse;
+use PhotoContainer\PhotoContainer\Infrastructure\Cache\CacheHelper;
 
 class FindEvent
 {
@@ -17,13 +18,30 @@ class FindEvent
      */
     protected $repository;
 
-    public function __construct(DbalEventRepository $repository)
+    /**
+     * @var CacheHelper
+     */
+    private $cacheHelper;
+
+    public function __construct(DbalEventRepository $repository, CacheHelper $cacheHelper)
     {
         $this->repository = $repository;
+        $this->cacheHelper = $cacheHelper;
     }
 
+    /**
+     * @param array $args
+     * @return array|false|mixed|EventCollectionResponse
+     * @throws \PhotoContainer\PhotoContainer\Infrastructure\Exception\PersistenceException
+     */
     public function handle(array $args)
     {
+        $argMD5 = md5(serialize($args));
+        $result = $this->cacheHelper->getByNamespace('find_event', $argMD5);
+        if ($result) {
+            return new EventCollectionResponse($result);
+        }
+
         $keyword = isset($args['keyword']) ? $args['keyword'] : null;
         $photographer = new Photographer((int) $args['photographer'] ?? $args['photographer']);
 
@@ -52,6 +70,9 @@ class FindEvent
         }
 
         $result = $this->repository->find($search);
+
+        $this->cacheHelper->saveByNamespace('find_event', $argMD5, $result);
+
         return new EventCollectionResponse($result);
     }
 }

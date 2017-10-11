@@ -4,23 +4,36 @@ namespace PhotoContainer\PhotoContainer\Contexts\Photo\Action;
 
 use PhotoContainer\PhotoContainer\Contexts\Photo\Domain\PhotoRepository;
 use PhotoContainer\PhotoContainer\Contexts\Photo\Response\PhotoResponse;
+use PhotoContainer\PhotoContainer\Infrastructure\Cache\CacheHelper;
 use PhotoContainer\PhotoContainer\Infrastructure\Helper\EventPhotoHelper;
 use PhotoContainer\PhotoContainer\Infrastructure\Web\DomainExceptionResponse;
 
 class CreatePhoto
 {
+    /**
+     * @var PhotoRepository
+     */
     private $dbRepo;
+
+    /**
+     * @var EventPhotoHelper
+     */
     private $fsRepo;
 
     /**
      * CreatePhoto constructor.
      * @param PhotoRepository $dbRepo
      * @param EventPhotoHelper $fsRepo
+     * @param CacheHelper $cacheHelper
      */
-    public function __construct(PhotoRepository $dbRepo, EventPhotoHelper $fsRepo)
-    {
+    public function __construct(
+        PhotoRepository $dbRepo,
+        EventPhotoHelper $fsRepo,
+        CacheHelper $cacheHelper
+    ) {
         $this->dbRepo = $dbRepo;
         $this->fsRepo = $fsRepo;
+        $this->cacheHelper = $cacheHelper;
     }
 
     /**
@@ -44,6 +57,7 @@ class CreatePhoto
             }
         }
 
+        $this->cacheHelper->clearNamespace('find_event');
         $this->dbRepo->activateEvent($event_id);
 
         return new PhotoResponse($array);

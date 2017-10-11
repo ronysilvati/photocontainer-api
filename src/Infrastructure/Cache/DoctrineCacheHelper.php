@@ -37,4 +37,38 @@ class DoctrineCacheHelper implements CacheHelper
 
         return $result;
     }
+
+    /**
+     * @param string $namespace
+     * @param string $key
+     * @param $data
+     * @param int $ttl
+     * @return bool
+     */
+    public function saveByNamespace(string $namespace, string $key, $data, int $ttl = 3600): bool
+    {
+        $this->cache->setNamespace($namespace);
+        return $this->cache->save($key, $data, $ttl);
+    }
+
+    /**
+     * @param string $namespace
+     * @param string $key
+     * @return false|mixed
+     */
+    public function getByNamespace(string $namespace, string $key)
+    {
+        $this->cache->setNamespace($namespace);
+        return $this->cache->fetch($key);
+    }
+
+    /**
+     * @param string $namespace
+     * @return bool
+     */
+    public function clearNamespace(string $namespace)
+    {
+        $this->cache->setNamespace($namespace);
+        return $this->cache->deleteAll();
+    }
 }
