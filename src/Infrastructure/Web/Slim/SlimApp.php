@@ -3,12 +3,14 @@
 namespace PhotoContainer\PhotoContainer\Infrastructure\Web\Slim;
 
 use League\Event\Emitter;
+use PhotoContainer\PhotoContainer\Infrastructure\Cache\CacheHelper;
 use PhotoContainer\PhotoContainer\Infrastructure\Event\EventRecorder;
 use PhotoContainer\PhotoContainer\Infrastructure\Event\EventWrapper;
 use PhotoContainer\PhotoContainer\Infrastructure\Web\WebApp;
 use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\ServerRequestInterface;
 use Slim\App;
+use Slim\Http\Response;
 use Slim\Middleware\JwtAuthentication;
 
 class SlimApp implements WebApp
@@ -74,6 +76,14 @@ class SlimApp implements WebApp
                 ->withHeader('Access-Control-Allow-Methods', 'GET, POST, PUT, DELETE, OPTIONS, PATCH')
                 ->withHeader('Access-Control-Max-Age', '604800');
         });
+
+        $this->app->get('/purge', function (ServerRequestInterface $request, ResponseInterface $response) {
+            /** @var CacheHelper $cache */
+            $cache = $this->get(CacheHelper::class);
+            $cache->purge();
+            return new Response(204);
+        });
+
     }
 
     public function run()
