@@ -6,8 +6,8 @@ error_reporting(E_ALL);
 use PhotoContainer\PhotoContainer\Infrastructure\Web\Slim\SlimApp;
 
 define('ROOT_DIR', dirname(__DIR__));
-define('CACHE_DIR', ROOT_DIR.'/cache');
-define('LOG_DIR', ROOT_DIR.'/logs');
+define('CACHE_DIR', ROOT_DIR.'/var/cache');
+define('LOG_DIR', ROOT_DIR.'/var/logs');
 define('DEBUG_MODE', true);
 
 require '../vendor/autoload.php';
@@ -55,7 +55,8 @@ $webApp->bootstrap(
             "/location",
             "/photo",
             '/contact',
-            '/profile_images'
+            '/profile_images',
+            '/purge'
         ],
     ]
 );
