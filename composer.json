@@ -25,7 +25,8 @@
         "league/event": "^2.1",
         "enqueue/enqueue": "^0.7.11",
         "enqueue/dbal": "^0.7.14",
-        "symfony/console": "^3.3"
+        "symfony/console": "^3.3",
+        "enqueue/fs": "^0.7.17"
     },
 
     "autoload": {
