@@ -13,6 +13,11 @@ interface CacheHelper
     public function remember(string $key, callable $fn, $ttl = 3600);
 
     /**
+     * @param string $key
+     */
+    public function clear(string $key): void;
+
+    /**
      * @param string $namespace
      * @param string $key
      * @param $data
@@ -32,5 +37,7 @@ interface CacheHelper
      * @param string $namespace
      * @return bool
      */
-    public function clearNamespace(string $namespace);
+    public function clearNamespace(string $namespace): bool;
+
+    public function purge(): void;
 }

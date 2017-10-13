@@ -66,9 +66,22 @@ class DoctrineCacheHelper implements CacheHelper
      * @param string $namespace
      * @return bool
      */
-    public function clearNamespace(string $namespace)
+    public function clearNamespace(string $namespace): bool
     {
         $this->cache->setNamespace($namespace);
         return $this->cache->deleteAll();
+    }
+
+    /**
+     * @param string $key
+     */
+    public function clear(string $key): void
+    {
+        $this->cache->delete($key);
+    }
+
+    public function purge(): void
+    {
+        $this->cache->deleteAll();
     }
 }
