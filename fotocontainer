@@ -39,5 +39,7 @@ $application = new Application();
 
 $application->add(new EmailPoolConsumer('EmailPool', $container->get(\Interop\Queue\PsrContext::class)));
 $application->add(new ImageProcessorConsumer('ImagePool', $container->get(\Interop\Queue\PsrContext::class)));
+$application->add(new \PhotoContainer\PhotoContainer\Application\Shell\Install());
+$application->add(new \PhotoContainer\PhotoContainer\Application\Shell\Cache());
 
 $application->run();
