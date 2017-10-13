@@ -19,6 +19,12 @@ class SwiftQueueSpool extends \Swift_ConfigurableSpool
     private $queue;
 
     /**
+     * In milliseconds
+     * @var int
+     */
+    const TIMEOUT = 50;
+
+    /**
      * @param PsrContext      $context
      * @param PsrQueue|string $queue
      */
@@ -62,7 +68,7 @@ class SwiftQueueSpool extends \Swift_ConfigurableSpool
             $time = time();
 
             while (true) {
-                if ($psrMessage = $consumer->receive(1000)) {
+                if ($psrMessage = $consumer->receive(self::TIMEOUT)) {
                     if (false == $isTransportStarted) {
                         $transport->start();
                         $isTransportStarted = true;
