@@ -18,6 +18,7 @@ class EloquentEventNotificationRepository implements EventNotificationRepository
         $notification = new EventNotificationModel();
         $notification->publisher_id = $publisher->getId();
         $notification->event_id = $event->getId();
+        $notification->visualized = true;
 
         $notification->save();
 

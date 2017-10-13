@@ -25,6 +25,7 @@ class EloquentPublisherPublicationRepository implements PublisherPublicationRepo
             $model->ask_for_changes = $publisherPublication->getAskForChanges();
             $model->approved = $publisherPublication->getApproved();
             $model->message = $publisherPublication->getText();
+            $model->visualized = true;
             $model->save();
 
             $publisherPublication->setId($model->id);
