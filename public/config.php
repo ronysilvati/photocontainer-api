@@ -9,6 +9,7 @@ use PhotoContainer\PhotoContainer\Infrastructure\Persistence\EloquentDatabasePro
 use PhotoContainer\PhotoContainer\Infrastructure\Persistence\DbalDatabaseProvider;
 use PhotoContainer\PhotoContainer\Infrastructure\Helper\EventPhotoHelper;
 use PhotoContainer\PhotoContainer\Infrastructure\Crypto\JwtGenerator;
+use Enqueue\Fs\FsConnectionFactory;
 
 if (!is_dir(CACHE_DIR)) {
     mkdir(CACHE_DIR, 0777);
@@ -103,13 +104,7 @@ $defaultDI[PhotoContainer\PhotoContainer\Infrastructure\Persistence\RestDatabase
 $defaultDI['EventDispatcher'] = DI\object(Emitter::class);
 
 $defaultDI[PsrContext::class] = function ($c) {
-    $dsn = 'mysql://'.getenv('MYSQL_USER').':'.getenv('MYSQL_PASSWORD').
-        '@'.getenv('MYSQL_HOST').':3306/'.getenv('MYSQL_DATABASE');
-
-    $factory = new DbalConnectionFactory($dsn);
-
-//    $factory = new FsConnectionFactory('file://dados/www/api.teste.fotocontainer.com.br/cache');
-
+    $factory = new FsConnectionFactory(ROOT_DIR.'/var/pool');
     return $factory->createContext();
 };
 
