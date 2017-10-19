@@ -42,7 +42,7 @@ class FindEvent
             return new EventCollectionResponse($result);
         }
 
-        $keyword = isset($args['keyword']) ? $args['keyword'] : null;
+        $keyword = $args['keyword'] ?? null;
         $photographer = new Photographer((int) $args['photographer'] ?? $args['photographer']);
 
         $allCategories = null;

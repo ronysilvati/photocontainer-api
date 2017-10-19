@@ -33,7 +33,7 @@ class EventController
     public function findEvent(ServerRequestInterface $request, ResponseInterface $response, FindEvent $action)
     {
         $args = $request->getQueryParams();
-        $id = isset($args['id']) ? $args['id'] : null;
+        $id = $args['id'] ?? null;
 
         $actionResponse = $action->handle($id);
 

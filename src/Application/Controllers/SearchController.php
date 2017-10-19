@@ -140,7 +140,7 @@ class SearchController
         string $type
     ) {
         $qsParams = $request->getQueryParams();
-        $keyword = isset($qsParams['keyword']) ? $qsParams['keyword'] : null;
+        $keyword = $qsParams['keyword'] ?? null;
 
         $allTags = null;
         if (!empty($qsParams['tags'])) {

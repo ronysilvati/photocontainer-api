@@ -57,9 +57,9 @@ class UpdateUser
 
         if (isset($data['profile_id']) && $data['profile_id'] == 2) {
             $photographerDetails = new PhotographerDetails(
-                isset($data['details']['bio']) ? $data['details']['bio'] : '',
-                isset($data['details']['studio']) ? $data['details']['studio'] : '',
-                isset($data['details']['name_type']) ? $data['details']['name_type'] : ''
+                $data['details']['bio'] ?? '',
+                $data['details']['studio'] ?? '',
+                $data['details']['name_type'] ?? ''
             );
 
             $user->getDetails()->changePhographerDetails($photographerDetails);

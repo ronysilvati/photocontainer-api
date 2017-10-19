@@ -28,8 +28,8 @@ class UserController
     {
         $args = $request->getQueryParams();
 
-        $id = isset($args['id']) ? $args['id'] : null;
-        $email = isset($args['email']) ? $args['email'] : null;
+        $id = $args['id'] ?? null;
+        $email = $args['email'] ?? null;
 
         $actionResponse = $action->handle($id, $email);
 
@@ -61,13 +61,13 @@ class UserController
 
         $details = new Details(
             null,
-            isset($data['details']['blog']) ? $data['details']['blog'] : '',
-            isset($data['details']['instagram']) ? $data['details']['instagram'] : '',
-            isset($data['details']['facebook']) ? $data['details']['facebook'] : '',
-            isset($data['details']['pinterest']) ? $data['details']['pinterest'] : '',
-            isset($data['details']['site']) ? $data['details']['site'] : '',
-            isset($data['details']['phone']) ? $data['details']['phone'] : '',
-            isset($data['details']['birth']) ? $data['details']['birth'] : ''
+            $data['details']['blog'] ?? '',
+            $data['details']['instagram'] ?? '',
+            $data['details']['facebook'] ?? '',
+            $data['details']['pinterest'] ?? '',
+            $data['details']['site'] ?? '',
+            $data['details']['phone'] ?? '',
+            $data['details']['birth'] ?? ''
         );
 
         $profile = new Profile(null, null, (int) $data['profile'], null);
