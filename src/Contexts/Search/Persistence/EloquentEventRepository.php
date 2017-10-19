@@ -19,7 +19,7 @@ use PhotoContainer\PhotoContainer\Infrastructure\Persistence\Eloquent\EventSearc
 use PhotoContainer\PhotoContainer\Infrastructure\Persistence\Eloquent\EventSearchPublisher;
 use PhotoContainer\PhotoContainer\Infrastructure\Persistence\Eloquent\Photo;
 use PhotoContainer\PhotoContainer\Infrastructure\Persistence\Eloquent\PhotoFavorite;
-use PhotoContainer\PhotoContainer\Infrastructure\Persistence\EloquentDatabaseProvider;
+
 
 class EloquentEventRepository implements EventRepository
 {

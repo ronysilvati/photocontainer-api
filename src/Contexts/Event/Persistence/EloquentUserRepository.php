@@ -8,7 +8,7 @@ use PhotoContainer\PhotoContainer\Contexts\Event\Domain\UserRepository;
 use PhotoContainer\PhotoContainer\Infrastructure\Exception\PersistenceException;
 use PhotoContainer\PhotoContainer\Infrastructure\Persistence\Eloquent\User;
 use PhotoContainer\PhotoContainer\Infrastructure\Persistence\Eloquent\UserProfile;
-use PhotoContainer\PhotoContainer\Infrastructure\Persistence\EloquentDatabaseProvider;
+
 
 class EloquentUserRepository implements UserRepository
 {

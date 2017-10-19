@@ -1,13 +1,8 @@
 <?php
 
-use PhotoContainer\PhotoContainer\Application\Controllers\CepController;
+
 use PhotoContainer\PhotoContainer\Application\Controllers\SearchController;
-use PhotoContainer\PhotoContainer\Application\Controllers\ApprovalController;
-use PhotoContainer\PhotoContainer\Application\Controllers\ContactController;
-use PhotoContainer\PhotoContainer\Application\Controllers\AuthController;
-use PhotoContainer\PhotoContainer\Application\Controllers\EventController;
-use PhotoContainer\PhotoContainer\Application\Controllers\UserController;
-use PhotoContainer\PhotoContainer\Application\Controllers\PhotoController;
+
 
 $app->post('/login', [AuthController::class, 'login']);
 

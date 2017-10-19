@@ -7,7 +7,7 @@ use PhotoContainer\PhotoContainer\Contexts\Event\Domain\FavoriteRepository;
 use PhotoContainer\PhotoContainer\Contexts\Event\Domain\Publisher;
 use PhotoContainer\PhotoContainer\Infrastructure\Exception\PersistenceException;
 use PhotoContainer\PhotoContainer\Infrastructure\Persistence\Eloquent\EventFavorite;
-use PhotoContainer\PhotoContainer\Infrastructure\Persistence\EloquentDatabaseProvider;
+
 
 class EloquentFavoriteRepository implements FavoriteRepository
 {

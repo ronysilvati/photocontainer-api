@@ -8,7 +8,7 @@ use PhotoContainer\PhotoContainer\Infrastructure\Exception\PersistenceException;
 use PhotoContainer\PhotoContainer\Infrastructure\Persistence\Eloquent\City;
 use PhotoContainer\PhotoContainer\Infrastructure\Persistence\Eloquent\Country;
 use PhotoContainer\PhotoContainer\Infrastructure\Persistence\Eloquent\State;
-use PhotoContainer\PhotoContainer\Infrastructure\Persistence\EloquentDatabaseProvider;
+
 
 class EloquentCepRepository implements CepRepository
 {

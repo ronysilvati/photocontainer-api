@@ -6,7 +6,7 @@ use PhotoContainer\PhotoContainer\Contexts\Search\Domain\Tag;
 use PhotoContainer\PhotoContainer\Contexts\Search\Domain\TagRepository;
 use PhotoContainer\PhotoContainer\Infrastructure\Exception\PersistenceException;
 use PhotoContainer\PhotoContainer\Infrastructure\Persistence\Eloquent\TagCategory;
-use PhotoContainer\PhotoContainer\Infrastructure\Persistence\EloquentDatabaseProvider;
+
 
 class EloquentTagRepository implements TagRepository
 {

@@ -8,7 +8,7 @@ use PhotoContainer\PhotoContainer\Application\Resources\Emails\PhotographerDownl
 use PhotoContainer\PhotoContainer\Contexts\Event\Domain\EventRepository;
 use PhotoContainer\PhotoContainer\Contexts\Photo\Event\DownloadedPhoto;
 use PhotoContainer\PhotoContainer\Contexts\User\Domain\UserRepository;
-use PhotoContainer\PhotoContainer\Infrastructure\Email\EmailHelper;
+
 use PhotoContainer\PhotoContainer\Infrastructure\Email\SwiftPoolMailerHelper;
 
 class SendEmailPhotographerOnDownload extends AbstractListener

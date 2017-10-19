@@ -13,7 +13,7 @@ use PhotoContainer\PhotoContainer\Infrastructure\Persistence\Eloquent\Event as E
 use PhotoContainer\PhotoContainer\Infrastructure\Persistence\Eloquent\EventCategory as EventCategoryModel;
 use PhotoContainer\PhotoContainer\Infrastructure\Persistence\Eloquent\EventSuppliers;
 use PhotoContainer\PhotoContainer\Infrastructure\Persistence\Eloquent\EventTag as EventTagModel;
-use PhotoContainer\PhotoContainer\Infrastructure\Persistence\EloquentDatabaseProvider;
+
 
 class EloquentEventRepository implements EventRepository
 {

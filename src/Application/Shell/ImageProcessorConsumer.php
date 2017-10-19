@@ -3,7 +3,7 @@
 namespace PhotoContainer\PhotoContainer\Application\Shell;
 
 use Interop\Queue\PsrContext;
-use Intervention\Image\Image;
+
 use Intervention\Image\ImageManager;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputArgument;

@@ -2,7 +2,7 @@
 
 namespace PhotoContainer\PhotoContainer\Infrastructure\Web\Slim;
 
-use League\Event\Emitter;
+
 use PhotoContainer\PhotoContainer\Infrastructure\Cache\CacheHelper;
 use PhotoContainer\PhotoContainer\Infrastructure\Event\EventRecorder;
 use PhotoContainer\PhotoContainer\Infrastructure\Event\EventWrapper;

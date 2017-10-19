@@ -3,7 +3,7 @@
 namespace PhotoContainer\PhotoContainer\Infrastructure\Persistence\Eloquent;
 
 use Illuminate\Database\Eloquent\Model as EloquentModel;
-use PhotoContainer\PhotoContainer\Contexts\Event\Domain\EventNotification;
+
 
 class PublisherPublication extends EloquentModel
 {

@@ -5,8 +5,7 @@ namespace PhotoContainer\PhotoContainer\Contexts\Search\Persistence;
 use Illuminate\Database\Capsule\Manager as DB;
 use PhotoContainer\PhotoContainer\Contexts\Search\Domain\NotificationRepository;
 use PhotoContainer\PhotoContainer\Infrastructure\Exception\PersistenceException;
-use PhotoContainer\PhotoContainer\Infrastructure\Persistence\Eloquent\EventSearchApproval;
-use PhotoContainer\PhotoContainer\Infrastructure\Persistence\EloquentDatabaseProvider;
+
 
 class EloquentNotificationRepository implements NotificationRepository
 {
