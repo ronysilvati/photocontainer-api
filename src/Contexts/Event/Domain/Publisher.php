@@ -53,7 +53,7 @@ class Publisher
     /**
      * @param mixed $id
      */
-    public function changeId(?int $id)
+    public function changeId(?int $id): void
     {
         $this->id = $id;
     }
@@ -70,7 +70,7 @@ class Publisher
      * @param mixed $profile_id
      * @throws \DomainException
      */
-    public function changeProfileId(?int $profile_id)
+    public function changeProfileId(?int $profile_id): void
     {
         if (self::APPROVED_PROFILE !== $profile_id) {
             throw new \DomainException('Apenas o perfil de publisher possui permissao para executar essa operação.');
@@ -90,7 +90,7 @@ class Publisher
     /**
      * @param null|string $name
      */
-    public function changeName(?string $name)
+    public function changeName(?string $name): void
     {
         $this->name = $name;
     }

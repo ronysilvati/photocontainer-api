@@ -29,7 +29,7 @@ class PublisherCreated implements Event
         return $this->user;
     }
 
-    public function getName()
+    public function getName(): string
     {
         return 'publisher_registered';
     }

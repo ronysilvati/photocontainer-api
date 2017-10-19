@@ -29,17 +29,17 @@ class Profile
         }
     }
 
-    public function changeId(int $id)
+    public function changeId(int $id): void
     {
         $this->id = $id;
     }
 
-    public function changeUserId(int $user_id)
+    public function changeUserId(int $user_id): void
     {
         $this->user_id = $user_id;
     }
 
-    public function changeProfileId(int $profile_id)
+    public function changeProfileId(int $profile_id): void
     {
         if (!in_array($profile_id, [self::PHOTOGRAPHER, self::PUBLISHER])) {
             throw new DomainException('O perfil selecionado é inválido.');
@@ -49,7 +49,7 @@ class Profile
         $this->active = $profile_id === self::PUBLISHER ? self::INACTIVE : self::ACTIVE;
     }
 
-    public function changeActive(int $active)
+    public function changeActive(int $active): void
     {
         $this->active = $active;
     }

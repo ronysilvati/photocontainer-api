@@ -94,7 +94,7 @@ class RequestPwdChange
      * @param User $user
      * @param RequestPassword $reqPwd
      */
-    private function sendEmail(User $user, RequestPassword $reqPwd)
+    private function sendEmail(User $user, RequestPassword $reqPwd): void
     {
         $data = [
             '{NAME}' => $user->getName(),

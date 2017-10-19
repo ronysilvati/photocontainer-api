@@ -39,7 +39,7 @@ class Favorite
     /**
      * @param int|null $id
      */
-    public function changeId(?int $id)
+    public function changeId(?int $id): void
     {
         $this->id = $id;
     }
@@ -55,7 +55,7 @@ class Favorite
     /**
      * @param Publisher $publisher
      */
-    public function changePublisher(Publisher $publisher)
+    public function changePublisher(Publisher $publisher): void
     {
         $this->publisher = $publisher;
     }
@@ -71,7 +71,7 @@ class Favorite
     /**
      * @param int|null $event_id
      */
-    public function changeEventId(int $event_id)
+    public function changeEventId(int $event_id): void
     {
         $this->event_id = $event_id;
     }
@@ -87,7 +87,7 @@ class Favorite
     /**
      * @param int|null $totalLikes
      */
-    public function changeTotalLikes(?int $totalLikes)
+    public function changeTotalLikes(?int $totalLikes): void
     {
         $this->totalLikes = $totalLikes;
     }

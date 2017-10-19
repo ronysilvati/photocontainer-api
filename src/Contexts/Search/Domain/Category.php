@@ -29,7 +29,7 @@ class Category
     /**
      * @param mixed $id
      */
-    public function changeId(int $id)
+    public function changeId(int $id): void
     {
         $this->id = $id;
     }
@@ -45,7 +45,7 @@ class Category
     /**
      * @param mixed $description
      */
-    public function changeDescription(string $description = null)
+    public function changeDescription(string $description = null): void
     {
         $this->description = $description;
     }

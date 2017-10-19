@@ -26,7 +26,7 @@ class Photographer
     /**
      * @param mixed $id
      */
-    public function changeId($id)
+    public function changeId($id): void
     {
         $this->id = $id;
     }
@@ -42,7 +42,7 @@ class Photographer
     /**
      * @param null|string $name
      */
-    public function changeName(?string $name = null)
+    public function changeName(?string $name = null): void
     {
         $this->name = $name;
     }

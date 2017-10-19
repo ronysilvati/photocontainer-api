@@ -38,7 +38,7 @@ class ImageHelper
     /**
      * @param string $dir
      */
-    public function configure(string $dir)
+    public function configure(string $dir): void
     {
         $dir .= '/';
 
@@ -104,7 +104,7 @@ class ImageHelper
      * @param string $type
      * @param array $criteria
      */
-    public function addCriteriaForSaving(string $type, array $criteria)
+    public function addCriteriaForSaving(string $type, array $criteria): void
     {
         $this->criteria[$type] = $criteria;
     }

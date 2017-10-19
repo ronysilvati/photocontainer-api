@@ -59,7 +59,7 @@ class RequestPassword
     /**
      * @param int|null $id
      */
-    public function setId(?int $id)
+    public function setId(?int $id): void
     {
         $this->id = $id;
     }
@@ -75,7 +75,7 @@ class RequestPassword
     /**
      * @param string $token
      */
-    public function setToken(string $token)
+    public function setToken(string $token): void
     {
         $this->token = $token;
     }

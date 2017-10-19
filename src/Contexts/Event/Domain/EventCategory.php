@@ -29,7 +29,7 @@ class EventCategory
     /**
      * @param mixed $event_id
      */
-    public function changeEventId(int $event_id)
+    public function changeEventId(int $event_id): void
     {
         $this->event_id = $event_id;
     }
@@ -46,7 +46,7 @@ class EventCategory
      * @param mixed $category_id
      * @throws \DomainException
      */
-    public function changeCategoryId(?int $category_id = null)
+    public function changeCategoryId(?int $category_id = null): void
     {
         if ($category_id === null) {
             throw new \DomainException('A categoria é obrigatória.');

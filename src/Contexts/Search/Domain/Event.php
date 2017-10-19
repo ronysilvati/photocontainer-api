@@ -102,7 +102,7 @@ class Event
     /**
      * @param bool $approvedForPublisher
      */
-    public function changeApprovedForPublisher(bool $approvedForPublisher)
+    public function changeApprovedForPublisher(bool $approvedForPublisher): void
     {
         $this->approvedForPublisher = $approvedForPublisher;
     }

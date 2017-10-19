@@ -14,7 +14,7 @@ class RestDatabaseProvider implements DatabaseProvider
         $this->config = $config;
     }
 
-    public function boot()
+    public function boot(): void
     {
         $this->client = new Client([
             'base_uri' => $this->config['host'],

@@ -29,7 +29,7 @@ class Publisher
     /**
      * @param int $id
      */
-    public function changeId(?int $id)
+    public function changeId(?int $id): void
     {
         $this->id = $id;
     }

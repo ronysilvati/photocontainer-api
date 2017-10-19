@@ -29,7 +29,7 @@ class EventTag
     /**
      * @param mixed $event_id
      */
-    public function changeEventId($event_id)
+    public function changeEventId($event_id): void
     {
         $this->event_id = $event_id;
     }
@@ -45,7 +45,7 @@ class EventTag
     /**
      * @param mixed $tag_id
      */
-    public function changeTagId($tag_id)
+    public function changeTagId($tag_id): void
     {
         $this->tag_id = $tag_id;
     }

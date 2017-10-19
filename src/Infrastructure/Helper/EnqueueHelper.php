@@ -47,7 +47,7 @@ class EnqueueHelper
      * @throws Exception
      * @throws \Exception
      */
-    public function queueMessage($message, string $queue)
+    public function queueMessage($message, string $queue): void
     {
         try {
             if (!$this->queue && $queue) {

@@ -54,7 +54,7 @@ class Details
         $this->changeBirth($birth);
     }
 
-    public function changeBlog(?string $blog)
+    public function changeBlog(?string $blog): void
     {
         if ($blog && empty($blog)) {
             throw new \DomainException('A URL do blog deve ser enviada!');
@@ -63,7 +63,7 @@ class Details
         $this->blog = $blog;
     }
 
-    public function changeId(int $id)
+    public function changeId(int $id): void
     {
         $this->id = $id;
     }
@@ -95,7 +95,7 @@ class Details
     /**
      * @param null|string $instagram
      */
-    public function changeInstagram(?string $instagram)
+    public function changeInstagram(?string $instagram): void
     {
         $this->instagram = $instagram;
     }
@@ -111,7 +111,7 @@ class Details
     /**
      * @param null|string $facebook
      */
-    public function changeFacebook(?string $facebook)
+    public function changeFacebook(?string $facebook): void
     {
         $this->facebook = $facebook;
     }
@@ -127,7 +127,7 @@ class Details
     /**
      * @param null|string $pinterest
      */
-    public function changePinterest(?string $pinterest)
+    public function changePinterest(?string $pinterest): void
     {
         $this->pinterest = $pinterest;
     }
@@ -143,7 +143,7 @@ class Details
     /**
      * @param null|string $site
      */
-    public function changeSite(?string $site)
+    public function changeSite(?string $site): void
     {
         $this->site = $site;
     }
@@ -159,7 +159,7 @@ class Details
     /**
      * @param mixed $phone
      */
-    public function changePhone(?string $phone)
+    public function changePhone(?string $phone): void
     {
         $this->phone = $phone ?? '';
     }
@@ -175,7 +175,7 @@ class Details
     /**
      * @param mixed $birth
      */
-    public function changeBirth(?string $birth)
+    public function changeBirth(?string $birth): void
     {
         $this->birth = $birth ?? '';
     }
@@ -191,7 +191,7 @@ class Details
     /**
      * @param null|PhotographerDetails $phographerDetails
      */
-    public function changePhographerDetails(?PhotographerDetails $phographerDetails)
+    public function changePhographerDetails(?PhotographerDetails $phographerDetails): void
     {
         $this->phographerDetails = $phographerDetails;
     }

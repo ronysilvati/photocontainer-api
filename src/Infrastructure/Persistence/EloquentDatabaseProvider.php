@@ -13,7 +13,7 @@ class EloquentDatabaseProvider implements DatabaseProvider
         $this->config = $config;
     }
 
-    public function boot()
+    public function boot(): void
     {
         $capsule = new Capsule;
         $capsule->addConnection([

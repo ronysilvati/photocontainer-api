@@ -27,7 +27,7 @@ class SendEmailOnPublisherPublication extends AbstractListener
     /**
      * @param EventInterface $event
      */
-    public function handle(EventInterface $event)
+    public function handle(EventInterface $event): void
     {
         try {
             /** @var PublisherPublished $eventData */

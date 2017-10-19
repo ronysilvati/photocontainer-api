@@ -43,7 +43,7 @@ class DownloadRequested implements Event
         return $this->publisher_id;
     }
     
-    public function getName()
+    public function getName(): string
     {
         return 'download_requested';
     }

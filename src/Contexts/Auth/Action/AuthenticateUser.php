@@ -62,7 +62,7 @@ class AuthenticateUser
         }
     }
 
-    public function saveLog(int $user_id)
+    public function saveLog(int $user_id): void
     {
         try {
             $this->repository->logAccess($user_id);

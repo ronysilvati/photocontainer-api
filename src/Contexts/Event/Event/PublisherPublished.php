@@ -58,7 +58,7 @@ class PublisherPublished implements Event
         return $this->publisher_id;
     }
 
-    public function getName()
+    public function getName(): string
     {
         return 'publisher_published';
     }

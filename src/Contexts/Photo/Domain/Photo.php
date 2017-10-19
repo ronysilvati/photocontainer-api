@@ -34,7 +34,7 @@ class Photo
     /**
      * @return int|null
      */
-    public function getId()
+    public function getId(): ?int
     {
         return $this->id;
     }
@@ -42,7 +42,7 @@ class Photo
     /**
      * @param int|null $id
      */
-    public function changeId($id)
+    public function changeId($id): void
     {
         $this->id = $id;
     }
@@ -50,7 +50,7 @@ class Photo
     /**
      * @return int|null
      */
-    public function getEventId()
+    public function getEventId(): ?int
     {
         return $this->event_id;
     }
@@ -59,7 +59,7 @@ class Photo
      * @param int|null $event_id
      * @throws \DomainException
      */
-    public function changeEventId($event_id = null)
+    public function changeEventId($event_id = null): void
     {
         if ($event_id === null) {
             throw new \DomainException('A foto deve possuir um evento.');
@@ -71,7 +71,7 @@ class Photo
     /**
      * @return array|null
      */
-    public function getFile()
+    public function getFile(): ?array
     {
         return $this->file;
     }
@@ -79,7 +79,7 @@ class Photo
     /**
      * @param array|null $file
      */
-    public function changeFile($file)
+    public function changeFile($file): void
     {
         $this->file = $file;
     }
@@ -95,7 +95,7 @@ class Photo
     /**
      * @param string $physicalName
      */
-    public function setPhysicalName(string $physicalName)
+    public function setPhysicalName(string $physicalName): void
     {
         $this->physicalName = $physicalName;
     }
@@ -104,7 +104,7 @@ class Photo
      * @param mixed $physicalName
      * @throws \DomainException
      */
-    public function changePhysicalName(?string $physicalName)
+    public function changePhysicalName(?string $physicalName): void
     {
         $path_parts = pathinfo($physicalName);
 
@@ -125,7 +125,7 @@ class Photo
      * @param bool $with_filename
      * @return string
      */
-    public function getFilePath(?string $thatFolder, $with_shared_path = false, $with_filename = false)
+    public function getFilePath(?string $thatFolder, $with_shared_path = false, $with_filename = false): string
     {
         $file_path = 'events/' . $this->getEventId() . '/' . $thatFolder;
 
@@ -141,7 +141,7 @@ class Photo
         return $file_path;
     }
 
-    public function getWatermarkFile()
+    public function getWatermarkFile(): string
     {
         return getenv('SHARED_PATH') . '/watermark.png';
     }

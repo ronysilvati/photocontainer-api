@@ -68,7 +68,7 @@ class DownloadRequest
     /**
      * @param int $id
      */
-    public function changeId(int $id)
+    public function changeId(int $id): void
     {
         $this->id = $id;
         EventRecorder::getInstance()->record(new DownloadRequested($this->event_id, $this->user_id));
@@ -85,7 +85,7 @@ class DownloadRequest
     /**
      * @param int $event_id
      */
-    public function changeEventId(int $event_id)
+    public function changeEventId(int $event_id): void
     {
         $this->event_id = $event_id;
     }
@@ -101,7 +101,7 @@ class DownloadRequest
     /**
      * @param int $user_id
      */
-    public function changeUserId(int $user_id)
+    public function changeUserId(int $user_id): void
     {
         $this->user_id = $user_id;
     }
@@ -117,7 +117,7 @@ class DownloadRequest
     /**
      * @param bool $authorized
      */
-    public function changeAuthorized(bool $authorized)
+    public function changeAuthorized(bool $authorized): void
     {
         $this->authorized = $authorized;
 
@@ -135,7 +135,7 @@ class DownloadRequest
     /**
      * @param bool $visualized
      */
-    public function changeVisualized(bool $visualized)
+    public function changeVisualized(bool $visualized): void
     {
         $this->visualized = $visualized;
     }
@@ -151,7 +151,7 @@ class DownloadRequest
     /**
      * @param bool $active
      */
-    public function changeActive(bool $active)
+    public function changeActive(bool $active): void
     {
         $this->active = $active;
     }

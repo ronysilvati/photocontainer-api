@@ -43,7 +43,7 @@ class Suppliers
     /**
      * @param int $id
      */
-    public function changeId(int $id)
+    public function changeId(int $id): void
     {
         $this->id = $id;
     }
@@ -59,7 +59,7 @@ class Suppliers
     /**
      * @param string $suppliers
      */
-    public function changeSuppliers(string $suppliers)
+    public function changeSuppliers(string $suppliers): void
     {
         $this->suppliers = $suppliers;
     }

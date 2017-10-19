@@ -51,7 +51,7 @@ class Cep
     /**
      * @param null|string $zipcode
      */
-    public function changeZipcode(?string $zipcode)
+    public function changeZipcode(?string $zipcode): void
     {
         $this->zipcode = $zipcode;
     }
@@ -67,7 +67,7 @@ class Cep
     /**
      * @param null|string $country
      */
-    public function changeCountry(?string $country)
+    public function changeCountry(?string $country): void
     {
         $this->country = $country;
     }
@@ -83,7 +83,7 @@ class Cep
     /**
      * @param null|string $state
      */
-    public function changeState(?string $state)
+    public function changeState(?string $state): void
     {
         $this->state = $state;
     }
@@ -99,7 +99,7 @@ class Cep
     /**
      * @param null|string $city
      */
-    public function changeCity(?string $city)
+    public function changeCity(?string $city): void
     {
         $this->city = $city;
     }
@@ -115,7 +115,7 @@ class Cep
     /**
      * @param null|string $neighborhood
      */
-    public function changeNeighborhood(?string $neighborhood)
+    public function changeNeighborhood(?string $neighborhood): void
     {
         $this->neighborhood = $neighborhood;
     }
@@ -131,7 +131,7 @@ class Cep
     /**
      * @param null|string $street
      */
-    public function changeStreet(?string $street)
+    public function changeStreet(?string $street): void
     {
         $this->street = $street;
     }
@@ -147,7 +147,7 @@ class Cep
     /**
      * @param null|string $complement
      */
-    public function changeComplement(?string $complement)
+    public function changeComplement(?string $complement): void
     {
         $this->complement = $complement;
     }

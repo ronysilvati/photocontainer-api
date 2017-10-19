@@ -37,7 +37,7 @@ class SendEmailPublisherOnDownload extends AbstractListener
     /**
      * @param EventInterface $event
      */
-    public function handle(EventInterface $event)
+    public function handle(EventInterface $event): void
     {
         try {
             /** @var DownloadedPhoto $data */

@@ -43,7 +43,7 @@ class SelectedPhotos
     /**
      * @param Photo $photo
      */
-    public function add(Photo $photo)
+    public function add(Photo $photo): void
     {
         $this->photos[] = $photo;
     }
@@ -59,7 +59,7 @@ class SelectedPhotos
     /**
      * @param string $zip
      */
-    public function attachZip(string $zip)
+    public function attachZip(string $zip): void
     {
         $this->zip = $zip;
 

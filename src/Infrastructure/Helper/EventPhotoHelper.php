@@ -96,7 +96,7 @@ class EventPhotoHelper
      * @throws PersistenceException
      * @throws \PhotoContainer\PhotoContainer\Infrastructure\Exception\PersistenceException
      */
-    public function deletePhoto(Photo $photo)
+    public function deletePhoto(Photo $photo): void
     {
         try {
             unlink($photo->getFilePath('thumb', true, true));

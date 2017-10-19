@@ -57,7 +57,7 @@ class SwiftQueueSpool extends \Swift_ConfigurableSpool
     /**
      * {@inheritdoc}
      */
-    public function flushQueue(\Swift_Transport $transport, &$failedRecipients = null)
+    public function flushQueue(\Swift_Transport $transport, &$failedRecipients = null): ?int
     {
         try {
             $consumer = $this->context->createConsumer($this->queue);
@@ -100,21 +100,21 @@ class SwiftQueueSpool extends \Swift_ConfigurableSpool
     /**
      * {@inheritdoc}
      */
-    public function start()
+    public function start(): void
     {
     }
 
     /**
      * {@inheritdoc}
      */
-    public function stop()
+    public function stop(): void
     {
     }
 
     /**
      * {@inheritdoc}
      */
-    public function isStarted()
+    public function isStarted(): bool
     {
         return true;
     }

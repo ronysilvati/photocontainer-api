@@ -72,7 +72,7 @@ class BroadcastEvent
         return new BroadcastResponse();
     }
 
-    public function queueEmails($publishers, $event)
+    public function queueEmails($publishers, $event): void
     {
         $to = ['name' => getenv('PHOTOCONTAINER_EMAIL_NAME'), 'email' => getenv('PHOTOCONTAINER_EMAIL')];
 

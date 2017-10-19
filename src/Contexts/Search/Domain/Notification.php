@@ -9,7 +9,7 @@ class Notification
      */
     private $values = [];
 
-    public function addNotification(string $name, int $value)
+    public function addNotification(string $name, int $value): void
     {
         $this->values[$name] = $value;
     }

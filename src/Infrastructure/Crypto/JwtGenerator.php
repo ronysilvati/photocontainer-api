@@ -13,12 +13,12 @@ class JwtGenerator implements CryptoMethod
         $this->key = $key;
     }
 
-    public function hash($value)
+    public function hash($value): string
     {
         return JWT::encode($value, $this->key);
     }
 
-    public function verify(string $plainPwd, string $hashedPwd)
+    public function verify(string $plainPwd, string $hashedPwd): void
     {
         // TODO: Implement verify() method.
     }

@@ -36,7 +36,7 @@ class SlimApp implements WebApp
      * @throws \Psr\Container\ContainerExceptionInterface
      * @throws \Psr\Container\NotFoundExceptionInterface
      */
-    public function bootstrap(array $conf)
+    public function bootstrap(array $conf): void
     {
         $app = $this->app;
         $container = $app->getContainer();
@@ -96,7 +96,7 @@ class SlimApp implements WebApp
         $container->get(EloquentDatabaseProvider::class);
     }
 
-    public function run()
+    public function run(): void
     {
         $this->app->run();
     }

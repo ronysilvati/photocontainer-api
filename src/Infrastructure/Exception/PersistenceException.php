@@ -26,7 +26,7 @@ class PersistenceException extends \Exception
     /**
      * @return string
      */
-    public function getInfraLayerError()
+    public function getInfraLayerError(): string
     {
         return $this->infraLayerError;
     }

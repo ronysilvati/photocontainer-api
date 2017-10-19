@@ -12,7 +12,7 @@ class EloquentAtomicWorker implements AtomicWorker
      * @return bool
      * @throws \Exception
      */
-    public function execute(callable $transaction, ?callable $onException = null)
+    public function execute(callable $transaction, ?callable $onException = null): ?bool
     {
         try {
             DB::beginTransaction();

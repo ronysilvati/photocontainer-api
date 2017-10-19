@@ -26,7 +26,7 @@ class EloquentAuthRepository implements AuthRepository
         }
     }
 
-    public function logAccess(int $user_id)
+    public function logAccess(int $user_id): void
     {
         try {
             $log = new AccessLog();

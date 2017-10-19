@@ -46,7 +46,7 @@ class ImageProcessorConsumer extends Command
     /**
      * @inheritdoc
      */
-    protected function configure()
+    protected function configure(): void
     {
         $this
             ->setName('queue_process:images')

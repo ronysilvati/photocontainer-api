@@ -71,7 +71,7 @@ class PhotographerDetails
      * @throws Exception
      * @throws \League\Flysystem\Exception
      */
-    public function setNameType(string $name_type)
+    public function setNameType(string $name_type): void
     {
         if (!in_array($name_type, [self::BY_NAME, self::BY_STUDIO])) {
             throw new Exception('Aceitos: name, studio');

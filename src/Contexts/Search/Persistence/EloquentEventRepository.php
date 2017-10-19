@@ -29,7 +29,7 @@ class EloquentEventRepository implements EventRepository
      * @throws \PhotoContainer\PhotoContainer\Infrastructure\Exception\PersistenceException
      * @throws \Exception
      */
-    public function find(EventSearch $search)
+    public function find(EventSearch $search): ?array
     {
         try {
             $where = [];

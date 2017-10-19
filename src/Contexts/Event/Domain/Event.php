@@ -77,7 +77,7 @@ class Event
     /**
      * @param mixed $id
      */
-    public function changeId(?int $id)
+    public function changeId(?int $id): void
     {
         $this->id = $id;
     }
@@ -93,7 +93,7 @@ class Event
     /**
      * @param mixed $bride
      */
-    public function changeBride(string $bride)
+    public function changeBride(string $bride): void
     {
         $this->bride = $bride;
     }
@@ -109,7 +109,7 @@ class Event
     /**
      * @param string|null $groom
      */
-    public function changeGroom(string $groom = null)
+    public function changeGroom(string $groom = null): void
     {
         $this->groom = $groom;
     }
@@ -125,7 +125,7 @@ class Event
     /**
      * @param string $eventDate
      */
-    public function changeEventDate(string $eventDate)
+    public function changeEventDate(string $eventDate): void
     {
         $this->eventDate = $eventDate;
     }
@@ -141,7 +141,7 @@ class Event
     /**
      * @param mixed $title
      */
-    public function changeTitle(string $title)
+    public function changeTitle(string $title): void
     {
         $this->title = $title;
     }
@@ -157,7 +157,7 @@ class Event
     /**
      * @param mixed $description
      */
-    public function changeDescription(string $description)
+    public function changeDescription(string $description): void
     {
         $this->description = $description;
     }
@@ -174,7 +174,7 @@ class Event
      * @param mixed $terms
      * @throws \DomainException
      */
-    public function changeTerms(bool $terms = null)
+    public function changeTerms(bool $terms = null): void
     {
         if ($terms === null || $terms === false) {
             throw new \DomainException('Os termos devem ser aceitos.');
@@ -194,7 +194,7 @@ class Event
     /**
      * @param mixed $approval_general
      */
-    public function changeApprovalGeneral(bool $approval_general)
+    public function changeApprovalGeneral(bool $approval_general): void
     {
         $this->approval_general = $approval_general;
     }
@@ -210,7 +210,7 @@ class Event
     /**
      * @param mixed $approval_photographer
      */
-    public function changeApprovalPhotographer(bool $approval_photographer)
+    public function changeApprovalPhotographer(bool $approval_photographer): void
     {
         $this->approval_photographer = $approval_photographer;
     }
@@ -226,7 +226,7 @@ class Event
     /**
      * @param mixed $approval_bride
      */
-    public function changeApprovalBride(bool $approval_bride)
+    public function changeApprovalBride(bool $approval_bride): void
     {
         $this->approval_bride = $approval_bride;
     }
@@ -242,7 +242,7 @@ class Event
     /**
      * @param Photographer $photographer
      */
-    public function changePhotographer(Photographer $photographer)
+    public function changePhotographer(Photographer $photographer): void
     {
         $this->photographer = $photographer;
     }
@@ -259,7 +259,7 @@ class Event
      * @param array $categories
      * @throws \DomainException
      */
-    public function changeCategories(array $categories)
+    public function changeCategories(array $categories): void
     {
         if (empty($categories)) {
             throw new \DomainException('Deve ser enviada ao menos uma categoria.');
@@ -283,7 +283,7 @@ class Event
     /**
      * @param $tags
      */
-    public function changeTags($tags)
+    public function changeTags($tags): void
     {
         $this->tags = $tags;
     }
@@ -299,7 +299,7 @@ class Event
     /**
      * @param array $favorites
      */
-    public function changeFavorites(array $favorites)
+    public function changeFavorites(array $favorites): void
     {
         $this->favorites = $favorites;
     }
@@ -315,7 +315,7 @@ class Event
     /**
      * @param Suppliers $suppliers
      */
-    public function changeSuppliers(?Suppliers $suppliers)
+    public function changeSuppliers(?Suppliers $suppliers): void
     {
         $this->suppliers = $suppliers;
     }
@@ -331,7 +331,7 @@ class Event
     /**
      * @param mixed $country
      */
-    public function changeCountry($country)
+    public function changeCountry($country): void
     {
         $this->country = $country;
     }
@@ -347,7 +347,7 @@ class Event
     /**
      * @param mixed $state
      */
-    public function changeState($state)
+    public function changeState($state): void
     {
         $this->state = $state;
     }
@@ -363,7 +363,7 @@ class Event
     /**
      * @param mixed $city
      */
-    public function changeCity($city)
+    public function changeCity($city): void
     {
         $this->city = $city;
     }

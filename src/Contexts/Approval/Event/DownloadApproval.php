@@ -55,7 +55,7 @@ class DownloadApproval implements Event
         return $this->approved;
     }
 
-    public function getName()
+    public function getName(): string
     {
         return 'download_request_response';
     }

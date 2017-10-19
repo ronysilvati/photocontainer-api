@@ -24,7 +24,7 @@ class Tag
     /**
      * @param mixed $id
      */
-    public function changeId($id)
+    public function changeId($id): void
     {
         $this->id = $id;
     }
@@ -40,7 +40,7 @@ class Tag
     /**
      * @param mixed $description
      */
-    public function changeDescription(?string $description)
+    public function changeDescription(?string $description): void
     {
         $this->description = $description;
     }

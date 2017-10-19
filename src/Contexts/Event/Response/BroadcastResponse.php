@@ -7,7 +7,7 @@ class BroadcastResponse implements \JsonSerializable
     /**
      * @return null
      */
-    public function jsonSerialize()
+    public function jsonSerialize(): void
     {
         return null;
     }

@@ -25,7 +25,7 @@ class DbalEventRepository implements EventRepository
         $this->conn = $provider->conn;
     }
 
-    public function find(EventSearch $search)
+    public function find(EventSearch $search): ?array
     {
         try {
             $where = [];

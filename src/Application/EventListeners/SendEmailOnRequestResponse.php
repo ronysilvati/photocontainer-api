@@ -33,7 +33,7 @@ class SendEmailOnRequestResponse extends AbstractListener
         $this->repository = $repository;
     }
 
-    public function handle(EventInterface $event)
+    public function handle(EventInterface $event): void
     {
         try {
             /** @var DownloadApproval $eventData */

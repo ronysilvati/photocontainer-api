@@ -67,7 +67,7 @@ class ProfileImageHelper
     /**
      * @param int $user_id
      */
-    public function removeOldVersions(int $user_id)
+    public function removeOldVersions(int $user_id): void
     {
         $list = $this->findProfileImage($user_id);
         if (empty($list)) {

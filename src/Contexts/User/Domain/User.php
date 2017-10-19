@@ -53,7 +53,7 @@ class User
      * @throws DomainViolationException
      * @throws \PhotoContainer\PhotoContainer\Infrastructure\Exception\DomainViolationException
      */
-    public function changeName(string $name)
+    public function changeName(string $name): void
     {
         if (!$this->validateLength($name, 3, 150)) {
             throw new DomainViolationException('O nome está em um formato inválido!');
@@ -67,7 +67,7 @@ class User
      * @throws DomainViolationException
      * @throws \PhotoContainer\PhotoContainer\Infrastructure\Exception\DomainViolationException
      */
-    public function changeEmail(string $email)
+    public function changeEmail(string $email): void
     {
         if (!$this->validateEmail($email)) {
             throw new DomainViolationException('O email está em um formato inválido!');
@@ -80,7 +80,7 @@ class User
      * @throws DomainViolationException
      * @throws \PhotoContainer\PhotoContainer\Infrastructure\Exception\DomainViolationException
      */
-    public function changeBlog(string $blog = null)
+    public function changeBlog(string $blog = null): void
     {
         if ($this->getProfile()->getProfileId() == Profile::PUBLISHER && empty($blog)) {
             throw new DomainViolationException('O endereço do blog deve ser enviado!');
@@ -94,7 +94,7 @@ class User
      * @throws DomainViolationException
      * @throws \PhotoContainer\PhotoContainer\Infrastructure\Exception\DomainViolationException
      */
-    public function changeDetails(Details $details = null)
+    public function changeDetails(Details $details = null): void
     {
         if ($this->getProfile()->getProfileId() === Profile::PUBLISHER && empty($details->getBlog())) {
             throw new DomainViolationException('O endereço do blog deve ser enviado!');
@@ -107,7 +107,7 @@ class User
      * @param string $pwd
      * @throws \DomainException
      */
-    public function changePwd(string $pwd)
+    public function changePwd(string $pwd): void
     {
         if (empty($pwd)) {
             throw new \DomainException('A senha nâo pode ser vazia');
@@ -119,7 +119,7 @@ class User
     /**
      * @param int $id
      */
-    public function changeId(int $id)
+    public function changeId(int $id): void
     {
         $this->id = $id;
 
@@ -130,7 +130,7 @@ class User
         }
     }
 
-    public function changeProfile(Profile $profile)
+    public function changeProfile(Profile $profile): void
     {
         $this->profile = $profile;
     }
@@ -194,7 +194,7 @@ class User
     /**
      * @param mixed $address
      */
-    public function changeAddress(?Address $address)
+    public function changeAddress(?Address $address): void
     {
         $this->address = $address;
     }

@@ -31,7 +31,7 @@ class Photographer
     /**
      * @param mixed $id
      */
-    public function changeId($id)
+    public function changeId($id): void
     {
         $this->id = $id;
     }
@@ -48,7 +48,7 @@ class Photographer
      * @param mixed $profile_id
      * @throws \DomainException
      */
-    public function changeProfileId($profile_id)
+    public function changeProfileId($profile_id): void
     {
         if (self::APPROVED_PROFILE !== $profile_id) {
             throw new \DomainException('Apenas o perfil de fotógrafo possui permissao para executar essa operação.');
@@ -68,7 +68,7 @@ class Photographer
     /**
      * @param null|string $name
      */
-    public function changeName(?string $name = null)
+    public function changeName(?string $name = null): void
     {
         $this->name = $name;
     }

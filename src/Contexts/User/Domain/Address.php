@@ -52,7 +52,7 @@ class Address
     /**
      * @return int|null
      */
-    public function getId()
+    public function getId(): ?int
     {
         return $this->id;
     }
@@ -60,7 +60,7 @@ class Address
     /**
      * @param int|null $id
      */
-    public function changeId(?int $id)
+    public function changeId(?int $id): void
     {
         $this->id = $id;
     }
@@ -76,7 +76,7 @@ class Address
     /**
      * @param int|null $user_id
      */
-    public function changeUserId(?int $user_id)
+    public function changeUserId(?int $user_id): void
     {
         $this->user_id = $user_id;
     }
@@ -93,7 +93,7 @@ class Address
      * @param null|string $zipcode
      * @throws \Exception
      */
-    public function changeZipcode(?string $zipcode)
+    public function changeZipcode(?string $zipcode): void
     {
         $this->zipcode = $zipcode;
     }
@@ -110,7 +110,7 @@ class Address
      * @param null|string $country
      * @throws \Exception
      */
-    public function changeCountry(?string $country)
+    public function changeCountry(?string $country): void
     {
         if (!empty($this->zipcode) && $country === '') {
             throw new \RuntimeException('O campo País deve ser enviado.');
@@ -131,7 +131,7 @@ class Address
      * @param null|string $state
      * @throws \Exception
      */
-    public function changeState(?string $state)
+    public function changeState(?string $state): void
     {
         if (!empty($this->zipcode) && $state === '') {
             throw new \RuntimeException('O campo Estado deve ser enviado.');
@@ -152,7 +152,7 @@ class Address
      * @param null|string $city
      * @throws \Exception
      */
-    public function changeCity(?string $city)
+    public function changeCity(?string $city): void
     {
         if (!empty($this->zipcode) && $city === '') {
             throw new \RuntimeException('O campo Cidade deve ser enviado.');
@@ -173,7 +173,7 @@ class Address
      * @param null|string $neighborhood
      * @throws \Exception
      */
-    public function changeNeighborhood(?string $neighborhood)
+    public function changeNeighborhood(?string $neighborhood): void
     {
         if (!empty($this->zipcode) && $neighborhood === '') {
             throw new \RuntimeException('O campo Bairro deve ser enviado.');
@@ -194,7 +194,7 @@ class Address
      * @param null|string $street
      * @throws \Exception
      */
-    public function changeStreet(?string $street)
+    public function changeStreet(?string $street): void
     {
         if (!empty($this->zipcode) && $street === '') {
             throw new \RuntimeException('O campo Logradouro deve ser enviado.');
@@ -214,7 +214,7 @@ class Address
     /**
      * @param null|string $complement
      */
-    public function changeComplement(?string $complement)
+    public function changeComplement(?string $complement): void
     {
         $this->complement = $complement;
     }

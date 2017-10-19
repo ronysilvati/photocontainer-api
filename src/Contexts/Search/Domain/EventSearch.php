@@ -71,7 +71,7 @@ class EventSearch
     /**
      * @param Photographer|null $photographer
      */
-    public function changePhotographer(Photographer $photographer= null)
+    public function changePhotographer(Photographer $photographer= null): void
     {
         $this->photographer = $photographer;
     }
@@ -87,7 +87,7 @@ class EventSearch
     /**
      * @param string|null $title
      */
-    public function changeTitle(string $title = null)
+    public function changeTitle(string $title = null): void
     {
         $this->title = $title;
     }
@@ -103,7 +103,7 @@ class EventSearch
     /**
      * @param int|null $id
      */
-    public function changeId(int $id = null)
+    public function changeId(int $id = null): void
     {
         $this->id = $id;
     }
@@ -119,7 +119,7 @@ class EventSearch
     /**
      * @param string|null $eventdate
      */
-    public function changeEventdate(string $eventdate = null)
+    public function changeEventdate(string $eventdate = null): void
     {
         list($year, $month, $day) = explode('-', $eventdate);
         $this->eventdate = $day. '/' .$month. '/' .$year;
@@ -136,7 +136,7 @@ class EventSearch
     /**
      * @param array|null $categories
      */
-    public function changeCategories(array $categories = null)
+    public function changeCategories(array $categories = null): void
     {
         $this->categories = $categories;
     }
@@ -152,7 +152,7 @@ class EventSearch
     /**
      * @param mixed $tags
      */
-    public function changeTags(?array $tags)
+    public function changeTags(?array $tags): void
     {
         $this->tags = $tags;
     }
@@ -176,7 +176,7 @@ class EventSearch
     /**
      * @param mixed $photos
      */
-    public function changePhotos(?int $photos)
+    public function changePhotos(?int $photos): void
     {
         $this->photos = $photos;
     }
@@ -192,7 +192,7 @@ class EventSearch
     /**
      * @param int $likes
      */
-    public function changeLikes(?int $likes)
+    public function changeLikes(?int $likes): void
     {
         $this->likes = $likes;
     }
@@ -208,7 +208,7 @@ class EventSearch
     /**
      * @param Publisher $publisher
      */
-    public function changePublisher(?Publisher $publisher)
+    public function changePublisher(?Publisher $publisher): void
     {
         $this->publisher = $publisher;
     }
@@ -224,7 +224,7 @@ class EventSearch
     /**
      * @param bool $publisherLike
      */
-    public function changePublisherLike(bool $publisherLike)
+    public function changePublisherLike(bool $publisherLike): void
     {
         $this->publisherLike = $publisherLike;
     }
@@ -269,7 +269,7 @@ class EventSearch
     /**
      * @param string $watermark
      */
-    public function setWatermark(string $watermark)
+    public function setWatermark(string $watermark): void
     {
         $this->watermark = $watermark;
     }
@@ -277,7 +277,7 @@ class EventSearch
     /**
      * @param string $filename
      */
-    public function changeFilename(string $filename)
+    public function changeFilename(string $filename): void
     {
         $this->filename = $filename;
     }

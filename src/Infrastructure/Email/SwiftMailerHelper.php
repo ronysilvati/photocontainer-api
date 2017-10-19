@@ -30,7 +30,7 @@ class SwiftMailerHelper implements EmailHelper
      * @param Email $email
      * @throws \Exception
      */
-    public function send(Email $email)
+    public function send(Email $email): void
     {
         try {
             $from = $email->getFrom();

@@ -36,7 +36,7 @@ class Like
     /**
      * @param int $user_id
      */
-    public function changeUserId(int $user_id)
+    public function changeUserId(int $user_id): void
     {
         $this->user_id = $user_id;
     }
@@ -52,7 +52,7 @@ class Like
     /**
      * @param int $photo_id
      */
-    public function changePhotoId(int $photo_id)
+    public function changePhotoId(int $photo_id): void
     {
         $this->photo_id = $photo_id;
     }

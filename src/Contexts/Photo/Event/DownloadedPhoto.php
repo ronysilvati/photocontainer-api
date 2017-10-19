@@ -59,7 +59,7 @@ class DownloadedPhoto implements Event
         return $this->photos;
     }
 
-    public function getName()
+    public function getName(): string
     {
         return 'downloaded_photo';
     }
