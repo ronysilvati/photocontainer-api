@@ -146,6 +146,7 @@ class PhotoController
      * @param DeletePhoto $action
      * @param string $guid
      * @return mixed
+     * @throws \PhotoContainer\PhotoContainer\Infrastructure\Exception\PersistenceException
      */
     public function delete(
         ServerRequestInterface $request,

@@ -43,6 +43,7 @@ class CepController
      * @param FindCep $action
      * @param string $cep
      * @return mixed
+     * @throws \PhotoContainer\PhotoContainer\Infrastructure\Exception\PersistenceException
      */
     public function getCep(ServerRequestInterface $request, ResponseInterface $response, FindCep $action, string $cep)
     {

@@ -5,7 +5,7 @@ namespace PhotoContainer\PhotoContainer\Contexts\Event\Response;
 class BroadcastResponse implements \JsonSerializable
 {
     /**
-     * @return null
+     * @return void
      */
     public function jsonSerialize(): void
     {
