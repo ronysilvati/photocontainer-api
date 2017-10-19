@@ -12,19 +12,9 @@ use PhotoContainer\PhotoContainer\Infrastructure\Persistence\EloquentDatabasePro
 
 class EloquentCepRepository implements CepRepository
 {
-    /**
-     * @var EloquentDatabaseProvider
-     */
-    private $conn;
-
-    public function __construct(EloquentDatabaseProvider $conn)
-    {
-        $this->conn = $conn;
-    }
-
     public function findCep(string $zipcode): Cep
     {
-        throw new \Exception("Nâo implementado.");
+        throw new \Exception('Nâo implementado.');
     }
 
     public function findStates(int $country_id): array
@@ -32,7 +22,7 @@ class EloquentCepRepository implements CepRepository
         try {
             return State::where('country_id', $country_id)->get(['id', 'name', 'statecode'])->toArray();
         } catch (\Exception $e) {
-            throw new PersistenceException("Estados não encontrados.", $e->getMessage());
+            throw new PersistenceException('Estados não encontrados.', $e->getMessage());
         }
     }
 
@@ -41,7 +31,7 @@ class EloquentCepRepository implements CepRepository
         try {
             return City::where('state_id', $state_id)->get(['name'])->toArray();
         } catch (\Exception $e) {
-            throw new PersistenceException("Cidades não encontradas.", $e->getMessage());
+            throw new PersistenceException('Cidades não encontradas.', $e->getMessage());
         }
     }
 
@@ -50,7 +40,7 @@ class EloquentCepRepository implements CepRepository
         try {
             return Country::orderBy('name')->get(['id', 'name'])->toArray();
         } catch (\Exception $e) {
-            throw new PersistenceException("Países não encontrados.", $e->getMessage());
+            throw new PersistenceException('Países não encontrados.', $e->getMessage());
         }
     }
 }

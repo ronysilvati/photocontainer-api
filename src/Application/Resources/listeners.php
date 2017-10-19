@@ -7,9 +7,6 @@ use PhotoContainer\PhotoContainer\Application\EventListeners\SendEmailOnDownload
 use PhotoContainer\PhotoContainer\Application\EventListeners\SendEmailOnRequestResponse;
 use PhotoContainer\PhotoContainer\Application\EventListeners\SendEmailOnPublisherPublication;
 
-/** @var \League\Event\Emitter $eventEmitter */
-$eventDispatcher = $container->get('EventDispatcher');
-
 $eventDispatcher->addListener('user_created', $container->get(SendEmailOnUserCreated::class));
 
 $eventDispatcher->addListener('publisher_registered', $container->get(SendEmailOnPublisherCreated::class));

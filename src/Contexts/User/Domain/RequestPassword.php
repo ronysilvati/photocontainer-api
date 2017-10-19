@@ -85,7 +85,7 @@ class RequestPassword
      */
     public function isActive(): bool
     {
-        return $this->validUntil > new DateTime("now");
+        return $this->validUntil > new DateTime('now');
     }
 
     /**

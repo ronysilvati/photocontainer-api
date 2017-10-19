@@ -8,8 +8,8 @@ class ApprovedEmail extends Email
 {
     public function __construct(?array $data, array $to, ?array $from = null)
     {
-        $file = __DIR__."/templates/approved.html";
-        $subject = "Acesso Aprovado.";
+        $file = __DIR__. '/templates/approved.html';
+        $subject = 'Acesso Aprovado.';
 
         parent::__construct($data, $file, $subject, $to, $from);
     }

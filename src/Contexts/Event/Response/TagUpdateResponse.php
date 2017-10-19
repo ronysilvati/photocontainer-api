@@ -14,9 +14,9 @@ class TagUpdateResponse
     public function jsonSerialize()
     {
         return [
-            "message" => "Update realizado.",
-            "_links" => [
-                "_self" => ['href' => "/events/"],
+            'message' => 'Update realizado.',
+            '_links' => [
+                '_self' => ['href' => '/events/'],
             ],
         ];
     }

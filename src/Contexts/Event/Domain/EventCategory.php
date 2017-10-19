@@ -48,7 +48,7 @@ class EventCategory
     public function changeCategoryId(?int $category_id = null)
     {
         if ($category_id === null) {
-            throw new \DomainException("A categoria é obrigatória.");
+            throw new \DomainException('A categoria é obrigatória.');
         }
 
         $this->category_id = $category_id;

@@ -31,7 +31,7 @@ class RestCepRepository implements CepRepository
             $cepData = json_decode($response->getBody()->getContents());
 
             if (property_exists($cepData, 'erro') && $cepData->erro) {
-                throw new \Exception("Erro no retorno do CEP.");
+                throw new \Exception('Erro no retorno do CEP.');
             }
 
             return new Cep(
@@ -44,22 +44,22 @@ class RestCepRepository implements CepRepository
                 $cepData->complemento
             );
         } catch (\Exception $e) {
-            throw new PersistenceException("CEP não encontrado.", $e->getMessage());
+            throw new PersistenceException('CEP não encontrado.', $e->getMessage());
         }
     }
 
     public function findStates(int $country_id): array
     {
-        throw new \Exception("Nâo implementado.");
+        throw new \Exception('Nâo implementado.');
     }
 
     public function findCities(int $state_id): array
     {
-        throw new \Exception("Nâo implementado.");
+        throw new \Exception('Nâo implementado.');
     }
 
     public function getCountries(): array
     {
-        throw new \Exception("Nâo implementado.");
+        throw new \Exception('Nâo implementado.');
     }
 }

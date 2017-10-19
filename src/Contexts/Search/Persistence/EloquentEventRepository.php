@@ -24,16 +24,6 @@ use PhotoContainer\PhotoContainer\Infrastructure\Persistence\EloquentDatabasePro
 class EloquentEventRepository implements EventRepository
 {
     /**
-     * @var EloquentDatabaseProvider
-     */
-    private $conn;
-
-    public function __construct(EloquentDatabaseProvider $conn)
-    {
-        $this->conn = $conn;
-    }
-
-    /**
      * @param EventSearch $search
      * @return array
      * @throws \Exception
@@ -44,7 +34,7 @@ class EloquentEventRepository implements EventRepository
             $where = [];
 
             if ($search->getTitle()) {
-                $where[] = ['title', 'like', "%".$search->getTitle()."%"];
+                $where[] = ['title', 'like', '%' .$search->getTitle(). '%'];
             }
 
             if ($search->getPhotographer()->getId()) {
@@ -141,9 +131,9 @@ class EloquentEventRepository implements EventRepository
 
                 $photos[] = [
                     'id' => $photo['id'],
-                    "thumb" => "events/{$id}/thumb/{$photo['filename']}",
-                    "watermark" => "events/{$id}/watermark/{$photo['filename']}",
-                    "filename" => $photo['filename'],
+                    'thumb' => "events/{$id}/thumb/{$photo['filename']}",
+                    'watermark' => "events/{$id}/watermark/{$photo['filename']}",
+                    'filename' => $photo['filename'],
                     'context' => 'gallery_photos_publisher',
                     'liked' => $liked,
                 ];
@@ -191,10 +181,10 @@ class EloquentEventRepository implements EventRepository
             foreach ($eventData['photo'] as $photo) {
                 $photos[] = [
                     'id' => $photo['id'],
-                    "thumb" => "/events/{$id}/thumb/".$photo['filename'],
-                    "watermark" => "/events/{$id}/watermark/".$photo['filename'],
-                    "protected" => "/events/{$id}/protected/".$photo['filename'],
-                    "filename" => $photo['filename'],
+                    'thumb' => "/events/{$id}/thumb/".$photo['filename'],
+                    'watermark' => "/events/{$id}/watermark/".$photo['filename'],
+                    'protected' => "/events/{$id}/protected/".$photo['filename'],
+                    'filename' => $photo['filename'],
                     'context' => 'gallery_photos_photographer',
                     'cover' => $photo['cover']
                 ];
@@ -242,7 +232,7 @@ class EloquentEventRepository implements EventRepository
                 );
             })->toArray();
         } catch (\Exception $e) {
-            throw new PersistenceException("Erro na listagem das aprovações pendentes.", $e->getMessage());
+            throw new PersistenceException('Erro na listagem das aprovações pendentes.', $e->getMessage());
         }
     }
 }

@@ -6,5 +6,5 @@ use Illuminate\Database\Eloquent\Model as EloquentModel;
 
 class PhotoFavorite extends EloquentModel
 {
-    protected $table = "photo_favorites";
+    protected $table = 'photo_favorites';
 }

@@ -43,14 +43,14 @@ class AuthenticateUser
             $user = $this->repository->find($auth->getUser());
 
             if ($this->cryptoMethod->verify($auth->getPassword(), $user->password) === false) {
-                throw new \Exception("A senha está incorreta");
+                throw new \Exception('A senha está incorreta');
             }
 
             $token = array(
 //                "iss" => "http://example.org",
 //                "aud" => "http://example.com",
-                "iat" => 1356999524,
-                "nbf" => 1357000000
+                'iat' => 1356999524,
+                'nbf' => 1357000000
             );
             $token = $this->jwtGenerator->hash($token);
 

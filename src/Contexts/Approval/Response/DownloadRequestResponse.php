@@ -16,9 +16,9 @@ class DownloadRequestResponse implements \JsonSerializable
     public function jsonSerialize()
     {
         return [
-            "id" => $this->request->getId(),
-            "_links" => [
-                "_self" => ['href' => "events/{$this->request->getEventId()}"],
+            'id' => $this->request->getId(),
+            '_links' => [
+                '_self' => ['href' => "events/{$this->request->getEventId()}"],
             ],
         ];
     }

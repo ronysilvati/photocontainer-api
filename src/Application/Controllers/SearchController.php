@@ -146,7 +146,7 @@ class SearchController
         if (!empty($qsParams['tags'])) {
             $allTags = [];
             foreach ($qsParams['tags'] as $tag) {
-                if ($tag != "") {
+                if ($tag != '') {
                     $allTags[] = new Tag((int) $tag, null);
                 }
             }

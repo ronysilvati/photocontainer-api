@@ -121,8 +121,8 @@ class EventSearch
      */
     public function changeEventdate(string $eventdate = null)
     {
-        list($year, $month, $day) = explode("-", $eventdate);
-        $this->eventdate = $day."/".$month."/".$year;
+        list($year, $month, $day) = explode('-', $eventdate);
+        $this->eventdate = $day. '/' .$month. '/' .$year;
     }
 
     /**
@@ -232,11 +232,11 @@ class EventSearch
     public function getSearchContext(): ?string
     {
         if ($this->publisher) {
-            return "gallery_publisher";
+            return 'gallery_publisher';
         }
 
         if ($this->photographer) {
-            return "gallery_photographer";
+            return 'gallery_photographer';
         }
 
         return null;

@@ -4,7 +4,7 @@ namespace PhotoContainer\PhotoContainer\Infrastructure;
 
 class NoContentResponse implements \JsonSerializable
 {
-    function jsonSerialize()
+    public function jsonSerialize()
     {
         return null;
     }

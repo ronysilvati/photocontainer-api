@@ -14,8 +14,8 @@ class PhotographerDownloadEmail extends Email
      */
     public function __construct(?array $data, array $to, ?array $from = null)
     {
-        $file = __DIR__."/templates/photographer_download_email.html";
-        $subject = "[PHOTOGRAPHER] Foto baixada";
+        $file = __DIR__. '/templates/photographer_download_email.html';
+        $subject = '[PHOTOGRAPHER] Foto baixada';
 
         parent::__construct($data, $file, $subject, $to, $from);
     }

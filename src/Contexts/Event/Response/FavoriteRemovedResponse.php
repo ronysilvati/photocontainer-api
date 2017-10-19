@@ -19,9 +19,9 @@ class FavoriteRemovedResponse implements \JsonSerializable
     {
         return [
             'event_id' => $this->favorite->getEventId(),
-            "totalLikes" => $this->favorite->getTotalLikes(),
-            "_links" => [
-                "_self" => ['href' => $this->selfReference],
+            'totalLikes' => $this->favorite->getTotalLikes(),
+            '_links' => [
+                '_self' => ['href' => $this->selfReference],
             ],
         ];
     }

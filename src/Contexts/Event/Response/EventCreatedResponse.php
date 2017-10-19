@@ -24,7 +24,7 @@ class EventCreatedResponse implements \JsonSerializable
     public function jsonSerialize()
     {
         return [
-            "id" => $this->event->getId(),
+            'id' => $this->event->getId(),
         ];
     }
 

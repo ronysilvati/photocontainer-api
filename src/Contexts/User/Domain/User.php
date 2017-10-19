@@ -55,7 +55,7 @@ class User
     public function changeName(string $name)
     {
         if (!$this->validateLength($name, 3, 150)) {
-            throw new DomainViolationException("O nome está em um formato inválido!");
+            throw new DomainViolationException('O nome está em um formato inválido!');
         }
 
         $this->name = $name;
@@ -68,7 +68,7 @@ class User
     public function changeEmail(string $email)
     {
         if (!$this->validateEmail($email)) {
-            throw new DomainViolationException("O email está em um formato inválido!");
+            throw new DomainViolationException('O email está em um formato inválido!');
         }
         $this->email = $email;
     }
@@ -80,7 +80,7 @@ class User
     public function changeBlog(string $blog = null)
     {
         if ($this->getProfile()->getProfileId() == Profile::PUBLISHER && empty($blog)) {
-            throw new DomainViolationException("O endereço do blog deve ser enviado!");
+            throw new DomainViolationException('O endereço do blog deve ser enviado!');
         }
 
         $this->getDetails()->changeBlog($blog);
@@ -93,7 +93,7 @@ class User
     public function changeDetails(Details $details = null)
     {
         if ($this->getProfile()->getProfileId() === Profile::PUBLISHER && empty($details->getBlog())) {
-            throw new DomainViolationException("O endereço do blog deve ser enviado!");
+            throw new DomainViolationException('O endereço do blog deve ser enviado!');
         }
 
         $this->details = $details;
@@ -105,7 +105,7 @@ class User
     public function changePwd(string $pwd)
     {
         if (empty($pwd)) {
-            throw new \DomainException("A senha nâo pode ser vazia");
+            throw new \DomainException('A senha nâo pode ser vazia');
         }
 
         $this->pwd = $pwd;

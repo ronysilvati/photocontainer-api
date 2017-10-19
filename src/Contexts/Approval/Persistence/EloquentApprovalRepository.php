@@ -14,16 +14,6 @@ use PhotoContainer\PhotoContainer\Infrastructure\Persistence\EloquentDatabasePro
 
 class EloquentApprovalRepository implements ApprovalRepository
 {
-    /**
-     * @var EloquentDatabaseProvider
-     */
-    private $conn;
-
-    public function __construct(EloquentDatabaseProvider $conn)
-    {
-        $this->conn = $conn;
-    }
-
     public function createDownloadRequest(DownloadRequest $request): DownloadRequest
     {
         try {
@@ -39,7 +29,7 @@ class EloquentApprovalRepository implements ApprovalRepository
 
             return $request;
         } catch (\Exception $e) {
-            throw new PersistenceException("Erro na criação do pedido para acesso!", $e->getMessage());
+            throw new PersistenceException('Erro na criação do pedido para acesso!', $e->getMessage());
         }
     }
 
@@ -63,7 +53,7 @@ class EloquentApprovalRepository implements ApprovalRepository
                 $request->active
             );
         } catch (\Exception $e) {
-            throw new PersistenceException("Erro na criação do pedido para acesso!", $e->getMessage());
+            throw new PersistenceException('Erro na criação do pedido para acesso!', $e->getMessage());
         }
     }
 
@@ -80,7 +70,7 @@ class EloquentApprovalRepository implements ApprovalRepository
 
             return $request;
         } catch (\Exception $e) {
-            throw new PersistenceException("Não foi possível autorizar o pedido.", $e->getMessage());
+            throw new PersistenceException('Não foi possível autorizar o pedido.', $e->getMessage());
         }
     }
 
@@ -97,7 +87,7 @@ class EloquentApprovalRepository implements ApprovalRepository
 
             return $request;
         } catch (\Exception $e) {
-            throw new PersistenceException("Não foi possível autorizar o pedido.", $e->getMessage());
+            throw new PersistenceException('Não foi possível autorizar o pedido.', $e->getMessage());
         }
     }
 
@@ -107,7 +97,7 @@ class EloquentApprovalRepository implements ApprovalRepository
             $data = EventModel::find($event_id);
             return new Event($data->title, $data->user_id);
         } catch (\Exception $e) {
-            throw new PersistenceException("Não foi buscar o Evento.", $e->getMessage());
+            throw new PersistenceException('Não foi buscar o Evento.', $e->getMessage());
         }
     }
 
@@ -117,7 +107,7 @@ class EloquentApprovalRepository implements ApprovalRepository
             $data = UserModel::find($user_id);
             return new User($data->name, $data->email);
         } catch (\Exception $e) {
-            throw new PersistenceException("Não foi possível buscar o publisher.", $e->getMessage());
+            throw new PersistenceException('Não foi possível buscar o publisher.', $e->getMessage());
         }
     }
 }

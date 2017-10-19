@@ -14,8 +14,8 @@ class NewPublisherEmail extends Email
      */
     public function __construct(?array $data, array $to, ?array $from = null)
     {
-        $file = __DIR__."/templates/new_publisher.html";
-        $subject = "[Publisher] Bem vinda!";
+        $file = __DIR__. '/templates/new_publisher.html';
+        $subject = '[Publisher] Bem vinda!';
 
         parent::__construct($data, $file, $subject, $to, $from);
     }

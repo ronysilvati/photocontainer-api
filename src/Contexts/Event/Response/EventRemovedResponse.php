@@ -24,8 +24,8 @@ class EventRemovedResponse implements \JsonSerializable
     public function jsonSerialize()
     {
         return [
-            "id" => $this->id,
-            "message" => "Evento removido.",
+            'id' => $this->id,
+            'message' => 'Evento removido.',
         ];
     }
 

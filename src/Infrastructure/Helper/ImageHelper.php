@@ -29,7 +29,7 @@ class ImageHelper
     /**
      * @var string
      */
-    private $errMessage = "Não foi possível processar a imagem.";
+    private $errMessage = 'Não foi possível processar a imagem.';
 
     const CRITERIA_DIMENSIONS = 'dimensions';
 

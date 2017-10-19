@@ -8,8 +8,8 @@ class ApprovalRequestEmail extends Email
 {
     public function __construct(?array $data, array $to, ?array $from = null)
     {
-        $file = __DIR__."/templates/approval_request.html";
-        $subject = "Pedido de aprovação.";
+        $file = __DIR__. '/templates/approval_request.html';
+        $subject = 'Pedido de aprovação.';
 
         parent::__construct($data, $file, $subject, $to, $from);
     }

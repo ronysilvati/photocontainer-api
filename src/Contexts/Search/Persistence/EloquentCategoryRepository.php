@@ -10,16 +10,6 @@ use PhotoContainer\PhotoContainer\Infrastructure\Persistence\EloquentDatabasePro
 
 class EloquentCategoryRepository implements CategoryRepository
 {
-    /**
-     * @var EloquentDatabaseProvider
-     */
-    private $conn;
-
-    public function __construct(EloquentDatabaseProvider $conn)
-    {
-        $this->conn = $conn;
-    }
-
     public function findAll(): array
     {
         try {

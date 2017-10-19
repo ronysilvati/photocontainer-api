@@ -195,7 +195,7 @@ class PhotoController
             return $response->withJson($actionResponse->jsonSerialize(), $actionResponse->getHttpStatus());
         }
 
-        $filename = explode("/", $actionResponse->getSelectedPhotos()->getZip());
+        $filename = explode('/', $actionResponse->getSelectedPhotos()->getZip());
 
         $stream = new Stream($actionResponse->getFileToStream());
         return $response->withHeader('Content-Type', 'application/force-download')

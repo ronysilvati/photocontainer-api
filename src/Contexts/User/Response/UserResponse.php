@@ -40,11 +40,11 @@ class UserResponse implements \JsonSerializable
     public function jsonSerialize(): array
     {
         $out = [
-            "id" => $this->user->getId(),
-            "name" => $this->user->getName(),
-            "email" => $this->user->getEmail(),
-            "_links" => [
-                "_self" => ['href' => $this->selfReference],
+            'id' => $this->user->getId(),
+            'name' => $this->user->getName(),
+            'email' => $this->user->getEmail(),
+            '_links' => [
+                '_self' => ['href' => $this->selfReference],
             ],
             'profile' => ['profile_id' => $this->user->getProfile()->getProfileId()],
         ];

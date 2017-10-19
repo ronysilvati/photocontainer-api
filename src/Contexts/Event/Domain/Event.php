@@ -260,11 +260,11 @@ class Event
     public function changeCategories(array $categories)
     {
         if (empty($categories)) {
-            throw new \DomainException("Deve ser enviada ao menos uma categoria.");
+            throw new \DomainException('Deve ser enviada ao menos uma categoria.');
         }
 
         if (count($categories) > 1) {
-            throw new \DomainException("É permitido apenas uma categoria.");
+            throw new \DomainException('É permitido apenas uma categoria.');
         }
 
         $this->categories = $categories;

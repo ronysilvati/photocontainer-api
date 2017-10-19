@@ -112,8 +112,8 @@ class Address
      */
     public function changeCountry(?string $country)
     {
-        if (!empty($this->zipcode) && $country === "") {
-            throw new \Exception("O campo País deve ser enviado.");
+        if (!empty($this->zipcode) && $country === '') {
+            throw new \Exception('O campo País deve ser enviado.');
         }
 
         $this->country = $country;
@@ -133,8 +133,8 @@ class Address
      */
     public function changeState(?string $state)
     {
-        if (!empty($this->zipcode) && $state === "") {
-            throw new \Exception("O campo Estado deve ser enviado.");
+        if (!empty($this->zipcode) && $state === '') {
+            throw new \Exception('O campo Estado deve ser enviado.');
         }
 
         $this->state = $state;
@@ -154,8 +154,8 @@ class Address
      */
     public function changeCity(?string $city)
     {
-        if (!empty($this->zipcode) && $city === "") {
-            throw new \Exception("O campo Cidade deve ser enviado.");
+        if (!empty($this->zipcode) && $city === '') {
+            throw new \Exception('O campo Cidade deve ser enviado.');
         }
 
         $this->city = $city;
@@ -175,8 +175,8 @@ class Address
      */
     public function changeNeighborhood(?string $neighborhood)
     {
-        if (!empty($this->zipcode) && $neighborhood === "") {
-            throw new \Exception("O campo Bairro deve ser enviado.");
+        if (!empty($this->zipcode) && $neighborhood === '') {
+            throw new \Exception('O campo Bairro deve ser enviado.');
         }
 
         $this->neighborhood = $neighborhood;
@@ -196,8 +196,8 @@ class Address
      */
     public function changeStreet(?string $street)
     {
-        if (!empty($this->zipcode) && $street === "") {
-            throw new \Exception("O campo Logradouro deve ser enviado.");
+        if (!empty($this->zipcode) && $street === '') {
+            throw new \Exception('O campo Logradouro deve ser enviado.');
         }
 
         $this->street = $street;

@@ -21,16 +21,6 @@ use PhotoContainer\PhotoContainer\Infrastructure\Persistence\Eloquent\RequestPas
 
 class EloquentUserRepository implements UserRepository
 {
-    /**
-     * @var EloquentDatabaseProvider
-     */
-    private $conn;
-
-    public function __construct(EloquentDatabaseProvider $conn)
-    {
-        $this->conn = $conn;
-    }
-
     public function createUser(User $user, ?string $encryptedPwd)
     {
         try {
@@ -59,7 +49,7 @@ class EloquentUserRepository implements UserRepository
                 $detail->site = $user->getDetails()->getSite();
                 $detail->phone = $user->getDetails()->getPhone();
                 $detail->birth = $user->getDetails()->getBirth();
-            };
+            }
 
             $detail->save();
             $details = $user->getDetails();
@@ -79,16 +69,16 @@ class EloquentUserRepository implements UserRepository
             return $user;
         } catch (\DomainException $e) {
             DB::rollback();
-            throw new PersistenceException($e->getMessage(), "Alguma regra de domínio não foi satisfeita!");
+            throw new PersistenceException($e->getMessage(), 'Alguma regra de domínio não foi satisfeita!');
         } catch (\Exception $e) {
             DB::rollback();
-            throw new PersistenceException("Erro na criação do usuário!", $e->getMessage());
+            throw new PersistenceException('Erro na criação do usuário!', $e->getMessage());
         }
     }
 
     public function isUserUnique(string $email): bool
     {
-        return UserModel::where("email", $email)->count() === 0;
+        return UserModel::where('email', $email)->count() === 0;
     }
 
     public function isUserSlotsAvailable(int $maxSlots): bool
@@ -161,7 +151,7 @@ class EloquentUserRepository implements UserRepository
 
             return $user;
         } catch (\Exception $e) {
-            throw new PersistenceException("Erro na criação do usuário!", $e->getMessage());
+            throw new PersistenceException('Erro na criação do usuário!', $e->getMessage());
         }
     }
 
@@ -206,7 +196,7 @@ class EloquentUserRepository implements UserRepository
                 $details->changeId($detail->id);
 
                 $user->changeDetails($details);
-            };
+            }
 
             if ($user->getAddress()) {
                 $address = $user->getAddress();
@@ -237,10 +227,10 @@ class EloquentUserRepository implements UserRepository
             return $user;
         } catch (\DomainException $e) {
             DB::rollback();
-            throw new PersistenceException($e->getMessage(), "Alguma regra de domínio não foi satisfeita!");
+            throw new PersistenceException($e->getMessage(), 'Alguma regra de domínio não foi satisfeita!');
         } catch (\Exception $e) {
             DB::rollback();
-            throw new PersistenceException("Erro na criação do usuário!", $e->getMessage());
+            throw new PersistenceException('Erro na criação do usuário!', $e->getMessage());
         }
     }
 

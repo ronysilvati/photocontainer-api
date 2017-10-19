@@ -53,35 +53,35 @@ class ContactController
             $data = $request->getParsedBody();
 
             if (empty($data)) {
-                throw new \Exception("Dados não enviados");
+                throw new \Exception('Dados não enviados');
             }
 
             if (!isset($data['name'])) {
-                throw new \Exception("Dados não enviados: nome.");
+                throw new \Exception('Dados não enviados: nome.');
             }
 
             if (!isset($data['email'])) {
-                throw new \Exception("Dados não enviados: email");
+                throw new \Exception('Dados não enviados: email');
             }
 
             if (!isset($data['phone'])) {
-                throw new \Exception("Dados não enviados: telefone.");
+                throw new \Exception('Dados não enviados: telefone.');
             }
 
             if (!isset($data['profile'])) {
-                throw new \Exception("Dados não enviados: perfil.");
+                throw new \Exception('Dados não enviados: perfil.');
             }
 
-            if ($data['profile'] == "publisher" && !isset($data['blog'])) {
-                throw new \Exception("Dados não enviados: blog.");
+            if ($data['profile'] == 'publisher' && !isset($data['blog'])) {
+                throw new \Exception('Dados não enviados: blog.');
             }
 
             $contact = new Contact();
-            $contact->name = $data['name'] ?? "";
-            $contact->email = $data['email'] ?? "";
-            $contact->phone = $data['phone'] ?? "";
-            $contact->profile = $data['profile'] ?? "";
-            $contact->blog = $data['blog'] ?? "";
+            $contact->name = $data['name'] ?? '';
+            $contact->email = $data['email'] ?? '';
+            $contact->phone = $data['phone'] ?? '';
+            $contact->profile = $data['profile'] ?? '';
+            $contact->blog = $data['blog'] ?? '';
             $contact->save();
 
             return $response->withJson(['msg' => 'Salvo com sucesso', 'total' => $total], 200);

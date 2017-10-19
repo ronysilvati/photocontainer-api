@@ -61,7 +61,7 @@ class Photo
     public function changeEventId($event_id = null)
     {
         if ($event_id === null) {
-            throw new \DomainException("A foto deve possuir um evento.");
+            throw new \DomainException('A foto deve possuir um evento.');
         }
 
         $this->event_id = $event_id;
@@ -107,12 +107,12 @@ class Photo
         $path_parts = pathinfo($physicalName);
 
         if (! isset($path_parts['extension'])) {
-            throw new \DomainException("Não foi possivel obter a extensão do arquivo.");
+            throw new \DomainException('Não foi possivel obter a extensão do arquivo.');
         }
 
         $extension = $path_parts['extension'];
         $uuid = Uuid::uuid5(Uuid::NAMESPACE_DNS, $this->event_id.$physicalName)->toString();
-        $new_filename = basename($uuid) . "." . $extension;
+        $new_filename = basename($uuid) . '.' . $extension;
 
         $this->physicalName = $new_filename;
     }
@@ -127,13 +127,13 @@ class Photo
     {
         $file_path = 'events/' . $this->getEventId() . '/' . $thatFolder;
 
-        $file_path = $file_path[-1] == "/" ? $file_path : $file_path."/";
+        $file_path = $file_path[-1] == '/' ? $file_path : $file_path. '/';
 
         if ($with_shared_path) {
             $file_path = getenv('SHARED_PATH') . '/' . $file_path;
         }
         if ($with_filename) {
-            $file_path = $file_path . $this->getPhysicalName();
+            $file_path .= $this->getPhysicalName();
         }
 
         return $file_path;

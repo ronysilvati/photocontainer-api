@@ -42,7 +42,7 @@ class Profile
     public function changeProfileId(int $profile_id)
     {
         if (!in_array($profile_id, [self::PHOTOGRAPHER, self::PUBLISHER])) {
-            throw new DomainException("O perfil selecionado é inválido.");
+            throw new DomainException('O perfil selecionado é inválido.');
         }
 
         $this->profile_id = $profile_id;

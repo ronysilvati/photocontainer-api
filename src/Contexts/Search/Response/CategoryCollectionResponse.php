@@ -16,8 +16,8 @@ class CategoryCollectionResponse implements \JsonSerializable
         $out = [];
         foreach ($this->collection as $item) {
             $out[] = [
-                "id" => $item->getId(),
-                "description" => $item->getDescription(),
+                'id' => $item->getId(),
+                'description' => $item->getDescription(),
             ];
         }
 

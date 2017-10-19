@@ -50,7 +50,7 @@ class Photographer
     public function changeProfileId($profile_id)
     {
         if (self::APPROVED_PROFILE !== $profile_id) {
-            throw new \DomainException("Apenas o perfil de fotógrafo possui permissao para executar essa operação.");
+            throw new \DomainException('Apenas o perfil de fotógrafo possui permissao para executar essa operação.');
         }
 
         $this->profile_id = $profile_id;

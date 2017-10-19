@@ -24,9 +24,9 @@ class FavoriteCreatedResponse implements \JsonSerializable
     public function jsonSerialize()
     {
         return [
-            "id" => $this->favorite->getId(),
+            'id' => $this->favorite->getId(),
             'event_id' => $this->favorite->getEventId(),
-            "totalLikes" => $this->favorite->getTotalLikes(),
+            'totalLikes' => $this->favorite->getTotalLikes(),
         ];
     }
 

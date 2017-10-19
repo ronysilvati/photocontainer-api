@@ -72,7 +72,7 @@ class Publisher
     public function changeProfileId(?int $profile_id)
     {
         if (self::APPROVED_PROFILE !== $profile_id) {
-            throw new \DomainException("Apenas o perfil de publisher possui permissao para executar essa operação.");
+            throw new \DomainException('Apenas o perfil de publisher possui permissao para executar essa operação.');
         }
 
         $this->profile_id = $profile_id;

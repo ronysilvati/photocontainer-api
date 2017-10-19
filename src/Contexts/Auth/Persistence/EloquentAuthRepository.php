@@ -11,28 +11,18 @@ use PhotoContainer\PhotoContainer\Infrastructure\Persistence\EloquentDatabasePro
 
 class EloquentAuthRepository implements AuthRepository
 {
-    /**
-     * @var EloquentDatabaseProvider
-     */
-    private $conn;
-
-    public function __construct(EloquentDatabaseProvider $conn)
-    {
-        $this->conn = $conn;
-    }
-
     public function find(string $user)
     {
         try {
             $user = User::where('email', $user)->first();
 
             if ($user === null) {
-                throw new \Exception("Usuário inexistente.");
+                throw new \Exception('Usuário inexistente.');
             }
 
             return $user;
         } catch (\Exception $e) {
-            throw new PersistenceException("Usuário não encontrado", $e->getMessage());
+            throw new PersistenceException('Usuário não encontrado', $e->getMessage());
         }
     }
 
@@ -43,7 +33,7 @@ class EloquentAuthRepository implements AuthRepository
             $log->user_id = $user_id;
             $log->save();
         } catch (\Exception $e) {
-            throw new PersistenceException("Erro na criação de log.", $e->getMessage());
+            throw new PersistenceException('Erro na criação de log.', $e->getMessage());
         }
     }
 }

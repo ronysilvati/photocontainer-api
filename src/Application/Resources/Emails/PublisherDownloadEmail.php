@@ -14,8 +14,8 @@ class PublisherDownloadEmail extends Email
      */
     public function __construct(?array $data, array $to, ?array $from = null)
     {
-        $file = __DIR__."/templates/publisher_download_email.html";
-        $subject = "[Publisher] Foto baixada";
+        $file = __DIR__. '/templates/publisher_download_email.html';
+        $subject = '[Publisher] Foto baixada';
 
         parent::__construct($data, $file, $subject, $to, $from);
     }

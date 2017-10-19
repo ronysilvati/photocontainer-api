@@ -23,7 +23,7 @@ class DbalNotificationRepository implements NotificationRepository
     public function approvalWaitList(int $photographer_id): int
     {
         try {
-            $sql = "SELECT COUNT(*) as total FROM event_search_approvals WHERE visualized = ?";
+            $sql = 'SELECT COUNT(*) as total FROM event_search_approvals WHERE visualized = ?';
             $stmt = $this->conn->prepare($sql);
             $stmt->bindValue(1, $photographer_id);
             $stmt->execute();

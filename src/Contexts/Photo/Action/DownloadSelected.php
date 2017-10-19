@@ -81,7 +81,7 @@ class DownloadSelected
         $zipname = getenv('ZIP_PATH').'/event_'.time().'.zip';
         if (!$this->zipCreatorHelper->createFromFiles($zipname, $filesForZip)) {
             throw new DomainViolationException('Falha no envio das fotos.');
-        };
+        }
 
         foreach ($selected->getPhotos() as $currentPhoto) {
             $download = new Download(null, $publisher_id, $currentPhoto);

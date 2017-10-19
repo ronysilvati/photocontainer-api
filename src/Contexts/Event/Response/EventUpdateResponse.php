@@ -26,7 +26,7 @@ class EventUpdateResponse implements \JsonSerializable
     public function jsonSerialize()
     {
         return [
-            "message" => "Update realizado.",
+            'message' => 'Update realizado.',
         ];
     }
 

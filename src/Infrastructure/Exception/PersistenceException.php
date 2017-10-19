@@ -18,7 +18,7 @@ class PersistenceException extends \Exception
      * @param int $code
      * @param Throwable|null $previous
      */
-    public function __construct($message = "", $infraLayerError, $code = 0, Throwable $previous = null) {
+    public function __construct($message = '', $infraLayerError, $code = 0, Throwable $previous = null) {
         $this->infraLayerError = $infraLayerError;
         parent::__construct($message, $code, $previous);
     }
