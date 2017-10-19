@@ -41,6 +41,7 @@ class SwiftQueueSpool extends \Swift_ConfigurableSpool
 
     /**
      * {@inheritdoc}
+     * @throws \Swift_IoException
      */
     public function queueMessage(\Swift_Mime_Message $message)
     {

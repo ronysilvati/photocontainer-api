@@ -47,6 +47,7 @@ class UpdatePassword
      * @param string $token
      * @param string $password
      * @return PasswordUpdatedResponse|DomainExceptionResponse
+     * @throws \PhotoContainer\PhotoContainer\Infrastructure\Exception\DomainViolationException
      * @throws DomainViolationException
      */
     public function handle(string $token, string $password)

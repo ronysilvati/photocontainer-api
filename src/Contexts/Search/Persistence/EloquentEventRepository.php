@@ -26,6 +26,7 @@ class EloquentEventRepository implements EventRepository
     /**
      * @param EventSearch $search
      * @return array
+     * @throws \PhotoContainer\PhotoContainer\Infrastructure\Exception\PersistenceException
      * @throws \Exception
      */
     public function find(EventSearch $search)
@@ -115,6 +116,7 @@ class EloquentEventRepository implements EventRepository
      * @param int $id
      * @param int $user_id
      * @return Event
+     * @throws \PhotoContainer\PhotoContainer\Infrastructure\Exception\PersistenceException
      * @throws PersistenceException
      */
     public function findEventPhotosPublisher(int $id, int $user_id): Event
@@ -167,6 +169,7 @@ class EloquentEventRepository implements EventRepository
     /**
      * @param int $id
      * @return Event
+     * @throws \PhotoContainer\PhotoContainer\Infrastructure\Exception\PersistenceException
      * @throws PersistenceException
      */
     public function findEventPhotosPhotographer(int $id): Event
@@ -205,6 +208,7 @@ class EloquentEventRepository implements EventRepository
     /**
      * @param int $photographer_id
      * @return array|null
+     * @throws \PhotoContainer\PhotoContainer\Infrastructure\Exception\PersistenceException
      * @throws PersistenceException
      */
     public function findWaitingRequests(int $photographer_id): ?array

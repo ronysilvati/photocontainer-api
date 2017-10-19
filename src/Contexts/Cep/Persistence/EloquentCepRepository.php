@@ -14,7 +14,7 @@ class EloquentCepRepository implements CepRepository
 {
     public function findCep(string $zipcode): Cep
     {
-        throw new \Exception('Nâo implementado.');
+        throw new \RuntimeException('Nâo implementado.');
     }
 
     public function findStates(int $country_id): array

@@ -50,6 +50,7 @@ class UploadProfileImage
      * @param int $user_id
      * @param array $file
      * @return ProfileImageUploaded
+     * @throws \PhotoContainer\PhotoContainer\Infrastructure\Exception\DomainViolationException
      * @throws DomainViolationException
      * @throws \Exception
      */

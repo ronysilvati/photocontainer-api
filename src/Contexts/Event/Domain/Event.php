@@ -172,6 +172,7 @@ class Event
 
     /**
      * @param mixed $terms
+     * @throws \DomainException
      */
     public function changeTerms(bool $terms = null)
     {
@@ -256,6 +257,7 @@ class Event
 
     /**
      * @param array $categories
+     * @throws \DomainException
      */
     public function changeCategories(array $categories)
     {

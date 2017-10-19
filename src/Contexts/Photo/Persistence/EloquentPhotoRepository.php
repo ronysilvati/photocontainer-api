@@ -34,6 +34,7 @@ class EloquentPhotoRepository implements PhotoRepository
     /**
      * @param Photo $photo
      * @return Photo
+     * @throws \PhotoContainer\PhotoContainer\Infrastructure\Exception\PersistenceException
      * @throws PersistenceException
      */
     public function create(Photo $photo): Photo
@@ -55,6 +56,7 @@ class EloquentPhotoRepository implements PhotoRepository
     /**
      * @param Download $download
      * @return Download
+     * @throws \PhotoContainer\PhotoContainer\Infrastructure\Exception\PersistenceException
      * @throws PersistenceException
      */
     public function download(Download $download): Download
@@ -76,6 +78,7 @@ class EloquentPhotoRepository implements PhotoRepository
     /**
      * @param int $id
      * @return Photo
+     * @throws \PhotoContainer\PhotoContainer\Infrastructure\Exception\PersistenceException
      * @throws PersistenceException
      */
     public function find(int $id): Photo
@@ -99,6 +102,7 @@ class EloquentPhotoRepository implements PhotoRepository
     /**
      * @param Like $like
      * @return Like
+     * @throws \PhotoContainer\PhotoContainer\Infrastructure\Exception\PersistenceException
      * @throws PersistenceException
      */
     public function like(Like $like): Like
@@ -109,7 +113,7 @@ class EloquentPhotoRepository implements PhotoRepository
                 ->count();
 
             if ($liked > 0) {
-                throw new \Exception('Foto já é favorita');
+                throw new \RuntimeException('Foto já é favorita');
             }
 
             $model = new PhotoFavorite();
@@ -126,6 +130,7 @@ class EloquentPhotoRepository implements PhotoRepository
     /**
      * @param Like $like
      * @return Like
+     * @throws \PhotoContainer\PhotoContainer\Infrastructure\Exception\PersistenceException
      * @throws PersistenceException
      */
     public function dislike(Like $like): Like
@@ -148,6 +153,7 @@ class EloquentPhotoRepository implements PhotoRepository
     /**
      * @param Photo $photo
      * @return Photographer
+     * @throws \PhotoContainer\PhotoContainer\Infrastructure\Exception\PersistenceException
      * @throws PersistenceException
      */
     public function findPhotoOwner(Photo $photo): Photographer
@@ -163,6 +169,7 @@ class EloquentPhotoRepository implements PhotoRepository
     /**
      * @param int $publisher_id
      * @return Publisher
+     * @throws \PhotoContainer\PhotoContainer\Infrastructure\Exception\PersistenceException
      * @throws PersistenceException
      */
     public function findPublisher(int $publisher_id): Publisher
@@ -178,6 +185,7 @@ class EloquentPhotoRepository implements PhotoRepository
     /**
      * @param string $guid
      * @return Photo
+     * @throws \PhotoContainer\PhotoContainer\Infrastructure\Exception\PersistenceException
      * @throws PersistenceException
      */
     public function deletePhoto(string $guid): Photo
@@ -211,6 +219,7 @@ class EloquentPhotoRepository implements PhotoRepository
     /**
      * @param int $event_id
      * @return array|null
+     * @throws \PhotoContainer\PhotoContainer\Infrastructure\Exception\PersistenceException
      * @throws PersistenceException
      */
     public function findEventPhotos(int $event_id): ?array
@@ -226,6 +235,7 @@ class EloquentPhotoRepository implements PhotoRepository
      * @param int $event_id
      * @param int $publisher_id
      * @return null|SelectedPhotos
+     * @throws \PhotoContainer\PhotoContainer\Infrastructure\Exception\PersistenceException
      * @throws PersistenceException
      */
     public function selectAllPhotos(int $event_id, int $publisher_id): ?SelectedPhotos
@@ -244,6 +254,7 @@ class EloquentPhotoRepository implements PhotoRepository
      * @param array $photo_ids
      * @param int $publisher_id
      * @return null|SelectedPhotos
+     * @throws \PhotoContainer\PhotoContainer\Infrastructure\Exception\PersistenceException
      * @throws PersistenceException
      */
     public function selectPhotos(array $photo_ids, int $publisher_id): ?SelectedPhotos
@@ -282,6 +293,7 @@ class EloquentPhotoRepository implements PhotoRepository
     /**
      * @param string $guid
      * @return bool
+     * @throws \PhotoContainer\PhotoContainer\Infrastructure\Exception\PersistenceException
      * @throws PersistenceException
      */
     public function setAsAlbumCover(string $guid): bool

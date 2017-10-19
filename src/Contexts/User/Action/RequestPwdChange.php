@@ -57,6 +57,7 @@ class RequestPwdChange
     /**
      * @param string $email
      * @return RequestPasswordCreated|DomainExceptionResponse
+     * @throws \RuntimeException
      */
     public function handle(string $email)
     {

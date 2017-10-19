@@ -69,6 +69,7 @@ abstract class Email
 
     /**
      * @return string
+     * @throws \DomainException
      */
     public function getTemplate(): string
     {

@@ -69,6 +69,7 @@ class PhotographerDetails
     /**
      * @param string $name_type
      * @throws Exception
+     * @throws \League\Flysystem\Exception
      */
     public function setNameType(string $name_type)
     {

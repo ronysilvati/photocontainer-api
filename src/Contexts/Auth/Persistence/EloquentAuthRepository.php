@@ -17,7 +17,7 @@ class EloquentAuthRepository implements AuthRepository
             $user = User::where('email', $user)->first();
 
             if ($user === null) {
-                throw new \Exception('Usuário inexistente.');
+                throw new \RuntimeException('Usuário inexistente.');
             }
 
             return $user;

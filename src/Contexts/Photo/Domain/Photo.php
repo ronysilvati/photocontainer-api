@@ -57,6 +57,7 @@ class Photo
 
     /**
      * @param int|null $event_id
+     * @throws \DomainException
      */
     public function changeEventId($event_id = null)
     {
@@ -101,6 +102,7 @@ class Photo
 
     /**
      * @param mixed $physicalName
+     * @throws \DomainException
      */
     public function changePhysicalName(?string $physicalName)
     {

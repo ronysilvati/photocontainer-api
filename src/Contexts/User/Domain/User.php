@@ -51,6 +51,7 @@ class User
     /**
      * @param string $name
      * @throws DomainViolationException
+     * @throws \PhotoContainer\PhotoContainer\Infrastructure\Exception\DomainViolationException
      */
     public function changeName(string $name)
     {
@@ -64,6 +65,7 @@ class User
     /**
      * @param string $email
      * @throws DomainViolationException
+     * @throws \PhotoContainer\PhotoContainer\Infrastructure\Exception\DomainViolationException
      */
     public function changeEmail(string $email)
     {
@@ -76,6 +78,7 @@ class User
     /**
      * @param string|null $blog
      * @throws DomainViolationException
+     * @throws \PhotoContainer\PhotoContainer\Infrastructure\Exception\DomainViolationException
      */
     public function changeBlog(string $blog = null)
     {
@@ -89,6 +92,7 @@ class User
     /**
      * @param Details|null $details
      * @throws DomainViolationException
+     * @throws \PhotoContainer\PhotoContainer\Infrastructure\Exception\DomainViolationException
      */
     public function changeDetails(Details $details = null)
     {
@@ -101,6 +105,7 @@ class User
 
     /**
      * @param string $pwd
+     * @throws \DomainException
      */
     public function changePwd(string $pwd)
     {

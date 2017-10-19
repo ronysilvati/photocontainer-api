@@ -25,6 +25,7 @@ class ProfileImage
      * @param int $user_id
      * @param array $file
      * @throws DomainViolationException
+     * @throws \PhotoContainer\PhotoContainer\Infrastructure\Exception\DomainViolationException
      */
     public function __construct(int $user_id, array $file)
     {

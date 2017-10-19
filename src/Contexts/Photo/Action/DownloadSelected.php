@@ -51,6 +51,7 @@ class DownloadSelected
      * @param int $publisher_id
      * @param string $ids
      * @return DownloadSelectedResponse|NoContentResponse
+     * @throws \PhotoContainer\PhotoContainer\Infrastructure\Exception\DomainViolationException
      * @throws DomainViolationException
      */
     public function handle(string $type, int $publisher_id, string $ids)

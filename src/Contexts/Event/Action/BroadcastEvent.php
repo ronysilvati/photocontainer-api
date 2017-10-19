@@ -55,6 +55,7 @@ class BroadcastEvent
     /**
      * @param int $event_id
      * @return BroadcastResponse
+     * @throws \PhotoContainer\PhotoContainer\Infrastructure\Exception\DomainViolationException
      * @throws DomainViolationException
      */
     public function handle(int $event_id): BroadcastResponse

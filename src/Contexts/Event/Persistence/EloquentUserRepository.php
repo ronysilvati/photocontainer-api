@@ -25,6 +25,7 @@ class EloquentUserRepository implements UserRepository
     /**
      * @param Photographer $photographer
      * @return Photographer
+     * @throws \PhotoContainer\PhotoContainer\Infrastructure\Exception\PersistenceException
      * @throws PersistenceException
      */
     public function findPhotographer(Photographer $photographer)
@@ -42,6 +43,7 @@ class EloquentUserRepository implements UserRepository
     /**
      * @param Publisher $publisher
      * @return Publisher
+     * @throws \PhotoContainer\PhotoContainer\Infrastructure\Exception\PersistenceException
      * @throws PersistenceException
      */
     public function findPublisher(Publisher $publisher)
@@ -85,6 +87,7 @@ class EloquentUserRepository implements UserRepository
     /**
      * @param int $profile
      * @return mixed
+     * @throws \PhotoContainer\PhotoContainer\Infrastructure\Exception\PersistenceException
      * @throws PersistenceException
      */
     public function findByProfile(int $profile)

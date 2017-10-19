@@ -46,6 +46,7 @@ class Photographer
 
     /**
      * @param mixed $profile_id
+     * @throws \DomainException
      */
     public function changeProfileId($profile_id)
     {

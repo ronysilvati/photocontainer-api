@@ -49,6 +49,7 @@ class CreatePublisherPublication
     /**
      * @param RequestInterface $request
      * @return PublisherPublicationResponse
+     * @throws \PhotoContainer\PhotoContainer\Infrastructure\Exception\DomainViolationException
      * @throws DomainViolationException
      */
     public function handle(RequestInterface $request)

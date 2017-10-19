@@ -127,7 +127,7 @@ class ImageHelper
                 $passed = $this->passDimensionCriteria($image, $criteria);
                 break;
             default:
-                throw new \Exception('Critério inexistente!');
+                throw new \RuntimeException('Critério inexistente!');
                 break;
         }
 

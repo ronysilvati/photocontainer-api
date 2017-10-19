@@ -31,11 +31,11 @@ class ApprovalDownload
     {
         $request = $this->repository->findDownloadRequest($event_id, $publisher_id);
         if ($request == null) {
-            throw new \Exception('Pedido não localizado.');
+            throw new \RuntimeException('Pedido não localizado.');
         }
 
         if ($request->isAuthorized()) {
-            throw new \Exception('Pedido já autorizado.');
+            throw new \RuntimeException('Pedido já autorizado.');
         }
 
         $request = $this->repository->approval($request);

@@ -53,27 +53,27 @@ class ContactController
             $data = $request->getParsedBody();
 
             if (empty($data)) {
-                throw new \Exception('Dados não enviados');
+                throw new \RuntimeException('Dados não enviados');
             }
 
             if (!isset($data['name'])) {
-                throw new \Exception('Dados não enviados: nome.');
+                throw new \RuntimeException('Dados não enviados: nome.');
             }
 
             if (!isset($data['email'])) {
-                throw new \Exception('Dados não enviados: email');
+                throw new \RuntimeException('Dados não enviados: email');
             }
 
             if (!isset($data['phone'])) {
-                throw new \Exception('Dados não enviados: telefone.');
+                throw new \RuntimeException('Dados não enviados: telefone.');
             }
 
             if (!isset($data['profile'])) {
-                throw new \Exception('Dados não enviados: perfil.');
+                throw new \RuntimeException('Dados não enviados: perfil.');
             }
 
             if ($data['profile'] == 'publisher' && !isset($data['blog'])) {
-                throw new \Exception('Dados não enviados: blog.');
+                throw new \RuntimeException('Dados não enviados: blog.');
             }
 
             $contact = new Contact();

@@ -44,6 +44,7 @@ class EventCategory
 
     /**
      * @param mixed $category_id
+     * @throws \DomainException
      */
     public function changeCategoryId(?int $category_id = null)
     {

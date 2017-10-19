@@ -68,6 +68,7 @@ class Publisher
 
     /**
      * @param mixed $profile_id
+     * @throws \DomainException
      */
     public function changeProfileId(?int $profile_id)
     {

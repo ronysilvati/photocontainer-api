@@ -43,7 +43,7 @@ class AuthenticateUser
             $user = $this->repository->find($auth->getUser());
 
             if ($this->cryptoMethod->verify($auth->getPassword(), $user->password) === false) {
-                throw new \Exception('A senha está incorreta');
+                throw new \RuntimeException('A senha está incorreta');
             }
 
             $token = array(

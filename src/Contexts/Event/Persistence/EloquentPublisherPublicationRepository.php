@@ -14,6 +14,7 @@ class EloquentPublisherPublicationRepository implements PublisherPublicationRepo
     /**
      * @param PublisherPublication $publisherPublication
      * @return PublisherPublication
+     * @throws \PhotoContainer\PhotoContainer\Infrastructure\Exception\PersistenceException
      * @throws PersistenceException
      */
     public function create(PublisherPublication $publisherPublication)

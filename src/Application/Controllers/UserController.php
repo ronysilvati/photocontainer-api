@@ -124,6 +124,7 @@ class UserController
      * @param ResponseInterface $response
      * @param RequestPwdChange $action
      * @return mixed
+     * @throws \PhotoContainer\PhotoContainer\Infrastructure\Exception\DomainViolationException
      * @throws DomainViolationException
      */
     public function requestPwdChange(

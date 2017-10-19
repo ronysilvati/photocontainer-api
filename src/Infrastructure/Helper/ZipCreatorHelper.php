@@ -10,6 +10,7 @@ class ZipCreatorHelper
      * @param string $name
      * @param array $filesForZip
      * @return bool
+     * @throws \RuntimeException
      */
     public function createFromFiles(string $name, array $filesForZip): bool
     {

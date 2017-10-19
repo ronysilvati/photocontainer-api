@@ -25,6 +25,7 @@ class PhotoController
      * @param ResponseInterface $response
      * @param CreatePhoto $action
      * @return mixed
+     * @throws \RuntimeException
      */
     public function createPhoto(
         ServerRequestInterface $request,

@@ -51,6 +51,7 @@ class EventPhotoHelper
     /**
      * @param Photo $photo
      * @return Photo
+     * @throws \PhotoContainer\PhotoContainer\Infrastructure\Exception\PersistenceException
      * @throws PersistenceException
      */
     public function create(Photo $photo): Photo
@@ -93,6 +94,7 @@ class EventPhotoHelper
     /**
      * @param Photo $photo
      * @throws PersistenceException
+     * @throws \PhotoContainer\PhotoContainer\Infrastructure\Exception\PersistenceException
      */
     public function deletePhoto(Photo $photo)
     {
