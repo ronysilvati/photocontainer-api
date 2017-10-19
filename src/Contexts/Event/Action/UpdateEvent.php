@@ -28,7 +28,7 @@ class UpdateEvent
      * @param array $data
      * @return EventUpdateResponse
      */
-    public function handle(int $id, array $data)
+    public function handle(int $id, array $data): \PhotoContainer\PhotoContainer\Contexts\Event\Response\EventUpdateResponse
     {
         $event = $this->repository->find($id);
         $this->repository->update($id, $data, $event);

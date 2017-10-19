@@ -17,7 +17,7 @@ class EloquentPublisherPublicationRepository implements PublisherPublicationRepo
      * @throws \PhotoContainer\PhotoContainer\Infrastructure\Exception\PersistenceException
      * @throws PersistenceException
      */
-    public function create(PublisherPublication $publisherPublication)
+    public function create(PublisherPublication $publisherPublication): ?\PhotoContainer\PhotoContainer\Contexts\Event\Domain\PublisherPublication
     {
         try {
             $model = new PublisherPublicationModel();

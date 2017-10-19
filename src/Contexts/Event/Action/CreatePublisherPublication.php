@@ -52,7 +52,7 @@ class CreatePublisherPublication
      * @throws \PhotoContainer\PhotoContainer\Infrastructure\Exception\DomainViolationException
      * @throws DomainViolationException
      */
-    public function handle(RequestInterface $request)
+    public function handle(RequestInterface $request): \PhotoContainer\PhotoContainer\Contexts\Event\Response\PublisherPublicationResponse
     {
         $data = json_decode($request->getBody()->getContents());
 

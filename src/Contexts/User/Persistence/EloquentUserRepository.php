@@ -21,7 +21,7 @@ use PhotoContainer\PhotoContainer\Infrastructure\Persistence\Eloquent\RequestPas
 
 class EloquentUserRepository implements UserRepository
 {
-    public function createUser(User $user, ?string $encryptedPwd)
+    public function createUser(User $user, ?string $encryptedPwd): ?\PhotoContainer\PhotoContainer\Contexts\User\Domain\User
     {
         try {
             DB::beginTransaction();
@@ -155,7 +155,7 @@ class EloquentUserRepository implements UserRepository
         }
     }
 
-    public function updateUser(User $user)
+    public function updateUser(User $user): ?\PhotoContainer\PhotoContainer\Contexts\User\Domain\User
     {
         try {
             DB::beginTransaction();

@@ -114,7 +114,7 @@ class ContactController
      * @param ResponseInterface $response
      * @return ResponseInterface
      */
-    public function list(ServerRequestInterface $request, ResponseInterface $response)
+    public function list(ServerRequestInterface $request, ResponseInterface $response): ?\Psr\Http\Message\ResponseInterface
     {
         try {
             $all = Contact::all()->toArray();

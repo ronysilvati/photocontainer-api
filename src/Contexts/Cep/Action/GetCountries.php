@@ -33,7 +33,7 @@ class GetCountries
     /**
      * @return CountryCollectionResponse
      */
-    public function handle()
+    public function handle(): \PhotoContainer\PhotoContainer\Contexts\Cep\Response\CountryCollectionResponse
     {
         $states = $this->cacheHelper->remember(
             'countries',

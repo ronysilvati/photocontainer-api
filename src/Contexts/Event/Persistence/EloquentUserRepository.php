@@ -28,7 +28,7 @@ class EloquentUserRepository implements UserRepository
      * @throws \PhotoContainer\PhotoContainer\Infrastructure\Exception\PersistenceException
      * @throws PersistenceException
      */
-    public function findPhotographer(Photographer $photographer)
+    public function findPhotographer(Photographer $photographer): ?\PhotoContainer\PhotoContainer\Contexts\Event\Domain\Photographer
     {
         try {
             $userData = $this->findUser($photographer->getId());
@@ -46,7 +46,7 @@ class EloquentUserRepository implements UserRepository
      * @throws \PhotoContainer\PhotoContainer\Infrastructure\Exception\PersistenceException
      * @throws PersistenceException
      */
-    public function findPublisher(Publisher $publisher)
+    public function findPublisher(Publisher $publisher): ?\PhotoContainer\PhotoContainer\Contexts\Event\Domain\Publisher
     {
         try {
             $userData = $this->findUser($publisher->getId());

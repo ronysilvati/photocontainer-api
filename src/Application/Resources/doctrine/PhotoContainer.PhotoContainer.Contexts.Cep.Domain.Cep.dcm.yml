@@ -1,0 +1,4 @@
+PhotoContainer\PhotoContainer\Contexts\Cep\Domain\Cep:
+  type: entity
+  repositoryClass: Doctrine\Tests\ORM\Mapping\UserRepository
+  table: cms_users

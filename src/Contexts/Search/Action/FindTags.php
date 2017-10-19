@@ -15,7 +15,7 @@ class FindTags
         $this->repository = $repository;
     }
 
-    public function handle()
+    public function handle(): \PhotoContainer\PhotoContainer\Contexts\Search\Response\TagCollectionResponse
     {
         $result = $this->repository->findAll();
         return new TagCollectionResponse($result);

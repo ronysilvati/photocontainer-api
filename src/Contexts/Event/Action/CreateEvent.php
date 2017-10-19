@@ -30,7 +30,7 @@ class CreateEvent
      * @param Event $event
      * @return EventCreatedResponse
      */
-    public function handle(Event $event)
+    public function handle(Event $event): \PhotoContainer\PhotoContainer\Contexts\Event\Response\EventCreatedResponse
     {
         $event->changePhotographer($this->userRepo->findPhotographer($event->getPhotographer()));
         $this->repository->create($event);

@@ -27,7 +27,7 @@ class FindCep
      * @param string $zipmail
      * @return CepResponse
      */
-    public function handle(string $zipmail)
+    public function handle(string $zipmail): \PhotoContainer\PhotoContainer\Contexts\Cep\Response\CepResponse
     {
         $cep = $this->repository->findCep($zipmail);
         return new CepResponse($cep);

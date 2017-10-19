@@ -15,7 +15,7 @@ class UpdateTags
         $this->repository = $repository;
     }
 
-    public function handle(array $tags, int $id)
+    public function handle(array $tags, int $id): \PhotoContainer\PhotoContainer\Contexts\Event\Response\TagUpdateResponse
     {
         $tags = $this->repository->saveEventTags($tags, $id);
         return new TagUpdateResponse($tags);

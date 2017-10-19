@@ -76,7 +76,8 @@ class PhotoController
         DownloadPhoto $action,
         int $photo_id,
         int $user_id
-    ) {
+    ): \Psr\Http\Message\ResponseInterface
+    {
         $actionResponse = $action->handle($photo_id, $user_id);
 
         if (get_class($actionResponse) == DomainExceptionResponse::class) {
@@ -189,7 +190,8 @@ class PhotoController
         string $type,
         string $ids,
         int $publisher_id
-    ) {
+    ): \Psr\Http\Message\ResponseInterface
+    {
         $actionResponse = $action->handle($type, $publisher_id, $ids);
 
         if (in_array(get_class($actionResponse), [DomainExceptionResponse::class, NoContentResponse::class])) {

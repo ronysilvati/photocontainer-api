@@ -15,7 +15,7 @@ class FindEventPhotosPhotographer
         $this->repository = $repository;
     }
 
-    public function handle(int $id)
+    public function handle(int $id): \PhotoContainer\PhotoContainer\Contexts\Search\Response\EventResponse
     {
         $result = $this->repository->findEventPhotosPhotographer($id);
         return new EventResponse($result, 'gallery_photos_photographer');

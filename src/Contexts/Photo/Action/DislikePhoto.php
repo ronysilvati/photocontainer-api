@@ -16,7 +16,7 @@ class DislikePhoto
         $this->repository = $repository;
     }
 
-    public function handle(Like $like)
+    public function handle(Like $like): \PhotoContainer\PhotoContainer\Contexts\Photo\Response\DislikeResponse
     {
         $like = $this->repository->dislike($like);
         return new DislikeResponse($like);

@@ -16,7 +16,7 @@ class LikePhoto
         $this->repository = $repository;
     }
 
-    public function handle(Like $like)
+    public function handle(Like $like): \PhotoContainer\PhotoContainer\Contexts\Photo\Response\LikeResponse
     {
         $like = $this->repository->like($like);
         return new LikeResponse($like);

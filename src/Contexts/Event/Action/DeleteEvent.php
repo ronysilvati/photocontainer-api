@@ -26,7 +26,7 @@ class DeleteEvent
      * @param int $id
      * @return EventRemovedResponse
      */
-    public function handle(int $id)
+    public function handle(int $id): \PhotoContainer\PhotoContainer\Contexts\Event\Response\EventRemovedResponse
     {
         $this->repository->delete($id);
         return new EventRemovedResponse($id);

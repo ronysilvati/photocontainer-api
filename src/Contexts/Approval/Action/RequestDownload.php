@@ -28,7 +28,7 @@ class RequestDownload
      * @return DownloadRequestResponse
      * @throws \Exception
      */
-    public function handle(int $event_id, int $publisher_id)
+    public function handle(int $event_id, int $publisher_id): \PhotoContainer\PhotoContainer\Contexts\Approval\Response\DownloadRequestResponse
     {
         $dlRequest = $this->repository->findDownloadRequest($event_id, $publisher_id);
         if ($dlRequest) {

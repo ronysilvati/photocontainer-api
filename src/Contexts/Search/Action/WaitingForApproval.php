@@ -15,7 +15,7 @@ class WaitingForApproval
         $this->repository = $repository;
     }
 
-    public function handle(int $photographer_id)
+    public function handle(int $photographer_id): \PhotoContainer\PhotoContainer\Contexts\Search\Response\ApprovalCollectionResponse
     {
         $waitingList = $this->repository->findWaitingRequests($photographer_id);
         return new ApprovalCollectionResponse($waitingList);

@@ -15,7 +15,7 @@ class GetNotifications
         $this->repository = $repository;
     }
 
-    public function handle(int $user_id)
+    public function handle(int $user_id): \PhotoContainer\PhotoContainer\Contexts\Search\Response\NotificationResponse
     {
         $notification = new Notification();
         $notification->addNotification('wait_list', $this->repository->approvalWaitList($user_id));

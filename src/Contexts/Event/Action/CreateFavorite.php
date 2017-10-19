@@ -35,7 +35,7 @@ class CreateFavorite
      * @param Favorite $favorite
      * @return FavoriteCreatedResponse
      */
-    public function handle(Favorite $favorite)
+    public function handle(Favorite $favorite): \PhotoContainer\PhotoContainer\Contexts\Event\Response\FavoriteCreatedResponse
     {
         $favorite->changePublisher($this->userRepo->findPublisher($favorite->getPublisher()));
         $favorite = $this->repository->createFavorite($favorite);

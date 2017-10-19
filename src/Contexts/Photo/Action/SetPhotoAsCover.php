@@ -14,7 +14,7 @@ class SetPhotoAsCover
         $this->repository = $repository;
     }
 
-    public function handle(string $guid)
+    public function handle(string $guid): \PhotoContainer\PhotoContainer\Infrastructure\NoContentResponse
     {
         $this->repository->setAsAlbumCover($guid);
         return new NoContentResponse();

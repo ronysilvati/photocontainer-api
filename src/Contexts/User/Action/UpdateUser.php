@@ -29,7 +29,7 @@ class UpdateUser
         $this->cryptoMethod = $cryptoMethod;
     }
 
-    public function handle(int $id, array $data)
+    public function handle(int $id, array $data): \PhotoContainer\PhotoContainer\Contexts\User\Response\UserResponse
     {
         /** @var User $user */
         $user = $this->userRepository->findUser($id);

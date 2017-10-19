@@ -17,7 +17,7 @@ class FindCategories
         $this->repository = $repository;
     }
 
-    public function handle()
+    public function handle(): \PhotoContainer\PhotoContainer\Contexts\Search\Response\CategoryCollectionResponse
     {
         $result = $this->repository->findAll();
         return new CategoryCollectionResponse($result);

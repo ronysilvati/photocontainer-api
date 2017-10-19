@@ -54,7 +54,7 @@ class UploadProfileImage
      * @throws DomainViolationException
      * @throws \Exception
      */
-    public function handle(int $user_id, array $file)
+    public function handle(int $user_id, array $file): \PhotoContainer\PhotoContainer\Contexts\User\Response\ProfileImageUploaded
     {
         $user = $this->userRepo->findUser($user_id);
 
