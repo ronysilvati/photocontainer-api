@@ -33,6 +33,7 @@ class DeletePhoto
     /**
      * @param string $guid
      * @return DeletedPhotoResponse|DomainExceptionResponse
+     * @throws \PhotoContainer\PhotoContainer\Infrastructure\Exception\PersistenceException
      */
     public function handle(string $guid)
     {

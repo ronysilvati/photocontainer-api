@@ -25,6 +25,7 @@ class Address
      * @param $neighborhood
      * @param $street
      * @param $complement
+     * @throws \Exception
      */
     public function __construct(
         ?int $id = null,

@@ -207,6 +207,7 @@ class EventController
      * @param BroadcastEvent $action
      * @param int $event_id
      * @return mixed
+     * @throws \PhotoContainer\PhotoContainer\Infrastructure\Exception\DomainViolationException
      */
     public function broadcastNewEvent(
         ServerRequestInterface $request,
@@ -224,6 +225,7 @@ class EventController
      * @param ResponseInterface $response
      * @param CreatePublisherPublication $action
      * @return mixed
+     * @throws \PhotoContainer\PhotoContainer\Infrastructure\Exception\DomainViolationException
      */
     public function publisherPublish(
         ServerRequestInterface $request,

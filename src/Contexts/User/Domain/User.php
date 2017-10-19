@@ -30,6 +30,7 @@ class User
      * @param string|null $pwd
      * @param Details|null $details
      * @param Profile|null $profile
+     * @throws DomainViolationException
      */
     public function __construct(int $id = null, string $name = null, string $email = null, string $pwd = null, Details $details = null, Profile $profile = null)
     {

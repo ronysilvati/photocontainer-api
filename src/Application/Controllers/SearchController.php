@@ -44,6 +44,7 @@ class SearchController
      * @param ResponseInterface $response
      * @param FindEvent $action
      * @return mixed
+     * @throws \PhotoContainer\PhotoContainer\Infrastructure\Exception\PersistenceException
      */
     public function searchEvent(ServerRequestInterface $request, ResponseInterface $response, FindEvent $action)
     {

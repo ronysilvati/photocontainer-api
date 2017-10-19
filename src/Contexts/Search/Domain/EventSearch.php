@@ -121,7 +121,7 @@ class EventSearch
      */
     public function changeEventdate(string $eventdate = null): void
     {
-        list($year, $month, $day) = explode('-', $eventdate);
+        [$year, $month, $day] = explode('-', $eventdate);
         $this->eventdate = $day. '/' .$month. '/' .$year;
     }
 

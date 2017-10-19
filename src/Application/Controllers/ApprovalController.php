@@ -17,6 +17,7 @@ class ApprovalController
      * @param int $publisher_id
      * @param RequestDownload $action
      * @return mixed
+     * @throws \Exception
      */
     public function requestDownload(
         ServerRequestInterface $request,
@@ -36,6 +37,7 @@ class ApprovalController
      * @param int $publisher_id
      * @param ApprovalDownload $action
      * @return mixed
+     * @throws \Exception
      */
     public function approvalDownload(
         ServerRequestInterface $request,
@@ -55,6 +57,7 @@ class ApprovalController
      * @param int $publisher_id
      * @param DisapprovalDownload $action
      * @return mixed
+     * @throws \Exception
      */
     public function disapprovalDownload(
         ServerRequestInterface $request,

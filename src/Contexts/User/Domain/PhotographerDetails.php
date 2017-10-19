@@ -33,6 +33,7 @@ class PhotographerDetails
      * @param string $bio
      * @param string $studio
      * @param string $name_type
+     * @throws Exception
      */
     public function __construct(?string $bio, ?string $studio, string $name_type)
     {

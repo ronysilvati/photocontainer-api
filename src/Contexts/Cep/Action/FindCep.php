@@ -26,6 +26,7 @@ class FindCep
     /**
      * @param string $zipmail
      * @return CepResponse
+     * @throws \PhotoContainer\PhotoContainer\Infrastructure\Exception\PersistenceException
      */
     public function handle(string $zipmail): \PhotoContainer\PhotoContainer\Contexts\Cep\Response\CepResponse
     {

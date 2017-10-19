@@ -36,6 +36,7 @@ class BroadcastEvent
 
     /**
      * BroadcastEvent constructor.
+     * @param EventRepository $eventRepository
      * @param EventNotificationRepository $notificationRepository
      * @param UserRepository $userRepository
      * @param SwiftPoolMailerHelper $emailHelper

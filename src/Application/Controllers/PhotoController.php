@@ -182,6 +182,7 @@ class PhotoController
      * @param string $ids
      * @param int $publisher_id
      * @return ResponseInterface
+     * @throws \PhotoContainer\PhotoContainer\Infrastructure\Exception\DomainViolationException
      */
     public function downloadSelectedPhotos(
         ServerRequestInterface $request,
