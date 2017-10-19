@@ -152,7 +152,7 @@ class ImageHelper
      */
     private function passMimetypeCriteria(Image $image, array $criteria): bool
     {
-        return in_array($image->mime(), $criteria['mimetypes']);
+        return in_array($image->mime(), $criteria['mimetypes'], true);
     }
 
     /**

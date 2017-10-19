@@ -58,7 +58,7 @@ class CreateUser
         }
 
         $user = $this->worker->execute(function () use ($user){
-            $encrypted = empty($user->getPwd()) ? '' : $this->cryptoMethod->hash($user->getPwd());
+            $encrypted = null === $user->getPwd() ? '' : $this->cryptoMethod->hash($user->getPwd());
             return $this->userRepository->createUser($user, $encrypted);
         });
 

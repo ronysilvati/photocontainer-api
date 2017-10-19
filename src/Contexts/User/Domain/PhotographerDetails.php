@@ -74,7 +74,7 @@ class PhotographerDetails
      */
     public function setNameType(string $name_type): void
     {
-        if (!in_array($name_type, [self::BY_NAME, self::BY_STUDIO])) {
+        if (!in_array($name_type, [self::BY_NAME, self::BY_STUDIO], true)) {
             throw new Exception('Aceitos: name, studio');
         }
 

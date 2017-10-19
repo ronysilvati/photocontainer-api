@@ -195,7 +195,7 @@ class PhotoController
     {
         $actionResponse = $action->handle($type, $publisher_id, $ids);
 
-        if (in_array(get_class($actionResponse), [DomainExceptionResponse::class, NoContentResponse::class])) {
+        if (in_array(get_class($actionResponse), [DomainExceptionResponse::class, NoContentResponse::class], true)) {
             return $response->withJson($actionResponse->jsonSerialize(), $actionResponse->getHttpStatus());
         }
 

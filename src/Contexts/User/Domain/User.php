@@ -83,7 +83,7 @@ class User
      */
     public function changeBlog(string $blog = null): void
     {
-        if ($this->getProfile()->getProfileId() == Profile::PUBLISHER && empty($blog)) {
+        if ($this->getProfile()->getProfileId() == Profile::PUBLISHER && null === $blog) {
             throw new DomainViolationException('O endereço do blog deve ser enviado!');
         }
 
@@ -97,7 +97,7 @@ class User
      */
     public function changeDetails(Details $details = null): void
     {
-        if ($this->getProfile()->getProfileId() === Profile::PUBLISHER && empty($details->getBlog())) {
+        if ($this->getProfile()->getProfileId() === Profile::PUBLISHER && null === $details->getBlog()) {
             throw new DomainViolationException('O endereço do blog deve ser enviado!');
         }
 

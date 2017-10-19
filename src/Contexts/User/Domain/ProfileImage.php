@@ -47,7 +47,7 @@ class ProfileImage
 
     public function changeFile(array $file): void
     {
-        if (!in_array($file['type'], self::ALLOWED_FILES)) {
+        if (!in_array($file['type'], self::ALLOWED_FILES, true)) {
             throw new DomainViolationException('Formato não preenchido.');
         }
 

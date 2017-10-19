@@ -56,7 +56,7 @@ class Details
 
     public function changeBlog(?string $blog): void
     {
-        if ($blog && empty($blog)) {
+        if ($blog && null === $blog) {
             throw new \DomainException('A URL do blog deve ser enviada!');
         }
 
