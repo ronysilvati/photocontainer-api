@@ -18,13 +18,21 @@ class EmailPoolConsumer extends Command
     private $transport;
 
     /**
+     * @var \Swift_Transport
+     */
+    private $realTransport;
+
+    /**
      * EmailPoolConsumer constructor.
      * @param null $name
      * @param PsrContext $psrContext
+     * @param \Swift_Transport $realTransport
      */
-    public function __construct($name = null, PsrContext $psrContext)
+    public function __construct($name = null, PsrContext $psrContext, \Swift_Transport $realTransport)
     {
         $this->transport = new Swift_SpoolTransport(new SwiftQueueSpool($psrContext));
+        $this->realTransport = $realTransport;
+
         parent::__construct($name);
     }
 
@@ -55,14 +63,8 @@ class EmailPoolConsumer extends Command
         $spool = $this->transport->getSpool();
         $spool->setTimeLimit($input->getArgument('timelimit'));
 
-        if (getenv('ENVIRONMENT') === 'prod') {
-            $realTransport = new \Swift_SendmailTransport('/usr/lib/sendmail -bs');
-        } else {
-            $realTransport = new \Swift_SmtpTransport('192.168.99.100','1025');
-        }
-
         $output->writeln('<info>Escutando fila...</info>');
-        $totalSent = $spool->flushQueue($realTransport);
+        $totalSent = $spool->flushQueue($this->realTransport);
 
         $output->writeln("<info>Fila processada. Enviados: {$totalSent}</info>");
     }

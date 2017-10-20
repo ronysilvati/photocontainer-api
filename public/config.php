@@ -4,7 +4,6 @@ use Interop\Queue\PsrContext;
 use League\Event\Emitter;
 use PhotoContainer\PhotoContainer\Infrastructure\Helper\EnqueueHelper;
 use PhotoContainer\PhotoContainer\Infrastructure\Email\SwiftQueueSpool;
-use Enqueue\Dbal\DbalConnectionFactory;
 use PhotoContainer\PhotoContainer\Infrastructure\Persistence\EloquentDatabaseProvider;
 use PhotoContainer\PhotoContainer\Infrastructure\Persistence\DbalDatabaseProvider;
 use PhotoContainer\PhotoContainer\Infrastructure\Helper\EventPhotoHelper;
@@ -71,14 +70,16 @@ $defaultDI[\PhotoContainer\PhotoContainer\Infrastructure\Email\SwiftPoolMailerHe
     return new \PhotoContainer\PhotoContainer\Infrastructure\Email\SwiftPoolMailerHelper($transport);
 };
 
-$defaultDI[PhotoContainer\PhotoContainer\Infrastructure\Email\EmailHelper::class] = function ($c) {
-    if (getenv('ENVIRONMENT') === 'prod') {
-        $transport = new Swift_SendmailTransport('/usr/lib/sendmail -bs');
-    } else {
-        $transport = new Swift_SmtpTransport('192.168.99.100','1025');
+$defaultDI['EmailTransport'] = function ($c) {
+    if (getenv('TRANSPORT') === 'smtp') {
+        return new Swift_SmtpTransport(getenv('SMTP_HOST'),getenv('SMTP_PORT'));
     }
 
-    return new \PhotoContainer\PhotoContainer\Infrastructure\Email\SwiftMailerHelper($transport);
+    return new Swift_SendmailTransport('/usr/lib/sendmail -bs');
+};
+
+$defaultDI[PhotoContainer\PhotoContainer\Infrastructure\Email\EmailHelper::class] = function ($c) {
+    return new \PhotoContainer\PhotoContainer\Infrastructure\Email\SwiftMailerHelper($c->get('EmailTransport'));
 };
 
 $defaultDI[PhotoContainer\PhotoContainer\Infrastructure\Cache\CacheHelper::class] = function () {
