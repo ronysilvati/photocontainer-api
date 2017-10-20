@@ -11,7 +11,7 @@ class TagUpdateResponse
         $this->collection = $collection;
     }
 
-    public function jsonSerialize(): array
+    public function jsonSerialize()
     {
         return [
             'message' => 'Update realizado.',
