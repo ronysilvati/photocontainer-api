@@ -230,7 +230,7 @@ class EloquentUserRepository implements UserRepository
             throw new PersistenceException($e->getMessage(), 'Alguma regra de domínio não foi satisfeita!');
         } catch (\Exception $e) {
             DB::rollback();
-            throw new PersistenceException('Erro na criação do usuário!', $e->getMessage());
+            throw new PersistenceException('Erro na edição do usuário!', $e->getMessage());
         }
     }
 
