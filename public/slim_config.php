@@ -4,6 +4,9 @@ $slimParams = [
     'settings.outputBuffering' => 'append',
     'settings.determineRouteBeforeAppMiddleware' => false,
     'settings.displayErrorDetails' => false,
+    'php-di' => [
+        'proxy_path' => CACHE_DIR,
+    ],
 ];
 
 if (!is_file(CACHE_DIR.'/routes.cache')) {
@@ -18,8 +21,10 @@ if (DEBUG_MODE) {
 }
 
 $slimParams['logger'] = function($c) {
+    $filename = getenv('ENVIRONMENT') === 'dev' ? 'dev.log' : 'prod.log';
+
     $logger = new \Monolog\Logger('API_LOG');
-    $file_handler = new \Monolog\Handler\StreamHandler("../logs/api.log");
+    $file_handler = new \Monolog\Handler\StreamHandler(LOG_DIR.'/'.$filename);
     $logger->pushHandler($file_handler);
     return $logger;
 };
