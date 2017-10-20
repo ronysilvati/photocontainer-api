@@ -32,7 +32,7 @@ class SwiftQueueSpool extends \Swift_ConfigurableSpool
     {
         $this->context = $context;
 
-        if (false == $queue instanceof PsrQueue) {
+        if ($queue instanceof PsrQueue === false) {
             $queue = $this->context->createQueue($queue);
         }
 
@@ -70,7 +70,7 @@ class SwiftQueueSpool extends \Swift_ConfigurableSpool
 
             while (true) {
                 if ($psrMessage = $consumer->receive(self::TIMEOUT)) {
-                    if (false == $isTransportStarted) {
+                    if ($isTransportStarted === false) {
                         $transport->start();
                         $isTransportStarted = true;
                     }

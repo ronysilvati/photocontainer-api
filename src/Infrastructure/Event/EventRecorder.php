@@ -12,7 +12,7 @@ class EventRecorder
     public static function getInstance()
     {
         static $instance = null;
-        if (null === $instance) {
+        if ($instance === null) {
             $instance = new static();
         }
 

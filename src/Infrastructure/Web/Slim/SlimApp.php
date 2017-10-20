@@ -10,6 +10,8 @@ use PhotoContainer\PhotoContainer\Infrastructure\Web\WebApp;
 use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\ServerRequestInterface;
 use Slim\App;
+use Slim\Exception\MethodNotAllowedException;
+use Slim\Exception\NotFoundException;
 use Slim\Http\Response;
 use Slim\Middleware\JwtAuthentication;
 use Zeuxisoo\Whoops\Provider\Slim\WhoopsMiddleware;
@@ -100,6 +102,10 @@ class SlimApp implements WebApp
 
     public function run(): void
     {
-        $this->app->run();
+        try {
+            $this->app->run();
+        } catch (\Exception $e) {
+            throw $e;
+        }
     }
 }

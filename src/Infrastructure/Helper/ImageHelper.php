@@ -113,6 +113,7 @@ class ImageHelper
      * @param string $type
      * @param Image $image
      * @return bool
+     * @throws \RuntimeException
      * @throws \Exception
      */
     private function executeCriteria(string $type, Image $image): bool
@@ -142,7 +143,7 @@ class ImageHelper
      */
     private function passDimensionCriteria(Image $image, array $criteria): bool
     {
-        return $image->getHeight() == $criteria['height'] && $image->getWidth() == $criteria['width'];
+        return $image->getHeight() === $criteria['height'] && $image->getWidth() === $criteria['width'];
     }
 
     /**

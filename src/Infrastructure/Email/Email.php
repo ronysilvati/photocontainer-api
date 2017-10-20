@@ -73,7 +73,7 @@ abstract class Email
      */
     public function getTemplate(): string
     {
-        if ($this->template == null && is_file($this->file)) {
+        if ($this->template === null && is_file($this->file)) {
             $this->template = file_get_contents($this->file);
         }
 

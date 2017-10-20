@@ -6,6 +6,7 @@ use Illuminate\Database\Capsule\Manager as DB;
 
 class EloquentAtomicWorker implements AtomicWorker
 {
+    /** @noinspection ReturnTypeCanBeDeclaredInspection */
     /**
      * @param callable $transaction
      * @param callable $onException

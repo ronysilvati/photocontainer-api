@@ -5,11 +5,6 @@ namespace PhotoContainer\PhotoContainer\Infrastructure\Email;
 class SwiftMailerHelper implements EmailHelper
 {
     /**
-     * @var \Swift_Transport
-     */
-    private $transport;
-
-    /**
      * @var \Swift_Mailer
      */
     private $mailer;
@@ -20,9 +15,7 @@ class SwiftMailerHelper implements EmailHelper
      */
     public function __construct(\Swift_Transport $transport)
     {
-        $this->transport = $transport;
-
-        $this->mailer = new \Swift_Mailer($this->transport);
+        $this->mailer = new \Swift_Mailer($transport);
         $this->mailer->registerPlugin(new \Swift_Plugins_AntiFloodPlugin(100, 1));
     }
 
