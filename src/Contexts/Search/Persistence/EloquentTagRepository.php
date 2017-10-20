@@ -10,16 +10,6 @@ use PhotoContainer\PhotoContainer\Infrastructure\Persistence\Eloquent\TagCategor
 
 class EloquentTagRepository implements TagRepository
 {
-    /**
-     * @var EloquentDatabaseProvider
-     */
-    private $conn;
-
-    public function __construct(EloquentDatabaseProvider $conn)
-    {
-        $this->conn = $conn;
-    }
-
     public function findAll(): array
     {
         try {

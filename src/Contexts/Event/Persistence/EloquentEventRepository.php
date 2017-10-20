@@ -18,19 +18,6 @@ use PhotoContainer\PhotoContainer\Infrastructure\Persistence\Eloquent\EventTag a
 class EloquentEventRepository implements EventRepository
 {
     /**
-     * @var EloquentDatabaseProvider
-     */
-    private $conn;
-
-    /**
-     * @inheritdoc
-     */
-    public function __construct(EloquentDatabaseProvider $conn)
-    {
-        $this->conn = $conn;
-    }
-
-    /**
      * @inheritdoc
      */
     public function create(Event $event)

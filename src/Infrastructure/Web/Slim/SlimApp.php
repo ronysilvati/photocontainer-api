@@ -2,7 +2,6 @@
 
 namespace PhotoContainer\PhotoContainer\Infrastructure\Web\Slim;
 
-
 use PhotoContainer\PhotoContainer\Infrastructure\Cache\CacheHelper;
 use PhotoContainer\PhotoContainer\Infrastructure\Event\EventRecorder;
 use PhotoContainer\PhotoContainer\Infrastructure\Event\EventWrapper;
@@ -42,8 +41,14 @@ class SlimApp implements WebApp
         $container = $app->getContainer();
         $eventDispatcher = $container->get('EventDispatcher');
 
+        $container->get(EloquentDatabaseProvider::class);
+
         require_once ROOT_DIR.'/src/Application/Resources/routes.php';
         require_once ROOT_DIR.'/src/Application/Resources/listeners.php';
+
+        if (DEBUG_MODE) {
+            $app->add(new WhoopsMiddleware($app));
+        }
 
         $this->app->add(new JwtAuthentication([
             'secret' => $conf['secret'],
@@ -59,6 +64,7 @@ class SlimApp implements WebApp
             $eventEmitter = $this->get('EventDispatcher');
 
             $events = EventRecorder::getInstance()->pullEvents();
+
             if (count($events) > 0) {
                 foreach ($events as $event) {
                     $eventEmitter->emit(new EventWrapper($event));
@@ -88,10 +94,6 @@ class SlimApp implements WebApp
             $cache->purge();
             return new Response(204);
         });
-
-        if (DEBUG_MODE) {
-            $app->add(new WhoopsMiddleware());
-        }
 
         $container->get(EloquentDatabaseProvider::class);
     }

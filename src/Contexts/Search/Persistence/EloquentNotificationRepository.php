@@ -10,20 +10,6 @@ use PhotoContainer\PhotoContainer\Infrastructure\Exception\PersistenceException;
 class EloquentNotificationRepository implements NotificationRepository
 {
     /**
-     * @var EloquentDatabaseProvider
-     */
-    private $conn;
-
-    /**
-     * EloquentNotificationRepository constructor.
-     * @param EloquentDatabaseProvider $conn
-     */
-    public function __construct(EloquentDatabaseProvider $conn)
-    {
-        $this->conn = $conn;
-    }
-
-    /**
      * @inheritdoc
      */
     public function approvalWaitList(int $photographer_id): int

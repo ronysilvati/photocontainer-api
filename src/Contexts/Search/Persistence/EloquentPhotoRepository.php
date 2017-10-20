@@ -10,16 +10,6 @@ use PhotoContainer\PhotoContainer\Infrastructure\Persistence\Eloquent\EventSearc
 
 class EloquentPhotoRepository implements PhotoRepository
 {
-    /**
-     * @var EloquentDatabaseProvider
-     */
-    private $conn;
-
-    public function __construct(EloquentDatabaseProvider $conn)
-    {
-        $this->conn = $conn;
-    }
-
     public function searchDownloaded(int $user_id, ?string $keyword, ?array $tags)
     {
         $where = $this->buildWhere($user_id, $keyword, $tags);

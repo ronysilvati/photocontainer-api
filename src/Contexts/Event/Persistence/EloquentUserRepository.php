@@ -13,16 +13,6 @@ use PhotoContainer\PhotoContainer\Infrastructure\Persistence\Eloquent\UserProfil
 class EloquentUserRepository implements UserRepository
 {
     /**
-     * @var EloquentDatabaseProvider
-     */
-    private $conn;
-
-    public function __construct(EloquentDatabaseProvider $conn)
-    {
-        $this->conn = $conn;
-    }
-
-    /**
      * @param Photographer $photographer
      * @return Photographer
      * @throws \PhotoContainer\PhotoContainer\Infrastructure\Exception\PersistenceException

@@ -11,16 +11,6 @@ use PhotoContainer\PhotoContainer\Infrastructure\Persistence\Eloquent\EventFavor
 
 class EloquentFavoriteRepository implements FavoriteRepository
 {
-    /**
-     * @var EloquentDatabaseProvider
-     */
-    private $conn;
-
-    public function __construct(EloquentDatabaseProvider $conn)
-    {
-        $this->conn = $conn;
-    }
-
     public function createFavorite(Favorite $favorite): Favorite
     {
         try {

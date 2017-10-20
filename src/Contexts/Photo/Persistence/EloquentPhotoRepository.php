@@ -22,16 +22,6 @@ use PhotoContainer\PhotoContainer\Infrastructure\Persistence\Eloquent\User;
 class EloquentPhotoRepository implements PhotoRepository
 {
     /**
-     * @var EloquentDatabaseProvider
-     */
-    private $conn;
-
-    public function __construct(EloquentDatabaseProvider $conn)
-    {
-        $this->conn = $conn;
-    }
-
-    /**
      * @param Photo $photo
      * @return Photo
      * @throws \PhotoContainer\PhotoContainer\Infrastructure\Exception\PersistenceException
