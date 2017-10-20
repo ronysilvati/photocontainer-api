@@ -12,7 +12,7 @@ class NoUserSlotsResponse implements \JsonSerializable
         return 300;
     }
 
-    public function jsonSerialize(): array
+    public function jsonSerialize()
     {
         return ['message' => 'Todos os slots de cadastro foram utilizados.'];
     }

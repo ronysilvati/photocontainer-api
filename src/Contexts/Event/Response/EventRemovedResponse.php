@@ -21,7 +21,7 @@ class EventRemovedResponse implements \JsonSerializable
     /**
      * @return array
      */
-    public function jsonSerialize(): array
+    public function jsonSerialize()
     {
         return [
             'id' => $this->id,

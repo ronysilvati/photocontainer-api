@@ -37,7 +37,7 @@ class UserResponse implements \JsonSerializable
         return $this->httpStatus;
     }
 
-    public function jsonSerialize(): array
+    public function jsonSerialize()
     {
         $out = [
             'id' => $this->user->getId(),

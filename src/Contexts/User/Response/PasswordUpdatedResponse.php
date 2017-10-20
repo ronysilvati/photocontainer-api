@@ -9,7 +9,7 @@ class PasswordUpdatedResponse implements \JsonSerializable
         return 204;
     }
 
-    public function jsonSerialize(): array
+    public function jsonSerialize()
     {
         return [];
     }

@@ -16,7 +16,7 @@ class ProfileImageUploaded implements \JsonSerializable
         return 201;
     }
 
-    public function jsonSerialize(): array
+    public function jsonSerialize()
     {
         return ['profile_image' => $this->path];
     }
