@@ -33,12 +33,12 @@ class SlimPHPDI extends \DI\Bridge\Slim\App
         $builder->addDefinitions('slim_config.php');
         $builder->addDefinitions('config.php');
         $builder->addDefinitions('../src/Application/Resources/services.php');
+
+        return $builder;
     }
 }
 
 $app = new SlimPHPDI;
-
-$app->add(new \Zeuxisoo\Whoops\Provider\Slim\WhoopsMiddleware);
 
 $webApp = new SlimApp($app);
 
