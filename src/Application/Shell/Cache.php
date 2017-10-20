@@ -10,16 +10,6 @@ use Symfony\Component\Console\Output\OutputInterface;
 class Cache extends Command
 {
     /**
-     * @var array
-     */
-    private $files;
-
-    /**
-     * @var array
-     */
-    private $dir;
-
-    /**
      * @inheritdoc
      */
     protected function configure(): void
