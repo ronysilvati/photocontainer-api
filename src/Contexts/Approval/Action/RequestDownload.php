@@ -26,6 +26,7 @@ class RequestDownload
      * @param int $event_id
      * @param int $publisher_id
      * @return DownloadRequestResponse
+     * @throws \RuntimeException
      * @throws \Exception
      */
     public function handle(int $event_id, int $publisher_id): \PhotoContainer\PhotoContainer\Contexts\Approval\Response\DownloadRequestResponse

@@ -11,6 +11,7 @@ class EloquentNotificationRepository implements NotificationRepository
 {
     /**
      * @inheritdoc
+     * @throws \PhotoContainer\PhotoContainer\Infrastructure\Exception\PersistenceException
      */
     public function approvalWaitList(int $photographer_id): int
     {

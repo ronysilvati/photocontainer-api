@@ -19,6 +19,7 @@ class EloquentEventRepository implements EventRepository
 {
     /**
      * @inheritdoc
+     * @throws \PhotoContainer\PhotoContainer\Infrastructure\Exception\PersistenceException
      */
     public function create(Event $event)
     {
@@ -61,6 +62,7 @@ class EloquentEventRepository implements EventRepository
 
     /**
      * @inheritdoc
+     * @throws \PhotoContainer\PhotoContainer\Infrastructure\Exception\PersistenceException
      */
     public function saveEventTags(array $eventTags, int $id)
     {
@@ -79,6 +81,7 @@ class EloquentEventRepository implements EventRepository
 
     /**
      * @inheritdoc
+     * @throws \PhotoContainer\PhotoContainer\Infrastructure\Exception\PersistenceException
      */
     public function saveEventSuppliers(string $suppliers, int $id)
     {
@@ -101,6 +104,7 @@ class EloquentEventRepository implements EventRepository
 
     /**
      * @inheritdoc
+     * @throws \PhotoContainer\PhotoContainer\Infrastructure\Exception\PersistenceException
      */
     public function delete(int $id): bool
     {
@@ -117,6 +121,7 @@ class EloquentEventRepository implements EventRepository
 
     /**
      * @inheritdoc
+     * @throws \PhotoContainer\PhotoContainer\Infrastructure\Exception\PersistenceException
      */
     public function update(int $id, array $data, Event $event): Event
     {
@@ -177,6 +182,7 @@ class EloquentEventRepository implements EventRepository
 
     /**
      * @inheritdoc
+     * @throws \PhotoContainer\PhotoContainer\Infrastructure\Exception\PersistenceException
      */
     public function find(int $id): ?Event
     {

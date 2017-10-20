@@ -24,7 +24,7 @@ class EloquentFavoriteRepository implements FavoriteRepository
 
             return $favorite;
         } catch (\Exception $e) {
-            throw new PersistenceException("Erro na criação do favorito!", $e->getMessage());
+            throw new PersistenceException('Erro na criação do favorito!', $e->getMessage());
         }
     }
 

@@ -77,7 +77,7 @@ class EloquentPhotoRepository implements PhotoRepository
             $photoData = PhotoModel::find($id);
 
             if ($photoData == null) {
-                throw new \Exception("A foto não existe.");
+                throw new \RuntimeException('A foto não existe.');
             }
 
             $photo = new Photo($photoData->id, $photoData->event_id, null);
@@ -188,7 +188,7 @@ class EloquentPhotoRepository implements PhotoRepository
             $photoData = $photo->first();
 
             if (DownloadModel::where('photo_id', $photoData->id)->count() > 0) {
-                throw new \Exception("Algum publisher já baixou essa foto, ela não pode ser removida.");
+                throw new \RuntimeException('Algum publisher já baixou essa foto, ela não pode ser removida.');
             }
 
             PhotoFavorite::where('photo_id', $photoData->id)->delete();

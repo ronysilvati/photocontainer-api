@@ -110,6 +110,7 @@ class Address
     /**
      * @param null|string $country
      * @throws \Exception
+     * @throws \RuntimeException
      */
     public function changeCountry(?string $country): void
     {
@@ -131,6 +132,7 @@ class Address
     /**
      * @param null|string $state
      * @throws \Exception
+     * @throws \RuntimeException
      */
     public function changeState(?string $state): void
     {
@@ -152,6 +154,7 @@ class Address
     /**
      * @param null|string $city
      * @throws \Exception
+     * @throws \RuntimeException
      */
     public function changeCity(?string $city): void
     {
@@ -173,6 +176,7 @@ class Address
     /**
      * @param null|string $neighborhood
      * @throws \Exception
+     * @throws \RuntimeException
      */
     public function changeNeighborhood(?string $neighborhood): void
     {
@@ -194,6 +198,7 @@ class Address
     /**
      * @param null|string $street
      * @throws \Exception
+     * @throws \RuntimeException
      */
     public function changeStreet(?string $street): void
     {

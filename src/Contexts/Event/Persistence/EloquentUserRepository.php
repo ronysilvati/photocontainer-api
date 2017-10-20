@@ -56,6 +56,7 @@ class EloquentUserRepository implements UserRepository
     /**
      * @param int $id
      * @return mixed
+     * @throws \PhotoContainer\PhotoContainer\Infrastructure\Exception\PersistenceException
      * @throws PersistenceException
      */
     private function findUser(int $id): ?array
@@ -70,7 +71,7 @@ class EloquentUserRepository implements UserRepository
             $userModel->load('userprofile');
             return $userModel->toArray();
         } catch (\Exception $e) {
-            throw new PersistenceException("O usuário não existe!", $e->getMessage());
+            throw new PersistenceException('O usuário não existe!', $e->getMessage());
         }
     }
 
@@ -95,7 +96,7 @@ class EloquentUserRepository implements UserRepository
 
             return $out;
         } catch (\Exception $e) {
-            throw new PersistenceException("Usuários não carregados.", $e->getMessage());
+            throw new PersistenceException('Usuários não carregados.', $e->getMessage());
         }
     }
 }

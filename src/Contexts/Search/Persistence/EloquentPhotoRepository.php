@@ -45,8 +45,8 @@ class EloquentPhotoRepository implements PhotoRepository
         ];
 
         if ($keyword) {
-            $where[] = ['title', 'like', "%".$keyword."%"];
-            $where[] = ['name', 'like', "%".$keyword."%"];
+            $where[] = ['title', 'like', '%' .$keyword. '%'];
+            $where[] = ['name', 'like', '%' .$keyword. '%'];
         }
 
         if ($tags) {
