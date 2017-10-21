@@ -1,4 +1,7 @@
 <?php
+
+use PhotoContainer\PhotoContainer\Infrastructure\Exception\PersistenceException;
+
 $slimParams = [
     'settings.responseChunkSize' => 4096,
     'settings.outputBuffering' => 'append',
@@ -21,12 +24,7 @@ if (DEBUG_MODE) {
 }
 
 $slimParams['logger'] = function($c) {
-    $filename = getenv('ENVIRONMENT') === 'dev' ? 'dev.log' : 'prod.log';
-
-    $logger = new \Monolog\Logger('API_LOG');
-    $file_handler = new \Monolog\Handler\StreamHandler(LOG_DIR.'/'.$filename);
-    $logger->pushHandler($file_handler);
-    return $logger;
+    return $c->get(\Psr\Log\LoggerInterface::class);
 };
 
 $slimParams['errorHandler'] = function ($c) {
@@ -45,7 +43,7 @@ $slimParams['errorHandler'] = function ($c) {
             $data['payload'] = $body;
         }
 
-        $message = get_class($e) == \PhotoContainer\PhotoContainer\Infrastructure\Exception\PersistenceException::class ? $e->getInfraLayerError() : $e->getMessage();
+        $message = $e instanceof PersistenceException ? $e->getInfraLayerError() : $e->getMessage();
 
         $c->get('logger')->addCritical($message, $data);
         return $response

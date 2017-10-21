@@ -9,6 +9,8 @@ use PhotoContainer\PhotoContainer\Infrastructure\Persistence\DbalDatabaseProvide
 use PhotoContainer\PhotoContainer\Infrastructure\Helper\EventPhotoHelper;
 use PhotoContainer\PhotoContainer\Infrastructure\Crypto\JwtGenerator;
 use Enqueue\Fs\FsConnectionFactory;
+use Monolog\Logger;
+use Monolog\Handler\StreamHandler;
 
 if (!is_dir(CACHE_DIR)) {
     mkdir(CACHE_DIR, 0777);
@@ -27,6 +29,25 @@ $defaultDI = [
         'port'      => getenv('MYSQL_PORT'),
     ]
 ];
+
+$defaultDI[Psr\Log\LoggerInterface::class] = function($c) {
+    $filename = getenv('ENVIRONMENT') === 'dev' ? 'dev.log' : 'prod.log';
+
+    $logger = new Logger('API_LOG');
+    $file_handler = new \Monolog\Handler\RotatingFileHandler(LOG_DIR.'/'.$filename, 7);
+    $logger->pushHandler($file_handler);
+    return $logger;
+};
+
+$defaultDI['eventLogger'] = function($c) {
+    $logger = new Logger('EVENT_LOG');
+    $file_handler = new \Monolog\Handler\RotatingFileHandler(LOG_DIR.'/events.log', 7);
+
+    $file_handler->pushProcessor(new \Monolog\Processor\ProcessIdProcessor());
+
+    $logger->pushHandler($file_handler);
+    return $logger;
+};
 
 $defaultDI[EloquentDatabaseProvider::class] = function ($c) {
     $database = new EloquentDatabaseProvider($c->get('database_config'));

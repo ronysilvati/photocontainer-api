@@ -2,13 +2,18 @@
 
 namespace PhotoContainer\PhotoContainer\Infrastructure\Web\Slim;
 
+use League\Event\CallbackListener;
+use Monolog\Handler\StreamHandler;
+use Monolog\Logger;
 use PhotoContainer\PhotoContainer\Infrastructure\Cache\CacheHelper;
+use PhotoContainer\PhotoContainer\Infrastructure\Event\Event;
 use PhotoContainer\PhotoContainer\Infrastructure\Event\EventRecorder;
 use PhotoContainer\PhotoContainer\Infrastructure\Event\EventWrapper;
 use PhotoContainer\PhotoContainer\Infrastructure\Persistence\EloquentDatabaseProvider;
 use PhotoContainer\PhotoContainer\Infrastructure\Web\WebApp;
 use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\ServerRequestInterface;
+use Psr\Log\LoggerInterface;
 use Slim\App;
 use Slim\Exception\MethodNotAllowedException;
 use Slim\Exception\NotFoundException;
@@ -65,11 +70,27 @@ class SlimApp implements WebApp
             /** @var \League\Event\Emitter $eventEmitter */
             $eventEmitter = $this->get('EventDispatcher');
 
+            /** @var LoggerInterface $logger */
+            $logger = $this->get('eventLogger');
+
             $events = EventRecorder::getInstance()->pullEvents();
 
             if (count($events) > 0) {
-                foreach ($events as $event) {
-                    $eventEmitter->emit(new EventWrapper($event));
+                $data = [
+                    'route' => $req->getMethod(). ' ' . $req->getUri()->getPath(),
+                ];
+
+                try {
+                    /** @var Event $event */
+                    foreach ($events as $event) {
+                        $eventEmitter->emit(new EventWrapper($event));
+                        $logger->debug('Emitido: '.$event->getName(), $data);
+                    }
+                } catch (\Exception $e) {
+                    $data['excpetion'] = $e->getMessage();
+                    $data['file'] = $e->getFile() . ': '. $e->getLine();
+
+                    $logger->error('Emitido: '.$event->getName(), $data);
                 }
             }
 
