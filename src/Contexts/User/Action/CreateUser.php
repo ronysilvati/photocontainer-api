@@ -44,7 +44,6 @@ class CreateUser
     /**
      * @param User $user
      * @return NoUserSlotsResponse|UserCreatedResponse
-     * @throws \PhotoContainer\PhotoContainer\Infrastructure\Exception\DomainViolationException
      * @throws DomainViolationException
      */
     public function handle(User $user)

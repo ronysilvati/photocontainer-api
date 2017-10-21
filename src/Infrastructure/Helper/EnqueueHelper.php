@@ -42,10 +42,9 @@ class EnqueueHelper
     }
 
     /**
-     * @param mixed $message
+     * @param $message
      * @param string $queue
-     * @throws Exception
-     * @throws \Exception
+     * @throws \RuntimeException
      */
     public function queueMessage($message, string $queue): void
     {
@@ -58,7 +57,7 @@ class EnqueueHelper
 
             $this->context->createProducer()->send($this->queue, $message);
         } catch (Exception $e) {
-            throw new RuntimeException(sprintf('Unable to send message to message queue.'), null, $e);
+            throw new \RuntimeException(sprintf('Unable to send message to message queue.'), null, $e);
         }
     }
 }
