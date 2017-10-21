@@ -26,6 +26,7 @@ class SendEmailOnPublisherPublication extends AbstractListener
 
     /**
      * @param EventInterface $event
+     * @throws \Exception
      */
     public function handle(EventInterface $event): void
     {
@@ -47,7 +48,7 @@ class SendEmailOnPublisherPublication extends AbstractListener
 
             $this->emailHelper->send($email);
         } catch (\Exception $e) {
-//            var_dump($e->getMessage());
+            throw $e;
         }
     }
 }

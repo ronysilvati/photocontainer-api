@@ -27,6 +27,7 @@ class SendEmailOnUserCreated extends AbstractListener
 
     /**
      * @param EventInterface $event
+     * @throws \Exception
      */
     public function handle(EventInterface $event): void
     {
@@ -51,7 +52,7 @@ class SendEmailOnUserCreated extends AbstractListener
 
             $this->emailHelper->send($email);
         } catch (\Exception $e) {
-            //
+            throw $e;
         }
     }
 }

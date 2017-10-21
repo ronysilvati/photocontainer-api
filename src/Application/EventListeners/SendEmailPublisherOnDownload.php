@@ -36,6 +36,7 @@ class SendEmailPublisherOnDownload extends AbstractListener
 
     /**
      * @param EventInterface $event
+     * @throws \Exception
      */
     public function handle(EventInterface $event): void
     {
@@ -52,7 +53,7 @@ class SendEmailPublisherOnDownload extends AbstractListener
 
             $this->emailHelper->send($email);
         } catch (\Exception $e) {
-            //
+            throw $e;
         }
     }
 }

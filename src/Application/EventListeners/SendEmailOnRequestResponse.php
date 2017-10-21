@@ -33,6 +33,10 @@ class SendEmailOnRequestResponse extends AbstractListener
         $this->repository = $repository;
     }
 
+    /**
+     * @param EventInterface $event
+     * @throws \Exception
+     */
     public function handle(EventInterface $event): void
     {
         try {
@@ -60,7 +64,7 @@ class SendEmailOnRequestResponse extends AbstractListener
 
             $this->emailHelper->send($email);
         } catch (\Exception $e) {
-            //
+            throw $e;
         }
     }
 }

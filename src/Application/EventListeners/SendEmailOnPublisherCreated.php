@@ -7,6 +7,7 @@ use League\Event\EventInterface;
 use PhotoContainer\PhotoContainer\Application\Resources\Emails\NewPublisherEmail;
 use PhotoContainer\PhotoContainer\Contexts\User\Domain\User;
 use PhotoContainer\PhotoContainer\Infrastructure\Email\EmailHelper;
+use Psr\Log\LoggerInterface;
 
 class SendEmailOnPublisherCreated extends AbstractListener
 {
@@ -14,6 +15,11 @@ class SendEmailOnPublisherCreated extends AbstractListener
      * @var EmailHelper
      */
     private $emailHelper;
+
+    /**
+     * @var LoggerInterface
+     */
+    private $logger;
 
     /**
      * SendEmail constructor.
@@ -26,6 +32,7 @@ class SendEmailOnPublisherCreated extends AbstractListener
 
     /**
      * @param EventInterface $event
+     * @throws \Exception
      */
     public function handle(EventInterface $event): void
     {
@@ -44,7 +51,7 @@ class SendEmailOnPublisherCreated extends AbstractListener
 
             $this->emailHelper->send($email);
         } catch (\Exception $e) {
-            //
+            throw $e;
         }
     }
 }
