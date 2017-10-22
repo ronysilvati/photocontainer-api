@@ -1,14 +1,11 @@
 <?php
 
-ini_set('display_errors', true);
-error_reporting(E_ALL);
-
 use PhotoContainer\PhotoContainer\Infrastructure\Web\Slim\SlimApp;
 
 define('ROOT_DIR', dirname(__DIR__));
 define('CACHE_DIR', ROOT_DIR.'/var/cache');
 define('LOG_DIR', ROOT_DIR.'/var/logs');
-define('DEBUG_MODE', true);
+define('DEBUG_MODE', false);
 
 require '../vendor/autoload.php';
 
