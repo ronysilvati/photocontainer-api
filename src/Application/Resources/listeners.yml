@@ -1,0 +1,20 @@
+PhotoContainer\PhotoContainer\Application\EventListeners\SendEmailOnUserCreated:
+  event: user_created
+
+PhotoContainer\PhotoContainer\Application\EventListeners\SendEmailOnPublisherCreated:
+  event: publisher_registered
+
+PhotoContainer\PhotoContainer\Application\EventListeners\SendEmailPhotographerOnDownload:
+  event: downloaded_photo
+
+PhotoContainer\PhotoContainer\Application\EventListeners\SendEmailPublisherOnDownload:
+  event: downloaded_photo
+
+PhotoContainer\PhotoContainer\Application\EventListeners\SendEmailOnDownloadRequest:
+  event: download_requested
+
+PhotoContainer\PhotoContainer\Application\EventListeners\SendEmailOnRequestResponse:
+  event: download_request_response
+
+PhotoContainer\PhotoContainer\Application\EventListeners\SendEmailOnPublisherPublication:
+  event: publisher_published
