@@ -56,7 +56,7 @@ class SlimApp implements WebApp
         $this->defaultRoutes();
     }
 
-    public function defaultRoutes(): void
+    private function defaultRoutes(): void
     {
         $this->app->options('/{routes:.+}', function (ServerRequestInterface $request, ResponseInterface $response) {
             return $response;
@@ -83,7 +83,7 @@ class SlimApp implements WebApp
     /**
      * @param array $conf
      */
-    public function middlewares(array $conf): void
+    private function middlewares(array $conf): void
     {
         if (DEBUG_MODE) {
             $this->app->add(new WhoopsMiddleware($this->app));
