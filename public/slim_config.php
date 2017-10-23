@@ -1,6 +1,8 @@
 <?php
 
 use PhotoContainer\PhotoContainer\Infrastructure\Exception\PersistenceException;
+use Psr\Log\LoggerInterface;
+use Psr\Http\Message\ServerRequestInterface;
 
 $slimParams = [
     'settings.responseChunkSize' => 4096,
@@ -24,11 +26,11 @@ if (DEBUG_MODE) {
 }
 
 $slimParams['logger'] = function($c) {
-    return $c->get(\Psr\Log\LoggerInterface::class);
+    return $c->get(LoggerInterface::class);
 };
 
 $slimParams['errorHandler'] = function ($c) {
-    return function (\Psr\Http\Message\ServerRequestInterface $request, $response, Exception $e) use ($c) {
+    return function (ServerRequestInterface $request, $response, Exception $e) use ($c) {
         $trace = $e->getTrace();
 
         $data = [
