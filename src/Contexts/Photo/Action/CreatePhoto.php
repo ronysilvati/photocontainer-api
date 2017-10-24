@@ -21,6 +21,11 @@ class CreatePhoto
     private $fsRepo;
 
     /**
+     * @var CacheHelper
+     */
+    private $cacheHelper;
+
+    /**
      * CreatePhoto constructor.
      * @param PhotoRepository $dbRepo
      * @param EventPhotoHelper $fsRepo

@@ -59,7 +59,7 @@ class Verify extends Command
             $this->verifyParameters($config);
         }
 
-        $this->verifyDirectories($config);
+        $this->verifyDirectories();
         $this->verifyProcess();
         $this->verifyDatabase();
 

@@ -45,4 +45,14 @@ class DbalNotificationRepository implements NotificationRepository
             );
         }
     }
+
+    public function eventNotification(int $publisher_id): int
+    {
+        // TODO: Implement eventNotification() method.
+    }
+
+    public function publisherPublication(int $photographer_id): int
+    {
+        // TODO: Implement publisherPublication() method.
+    }
 }
