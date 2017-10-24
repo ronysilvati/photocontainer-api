@@ -2,7 +2,6 @@
 
 namespace PhotoContainer\PhotoContainer\Contexts\User\Domain;
 
-
 use PhotoContainer\PhotoContainer\Infrastructure\Exception\DomainViolationException;
 use Ramsey\Uuid\Uuid;
 
@@ -45,6 +44,10 @@ class ProfileImage
         return $this->user_id;
     }
 
+    /**
+     * @param array $file
+     * @throws DomainViolationException
+     */
     public function changeFile(array $file): void
     {
         if (!in_array($file['type'], self::ALLOWED_FILES, true)) {
@@ -58,12 +61,18 @@ class ProfileImage
         $this->file = $file;
     }
 
+    /**
+     * @return string
+     */
     public function getImageName(): string
     {
         $extensions = ['image/jpeg' => 'jpg', 'image/png' => 'png'];
         return Uuid::uuid5(Uuid::NAMESPACE_DNS, $this->user_id)->toString().'.'.$extensions[$this->file['type']];
     }
 
+    /**
+     * @return string
+     */
     public function getFile(): string
     {
         return $this->file['tmp_name'];

@@ -9,14 +9,22 @@ use PhotoContainer\PhotoContainer\Infrastructure\Persistence\Eloquent\City;
 use PhotoContainer\PhotoContainer\Infrastructure\Persistence\Eloquent\Country;
 use PhotoContainer\PhotoContainer\Infrastructure\Persistence\Eloquent\State;
 
-
 class EloquentCepRepository implements CepRepository
 {
+    /**
+     * @param string $zipcode
+     * @return Cep
+     */
     public function findCep(string $zipcode): Cep
     {
         throw new \RuntimeException('Nâo implementado.');
     }
 
+    /**
+     * @param int $country_id
+     * @return array
+     * @throws PersistenceException
+     */
     public function findStates(int $country_id): array
     {
         try {
@@ -26,6 +34,11 @@ class EloquentCepRepository implements CepRepository
         }
     }
 
+    /**
+     * @param int $state_id
+     * @return array
+     * @throws PersistenceException
+     */
     public function findCities(int $state_id): array
     {
         try {
@@ -35,6 +48,10 @@ class EloquentCepRepository implements CepRepository
         }
     }
 
+    /**
+     * @return array
+     * @throws PersistenceException
+     */
     public function getCountries(): array
     {
         try {

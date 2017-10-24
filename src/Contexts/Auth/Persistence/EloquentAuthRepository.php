@@ -10,6 +10,11 @@ use PhotoContainer\PhotoContainer\Infrastructure\Persistence\Eloquent\User;
 
 class EloquentAuthRepository implements AuthRepository
 {
+    /**
+     * @param string $user
+     * @return string
+     * @throws PersistenceException
+     */
     public function find(string $user)
     {
         try {
@@ -25,6 +30,10 @@ class EloquentAuthRepository implements AuthRepository
         }
     }
 
+    /**
+     * @param int $user_id
+     * @throws PersistenceException
+     */
     public function logAccess(int $user_id): void
     {
         try {

@@ -10,6 +10,10 @@ use PhotoContainer\PhotoContainer\Infrastructure\Persistence\Eloquent\Category a
 
 class EloquentCategoryRepository implements CategoryRepository
 {
+    /**
+     * @return array
+     * @throws PersistenceException
+     */
     public function findAll(): array
     {
         try {

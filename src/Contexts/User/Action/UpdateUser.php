@@ -23,13 +23,25 @@ class UpdateUser
      */
     private $cryptoMethod;
 
+    /**
+     * UpdateUser constructor.
+     * @param UserRepository $userRepository
+     * @param CryptoMethod $cryptoMethod
+     */
     public function __construct(UserRepository $userRepository, CryptoMethod $cryptoMethod)
     {
         $this->userRepository = $userRepository;
         $this->cryptoMethod = $cryptoMethod;
     }
 
-    public function handle(int $id, array $data): \PhotoContainer\PhotoContainer\Contexts\User\Response\UserResponse
+    /**
+     * @param int $id
+     * @param array $data
+     * @return UserResponse
+     * @throws \Exception
+     * @throws \PhotoContainer\PhotoContainer\Infrastructure\Exception\DomainViolationException
+     */
+    public function handle(int $id, array $data): UserResponse
     {
         /** @var User $user */
         $user = $this->userRepository->findUser($id);
@@ -73,6 +85,12 @@ class UpdateUser
         return new UserResponse($user);
     }
 
+    /**
+     * @param User $user
+     * @param array $dataAddress
+     * @return Address
+     * @throws \Exception
+     */
     private function updateAddress(User $user, array $dataAddress): Address
     {
         $address = $user->getAddress() ?? new Address();
@@ -88,6 +106,11 @@ class UpdateUser
         return $address;
     }
 
+    /**
+     * @param Details $details
+     * @param array $dataDetails
+     * @return Details
+     */
     private function updateDetails(Details $details, array $dataDetails): Details
     {
         if (isset($dataDetails['facebook'])) {

@@ -9,6 +9,9 @@ use PhotoContainer\PhotoContainer\Infrastructure\Persistence\DbalDatabaseProvide
 
 class DbalNotificationRepository implements NotificationRepository
 {
+    /**
+     * @var
+     */
     private $conn;
 
     /**
@@ -20,6 +23,11 @@ class DbalNotificationRepository implements NotificationRepository
         $this->conn = $provider->conn;
     }
 
+    /**
+     * @param int $photographer_id
+     * @return int
+     * @throws PersistenceException
+     */
     public function approvalWaitList(int $photographer_id): int
     {
         try {

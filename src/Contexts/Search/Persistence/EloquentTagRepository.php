@@ -10,6 +10,10 @@ use PhotoContainer\PhotoContainer\Infrastructure\Persistence\Eloquent\TagCategor
 
 class EloquentTagRepository implements TagRepository
 {
+    /**
+     * @return array
+     * @throws PersistenceException
+     */
     public function findAll(): array
     {
         try {

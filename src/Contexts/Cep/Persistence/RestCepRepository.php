@@ -23,6 +23,11 @@ class RestCepRepository implements CepRepository
         $this->provider = $provider;
     }
 
+    /**
+     * @param string $zipcode
+     * @return Cep
+     * @throws PersistenceException
+     */
     public function findCep(string $zipcode): Cep
     {
         try {
@@ -48,16 +53,27 @@ class RestCepRepository implements CepRepository
         }
     }
 
+    /**
+     * @param int $country_id
+     * @return array
+     */
     public function findStates(int $country_id): array
     {
         throw new \RuntimeException('Nâo implementado.');
     }
 
+    /**
+     * @param int $state_id
+     * @return array
+     */
     public function findCities(int $state_id): array
     {
         throw new \RuntimeException('Nâo implementado.');
     }
 
+    /**
+     * @return array
+     */
     public function getCountries(): array
     {
         throw new \RuntimeException('Nâo implementado.');

@@ -14,6 +14,11 @@ use PhotoContainer\PhotoContainer\Infrastructure\Persistence\Eloquent\User as Us
 
 class EloquentApprovalRepository implements ApprovalRepository
 {
+    /**
+     * @param DownloadRequest $request
+     * @return DownloadRequest
+     * @throws PersistenceException
+     */
     public function createDownloadRequest(DownloadRequest $request): DownloadRequest
     {
         try {
@@ -33,6 +38,12 @@ class EloquentApprovalRepository implements ApprovalRepository
         }
     }
 
+    /**
+     * @param int $event_id
+     * @param int $user_id
+     * @return null|DownloadRequest
+     * @throws PersistenceException
+     */
     public function findDownloadRequest(int $event_id, int $user_id): ?DownloadRequest
     {
         try {
@@ -57,6 +68,11 @@ class EloquentApprovalRepository implements ApprovalRepository
         }
     }
 
+    /**
+     * @param DownloadRequest $request
+     * @return null|DownloadRequest
+     * @throws PersistenceException
+     */
     public function approval(DownloadRequest $request): ?DownloadRequest
     {
         try {
@@ -74,6 +90,11 @@ class EloquentApprovalRepository implements ApprovalRepository
         }
     }
 
+    /**
+     * @param DownloadRequest $request
+     * @return null|DownloadRequest
+     * @throws PersistenceException
+     */
     public function disapproval(DownloadRequest $request): ?DownloadRequest
     {
         try {
@@ -91,6 +112,11 @@ class EloquentApprovalRepository implements ApprovalRepository
         }
     }
 
+    /**
+     * @param int $event_id
+     * @return Event
+     * @throws PersistenceException
+     */
     public function findEvent(int $event_id): Event
     {
         try {
@@ -101,6 +127,11 @@ class EloquentApprovalRepository implements ApprovalRepository
         }
     }
 
+    /**
+     * @param int $user_id
+     * @return User
+     * @throws PersistenceException
+     */
     public function findUser(int $user_id): User
     {
         try {

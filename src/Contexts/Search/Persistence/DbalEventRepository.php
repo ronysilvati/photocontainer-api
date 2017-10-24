@@ -20,11 +20,20 @@ class DbalEventRepository implements EventRepository
      */
     private $conn;
 
+    /**
+     * DbalEventRepository constructor.
+     * @param DbalDatabaseProvider $provider
+     */
     public function __construct(DbalDatabaseProvider $provider)
     {
         $this->conn = $provider->conn;
     }
 
+    /**
+     * @param EventSearch $search
+     * @return array|null
+     * @throws PersistenceException
+     */
     public function find(EventSearch $search): ?array
     {
         try {
@@ -125,6 +134,11 @@ class DbalEventRepository implements EventRepository
         }
     }
 
+    /**
+     * @param int $event_id
+     * @return array
+     * @throws \Doctrine\DBAL\DBALException
+     */
     private function findCoverPhoto(int $event_id): array
     {
         $sql = "SELECT filename FROM photos WHERE cover = 1 AND event_id = {$event_id}";
@@ -142,16 +156,29 @@ class DbalEventRepository implements EventRepository
         return $stmt->fetch();
     }
 
+    /**
+     * @param int $photographer_id
+     * @return array|null
+     */
     public function findWaitingRequests(int $photographer_id): ?array
     {
         // TODO: Implement findWaitingRequests() method.
     }
 
+    /**
+     * @param int $id
+     * @return Event
+     */
     public function findEventPhotosPhotographer(int $id): Event
     {
         // TODO: Implement findEventPhotosPhotographer() method.
     }
 
+    /**
+     * @param int $id
+     * @param int $user_id
+     * @return Event
+     */
     public function findEventPhotosPublisher(int $id, int $user_id): Event
     {
         // TODO: Implement findEventPhotosPublisher() method.

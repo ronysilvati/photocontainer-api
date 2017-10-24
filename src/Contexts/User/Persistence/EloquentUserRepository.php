@@ -21,6 +21,12 @@ use PhotoContainer\PhotoContainer\Infrastructure\Persistence\Eloquent\RequestPas
 
 class EloquentUserRepository implements UserRepository
 {
+    /**
+     * @param User $user
+     * @param null|string $encryptedPwd
+     * @return null|User
+     * @throws PersistenceException
+     */
     public function createUser(User $user, ?string $encryptedPwd): ?\PhotoContainer\PhotoContainer\Contexts\User\Domain\User
     {
         try {
@@ -76,16 +82,30 @@ class EloquentUserRepository implements UserRepository
         }
     }
 
+    /**
+     * @param string $email
+     * @return bool
+     */
     public function isUserUnique(string $email): bool
     {
         return UserModel::where('email', $email)->count() === 0;
     }
 
+    /**
+     * @param int $maxSlots
+     * @return bool
+     */
     public function isUserSlotsAvailable(int $maxSlots): bool
     {
         return UserModel::count() <= $maxSlots;
     }
 
+    /**
+     * @param int|null $id
+     * @param null|string $email
+     * @return null|User
+     * @throws PersistenceException
+     */
     public function findUser(?int $id = null, ?string $email = null): ?User
     {
         try {
@@ -155,6 +175,11 @@ class EloquentUserRepository implements UserRepository
         }
     }
 
+    /**
+     * @param User $user
+     * @return null|User
+     * @throws PersistenceException
+     */
     public function updateUser(User $user): ?\PhotoContainer\PhotoContainer\Contexts\User\Domain\User
     {
         try {
@@ -234,6 +259,11 @@ class EloquentUserRepository implements UserRepository
         }
     }
 
+    /**
+     * @param User $user
+     * @return null|RequestPassword
+     * @throws PersistenceException
+     */
     public function findPwdRequest(User $user): ?RequestPassword
     {
         try {
@@ -250,6 +280,11 @@ class EloquentUserRepository implements UserRepository
         }
     }
 
+    /**
+     * @param RequestPassword $requestPassword
+     * @return RequestPassword
+     * @throws PersistenceException
+     */
     public function createPwdRequest(RequestPassword $requestPassword): RequestPassword
     {
         try {
@@ -266,6 +301,10 @@ class EloquentUserRepository implements UserRepository
         }
     }
 
+    /**
+     * @param RequestPassword $requestPassword
+     * @throws PersistenceException
+     */
     public function removePwdRequest(RequestPassword $requestPassword): void
     {
         try {
@@ -277,6 +316,11 @@ class EloquentUserRepository implements UserRepository
         }
     }
 
+    /**
+     * @param string $token
+     * @return null|RequestPassword
+     * @throws PersistenceException
+     */
     public function getValidToken(string $token): ?RequestPassword
     {
         try {

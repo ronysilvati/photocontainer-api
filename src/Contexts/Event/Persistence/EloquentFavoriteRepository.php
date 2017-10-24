@@ -11,6 +11,11 @@ use PhotoContainer\PhotoContainer\Infrastructure\Persistence\Eloquent\EventFavor
 
 class EloquentFavoriteRepository implements FavoriteRepository
 {
+    /**
+     * @param Favorite $favorite
+     * @return Favorite
+     * @throws PersistenceException
+     */
     public function createFavorite(Favorite $favorite): Favorite
     {
         try {
@@ -28,6 +33,11 @@ class EloquentFavoriteRepository implements FavoriteRepository
         }
     }
 
+    /**
+     * @param Favorite $favorite
+     * @return Favorite
+     * @throws PersistenceException
+     */
     public function removeFavorite(Favorite $favorite): Favorite
     {
         try {
@@ -43,6 +53,10 @@ class EloquentFavoriteRepository implements FavoriteRepository
         }
     }
 
+    /**
+     * @param Favorite $favorite
+     * @return null|Favorite
+     */
     public function findFavorite(Favorite $favorite): ?Favorite
     {
         if ($favorite->getId()) {
