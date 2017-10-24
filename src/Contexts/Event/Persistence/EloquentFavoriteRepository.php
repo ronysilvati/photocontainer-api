@@ -49,7 +49,7 @@ class EloquentFavoriteRepository implements FavoriteRepository
 
             return $favorite;
         } catch (\Exception $e) {
-            throw new PersistenceException($e->getMessage());
+            throw new PersistenceException($e->getMessage(), $e->getMessage());
         }
     }
 

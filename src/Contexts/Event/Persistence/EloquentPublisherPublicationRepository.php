@@ -41,7 +41,7 @@ class EloquentPublisherPublicationRepository implements PublisherPublicationRepo
 
             return $publisherPublication;
         } catch (\Exception $e) {
-            throw new PersistenceException($e->getMessage());
+            throw new PersistenceException('Erro no envio da publicação do publisher.', $e->getMessage());
         }
     }
 }
