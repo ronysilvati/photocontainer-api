@@ -20,9 +20,9 @@ class SlimPHPDI extends App
         $cache->setNamespace('PhotoContainer');
         $builder->setDefinitionCache($cache);
 
-        $builder->addDefinitions('slim_config.php');
-        $builder->addDefinitions('config.php');
-        $builder->addDefinitions('../src/Application/Resources/services.php');
+        $builder->addDefinitions(ROOT_DIR.'/public/slim_config.php');
+        $builder->addDefinitions(ROOT_DIR.'/public/config.php');
+        $builder->addDefinitions(ROOT_DIR.'/src/Application/Resources/services.php');
 
         return $builder;
     }
