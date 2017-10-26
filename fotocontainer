@@ -47,7 +47,7 @@ $application->add(
     )
 );
 $application->add(new ImageProcessorConsumer('ImagePool', $container->get(\Interop\Queue\PsrContext::class)));
-$application->add(new \PhotoContainer\PhotoContainer\Application\Shell\Install());
+$application->add(new \PhotoContainer\PhotoContainer\Application\Shell\InstallDatabase());
 $application->add(new \PhotoContainer\PhotoContainer\Application\Shell\Cache());
 $application->add(new \PhotoContainer\PhotoContainer\Application\Shell\Verify('Verify', $container));
 
