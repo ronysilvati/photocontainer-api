@@ -6,8 +6,8 @@ use PhotoContainer\PhotoContainer\Contexts\Event\Domain\Photographer;
 use PhotoContainer\PhotoContainer\Contexts\Event\Domain\Publisher;
 use PhotoContainer\PhotoContainer\Contexts\Event\Domain\UserRepository;
 use PhotoContainer\PhotoContainer\Infrastructure\Exception\PersistenceException;
-use PhotoContainer\PhotoContainer\Infrastructure\Persistence\Eloquent\User;
-use PhotoContainer\PhotoContainer\Infrastructure\Persistence\Eloquent\UserProfile;
+use PhotoContainer\PhotoContainer\Application\Resources\Eloquent\User;
+use PhotoContainer\PhotoContainer\Application\Resources\Eloquent\UserProfile;
 
 
 class EloquentUserRepository implements UserRepository

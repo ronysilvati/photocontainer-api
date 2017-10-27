@@ -7,7 +7,7 @@ use PhotoContainer\PhotoContainer\Contexts\Event\Domain\PublisherPublicationRepo
 use PhotoContainer\PhotoContainer\Contexts\Event\Event\PublisherPublished;
 use PhotoContainer\PhotoContainer\Infrastructure\Event\EventRecorder;
 use PhotoContainer\PhotoContainer\Infrastructure\Exception\PersistenceException;
-use PhotoContainer\PhotoContainer\Infrastructure\Persistence\Eloquent\PublisherPublication as PublisherPublicationModel;
+use PhotoContainer\PhotoContainer\Application\Resources\Eloquent\PublisherPublication as PublisherPublicationModel;
 
 class EloquentPublisherPublicationRepository implements PublisherPublicationRepository
 {

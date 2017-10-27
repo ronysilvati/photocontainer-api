@@ -7,9 +7,9 @@ use PhotoContainer\PhotoContainer\Contexts\Approval\Domain\DownloadRequest;
 use PhotoContainer\PhotoContainer\Contexts\Approval\Domain\Event;
 use PhotoContainer\PhotoContainer\Contexts\Approval\Domain\User;
 use PhotoContainer\PhotoContainer\Infrastructure\Exception\PersistenceException;
-use PhotoContainer\PhotoContainer\Infrastructure\Persistence\Eloquent\DownloadRequest as RequestModel;
-use PhotoContainer\PhotoContainer\Infrastructure\Persistence\Eloquent\Event as EventModel;
-use PhotoContainer\PhotoContainer\Infrastructure\Persistence\Eloquent\User as UserModel;
+use PhotoContainer\PhotoContainer\Application\Resources\Eloquent\DownloadRequest as RequestModel;
+use PhotoContainer\PhotoContainer\Application\Resources\Eloquent\Event as EventModel;
+use PhotoContainer\PhotoContainer\Application\Resources\Eloquent\User as UserModel;
 
 
 class EloquentApprovalRepository implements ApprovalRepository

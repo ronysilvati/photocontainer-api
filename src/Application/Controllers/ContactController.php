@@ -5,7 +5,7 @@ namespace PhotoContainer\PhotoContainer\Application\Controllers;
 use League\Csv\Writer;
 use PhotoContainer\PhotoContainer\Contexts\Contact\Email\TotalContactsEmail;
 use PhotoContainer\PhotoContainer\Infrastructure\Email\EmailHelper;
-use PhotoContainer\PhotoContainer\Infrastructure\Persistence\Eloquent\Contact;
+use PhotoContainer\PhotoContainer\Application\Resources\Eloquent\Contact;
 use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\ServerRequestInterface;
 

@@ -12,11 +12,11 @@ use PhotoContainer\PhotoContainer\Contexts\Photo\Domain\PhotoRepository;
 use PhotoContainer\PhotoContainer\Contexts\Photo\Domain\Publisher;
 use PhotoContainer\PhotoContainer\Contexts\Photo\Domain\SelectedPhotos;
 use PhotoContainer\PhotoContainer\Infrastructure\Exception\PersistenceException;
-use PhotoContainer\PhotoContainer\Infrastructure\Persistence\Eloquent\Download as DownloadModel;
-use PhotoContainer\PhotoContainer\Infrastructure\Persistence\Eloquent\Event;
-use PhotoContainer\PhotoContainer\Infrastructure\Persistence\Eloquent\Photo as PhotoModel;
-use PhotoContainer\PhotoContainer\Infrastructure\Persistence\Eloquent\PhotoFavorite;
-use PhotoContainer\PhotoContainer\Infrastructure\Persistence\Eloquent\User;
+use PhotoContainer\PhotoContainer\Application\Resources\Eloquent\Download as DownloadModel;
+use PhotoContainer\PhotoContainer\Application\Resources\Eloquent\Event;
+use PhotoContainer\PhotoContainer\Application\Resources\Eloquent\Photo as PhotoModel;
+use PhotoContainer\PhotoContainer\Application\Resources\Eloquent\PhotoFavorite;
+use PhotoContainer\PhotoContainer\Application\Resources\Eloquent\User;
 
 
 class EloquentPhotoRepository implements PhotoRepository

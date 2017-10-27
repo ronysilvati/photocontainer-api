@@ -9,10 +9,10 @@ use PhotoContainer\PhotoContainer\Contexts\Event\Domain\EventTag;
 use PhotoContainer\PhotoContainer\Contexts\Event\Domain\Photographer;
 use PhotoContainer\PhotoContainer\Contexts\Event\Domain\Suppliers;
 use PhotoContainer\PhotoContainer\Infrastructure\Exception\PersistenceException;
-use PhotoContainer\PhotoContainer\Infrastructure\Persistence\Eloquent\Event as EventModel;
-use PhotoContainer\PhotoContainer\Infrastructure\Persistence\Eloquent\EventCategory as EventCategoryModel;
-use PhotoContainer\PhotoContainer\Infrastructure\Persistence\Eloquent\EventSuppliers;
-use PhotoContainer\PhotoContainer\Infrastructure\Persistence\Eloquent\EventTag as EventTagModel;
+use PhotoContainer\PhotoContainer\Application\Resources\Eloquent\Event as EventModel;
+use PhotoContainer\PhotoContainer\Application\Resources\Eloquent\EventCategory as EventCategoryModel;
+use PhotoContainer\PhotoContainer\Application\Resources\Eloquent\EventSuppliers;
+use PhotoContainer\PhotoContainer\Application\Resources\Eloquent\EventTag as EventTagModel;
 
 
 class EloquentEventRepository implements EventRepository

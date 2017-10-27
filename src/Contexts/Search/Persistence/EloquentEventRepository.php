@@ -10,15 +10,15 @@ use PhotoContainer\PhotoContainer\Contexts\Search\Domain\EventSearch;
 use PhotoContainer\PhotoContainer\Contexts\Search\Domain\Photographer;
 use PhotoContainer\PhotoContainer\Contexts\Search\Domain\Tag;
 use PhotoContainer\PhotoContainer\Infrastructure\Exception\PersistenceException;
-use PhotoContainer\PhotoContainer\Infrastructure\Persistence\Eloquent\Detail;
-use PhotoContainer\PhotoContainer\Infrastructure\Persistence\Eloquent\DownloadRequest;
-use PhotoContainer\PhotoContainer\Infrastructure\Persistence\Eloquent\Event as EventModel;
-use PhotoContainer\PhotoContainer\Infrastructure\Persistence\Eloquent\EventFavorite;
-use PhotoContainer\PhotoContainer\Infrastructure\Persistence\Eloquent\EventSearch as EventSearchModel;
-use PhotoContainer\PhotoContainer\Infrastructure\Persistence\Eloquent\EventSearchApproval;
-use PhotoContainer\PhotoContainer\Infrastructure\Persistence\Eloquent\EventSearchPublisher;
-use PhotoContainer\PhotoContainer\Infrastructure\Persistence\Eloquent\Photo;
-use PhotoContainer\PhotoContainer\Infrastructure\Persistence\Eloquent\PhotoFavorite;
+use PhotoContainer\PhotoContainer\Application\Resources\Eloquent\Detail;
+use PhotoContainer\PhotoContainer\Application\Resources\Eloquent\DownloadRequest;
+use PhotoContainer\PhotoContainer\Application\Resources\Eloquent\Event as EventModel;
+use PhotoContainer\PhotoContainer\Application\Resources\Eloquent\EventFavorite;
+use PhotoContainer\PhotoContainer\Application\Resources\Eloquent\EventSearch as EventSearchModel;
+use PhotoContainer\PhotoContainer\Application\Resources\Eloquent\EventSearchApproval;
+use PhotoContainer\PhotoContainer\Application\Resources\Eloquent\EventSearchPublisher;
+use PhotoContainer\PhotoContainer\Application\Resources\Eloquent\Photo;
+use PhotoContainer\PhotoContainer\Application\Resources\Eloquent\PhotoFavorite;
 
 
 class EloquentEventRepository implements EventRepository

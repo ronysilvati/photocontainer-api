@@ -7,7 +7,7 @@ use League\Event\EventInterface;
 use PhotoContainer\PhotoContainer\Application\Resources\Emails\PublisherPublicationEmail;
 use PhotoContainer\PhotoContainer\Contexts\Event\Event\PublisherPublished;
 use PhotoContainer\PhotoContainer\Infrastructure\Email\SwiftPoolMailerHelper;
-use PhotoContainer\PhotoContainer\Infrastructure\Persistence\Eloquent\Event;
+use PhotoContainer\PhotoContainer\Application\Resources\Eloquent\Event;
 
 class SendEmailOnPublisherPublication extends AbstractListener
 {

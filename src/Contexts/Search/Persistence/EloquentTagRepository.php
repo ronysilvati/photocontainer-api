@@ -5,7 +5,7 @@ namespace PhotoContainer\PhotoContainer\Contexts\Search\Persistence;
 use PhotoContainer\PhotoContainer\Contexts\Search\Domain\Tag;
 use PhotoContainer\PhotoContainer\Contexts\Search\Domain\TagRepository;
 use PhotoContainer\PhotoContainer\Infrastructure\Exception\PersistenceException;
-use PhotoContainer\PhotoContainer\Infrastructure\Persistence\Eloquent\TagCategory;
+use PhotoContainer\PhotoContainer\Application\Resources\Eloquent\TagCategory;
 
 
 class EloquentTagRepository implements TagRepository

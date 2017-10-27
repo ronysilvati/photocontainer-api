@@ -4,8 +4,8 @@ namespace PhotoContainer\PhotoContainer\Contexts\Auth\Persistence;
 
 use PhotoContainer\PhotoContainer\Contexts\Auth\Domain\AuthRepository;
 use PhotoContainer\PhotoContainer\Infrastructure\Exception\PersistenceException;
-use PhotoContainer\PhotoContainer\Infrastructure\Persistence\Eloquent\AccessLog;
-use PhotoContainer\PhotoContainer\Infrastructure\Persistence\Eloquent\User;
+use PhotoContainer\PhotoContainer\Application\Resources\Eloquent\AccessLog;
+use PhotoContainer\PhotoContainer\Application\Resources\Eloquent\User;
 
 
 class EloquentAuthRepository implements AuthRepository

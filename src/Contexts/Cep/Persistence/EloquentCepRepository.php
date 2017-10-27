@@ -5,9 +5,9 @@ namespace PhotoContainer\PhotoContainer\Contexts\Cep\Persistence;
 use PhotoContainer\PhotoContainer\Contexts\Cep\Domain\Cep;
 use PhotoContainer\PhotoContainer\Contexts\Cep\Domain\CepRepository;
 use PhotoContainer\PhotoContainer\Infrastructure\Exception\PersistenceException;
-use PhotoContainer\PhotoContainer\Infrastructure\Persistence\Eloquent\City;
-use PhotoContainer\PhotoContainer\Infrastructure\Persistence\Eloquent\Country;
-use PhotoContainer\PhotoContainer\Infrastructure\Persistence\Eloquent\State;
+use PhotoContainer\PhotoContainer\Application\Resources\Eloquent\City;
+use PhotoContainer\PhotoContainer\Application\Resources\Eloquent\Country;
+use PhotoContainer\PhotoContainer\Application\Resources\Eloquent\State;
 
 class EloquentCepRepository implements CepRepository
 {

@@ -11,12 +11,12 @@ use PhotoContainer\PhotoContainer\Contexts\User\Domain\RequestPassword;
 use PhotoContainer\PhotoContainer\Contexts\User\Domain\User;
 use PhotoContainer\PhotoContainer\Contexts\User\Domain\UserRepository;
 use PhotoContainer\PhotoContainer\Infrastructure\Exception\PersistenceException;
-use PhotoContainer\PhotoContainer\Infrastructure\Persistence\Eloquent\Address as AddressModel;
-use PhotoContainer\PhotoContainer\Infrastructure\Persistence\Eloquent\Detail;
-use PhotoContainer\PhotoContainer\Infrastructure\Persistence\Eloquent\User as UserModel;
-use PhotoContainer\PhotoContainer\Infrastructure\Persistence\Eloquent\UserProfile;
+use PhotoContainer\PhotoContainer\Application\Resources\Eloquent\Address as AddressModel;
+use PhotoContainer\PhotoContainer\Application\Resources\Eloquent\Detail;
+use PhotoContainer\PhotoContainer\Application\Resources\Eloquent\User as UserModel;
+use PhotoContainer\PhotoContainer\Application\Resources\Eloquent\UserProfile;
 
-use PhotoContainer\PhotoContainer\Infrastructure\Persistence\Eloquent\RequestPassword as RequestPasswordModel;
+use PhotoContainer\PhotoContainer\Application\Resources\Eloquent\RequestPassword as RequestPasswordModel;
 
 
 class EloquentUserRepository implements UserRepository

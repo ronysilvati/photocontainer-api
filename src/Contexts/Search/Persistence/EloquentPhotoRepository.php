@@ -4,8 +4,8 @@ namespace PhotoContainer\PhotoContainer\Contexts\Search\Persistence;
 
 use PhotoContainer\PhotoContainer\Contexts\Search\Domain\Historic;
 use PhotoContainer\PhotoContainer\Contexts\Search\Domain\PhotoRepository;
-use PhotoContainer\PhotoContainer\Infrastructure\Persistence\Eloquent\EventSearchPublisherDownload;
-use PhotoContainer\PhotoContainer\Infrastructure\Persistence\Eloquent\EventSearchPublisherFavorite;
+use PhotoContainer\PhotoContainer\Application\Resources\Eloquent\EventSearchPublisherDownload;
+use PhotoContainer\PhotoContainer\Application\Resources\Eloquent\EventSearchPublisherFavorite;
 
 
 class EloquentPhotoRepository implements PhotoRepository
