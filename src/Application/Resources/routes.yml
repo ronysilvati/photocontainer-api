@@ -120,7 +120,7 @@ PhotoContainer\PhotoContainer\Application\Controllers\UserController:
     verb: POST
     route: /users/updatePassword
 
-PhotoController:
+PhotoContainer\PhotoContainer\Application\Controllers\PhotoController:
   createPhoto:
     verb: POST
     route: /photo
