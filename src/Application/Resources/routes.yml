@@ -140,5 +140,5 @@ PhotoContainer\PhotoContainer\Application\Controllers\PhotoController:
     verb: PATCH
     route: /photo/cover/{guid}
   downloadSelectedPhotos:
-    verb: PATCH
+    verb: POST
     route: /event/download/{type:all|select}/{ids}/publisher/{publisher_id}
