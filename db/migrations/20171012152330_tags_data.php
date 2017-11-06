@@ -1,18 +1,41 @@
 <?php
 
-use Phinx\Seed\AbstractSeed;
+use Phinx\Migration\AbstractMigration;
 
-class TagsSeed extends AbstractSeed
+class TagsData extends AbstractMigration
 {
-    /**
-     * Run Method.
-     *
-     * Write your database seeder using this method.
-     *
-     * More information on writing seeders is available here:
-     * http://docs.phinx.org/en/latest/seeding.html
-     */
-    public function run()
+    public function change()
+    {
+        $this->tagCreation();
+        $this->updateTag();
+    }
+
+    public function updateTag()
+    {
+        $data = [
+            [
+                'tag_category_id' => 9,
+                'description' => 'Nenhuma',
+                'created_at' => date('Y-m-d H:i:s'),
+            ],
+            [
+                'tag_category_id' => 5,
+                'description' => 'Outro',
+                'created_at' => date('Y-m-d H:i:s'),
+            ],
+            [
+                'tag_category_id' => 1,
+                'description' => 'Outro',
+                'created_at' => date('Y-m-d H:i:s'),
+            ],
+        ];
+        $tags = $this->table('tags');
+        $tags->insert($data)->save();
+
+        $this->execute("UPDATE tags SET description = 'Nenhuma' WHERE id = 49");
+    }
+
+    public function tagCreation()
     {
         $sql = "
     INSERT INTO `tag_categories` (`id`, `description`, `created_at`, `updated_at`) VALUES
