@@ -7,10 +7,11 @@ class Photographer
     private $id;
     private $profile_id;
     private $name;
+    private $site;
 
     const APPROVED_PROFILE = 2;
 
-    public function __construct(?int $id, int $profile_id = null, string $name = null)
+    public function __construct(?int $id, int $profile_id = null, string $name = null, string $site = '')
     {
         $this->changeId($id);
 
@@ -18,6 +19,7 @@ class Photographer
             $this->changeProfileId($profile_id);
         }
         $this->changeName($name);
+        $this->site = $site;
     }
 
     /**
@@ -71,5 +73,13 @@ class Photographer
     public function changeName(?string $name = null): void
     {
         $this->name = $name;
+    }
+
+    /**
+     * @return string
+     */
+    public function getSite(): string
+    {
+        return $this->site;
     }
 }

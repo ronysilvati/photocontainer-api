@@ -33,7 +33,11 @@ class EventFoundResponse implements \JsonSerializable
             'id' => $this->event->getId(),
             'bride' => $this->event->getBride(),
             'groom' => $this->event->getGroom(),
-            'photographer_id' => $this->event->getPhotographer()->getId(),
+            'photographer' => [
+                'id' => $this->event->getPhotographer()->getId(),
+                'name' => $this->event->getPhotographer()->getName(),
+                'site' => $this->event->getPhotographer()->getSite(),
+            ],
             'title' => $this->event->getTitle(),
             'description' => $this->event->getDescription(),
             'terms' => $this->event->getTerms(),

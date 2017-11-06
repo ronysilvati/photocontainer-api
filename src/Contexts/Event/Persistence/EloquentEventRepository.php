@@ -9,6 +9,7 @@ use PhotoContainer\PhotoContainer\Contexts\Event\Domain\EventTag;
 use PhotoContainer\PhotoContainer\Contexts\Event\Domain\Photographer;
 use PhotoContainer\PhotoContainer\Contexts\Event\Domain\Suppliers;
 use PhotoContainer\PhotoContainer\Infrastructure\Exception\PersistenceException;
+use PhotoContainer\PhotoContainer\Infrastructure\Persistence\Eloquent\Detail;
 use PhotoContainer\PhotoContainer\Infrastructure\Persistence\Eloquent\Event as EventModel;
 use PhotoContainer\PhotoContainer\Infrastructure\Persistence\Eloquent\EventCategory as EventCategoryModel;
 use PhotoContainer\PhotoContainer\Infrastructure\Persistence\Eloquent\EventSuppliers;
@@ -195,7 +196,13 @@ class EloquentEventRepository implements EventRepository
 
             $eventData = $eventModel->load('EventCategory', 'EventTag', 'User')->toArray();
 
-            $photographer = new Photographer($eventData['user']['id'], null, $eventData['user']['name']);
+            $detail = Detail::where(['user_id' => $eventData['user']['id']])->first();
+            $photographer = new Photographer(
+                $eventData['user']['id'],
+                Photographer::APPROVED_PROFILE,
+                $eventData['user']['name'],
+                $detail->site ?? ''
+            );
 
             $categories = [];
             foreach ($eventData['event_category'] as $category) {
@@ -230,6 +237,7 @@ class EloquentEventRepository implements EventRepository
                 $suppliers
             );
         } catch (\Exception $e) {
+            var_dump($e->getMessage());exit;
             throw new PersistenceException('Erro na busca de evento.', $e->getMessage());
         }
     }
