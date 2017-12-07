@@ -1,0 +1,4 @@
+resources:
+  users: PhotoContainer\PhotoContainer\Infrastructure\Persistence\Eloquent\User
+  categories: PhotoContainer\PhotoContainer\Infrastructure\Persistence\Eloquent\Category
+  tags: PhotoContainer\PhotoContainer\Infrastructure\Persistence\Eloquent\Tag

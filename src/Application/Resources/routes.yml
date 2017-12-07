@@ -1,101 +1,21 @@
 PhotoContainer\PhotoContainer\Application\Controllers\AuthController:
-  login:
+  authenticate:
     verb: POST
     route: /login
 
 PhotoContainer\PhotoContainer\Application\Controllers\CepController:
+  findCep:
+    verb: GET
+    route: /location/zipcode/{cep}
+  findStates:
+    verb: GET
+    route: /location/country/{country_id}/states
+  findCities:
+    verb: GET
+    route: /location/state/{state_id}/cities
   getCountries:
     verb: GET
     route: /location/countries
-  getCep:
-    verb: GET
-    route: /location/zipcode/{cep}
-  getStates:
-    verb: GET
-    route: /location/country/{country_id}/states
-  getCities:
-    verb: GET
-    route: /location/state/{state_id}/cities
-
-PhotoContainer\PhotoContainer\Application\Controllers\SearchController:
-  searchEvent:
-    verb: GET
-    route: /search/events
-  searchCategories:
-    verb: GET
-    route: /search/categories
-  searchTags:
-    verb: GET
-    route: /search/tags
-  searchEventPhotosPublisher:
-    verb: GET
-    route: /search/events/{event_id}/photos/user/{user_id}
-  searchEventPhotosPhotographer:
-    verb: GET
-    route: /search/events/{photographer_id}/photos
-  publisherHistoric:
-    verb: GET
-    route: /search/photo/user/{publisher_id}/{type:downloads|favorites}
-  waitingForApproval:
-    verb: GET
-    route: /search/waiting_approval/user/{photographer_id}
-  notifications:
-    verb: GET
-    route: /search/notifications/user/{user_id}
-
-PhotoContainer\PhotoContainer\Application\Controllers\ApprovalController:
-  requestDownload:
-    verb: POST
-    route: /events/{event_id}/request/user/{publisher_id}
-  approvalDownload:
-    verb: PUT
-    route: /events/{event_id}/approval/user/{publisher_id}
-  disapprovalDownload:
-    verb: PUT
-    route: /events/{event_id}/disapproval/user/{publisher_id}
-
-PhotoContainer\PhotoContainer\Application\Controllers\ContactController:
-  createContact:
-    verb: POST
-    route: /contact
-  total:
-    verb: GET
-    route: /contact/total
-  list:
-    verb: GET
-    route: /contact/list
-
-PhotoContainer\PhotoContainer\Application\Controllers\EventController:
-  findEvent:
-    verb: GET
-    route: /events
-  createEvent:
-    verb: POST
-    route: /events
-  deleteEvent:
-    verb: DELETE
-    route: /events/{id}
-  editEvent:
-    verb: PUT
-    route: /events/{id}
-  createFavorite:
-    verb: POST
-    route: /events/{event_id}/favorite/publisher/{publisher_id}
-  deleteFavorite:
-    verb: DELETE
-    route: /events/{event_id}/favorite/publisher/{publisher_id}
-  updateTags:
-    verb: POST
-    route: /events/{id}/tags
-  updateSuppliers:
-    verb: POST
-    route: /events/{id}/suppliers
-  broadcastNewEvent:
-    verb: POST
-    route: /events/{event_id}/broadcastPublishers
-  publisherPublish:
-    verb: POST
-    route: /events/publisherPublish
 
 PhotoContainer\PhotoContainer\Application\Controllers\UserController:
   createUser:
@@ -120,25 +40,109 @@ PhotoContainer\PhotoContainer\Application\Controllers\UserController:
     verb: POST
     route: /users/updatePassword
 
-PhotoContainer\PhotoContainer\Application\Controllers\PhotoController:
-  createPhoto:
-    verb: POST
-    route: /photo
-  downloadPhoto:
+PhotoContainer\PhotoContainer\Application\Controllers\SearchController:
+  searchEvent:
     verb: GET
-    route: /photo/{photo_id}/user/{user_id}/download
-  like:
-    verb: POST
-    route: /photo/{photo_id}/like/publisher/{publisher_id}
-  dislike:
-    verb: DELETE
-    route: /photo/{photo_id}/dislike/publisher/{publisher_id}
-  delete:
-    verb: DELETE
-    route: /photo/{guid}
-  asCover:
-    verb: PATCH
-    route: /photo/cover/{guid}
-  downloadSelectedPhotos:
+    route: /search/events
+  searchResources:
     verb: GET
-    route: /event/download/{type:all|select}/{ids}/publisher/{publisher_id}
+    route: /search/resources/{resource}
+  searchResources:
+    verb: GET
+    route: /search/{resource:categories}
+  searchTags:
+    verb: GET
+    route: /search/tags
+  searchEventPhotosPublisher:
+    verb: GET
+    route: /search/events/{event_id}/photos/user/{user_id}
+  searchEventPhotosPhotographer:
+    verb: GET
+    route: /search/events/{photographer_id}/photos
+  publisherHistoric:
+    verb: GET
+    route: /search/photo/user/{publisher_id}/{type:downloads|favorites}
+  waitingForApproval:
+    verb: GET
+    route: /search/waiting_approval/user/{photographer_id}
+  notifications:
+    verb: GET
+    route: /search/notifications/user/{user_id}
+
+#PhotoContainer\PhotoContainer\Application\Controllers\ApprovalController:
+#  requestDownload:
+#    verb: POST
+#    route: /events/{event_id}/request/user/{publisher_id}
+#  approvalDownload:
+#    verb: PUT
+#    route: /events/{event_id}/approval/user/{publisher_id}
+#  disapprovalDownload:
+#    verb: PUT
+#    route: /events/{event_id}/disapproval/user/{publisher_id}
+#
+#PhotoContainer\PhotoContainer\Application\Controllers\ContactController:
+#  createContact:
+#    verb: POST
+#    route: /contact
+#  total:
+#    verb: GET
+#    route: /contact/total
+#  list:
+#    verb: GET
+#    route: /contact/list
+#
+#PhotoContainer\PhotoContainer\Application\Controllers\EventController:
+#  findEvent:
+#    verb: GET
+#    route: /events
+#  createEvent:
+#    verb: POST
+#    route: /events
+#  deleteEvent:
+#    verb: DELETE
+#    route: /events/{id}
+#  editEvent:
+#    verb: PUT
+#    route: /events/{id}
+#  createFavorite:
+#    verb: POST
+#    route: /events/{event_id}/favorite/publisher/{publisher_id}
+#  deleteFavorite:
+#    verb: DELETE
+#    route: /events/{event_id}/favorite/publisher/{publisher_id}
+#  updateTags:
+#    verb: POST
+#    route: /events/{id}/tags
+#  updateSuppliers:
+#    verb: POST
+#    route: /events/{id}/suppliers
+#  broadcastNewEvent:
+#    verb: POST
+#    route: /events/{event_id}/broadcastPublishers
+#  publisherPublish:
+#    verb: POST
+#    route: /events/publisherPublish
+#
+#
+#PhotoContainer\PhotoContainer\Application\Controllers\PhotoController:
+#  createPhoto:
+#    verb: POST
+#    route: /photo
+#  downloadPhoto:
+#    verb: GET
+#    route: /photo/{photo_id}/user/{user_id}/download
+#  like:
+#    verb: POST
+#    route: /photo/{photo_id}/like/publisher/{publisher_id}
+#  dislike:
+#    verb: DELETE
+#    route: /photo/{photo_id}/dislike/publisher/{publisher_id}
+#  delete:
+#    verb: DELETE
+#    route: /photo/{guid}
+#  asCover:
+#    verb: PATCH
+#    route: /photo/cover/{guid}
+#  downloadSelectedPhotos:
+#    verb: GET
+#    route: /event/download/{type:all|select}/{ids}/publisher/{publisher_id}
