@@ -11,6 +11,8 @@ class ProfileImageHelper
      */
     private $profile_images_dir;
 
+    const EXTENSIONS = ['image/jpeg' => 'jpg', 'image/png' => 'png'];
+
     /**
      * ProfileImageHelper constructor.
      */
@@ -21,13 +23,12 @@ class ProfileImageHelper
 
     /**
      * @param int $user_id
-     * @param array $file
+     * @param string $mimetype
      * @return string
      */
-    public function generateName(int $user_id, array $file): string
+    public function generateName(int $user_id, string $mimetype): string
     {
-        $extensions = ['image/jpeg' => 'jpg', 'image/png' => 'png'];
-        return $this->generateFilename($user_id).'.'.$extensions[$file['type']];
+        return $this->generateFilename($user_id).'.'.self::EXTENSIONS[$mimetype];
     }
 
     /**
