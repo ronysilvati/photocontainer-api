@@ -2,6 +2,7 @@
 
 namespace PhotoContainer\PhotoContainer\Infrastructure\Web\Slim;
 
+use PhotoContainer\PhotoContainer\Application\Controllers\CommandBusController;
 use PhotoContainer\PhotoContainer\Infrastructure\Cache\CacheHelper;
 use PhotoContainer\PhotoContainer\Infrastructure\Event\Event;
 use PhotoContainer\PhotoContainer\Infrastructure\Event\EventRecorder;
@@ -9,6 +10,7 @@ use PhotoContainer\PhotoContainer\Infrastructure\Event\EventWrapper;
 use PhotoContainer\PhotoContainer\Infrastructure\Persistence\EloquentDatabaseProvider;
 use PhotoContainer\PhotoContainer\Infrastructure\Web\WebApp;
 use Psr\Container\ContainerInterface;
+
 use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\ServerRequestInterface;
 use Psr\Log\LoggerInterface;
@@ -30,13 +32,21 @@ class SlimApp implements WebApp
     private $container;
 
     /**
+     * @var mixed|CacheHelper
+     */
+    private $cacheHelper;
+
+    /**
      * SlimApp constructor.
      * @param App $app
+     * @throws \Psr\Container\ContainerExceptionInterface
+     * @throws \Psr\Container\NotFoundExceptionInterface
      */
     public function __construct(App $app)
     {
         $this->app = $app;
         $this->container = $app->getContainer();
+        $this->cacheHelper = $this->container->get(CacheHelper::class);
     }
 
     /**
@@ -46,9 +56,8 @@ class SlimApp implements WebApp
      */
     public function bootstrap(array $conf): void
     {
-        $cacheHelper = $this->container->get(CacheHelper::class);
-        $this->loadRoutes($cacheHelper);
-        $this->setListeners($cacheHelper);
+        $this->loadRoutes();
+        $this->setListeners();
 
         $this->container->get(EloquentDatabaseProvider::class);
 
@@ -96,6 +105,8 @@ class SlimApp implements WebApp
         ]));
 
         $this->app->add(function (ServerRequestInterface $req, ResponseInterface $res, $next) {
+            $this->set('request', $req);
+
             /** @var ResponseInterface $response */
             $response = $next($req, $res);
 
@@ -130,40 +141,49 @@ class SlimApp implements WebApp
         });
     }
 
-    /**
-     * @param CacheHelper $cacheHelper
-     */
-    private function loadRoutes(CacheHelper $cacheHelper)
+    private function loadRoutes()
     {
-        $routes = $cacheHelper->remember('all_routes', function () {
-            $filename = ROOT_DIR.'/src/Application/Resources/routes.yml';
-            return yaml_parse_file($filename);
-        });
+        $routes = $this->cachedYamlLoader('routes.yml', 'all_routes');
 
         foreach ($routes as $controller => $actions) {
             foreach ($actions as $action => $config) {
-                $this->app->map([$config['verb']], $config['route'], [$controller, $action]);
+                if (!isset($config['verb'])) {
+                    foreach ($config as $command => $routing) {
+                        $this->container->set($routing['route'], $command);
+                        $this->app->map([$routing['verb']], $routing['route'], [$controller, $action]);
+                    }
+                } else {
+                    $this->app->map([$config['verb']], $config['route'], [$controller, $action]);
+                }
             }
         }
     }
 
     /**
-     * @param CacheHelper $cacheHelper
      * @throws \Psr\Container\ContainerExceptionInterface
      * @throws \Psr\Container\NotFoundExceptionInterface
      */
-    private function setListeners(CacheHelper $cacheHelper)
+    private function setListeners()
     {
+        $listeners = $this->cachedYamlLoader('listeners.yml', 'all_listeners');
+
         $eventDispatcher = $this->container->get('EventDispatcher');
-
-        $listeners = $cacheHelper->remember('all_listeners', function () {
-            $filename = ROOT_DIR.'/src/Application/Resources/listeners.yml';
-            return yaml_parse_file($filename);
-        });
-
         foreach ($listeners as $class => $listener) {
             $eventDispatcher->addListener($listener['event'], $this->container->get($class));
         }
+    }
+
+    /**
+     * @param string $filename
+     * @param string $cacheKey
+     * @return array
+     */
+    private function cachedYamlLoader(string $filename, string $cacheKey): array
+    {
+        return $this->cacheHelper->remember($cacheKey, function () use ($filename) {
+            $filename = ROOT_DIR.'/src/Application/Resources/'.$filename;
+            return yaml_parse_file($filename);
+        });
     }
 
     /**
