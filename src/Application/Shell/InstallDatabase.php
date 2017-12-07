@@ -2,12 +2,12 @@
 
 namespace PhotoContainer\PhotoContainer\Application\Shell;
 
-use Dotenv\Dotenv;
+
 use Symfony\Component\Console\Command\Command;
 
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
-use Symfony\Component\Console\Question\ChoiceQuestion;
+
 use Symfony\Component\Console\Question\ConfirmationQuestion;
 use Symfony\Component\Console\Question\Question;
 
@@ -87,7 +87,7 @@ class InstallDatabase extends Command
             $dsn = 'mysql:host='.$this->host;
             $pdo = new \PDO($dsn, $this->user, $this->pwd);
 
-            $databases = $pdo->prepare("show databases;");
+            $databases = $pdo->prepare('show databases;');
             $databases->execute();
             $databases = $databases->fetchAll();
 
@@ -95,12 +95,12 @@ class InstallDatabase extends Command
                 return $item['Database'] === $this->database;
             });
 
-            if (!empty($exists)) {
+            if (null !== $exists) {
                 $this->output->writeln('<error>Já existe um banco de dados com este nome. Abortando!</error>');
                 return false;
             }
 
-            $pdo->exec("CREATE DATABASE ".$this->database.";");
+            $pdo->exec('CREATE DATABASE ' .$this->database. ';');
 
             return true;
         } catch (\Exception $e) {

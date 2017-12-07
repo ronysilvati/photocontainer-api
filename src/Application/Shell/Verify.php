@@ -91,7 +91,7 @@ class Verify extends Command
             $dsn = 'mysql:host='.getenv('MYSQL_HOST');
             $pdo = new \PDO($dsn, getenv('MYSQL_USER'), getenv('MYSQL_PASSWORD'));
 
-            $databases = $pdo->prepare("show databases;");
+            $databases = $pdo->prepare('show databases;');
             $databases->execute();
             $databases = $databases->fetchAll();
 
@@ -99,7 +99,7 @@ class Verify extends Command
                 return $item['Database'] === getenv('MYSQL_DATABASE');
             });
 
-            if (empty($exists)) {
+            if (null === $exists) {
                 $this->errors['database']['error'][] = 'O banco de dados "'.getenv('MYSQL_DATABASE').'"" não existe. A migração de dados foi feita?';
             }
 
@@ -114,12 +114,12 @@ class Verify extends Command
             }
 
             if (isset($this->errors['database']['error'])) {
-                $this->errors['database']['hint'][] = "---- ERROS NA CONFIGURAÇÃO DO BANCO DE DADOS ----";
-                $this->errors['database']['hint'][] = "Verifique se as configurações foram feitas corretamentes no arquivo public/.env.";
-                $this->errors['database']['hint'][] = "Além disto verifique se o Banco de Dados está online e o database configurado";
-                $this->errors['database']['hint'][] = "foi criado. Por fim, realize a migração utilizando os comandos do Phinx.";
-                $this->errors['database']['hint'][] = "Para migrar as tabelas execute o comando: ./vendor/bin/phinx migrate";
-                $this->errors['database']['hint'][] = "Para popular o banco execute o comando: ./vendor/bin/phinx seed:run";
+                $this->errors['database']['hint'][] = '---- ERROS NA CONFIGURAÇÃO DO BANCO DE DADOS ----';
+                $this->errors['database']['hint'][] = 'Verifique se as configurações foram feitas corretamentes no arquivo public/.env.';
+                $this->errors['database']['hint'][] = 'Além disto verifique se o Banco de Dados está online e o database configurado';
+                $this->errors['database']['hint'][] = 'foi criado. Por fim, realize a migração utilizando os comandos do Phinx.';
+                $this->errors['database']['hint'][] = 'Para migrar as tabelas execute o comando: ./vendor/bin/phinx migrate';
+                $this->errors['database']['hint'][] = 'Para popular o banco execute o comando: ./vendor/bin/phinx seed:run';
             }
         } catch (\Exception $e) {
             $this->errors[] = 'Não foi possível conectar no banco! Erro: '.$e->getMessage();
@@ -133,17 +133,17 @@ class Verify extends Command
             './fotocontainer queue_process:images' => 'ps -ax | grep "./fotocontainer queue_process:images"'
         ];
 
-        foreach ($process as $key => $process) {
-            $result = shell_exec($process);
-            if(count(explode("\n", $result)) <= 3) {
+        foreach ($process as $key => $internalProcess) {
+            $result = shell_exec($internalProcess);
+            if(substr_count($result, "\n") + 1 <= 3) {
                 $this->errors['process']['error'][] = 'Verifique se este seguinte processo está configurado na cron: '.$key;
             }
         }
 
         if (isset($this->errors['process']['error'])) {
-            $this->errors['process']['hint'][] = "---- ERROS NA CONFIGURAÇÃO DOS PROCESSOS DA CRON ----";
-            $this->errors['process']['hint'][] = "Existem alguns comandos que são utilizados para executar tarefas em backgorund, que são";
-            $this->errors['process']['hint'][] = "configurados na crontab. Siga as instruções indicadas nos erros indicados.";
+            $this->errors['process']['hint'][] = '---- ERROS NA CONFIGURAÇÃO DOS PROCESSOS DA CRON ----';
+            $this->errors['process']['hint'][] = 'Existem alguns comandos que são utilizados para executar tarefas em backgorund, que são';
+            $this->errors['process']['hint'][] = 'configurados na crontab. Siga as instruções indicadas nos erros indicados.';
         }
     }
 
@@ -163,8 +163,8 @@ class Verify extends Command
         }
 
         if (isset($this->errors['dir']['hint'])) {
-            $this->errors['dir']['hint'][] = "---- ERROS NOS DIRETÓRIOS DA APLICAÇÃO ----";
-            $this->errors['dir']['hint'][] = "Verifique a existência dos diretórios, de acordo com as mensagens de erro indicadas.";
+            $this->errors['dir']['hint'][] = '---- ERROS NOS DIRETÓRIOS DA APLICAÇÃO ----';
+            $this->errors['dir']['hint'][] = 'Verifique a existência dos diretórios, de acordo com as mensagens de erro indicadas.';
             $this->errors['dir']['hint'][] = "Para configurar automaticamente, invoque o comando: './fotocontainer tools:install'.";
 
         }
@@ -202,9 +202,9 @@ class Verify extends Command
         }
 
         if (isset($this->errors['configuration']['error'])) {
-            $this->errors['configuration']['hint'][] = "---- ERROS NA CONFIGURAÇÃO BÁSICA DA APLICAÇÃO ----";
-            $this->errors['configuration']['hint'][] = "Verifique suas configurações em public/.env. Deve existir no diretório e deve estar";
-            $this->errors['configuration']['hint'][] = "corretamente configurado, de acordo com as orientações descritas no arquivo .env.SAMPLE.";
+            $this->errors['configuration']['hint'][] = '---- ERROS NA CONFIGURAÇÃO BÁSICA DA APLICAÇÃO ----';
+            $this->errors['configuration']['hint'][] = 'Verifique suas configurações em public/.env. Deve existir no diretório e deve estar';
+            $this->errors['configuration']['hint'][] = 'corretamente configurado, de acordo com as orientações descritas no arquivo .env.SAMPLE.';
         }
     }
 }
