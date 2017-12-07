@@ -2,7 +2,7 @@
 
 namespace PhotoContainer\PhotoContainer\Contexts\Photo\Action;
 
-use PhotoContainer\PhotoContainer\Contexts\Photo\Domain\Like;
+use PhotoContainer\PhotoContainer\Contexts\Photo\Command\LikePhotoCommand;
 use PhotoContainer\PhotoContainer\Contexts\Photo\Domain\PhotoRepository;
 use PhotoContainer\PhotoContainer\Contexts\Photo\Response\LikeResponse;
 
@@ -16,9 +16,9 @@ class LikePhoto
         $this->repository = $repository;
     }
 
-    public function handle(Like $like): \PhotoContainer\PhotoContainer\Contexts\Photo\Response\LikeResponse
+    public function handle(LikePhotoCommand $command): LikeResponse
     {
-        $like = $this->repository->like($like);
+        $like = $this->repository->like($command->getLike());
         return new LikeResponse($like);
     }
 }

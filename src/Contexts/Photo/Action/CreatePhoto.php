@@ -2,6 +2,7 @@
 
 namespace PhotoContainer\PhotoContainer\Contexts\Photo\Action;
 
+use PhotoContainer\PhotoContainer\Contexts\Photo\Command\CreatePhotoCommand;
 use PhotoContainer\PhotoContainer\Contexts\Photo\Domain\PhotoRepository;
 use PhotoContainer\PhotoContainer\Contexts\Photo\Response\PhotoResponse;
 use PhotoContainer\PhotoContainer\Infrastructure\Cache\CacheHelper;
@@ -42,16 +43,15 @@ class CreatePhoto
     }
 
     /**
-     * @param array $array
-     * @param int $event_id
+     * @param CreatePhotoCommand $command
      * @return PhotoResponse|DomainExceptionResponse
      */
-    public function handle(array $array, int $event_id)
+    public function handle(CreatePhotoCommand $command)
     {
-        foreach ($array as $item) {
+        foreach ($command->getPhotos() as $item) {
             try {
-                $eventPhotos = $this->dbRepo->findEventPhotos($event_id);
-                if (count($eventPhotos) >= 30) {
+                $eventPhotos = $this->dbRepo->findEventPhotos($command->getEventId());
+                if (\count($eventPhotos) >= 30) {
                     return new DomainExceptionResponse('O limite de fotos foi atingido.');
                 }
 
@@ -63,8 +63,8 @@ class CreatePhoto
         }
 
         $this->cacheHelper->clearNamespace('find_event');
-        $this->dbRepo->activateEvent($event_id);
+        $this->dbRepo->activateEvent($command->getEventId());
 
-        return new PhotoResponse($array);
+        return new PhotoResponse($command->getPhotos());
     }
 }

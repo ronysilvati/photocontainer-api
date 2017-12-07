@@ -2,163 +2,130 @@
 
 namespace PhotoContainer\PhotoContainer\Application\Controllers;
 
-use PhotoContainer\PhotoContainer\Contexts\User\Action\CreateUser;
-use PhotoContainer\PhotoContainer\Contexts\User\Action\FindFreeSlotForUser;
-use PhotoContainer\PhotoContainer\Contexts\User\Action\FindUser;
-use PhotoContainer\PhotoContainer\Contexts\User\Action\RequestPwdChange;
-use PhotoContainer\PhotoContainer\Contexts\User\Action\UpdatePassword;
-use PhotoContainer\PhotoContainer\Contexts\User\Action\UpdateUser;
-use PhotoContainer\PhotoContainer\Contexts\User\Action\UploadProfileImage;
-use PhotoContainer\PhotoContainer\Contexts\User\Domain\Details;
-use PhotoContainer\PhotoContainer\Contexts\User\Domain\Profile;
-use PhotoContainer\PhotoContainer\Contexts\User\Domain\User;
-use PhotoContainer\PhotoContainer\Infrastructure\Exception\DomainViolationException;
+
+use PhotoContainer\PhotoContainer\Contexts\User\Command\CreateUserCommand;
+use PhotoContainer\PhotoContainer\Contexts\User\Command\FindFreeSlotForUserCommand;
+use PhotoContainer\PhotoContainer\Contexts\User\Command\FindUserCommand;
+use PhotoContainer\PhotoContainer\Contexts\User\Command\RequestPwdChangeCommand;
+use PhotoContainer\PhotoContainer\Contexts\User\Command\UpdatePasswordCommand;
+use PhotoContainer\PhotoContainer\Contexts\User\Command\UpdateUserCommand;
+use PhotoContainer\PhotoContainer\Contexts\User\Command\UploadProfileImageCommand;
+
+use PhotoContainer\PhotoContainer\Infrastructure\Web\Controller;
 use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\ServerRequestInterface;
 
-class UserController
+class UserController extends Controller
 {
     /**
      * @param ServerRequestInterface $request
      * @param ResponseInterface $response
-     * @param FindUser $action
      * @return mixed
+     * @throws \Exception
+     * @throws \Psr\Container\ContainerExceptionInterface
+     * @throws \Psr\Container\NotFoundExceptionInterface
      */
-    public function findUser(ServerRequestInterface $request, ResponseInterface $response, FindUser $action)
+    public function findUser(ServerRequestInterface $request, ResponseInterface $response)
     {
-        $args = $request->getQueryParams();
+        $queryParams = $request->getQueryParams();
 
-        $id = $args['id'] ?? null;
-        $email = $args['email'] ?? null;
-
-        $actionResponse = $action->handle($id, $email);
-
-        return $response->withJson($actionResponse, $actionResponse->getHttpStatus());
-    }
-
-    /**
-     * @param ServerRequestInterface $request
-     * @param ResponseInterface $response
-     * @param FindFreeSlotForUser $action
-     * @return mixed
-     */
-    public function findFreeSlotForUser(ServerRequestInterface $request, ResponseInterface $response, FindFreeSlotForUser $action)
-    {
-        $actionResponse = $action->handle();
-        return $response->withJson($actionResponse, $actionResponse->getHttpStatus());
-    }
-
-    /**
-     * @param ServerRequestInterface $request
-     * @param ResponseInterface $response
-     * @param CreateUser $action
-     * @return mixed
-     * @throws DomainViolationException
-     */
-    public function createUser(ServerRequestInterface $request, ResponseInterface $response, CreateUser $action)
-    {
-        $data = $request->getParsedBody();
-
-        $details = new Details(
-            null,
-            $data['details']['blog'] ?? '',
-            $data['details']['instagram'] ?? '',
-            $data['details']['facebook'] ?? '',
-            $data['details']['pinterest'] ?? '',
-            $data['details']['site'] ?? '',
-            $data['details']['phone'] ?? '',
-            $data['details']['birth'] ?? ''
+        $domainResponse = $this->commandBus()->handle(
+            new FindUserCommand($queryParams['id'] ?? null, $queryParams['email'] ?? null)
         );
+        return $response->withJson($domainResponse, $domainResponse->getHttpStatus());
+    }
 
-        $profile = new Profile(null, null, (int) $data['profile'], null);
-        $user = new User(null, $data['name'], $data['email'], $data['password'], $details, $profile);
-
-        $actionResponse = $action->handle($user);
-
-        return $response->withJson($actionResponse, $actionResponse->getHttpStatus());
+    /**
+     * @param ResponseInterface $response
+     * @return mixed
+     * @throws \Exception
+     * @throws \Psr\Container\ContainerExceptionInterface
+     * @throws \Psr\Container\NotFoundExceptionInterface
+     */
+    public function findFreeSlotForUser(ResponseInterface $response)
+    {
+        $domainResponse = $this->commandBus()->handle(new FindFreeSlotForUserCommand());
+        return $response->withJson($domainResponse, $domainResponse->getHttpStatus());
     }
 
     /**
      * @param ServerRequestInterface $request
      * @param ResponseInterface $response
-     * @param UpdateUser $action
+     * @return mixed
+     * @throws \Exception
+     * @throws \Psr\Container\ContainerExceptionInterface
+     * @throws \Psr\Container\NotFoundExceptionInterface
+     */
+    public function createUser(ServerRequestInterface $request, ResponseInterface $response)
+    {
+        $domainResponse = $this->commandBus()->handle(new CreateUserCommand($request->getParsedBody()));
+        return $response->withJson($domainResponse, $domainResponse->getHttpStatus());
+    }
+
+    /**
+     * @param ServerRequestInterface $request
+     * @param ResponseInterface $response
      * @param int $id
      * @return mixed
+     * @throws \Exception
+     * @throws \Psr\Container\ContainerExceptionInterface
+     * @throws \Psr\Container\NotFoundExceptionInterface
      */
-    public function updateUser(ServerRequestInterface $request, ResponseInterface $response, UpdateUser $action, int $id)
+    public function updateUser(ServerRequestInterface $request, ResponseInterface $response, int $id)
+    {
+        $domainResponse = $this->commandBus()->handle(new UpdateUserCommand($id, $request->getParsedBody()));
+        return $response->withJson($domainResponse, $domainResponse->getHttpStatus());
+    }
+
+    /**
+     * @param ServerRequestInterface $request
+     * @param ResponseInterface $response
+     * @param int $id
+     * @return mixed
+     * @throws \Exception
+     * @throws \Psr\Container\ContainerExceptionInterface
+     * @throws \Psr\Container\NotFoundExceptionInterface
+     */
+    public function createProfileImage(ServerRequestInterface $request, ResponseInterface $response, int $id)
+    {
+        $files = $request->getUploadedFiles();
+        if (empty($files)) {
+            return $response->withJson(['message' => 'Imagem não enviada ou erro durante o envio.'], 500);
+        }
+
+        $domainResponse = $this->commandBus()->handle(new UploadProfileImageCommand($id, $files['profile_image']));
+        return $response->withJson($domainResponse, $domainResponse->getHttpStatus());
+    }
+
+    /**
+     * @param ServerRequestInterface $request
+     * @param ResponseInterface $response
+     * @return mixed
+     * @throws \Exception
+     * @throws \Psr\Container\ContainerExceptionInterface
+     * @throws \Psr\Container\NotFoundExceptionInterface
+     */
+    public function requestPwdChange(ServerRequestInterface $request, ResponseInterface $response)
+    {
+        $body = $request->getParsedBody();
+
+        $domainResponse = $this->commandBus()->handle(new RequestPwdChangeCommand($body['email']));
+        return $response->withJson($domainResponse, $domainResponse->getHttpStatus());
+    }
+
+    /**
+     * @param ServerRequestInterface $request
+     * @param ResponseInterface $response
+     * @return mixed
+     * @throws \Exception
+     * @throws \Psr\Container\ContainerExceptionInterface
+     * @throws \Psr\Container\NotFoundExceptionInterface
+     */
+    public function updatePassword(ServerRequestInterface $request, ResponseInterface $response)
     {
         $data = $request->getParsedBody();
 
-        $actionResponse = $action->handle($id, $data);
-
-        return $response->withJson($actionResponse, $actionResponse->getHttpStatus());
-
-    }
-
-    /**
-     * @param ServerRequestInterface $request
-     * @param ResponseInterface $response
-     * @param UploadProfileImage $action
-     * @param string $id
-     * @return mixed
-     * @throws DomainViolationException
-     * @throws \Exception
-     */
-    public function createProfileImage(
-        ServerRequestInterface $request,
-        ResponseInterface $response,
-        UploadProfileImage $action,
-        string $id
-    ) {
-        if (!isset($_FILES['profile_image']['error']) || is_array($_FILES['profile_image']['error'])) {
-            return $response->withJson(['message' => 'Erro no recebimento da imagem.'], 500);
-        }
-
-        $actionResponse = $action->handle((int) $id, $_FILES['profile_image']);
-
-        return  $response->withJson($actionResponse, $actionResponse->getHttpStatus());
-    }
-
-    /**
-     * @param ServerRequestInterface $request
-     * @param ResponseInterface $response
-     * @param RequestPwdChange $action
-     * @return mixed
-     * @throws \PhotoContainer\PhotoContainer\Infrastructure\Exception\DomainViolationException
-     * @throws DomainViolationException
-     */
-    public function requestPwdChange(
-        ServerRequestInterface $request,
-        ResponseInterface $response,
-        RequestPwdChange $action
-    ) {
-        $data = $request->getParsedBody();
-
-        if (!isset($data['email'])) {
-            throw new DomainViolationException('O email deve ser enviado.');
-        }
-
-        $actionResponse = $action->handle($data['email']);
-
-        return $response->withJson($actionResponse, $actionResponse->getHttpStatus());
-    }
-
-    /**
-     * @param ServerRequestInterface $request
-     * @param ResponseInterface $response
-     * @param UpdatePassword $action
-     * @return mixed
-     * @throws DomainViolationException
-     */
-    public function updatePassword(
-        ServerRequestInterface $request,
-        ResponseInterface $response,
-        UpdatePassword $action
-    ) {
-        $data = $request->getParsedBody();
-
-        $actionResponse = $action->handle($data['token'], $data['password']);
-
-        return $response->withJson($actionResponse, $actionResponse->getHttpStatus());
+        $domainResponse = $this->commandBus()->handle(new UpdatePasswordCommand($data['token'], $data['password']));
+        return $response->withJson($domainResponse, $domainResponse->getHttpStatus());
     }
 }

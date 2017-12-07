@@ -2,7 +2,7 @@
 
 namespace PhotoContainer\PhotoContainer\Contexts\Event\Action;
 
-use PhotoContainer\PhotoContainer\Contexts\Event\Domain\Favorite;
+use PhotoContainer\PhotoContainer\Contexts\Event\Command\DeleteFavoriteCommand;
 use PhotoContainer\PhotoContainer\Contexts\Event\Domain\FavoriteRepository;
 use PhotoContainer\PhotoContainer\Contexts\Event\Response\FavoriteRemovedResponse;
 use PhotoContainer\PhotoContainer\Infrastructure\Web\DomainExceptionResponse;
@@ -16,9 +16,11 @@ class DeleteFavorite
         $this->repository = $repository;
     }
 
-    public function handle(Favorite $favorite)
+    public function handle(DeleteFavoriteCommand $command)
     {
         try {
+            $favorite = $command->getFavorite();
+
             $favorite = $this->repository->removeFavorite($favorite);
             return new FavoriteRemovedResponse($favorite);
         } catch (\Exception $e) {

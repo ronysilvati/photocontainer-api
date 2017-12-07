@@ -2,9 +2,9 @@
 
 namespace PhotoContainer\PhotoContainer\Contexts\Search\Action;
 
+use PhotoContainer\PhotoContainer\Contexts\Search\Command\FindEventPhotosPhotographerCommand;
 use PhotoContainer\PhotoContainer\Contexts\Search\Domain\EventRepository;
 use PhotoContainer\PhotoContainer\Contexts\Search\Response\EventResponse;
-
 
 class FindEventPhotosPhotographer
 {
@@ -15,9 +15,9 @@ class FindEventPhotosPhotographer
         $this->repository = $repository;
     }
 
-    public function handle(int $id): \PhotoContainer\PhotoContainer\Contexts\Search\Response\EventResponse
+    public function handle(FindEventPhotosPhotographerCommand $command): EventResponse
     {
-        $result = $this->repository->findEventPhotosPhotographer($id);
+        $result = $this->repository->findEventPhotosPhotographer($command->getPhotographerId());
         return new EventResponse($result, 'gallery_photos_photographer');
     }
 }

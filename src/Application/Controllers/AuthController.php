@@ -2,24 +2,30 @@
 
 namespace PhotoContainer\PhotoContainer\Application\Controllers;
 
-use PhotoContainer\PhotoContainer\Contexts\Auth\Action\AuthenticateUser;
+use PhotoContainer\PhotoContainer\Contexts\Auth\Command\AuthenticateUserCommand;
+use PhotoContainer\PhotoContainer\Infrastructure\Web\Controller;
+use Psr\Container\ContainerExceptionInterface;
+use Psr\Container\NotFoundExceptionInterface;
 use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\ServerRequestInterface;
 
-class AuthController
+class AuthController extends Controller
 {
     /**
      * @param ServerRequestInterface $request
      * @param ResponseInterface $response
-     * @param AuthenticateUser $action
-     * @return mixed
+     * @return ResponseInterface
+     * @throws ContainerExceptionInterface
+     * @throws NotFoundExceptionInterface
+     * @throws \Exception
      */
-    public function login(ServerRequestInterface $request, ResponseInterface $response, AuthenticateUser $action)
+    public function authenticate(ServerRequestInterface $request, ResponseInterface $response): ResponseInterface
     {
-//        $data = $request->getParsedBody();
+        $body = $request->getParsedBody();
 
-//        $domainResponse = $action->handle(new Auth($data['user'], $data['password']), new JwtGenerator('secret'));
-        $domainResponse = $action->handle($request);
+        $domainResponse = $this->commandBus()->handle(
+            new AuthenticateUserCommand($body['user'], $body['password'])
+        );
 
         return $response->withJson($domainResponse, $domainResponse->getHttpStatus());
     }

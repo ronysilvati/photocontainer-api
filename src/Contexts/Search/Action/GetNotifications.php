@@ -2,6 +2,7 @@
 
 namespace PhotoContainer\PhotoContainer\Contexts\Search\Action;
 
+use PhotoContainer\PhotoContainer\Contexts\Search\Command\GetNotificationsCommand;
 use PhotoContainer\PhotoContainer\Contexts\Search\Domain\Notification;
 use PhotoContainer\PhotoContainer\Contexts\Search\Domain\NotificationRepository;
 use PhotoContainer\PhotoContainer\Contexts\Search\Response\NotificationResponse;
@@ -15,12 +16,15 @@ class GetNotifications
         $this->repository = $repository;
     }
 
-    public function handle(int $user_id): \PhotoContainer\PhotoContainer\Contexts\Search\Response\NotificationResponse
+    public function handle(GetNotificationsCommand $command): NotificationResponse
     {
+        $userId = $command->getUserId();
+
         $notification = new Notification();
-        $notification->addNotification('wait_list', $this->repository->approvalWaitList($user_id));
-        $notification->addNotification('event_notification', $this->repository->eventNotification($user_id));
-        $notification->addNotification('publisher_publications', $this->repository->publisherPublication($user_id));
+        $notification
+            ->addNotification('wait_list', $this->repository->approvalWaitList($userId))
+            ->addNotification('event_notification', $this->repository->eventNotification($userId))
+            ->addNotification('publisher_publications', $this->repository->publisherPublication($userId));
 
         return new NotificationResponse($notification);
     }

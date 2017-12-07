@@ -2,9 +2,10 @@
 
 namespace PhotoContainer\PhotoContainer\Contexts\Search\Action;
 
+use PhotoContainer\PhotoContainer\Contexts\Search\Command\FindHistoricCommand;
 use PhotoContainer\PhotoContainer\Contexts\Search\Domain\PhotoRepository;
 use PhotoContainer\PhotoContainer\Contexts\Search\Response\HistoricCollectionResponse;
-use PhotoContainer\PhotoContainer\Infrastructure\Web\DomainExceptionResponse;
+
 
 class FindHistoric
 {
@@ -23,20 +24,19 @@ class FindHistoric
     }
 
     /**
-     * @param int $id
-     * @param null|string $keyword
-     * @param array|null $tags
-     * @param string $type
-     * @return HistoricCollectionResponse|DomainExceptionResponse
+     * @param FindHistoricCommand $command
+     * @return HistoricCollectionResponse
      */
-    public function handle(int $id, ?string $keyword, ?array $tags, string $type)
+    public function handle(FindHistoricCommand $command): HistoricCollectionResponse
     {
-        switch ($type) {
+        switch ($command->getType()) {
             case 'favorites':
-                $result = $this->repository->searchLikes($id, $keyword, $tags);
+                $result = $this->repository
+                    ->searchLikes($command->getPublisherId(), $command->getKeyword(), $command->getTags());
                 break;
             case 'downloads':
-                $result = $this->repository->searchDownloaded($id, $keyword, $tags);
+                $result = $this->repository
+                    ->searchDownloaded($command->getPublisherId(), $command->getKeyword(), $command->getTags());
                 break;
         }
 

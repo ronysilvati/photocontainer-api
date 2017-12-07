@@ -2,213 +2,178 @@
 
 namespace PhotoContainer\PhotoContainer\Application\Controllers;
 
-use PhotoContainer\PhotoContainer\Contexts\Photo\Action\CreatePhoto;
-use PhotoContainer\PhotoContainer\Contexts\Photo\Action\DeletePhoto;
-use PhotoContainer\PhotoContainer\Contexts\Photo\Action\DislikePhoto;
-use PhotoContainer\PhotoContainer\Contexts\Photo\Action\DownloadSelected;
-use PhotoContainer\PhotoContainer\Contexts\Photo\Action\DownloadPhoto;
-use PhotoContainer\PhotoContainer\Contexts\Photo\Action\LikePhoto;
-use PhotoContainer\PhotoContainer\Contexts\Photo\Action\SetPhotoAsCover;
-use PhotoContainer\PhotoContainer\Contexts\Photo\Domain\Like;
-use PhotoContainer\PhotoContainer\Contexts\Photo\Domain\Photo;
-use PhotoContainer\PhotoContainer\Infrastructure\NoContentResponse;
-use PhotoContainer\PhotoContainer\Infrastructure\Web\DomainExceptionResponse;
+use PhotoContainer\PhotoContainer\Contexts\Photo\Command\CreatePhotoCommand;
+use PhotoContainer\PhotoContainer\Contexts\Photo\Command\DeletePhotoCommand;
+use PhotoContainer\PhotoContainer\Contexts\Photo\Command\DislikePhotoCommand;
+use PhotoContainer\PhotoContainer\Contexts\Photo\Command\DownloadPhotoCommand;
+use PhotoContainer\PhotoContainer\Contexts\Photo\Command\DownloadSelectedCommand;
+use PhotoContainer\PhotoContainer\Contexts\Photo\Command\LikePhotoCommand;
+use PhotoContainer\PhotoContainer\Contexts\Photo\Command\SetPhotoAsCoverCommand;
+use PhotoContainer\PhotoContainer\Contexts\Photo\Response\DownloadSelectedResponse;
+use PhotoContainer\PhotoContainer\Infrastructure\Web\Controller;
 use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\ServerRequestInterface;
 use Slim\Http\Stream;
-use Slim\Http\UploadedFile;
 
-class PhotoController
+class PhotoController extends Controller
 {
     /**
      * @param ServerRequestInterface $request
      * @param ResponseInterface $response
-     * @param CreatePhoto $action
      * @return mixed
-     * @throws \RuntimeException
+     * @throws \Exception
+     * @throws \Psr\Container\ContainerExceptionInterface
+     * @throws \Psr\Container\NotFoundExceptionInterface
      */
-    public function createPhoto(
-        ServerRequestInterface $request,
-        ResponseInterface $response,
-        CreatePhoto $action
-    ) {
+    public function createPhoto(ServerRequestInterface $request, ResponseInterface $response)
+    {
         $data = $request->getParsedBody();
-
-        $event_id = (int) $data['event_id'];
-
-        $allPhotos = [];
         $uploaded = $request->getUploadedFiles();
-        foreach ($uploaded as $files) {
-            /** @var UploadedFile $file */
-            foreach ($files as $file) {
-                if ($file->getError() !== UPLOAD_ERR_OK) {
-                    throw new \RuntimeException('Erro no envio do arquivo.');
-                }
 
-                $filedata = [
-                    'error' => $file->getError(),
-                    'name' => $file->getClientFilename(),
-                    'size' => $file->getSize(),
-                    'tmp_name' => $file->file,
-                    'type' => $file->getClientMediaType(),
-                ];
-
-                $allPhotos[] = new Photo(null, $event_id, $filedata, $file->getClientFilename());
-            }
-        }
-
-        $actionResponse = $action->handle($allPhotos, $event_id);
-
+        $actionResponse = $this->commandBus()->handle(new CreatePhotoCommand($data, $uploaded));
         return $response->withJson($actionResponse, $actionResponse->getHttpStatus());
     }
 
     /**
      * @param ServerRequestInterface $request
      * @param ResponseInterface $response
-     * @param DownloadPhoto $action
-     * @param int $photo_id
-     * @param int $user_id
+     * @param int $photoId
+     * @param int $userId
      * @return ResponseInterface
+     * @throws \Exception
+     * @throws \Psr\Container\ContainerExceptionInterface
+     * @throws \Psr\Container\NotFoundExceptionInterface
      */
     public function downloadPhoto(
         ServerRequestInterface $request,
         ResponseInterface $response,
-        DownloadPhoto $action,
-        int $photo_id,
-        int $user_id
-    ): \Psr\Http\Message\ResponseInterface
+        int $photoId,
+        int $userId
+    ): ResponseInterface
     {
-        $actionResponse = $action->handle($photo_id, $user_id);
-
-        if (get_class($actionResponse) == DomainExceptionResponse::class) {
-            return $response->withJson($actionResponse->jsonSerialize(), $actionResponse->getHttpStatus());
-        }
-
-        $stream = new Stream($actionResponse->getFileToStream()); // create a stream instance for the response body
-        return $response->withHeader('Content-Type', 'application/force-download')
-            ->withHeader('Content-Type', 'application/octet-stream')
-            ->withHeader('Content-Type', 'application/download')
-            ->withHeader('Content-Description', 'File Transfer')
-            ->withHeader('Content-Transfer-Encoding', 'binary')
-            ->withHeader('Content-Disposition', 'attachment; filename="' . $actionResponse->getDownload()->getPhoto()->getPhysicalName() . '"')
-            ->withHeader('Expires', '0')
-            ->withHeader('Cache-Control', 'must-revalidate, post-check=0, pre-check=0')
-            ->withHeader('Pragma', 'public')
-            ->withBody($stream); // all stream contents will be sent to the response
+        $actionResponse = $this->commandBus()->handle(new DownloadPhotoCommand($photoId, $userId));
+        return $response->withJson($actionResponse, $actionResponse->getHttpStatus());
     }
 
     /**
      * @param ServerRequestInterface $request
      * @param ResponseInterface $response
-     * @param LikePhoto $action
-     * @param int $photo_id
-     * @param int $publisher_id
+     * @param int $photoId
+     * @param int $publisherId
      * @return mixed
+     * @throws \Exception
+     * @throws \Psr\Container\ContainerExceptionInterface
+     * @throws \Psr\Container\NotFoundExceptionInterface
      */
     public function like(
         ServerRequestInterface $request,
         ResponseInterface $response,
-        LikePhoto $action,
-        int $photo_id,
-        int $publisher_id
+        int $photoId,
+        int $publisherId
     ) {
-        $like = new Like($publisher_id, $photo_id);
-
-        $actionResponse = $action->handle($like);
-
+        $actionResponse = $this->commandBus()->handle(new LikePhotoCommand($photoId, $publisherId));
         return $response->withJson($actionResponse, $actionResponse->getHttpStatus());
     }
 
     /**
      * @param ServerRequestInterface $request
      * @param ResponseInterface $response
-     * @param DislikePhoto $action
-     * @param int $photo_id
-     * @param int $publisher_id
+     * @param int $photoId
+     * @param int $publisherId
      * @return mixed
+     * @throws \Exception
+     * @throws \Psr\Container\ContainerExceptionInterface
+     * @throws \Psr\Container\NotFoundExceptionInterface
      */
     public function dislike(
         ServerRequestInterface $request,
         ResponseInterface $response,
-        DislikePhoto $action,
-        int $photo_id,
-        int $publisher_id
+        int $photoId,
+        int $publisherId
     ) {
-        $like = new Like($publisher_id, $photo_id);
-        $actionResponse = $action->handle($like);
-
+        $actionResponse = $this->commandBus()->handle(new DislikePhotoCommand($photoId, $publisherId));
         return $response->withJson($actionResponse, $actionResponse->getHttpStatus());
     }
 
     /**
      * @param ServerRequestInterface $request
      * @param ResponseInterface $response
-     * @param DeletePhoto $action
      * @param string $guid
      * @return mixed
-     * @throws \PhotoContainer\PhotoContainer\Infrastructure\Exception\PersistenceException
+     * @throws \Exception
+     * @throws \Psr\Container\ContainerExceptionInterface
+     * @throws \Psr\Container\NotFoundExceptionInterface
      */
     public function delete(
         ServerRequestInterface $request,
         ResponseInterface $response,
-        DeletePhoto $action,
         string $guid
     ) {
-        $actionResponse = $action->handle($guid);
+        $actionResponse = $this->commandBus()->handle(new DeletePhotoCommand($guid));
         return $response->withJson($actionResponse, $actionResponse->getHttpStatus());
     }
 
     /**
      * @param ServerRequestInterface $request
      * @param ResponseInterface $response
-     * @param SetPhotoAsCover $action
      * @param string $guid
      * @return mixed
+     * @throws \Exception
+     * @throws \Psr\Container\ContainerExceptionInterface
+     * @throws \Psr\Container\NotFoundExceptionInterface
      */
-    public function asCover(
-        ServerRequestInterface $request,
-        ResponseInterface $response,
-        SetPhotoAsCover $action,
-        string $guid
-    ) {
-        $actionResponse = $action->handle($guid);
+    public function asCover(ServerRequestInterface $request, ResponseInterface $response, string $guid)
+    {
+        $actionResponse = $this->commandBus()->handle(new SetPhotoAsCoverCommand($guid));
         return $response->withJson($actionResponse, $actionResponse->getHttpStatus());
     }
 
     /**
      * @param ServerRequestInterface $request
      * @param ResponseInterface $response
-     * @param DownloadSelected $action
      * @param string $type
      * @param string $ids
-     * @param int $publisher_id
+     * @param int $publisherId
      * @return ResponseInterface
-     * @throws \PhotoContainer\PhotoContainer\Infrastructure\Exception\DomainViolationException
+     * @throws \Exception
+     * @throws \Psr\Container\ContainerExceptionInterface
+     * @throws \Psr\Container\NotFoundExceptionInterface
      */
     public function downloadSelectedPhotos(
         ServerRequestInterface $request,
         ResponseInterface $response,
-        DownloadSelected $action,
         string $type,
         string $ids,
-        int $publisher_id
-    ): \Psr\Http\Message\ResponseInterface
+        int $publisherId
+    ): ResponseInterface
     {
-        $actionResponse = $action->handle($type, $publisher_id, $ids);
+        $actionResponse = $this->commandBus()->handle(new DownloadSelectedCommand($type, $publisherId, $ids));
 
-        if (in_array(get_class($actionResponse), [DomainExceptionResponse::class, NoContentResponse::class], true)) {
+        if (\get_class($actionResponse) !== DownloadSelectedResponse::class) {
             return $response->withJson($actionResponse->jsonSerialize(), $actionResponse->getHttpStatus());
         }
 
         $filename = explode('/', $actionResponse->getSelectedPhotos()->getZip());
 
-        $stream = new Stream($actionResponse->getFileToStream());
+        return $this->streamFileResponse($actionResponse->getFileToStream(), end($filename), $response);
+    }
+
+    /**
+     * @param $stream
+     * @param string $filename
+     * @param ResponseInterface $response
+     * @return ResponseInterface
+     * @throws \InvalidArgumentException
+     */
+    public function streamFileResponse($stream, string $filename, ResponseInterface $response): ResponseInterface
+    {
+        $stream = new Stream($stream); // create a stream instance for the response body
         return $response->withHeader('Content-Type', 'application/force-download')
             ->withHeader('Content-Type', 'application/octet-stream')
             ->withHeader('Content-Type', 'application/download')
             ->withHeader('Content-Description', 'File Transfer')
             ->withHeader('Content-Transfer-Encoding', 'binary')
-            ->withHeader('Content-Disposition', 'attachment; filename="'.end($filename). '"')
+            ->withHeader('Content-Disposition', 'attachment; filename="'.$filename.'"')
             ->withHeader('Expires', '0')
             ->withHeader('Cache-Control', 'must-revalidate, post-check=0, pre-check=0')
             ->withHeader('Pragma', 'public')

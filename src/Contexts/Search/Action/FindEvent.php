@@ -2,11 +2,10 @@
 
 namespace PhotoContainer\PhotoContainer\Contexts\Search\Action;
 
-use PhotoContainer\PhotoContainer\Contexts\Search\Domain\Category;
+use PhotoContainer\PhotoContainer\Contexts\Search\Command\FindEventCommand;
 use PhotoContainer\PhotoContainer\Contexts\Search\Domain\EventSearch;
 use PhotoContainer\PhotoContainer\Contexts\Search\Domain\Photographer;
 use PhotoContainer\PhotoContainer\Contexts\Search\Domain\Publisher;
-use PhotoContainer\PhotoContainer\Contexts\Search\Domain\Tag;
 use PhotoContainer\PhotoContainer\Contexts\Search\Persistence\DbalEventRepository;
 use PhotoContainer\PhotoContainer\Contexts\Search\Response\EventCollectionResponse;
 use PhotoContainer\PhotoContainer\Infrastructure\Cache\CacheHelper;
@@ -30,43 +29,26 @@ class FindEvent
     }
 
     /**
-     * @param array $args
-     * @return array|false|mixed|EventCollectionResponse
+     * @param FindEventCommand $command
+     * @return EventCollectionResponse
      * @throws \PhotoContainer\PhotoContainer\Infrastructure\Exception\PersistenceException
      */
-    public function handle(array $args)
+    public function handle(FindEventCommand $command): \PhotoContainer\PhotoContainer\Contexts\Search\Response\EventCollectionResponse
     {
-        $argMD5 = md5(serialize($args));
+        $argMD5 = md5(serialize($command));
         $result = $this->cacheHelper->getByNamespace('find_event', $argMD5);
         if ($result) {
             return new EventCollectionResponse($result);
         }
 
-        $keyword = $args['keyword'] ?? null;
-        $photographer = new Photographer((int) $args['photographer'] ?? $args['photographer']);
+        $photographer = new Photographer($command->getPhotographer());
+        $allCategories = $command->getCategories();
+        $allTags = $command->getTags();
 
-        $allCategories = null;
-        if (!empty($args['categories'])) {
-            $allCategories = [];
-            foreach ($args['categories'] as $category) {
-                $allCategories[] = new Category((int) $category);
-            }
-        }
+        $search = new EventSearch(null, $photographer, $command->getKeyword(), $allCategories, $allTags, 1);
 
-        $allTags = null;
-        if (!empty($args['tags'])) {
-            $allTags = [];
-            foreach ($args['tags'] as $category => $tags) {
-                foreach ($tags as $tag) {
-                    $allTags[$category][] = new Tag((int) $tag, null);
-                }
-            }
-        }
-
-        $search = new EventSearch(null, $photographer, $keyword, $allCategories, $allTags, 1);
-
-        if (!empty($args['publisher'])) {
-            $search->changePublisher(new Publisher((int) $args['publisher'] ?? $args['publisher']));
+        if ($command->getPublisher()) {
+            $search->changePublisher(new Publisher($command->getPublisher()));
         }
 
         $result = $this->repository->find($search);

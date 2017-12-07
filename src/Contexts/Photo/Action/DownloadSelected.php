@@ -2,11 +2,10 @@
 
 namespace PhotoContainer\PhotoContainer\Contexts\Photo\Action;
 
-use PhotoContainer\PhotoContainer\Contexts\Event\Domain\EventRepository;
+use PhotoContainer\PhotoContainer\Contexts\Photo\Command\DownloadSelectedCommand;
 use PhotoContainer\PhotoContainer\Contexts\Photo\Domain\Download;
 use PhotoContainer\PhotoContainer\Contexts\Photo\Domain\Photo;
 use PhotoContainer\PhotoContainer\Contexts\Photo\Domain\PhotoRepository;
-
 use PhotoContainer\PhotoContainer\Contexts\Photo\Response\DownloadSelectedResponse;
 use PhotoContainer\PhotoContainer\Infrastructure\Event\EventRecorder;
 use PhotoContainer\PhotoContainer\Infrastructure\Exception\DomainViolationException;
@@ -26,46 +25,35 @@ class DownloadSelected
     private $zipCreatorHelper;
 
     /**
-     * @var EventRepository
-     */
-    private $eventRepository;
-
-    /**
      * DownloadSelected constructor.
      * @param PhotoRepository $dbRepo
-     * @param EventRepository $eventRepository
      * @param ZipCreatorHelper $zipCreatorHelper
      */
     public function __construct(
         PhotoRepository $dbRepo,
-        EventRepository $eventRepository,
         ZipCreatorHelper $zipCreatorHelper
     ) {
         $this->dbRepo = $dbRepo;
         $this->zipCreatorHelper = $zipCreatorHelper;
-        $this->eventRepository = $eventRepository;
     }
 
     /**
-     * @param string $type
-     * @param int $publisher_id
-     * @param string $ids
+     * @param DownloadSelectedCommand $command
      * @return DownloadSelectedResponse|NoContentResponse
-     * @throws \PhotoContainer\PhotoContainer\Infrastructure\Exception\DomainViolationException
      * @throws DomainViolationException
      */
-    public function handle(string $type, int $publisher_id, string $ids)
+    public function handle(DownloadSelectedCommand $command)
     {
         $selected = null;
-        switch ($type) {
+        switch ($command->getType()) {
             case 'all':
-                $event_id = (int) $ids;
-                $selected = $this->dbRepo->selectAllPhotos($event_id, $publisher_id);
+                $event_id = (int) $command->getIds();
+                $selected = $this->dbRepo->selectAllPhotos($event_id, $command->getPublisherId());
                 break;
 
             case 'select':
-                $photo_ids = array_map('intval', explode(',', $ids));
-                $selected = $this->dbRepo->selectPhotos($photo_ids, $publisher_id);
+                $photo_ids = array_map('intval', explode(',', $command->getIds()));
+                $selected = $this->dbRepo->selectPhotos($photo_ids, $command->getPublisherId());
                 break;
         }
 
@@ -85,7 +73,7 @@ class DownloadSelected
         }
 
         foreach ($selected->getPhotos() as $currentPhoto) {
-            $download = new Download(null, $publisher_id, $currentPhoto);
+            $download = new Download(null, $command->getPublisherId(), $currentPhoto);
             $this->dbRepo->download($download);
         }
 

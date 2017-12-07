@@ -2,10 +2,10 @@
 
 namespace PhotoContainer\PhotoContainer\Contexts\Cep\Action;
 
+use PhotoContainer\PhotoContainer\Contexts\Cep\Command\GetCountriesCommand;
 use PhotoContainer\PhotoContainer\Contexts\Cep\Domain\CepRepository;
 use PhotoContainer\PhotoContainer\Contexts\Cep\Response\CountryCollectionResponse;
 use PhotoContainer\PhotoContainer\Infrastructure\Cache\CacheHelper;
-
 
 class GetCountries
 {
@@ -31,9 +31,10 @@ class GetCountries
     }
 
     /**
+     * @param GetCountriesCommand $command
      * @return CountryCollectionResponse
      */
-    public function handle(): \PhotoContainer\PhotoContainer\Contexts\Cep\Response\CountryCollectionResponse
+    public function handle(GetCountriesCommand $command): CountryCollectionResponse
     {
         $states = $this->cacheHelper->remember(
             'countries',

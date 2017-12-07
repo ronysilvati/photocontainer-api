@@ -2,6 +2,7 @@
 
 namespace PhotoContainer\PhotoContainer\Contexts\User\Action;
 
+use PhotoContainer\PhotoContainer\Contexts\User\Command\UpdateUserCommand;
 use PhotoContainer\PhotoContainer\Contexts\User\Domain\Address;
 use PhotoContainer\PhotoContainer\Contexts\User\Domain\Details;
 use PhotoContainer\PhotoContainer\Contexts\User\Domain\PhotographerDetails;
@@ -9,7 +10,6 @@ use PhotoContainer\PhotoContainer\Contexts\User\Domain\User;
 use PhotoContainer\PhotoContainer\Contexts\User\Domain\UserRepository;
 use PhotoContainer\PhotoContainer\Contexts\User\Response\UserResponse;
 use PhotoContainer\PhotoContainer\Infrastructure\Crypto\CryptoMethod;
-
 
 class UpdateUser
 {
@@ -23,6 +23,8 @@ class UpdateUser
      */
     private $cryptoMethod;
 
+    const PHOTOGRAPHER = 2;
+
     /**
      * UpdateUser constructor.
      * @param UserRepository $userRepository
@@ -35,50 +37,38 @@ class UpdateUser
     }
 
     /**
-     * @param int $id
-     * @param array $data
+     * @param UpdateUserCommand $command
      * @return UserResponse
      * @throws \Exception
      * @throws \PhotoContainer\PhotoContainer\Infrastructure\Exception\DomainViolationException
      */
-    public function handle(int $id, array $data): UserResponse
+    public function handle(UpdateUserCommand $command): UserResponse
     {
         /** @var User $user */
-        $user = $this->userRepository->findUser($id);
+        $user = $this->userRepository->findUser($command->getId());
 
-        if (isset($data['name'])) {
-            $user->changeName($data['name']);
-        }
+        !$command->getName()?: $user->changeName($command->getName());
+        !$command->getEmail() ?: $user->changeEmail($command->getEmail());
 
-        if (isset($data['email'])) {
-            $user->changeEmail($data['email']);
-        }
-
-        if (isset($data['details']['blog'])) {
-            $user->changeBlog($data['details']['blog']);
-        }
-
-        if (isset($data['address'])) {
-            $address = $this->updateAddress($user, $data['address']);
-            $user->changeAddress($address);
-        }
-
-        if (isset($data['details'])) {
-            $user->changeDetails($this->updateDetails($user->getDetails(), $data['details']));
-        }
-
-        if (isset($data['profile_id']) && $data['profile_id'] == 2) {
+        if ($command->getProfileId() === self::PHOTOGRAPHER) {
             $photographerDetails = new PhotographerDetails(
-                $data['details']['bio'] ?? '',
-                $data['details']['studio'] ?? '',
-                $data['details']['name_type'] ?? ''
+                $command->getBio(),
+                $command->getStudio(),
+                $command->getNameType()
             );
 
             $user->getDetails()->changePhographerDetails($photographerDetails);
         }
 
-        if (isset($data['password']) && !empty($data['password'])) {
-            $user->changePwd($this->cryptoMethod->hash($data['password']));
+        !$command->getPassword() ?: $user->changePwd($this->cryptoMethod->hash($command->getPassword()));
+
+        if ($command->isHasDetails()) {
+            $user->changeDetails($this->updateDetails($user->getDetails(), $command));
+        }
+
+        if ($command->isHasAddress()) {
+            $address = $this->updateAddress($user, $command);
+            $user->changeAddress($address);
         }
 
         $user = $this->userRepository->updateUser($user);
@@ -87,55 +77,39 @@ class UpdateUser
 
     /**
      * @param User $user
-     * @param array $dataAddress
+     * @param UpdateUserCommand $command
      * @return Address
      * @throws \Exception
      */
-    private function updateAddress(User $user, array $dataAddress): Address
+    private function updateAddress(User $user, UpdateUserCommand $command): Address
     {
         $address = $user->getAddress() ?? new Address();
 
-        $address->changeCountry($dataAddress['country']);
-        $address->changeZipcode($dataAddress['zipcode']);
-        $address->changeState($dataAddress['state']);
-        $address->changeCity($dataAddress['city']);
-        $address->changeNeighborhood($dataAddress['neighborhood']);
-        $address->changeStreet($dataAddress['street']);
-        $address->changeComplement($dataAddress['complement']);
+        !$command->getCountry() ?: $address->changeCountry($command->getCountry());
+        !$command->getZipcode() ?: $address->changeZipcode($command->getZipcode());
+        !$command->getState() ?: $address->changeState($command->getState());
+        !$command->getCity() ?: $address->changeCity($command->getCity());
+        !$command->getNeighborhood() ?: $address->changeNeighborhood($command->getNeighborhood());
+        !$command->getStreet() ?: $address->changeStreet($command->getStreet());
+        !$command->getComplement() ?: $address->changeComplement($command->getComplement());
 
         return $address;
     }
 
     /**
      * @param Details $details
-     * @param array $dataDetails
+     * @param UpdateUserCommand $command
      * @return Details
      */
-    private function updateDetails(Details $details, array $dataDetails): Details
+    private function updateDetails(Details $details, UpdateUserCommand $command): Details
     {
-        if (isset($dataDetails['facebook'])) {
-            $details->changeFacebook($dataDetails['facebook']);
-        }
-
-        if (isset($dataDetails['pinterest'])) {
-            $details->changePinterest($dataDetails['pinterest']);
-        }
-
-        if (isset($dataDetails['instagram'])) {
-            $details->changeInstagram($dataDetails['instagram']);
-        }
-
-        if (isset($dataDetails['phone'])) {
-            $details->changePhone($dataDetails['phone']);
-        }
-
-        if (isset($dataDetails['birth'])) {
-            $details->changeBirth($dataDetails['birth']);
-        }
-
-        if (isset($dataDetails['site'])) {
-            $details->changeSite($dataDetails['site']);
-        }
+        !$command->getBlog() ?: $details->changeBlog($command->getBlog());
+        !$command->getFacebook() ?: $details->changeFacebook($command->getFacebook());
+        !$command->getPinterest() ?: $details->changePinterest($command->getPinterest());
+        !$command->getInstagram() ?: $details->changeInstagram($command->getInstagram());
+        !$command->getPhone() ?: $details->changePhone($command->getPhone());
+        !$command->getBirth() ?: $details->changeBirth($command->getBirth());
+        !$command->getSite() ?: $details->changeSite($command->getSite());
 
         return $details;
     }

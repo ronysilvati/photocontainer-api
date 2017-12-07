@@ -2,6 +2,7 @@
 
 namespace PhotoContainer\PhotoContainer\Contexts\Photo\Action;
 
+use PhotoContainer\PhotoContainer\Contexts\Photo\Command\DownloadPhotoCommand;
 use PhotoContainer\PhotoContainer\Contexts\Photo\Domain\Download;
 use PhotoContainer\PhotoContainer\Contexts\Photo\Domain\PhotoRepository;
 use PhotoContainer\PhotoContainer\Contexts\Photo\Response\DownloadResponse;
@@ -24,14 +25,13 @@ class DownloadPhoto
     }
 
     /**
-     * @param int $photo_id
-     * @param int $publisher_id
-     * @return DownloadResponse|DomainExceptionResponse
+     * @param DownloadPhotoCommand $command
+     * @return DownloadResponse
      */
-    public function handle(int $photo_id, int $publisher_id)
+    public function handle(DownloadPhotoCommand $command)
     {
-        $photo = $this->dbRepo->find($photo_id);
-        $download = new Download(null, $publisher_id, $photo);
+        $photo = $this->dbRepo->find($command->getPhotoId());
+        $download = new Download(null, $command->getUserId(), $photo);
 
         $this->dbRepo->download($download);
 

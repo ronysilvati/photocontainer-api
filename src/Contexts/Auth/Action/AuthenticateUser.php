@@ -2,13 +2,13 @@
 
 namespace PhotoContainer\PhotoContainer\Contexts\Auth\Action;
 
+use PhotoContainer\PhotoContainer\Contexts\Auth\Command\AuthenticateUserCommand;
 use PhotoContainer\PhotoContainer\Contexts\Auth\Domain\Auth;
 use PhotoContainer\PhotoContainer\Contexts\Auth\Domain\AuthRepository;
 use PhotoContainer\PhotoContainer\Contexts\Auth\Response\AuthenticatedResponse;
 use PhotoContainer\PhotoContainer\Contexts\Auth\Response\NotPermittedResponse;
 use PhotoContainer\PhotoContainer\Infrastructure\Crypto\CryptoMethod;
 use PhotoContainer\PhotoContainer\Infrastructure\Crypto\JwtGenerator;
-use Psr\Http\Message\ServerRequestInterface;
 
 class AuthenticateUser
 {
@@ -34,11 +34,10 @@ class AuthenticateUser
         $this->jwtGenerator = $jwtGenerator;
     }
 
-    public function handle(ServerRequestInterface $request)
+    public function handle(AuthenticateUserCommand $command)
     {
         try {
-            $data = $request->getParsedBody();
-            $auth = new Auth($data['user'], $data['password']);
+            $auth = new Auth($command->getUser(), $command->getPassword());
 
             $user = $this->repository->find($auth->getUser());
 

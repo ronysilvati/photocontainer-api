@@ -2,13 +2,12 @@
 
 namespace PhotoContainer\PhotoContainer\Contexts\User\Action;
 
-
+use PhotoContainer\PhotoContainer\Contexts\User\Command\UploadProfileImageCommand;
 use PhotoContainer\PhotoContainer\Contexts\User\Domain\UserRepository;
 use PhotoContainer\PhotoContainer\Contexts\User\Response\ProfileImageUploaded;
 use PhotoContainer\PhotoContainer\Infrastructure\Exception\DomainViolationException;
 use PhotoContainer\PhotoContainer\Infrastructure\Helper\ImageHelper;
 use PhotoContainer\PhotoContainer\Infrastructure\Helper\ProfileImageHelper;
-
 
 class UploadProfileImage
 {
@@ -47,16 +46,15 @@ class UploadProfileImage
     }
 
     /**
-     * @param int $user_id
-     * @param array $file
+     * @param UploadProfileImageCommand $command
      * @return ProfileImageUploaded
      * @throws \PhotoContainer\PhotoContainer\Infrastructure\Exception\DomainViolationException
      * @throws DomainViolationException
      * @throws \Exception
      */
-    public function handle(int $user_id, array $file): \PhotoContainer\PhotoContainer\Contexts\User\Response\ProfileImageUploaded
+    public function handle(UploadProfileImageCommand $command): ProfileImageUploaded
     {
-        $user = $this->userRepo->findUser($user_id);
+        $user = $this->userRepo->findUser($command->getUserId());
 
         if (!$user) {
             throw new DomainViolationException('Usuário não encontrado');
@@ -81,17 +79,17 @@ class UploadProfileImage
             ]
         );
 
-        $this->profileImageHelper->removeOldVersions($user_id);
+        $this->profileImageHelper->removeOldVersions($command->getUserId());
 
         $result = $this->imageHelper->createImage(
-            $file['tmp_name'],
-            $this->profileImageHelper->generateName($user_id, $file)
+            $command->getFile()->getStream(),
+            $this->profileImageHelper->generateName($command->getUserId(), $command->getFile()->getClientMediaType())
         );
 
         if (!$result) {
             throw new DomainViolationException($this->imageHelper->getErrMessage());
         }
 
-        return new ProfileImageUploaded($this->profileImageHelper->resolveUri($user_id));
+        return new ProfileImageUploaded($this->profileImageHelper->resolveUri($command->getUserId()));
     }
 }

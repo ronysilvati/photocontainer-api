@@ -72,7 +72,7 @@ class ContactController
                 throw new \RuntimeException('Dados não enviados: perfil.');
             }
 
-            if ($data['profile'] == 'publisher' && !isset($data['blog'])) {
+            if ($data['profile'] === 'publisher' && !isset($data['blog'])) {
                 throw new \RuntimeException('Dados não enviados: blog.');
             }
 

@@ -2,16 +2,14 @@
 
 namespace PhotoContainer\PhotoContainer\Contexts\Event\Action;
 
-
+use PhotoContainer\PhotoContainer\Contexts\Event\Command\CreatePublisherPublicationCommand;
 use PhotoContainer\PhotoContainer\Contexts\Event\Domain\EventRepository;
 use PhotoContainer\PhotoContainer\Contexts\Event\Domain\Publisher;
 use PhotoContainer\PhotoContainer\Contexts\Event\Domain\PublisherPublication;
 use PhotoContainer\PhotoContainer\Contexts\Event\Domain\PublisherPublicationRepository;
 use PhotoContainer\PhotoContainer\Contexts\Event\Domain\UserRepository;
 use PhotoContainer\PhotoContainer\Contexts\Event\Response\PublisherPublicationResponse;
-
 use PhotoContainer\PhotoContainer\Infrastructure\Exception\DomainViolationException;
-use Psr\Http\Message\RequestInterface;
 
 class CreatePublisherPublication
 {
@@ -47,30 +45,28 @@ class CreatePublisherPublication
     }
 
     /**
-     * @param RequestInterface $request
+     * @param CreatePublisherPublicationCommand $command
      * @return PublisherPublicationResponse
      * @throws \PhotoContainer\PhotoContainer\Infrastructure\Exception\DomainViolationException
      * @throws DomainViolationException
      */
-    public function handle(RequestInterface $request): \PhotoContainer\PhotoContainer\Contexts\Event\Response\PublisherPublicationResponse
+    public function handle(CreatePublisherPublicationCommand $command): PublisherPublicationResponse
     {
-        $data = json_decode($request->getBody()->getContents());
-
-        if (!$this->eventRepository->find($data->event_id)) {
+        if (!$this->eventRepository->find($command->getEventId())) {
             throw new DomainViolationException('O evento é inválido.');
         }
 
-        if (!$this->userRepository->findPublisher(new Publisher($data->publisher_id, 3, ''))) {
+        if (!$this->userRepository->findPublisher(new Publisher($command->getPublisherId(), 3, ''))) {
             throw new DomainViolationException('O publisher é inválido.');
         }
 
         $publisherPublication = new PublisherPublication(
             null,
-            $data->event_id,
-            $data->publisher_id,
-            $data->text,
-            $data->ask_for_changes,
-            $data->approved
+            $command->getEventId(),
+            $command->getPublisherId(),
+            $command->getText(),
+            $command->isAskForChanges(),
+            $command->isApproved()
         );
 
         $this->publicationRepository->create($publisherPublication);

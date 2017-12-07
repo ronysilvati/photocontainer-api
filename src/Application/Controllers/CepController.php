@@ -2,94 +2,93 @@
 
 namespace PhotoContainer\PhotoContainer\Application\Controllers;
 
-use PhotoContainer\PhotoContainer\Contexts\Cep\Action\FindCep;
-use PhotoContainer\PhotoContainer\Contexts\Cep\Action\FindCities;
-use PhotoContainer\PhotoContainer\Contexts\Cep\Action\FindStates;
-use PhotoContainer\PhotoContainer\Contexts\Cep\Action\GetCountries;
+use League\Tactician\CommandBus;
+use PhotoContainer\PhotoContainer\Contexts\Cep\Command\FindCepCommand;
+use PhotoContainer\PhotoContainer\Contexts\Cep\Command\FindCitiesCommand;
+use PhotoContainer\PhotoContainer\Contexts\Cep\Command\FindStatesCommand;
+use PhotoContainer\PhotoContainer\Contexts\Cep\Command\GetCountriesCommand;
+use PhotoContainer\PhotoContainer\Infrastructure\Web\CachedControllerResponseTrait;
+use PhotoContainer\PhotoContainer\Infrastructure\Web\Controller;
+use Psr\Container\ContainerInterface;
 use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\ServerRequestInterface;
-use Slim\HttpCache\CacheProvider;
 
-class CepController
+class CepController extends Controller
 {
-    /**
-     * @var CacheProvider
-     */
-    private $httpCache;
+    use CachedControllerResponseTrait;
 
-    public function __construct(CacheProvider $httpCache)
+    /**
+     * @var CommandBus
+     */
+    private $commandBus;
+
+    /**
+     * CepController constructor.
+     * @param ContainerInterface $container
+     * @throws \Psr\Container\ContainerExceptionInterface
+     * @throws \Psr\Container\NotFoundExceptionInterface
+     */
+    public function __construct(ContainerInterface $container)
     {
-        $this->httpCache = $httpCache;
+        parent::__construct($container);
+        $this->commandBus = $this->container->get('CachedCommandBus');
     }
 
     /**
      * @param ServerRequestInterface $request
      * @param ResponseInterface $response
-     * @param GetCountries $action
-     * @return mixed
+     * @return ResponseInterface
      */
-    public function getCountries(ServerRequestInterface $request, ResponseInterface $response, GetCountries $action)
+    public function findCep(ServerRequestInterface $request, ResponseInterface $response): ResponseInterface
     {
-        $actionResponse = $action->handle();
+        $route = $request->getAttribute('route');
 
-        $response = $this->httpCache->withExpires($response, time() + getenv('HEAD_EXPIRES'));
+        $domainResponse = $this->commandBus->handle(
+            new FindCepCommand($route->getArgument('cep'))
+        );
 
-        return $response->withJson($actionResponse, $actionResponse->getHttpStatus());
+        return $this->cachedHttpResponse($response, $domainResponse);
     }
 
     /**
      * @param ServerRequestInterface $request
      * @param ResponseInterface $response
-     * @param FindCep $action
-     * @param string $cep
-     * @return mixed
-     * @throws \PhotoContainer\PhotoContainer\Infrastructure\Exception\PersistenceException
+     * @return ResponseInterface
      */
-    public function getCep(ServerRequestInterface $request, ResponseInterface $response, FindCep $action, string $cep)
+    public function findCities(ServerRequestInterface $request, ResponseInterface $response): ResponseInterface
     {
-        $actionResponse = $action->handle($cep);
+        $route = $request->getAttribute('route');
 
-        $response = $this->httpCache->withExpires($response, time() + getenv('HEAD_EXPIRES'));
+        $domainResponse = $this->commandBus->handle(
+            new FindCitiesCommand((int) $route->getArgument('state_id'))
+        );
 
-        return $response->withJson($actionResponse, $actionResponse->getHttpStatus());
+        return $this->cachedHttpResponse($response, $domainResponse);
     }
 
     /**
      * @param ServerRequestInterface $request
      * @param ResponseInterface $response
-     * @param FindStates $action
-     * @param int $country_id
-     * @return mixed
+     * @return ResponseInterface
      */
-    public function getStates(
-        ServerRequestInterface $request,
-        ResponseInterface $response,
-        FindStates $action, int $country_id
-    ) {
-        $actionResponse = $action->handle($country_id);
+    public function findStates(ServerRequestInterface $request, ResponseInterface $response): ResponseInterface
+    {
+        $route = $request->getAttribute('route');
+        $domainResponse = $this->commandBus->handle(
+            new FindStatesCommand((int) $route->getArgument('country_id'))
+        );
 
-        $response = $this->httpCache->withExpires($response, time() + getenv('HEAD_EXPIRES'));
-
-        return $response->withJson($actionResponse, $actionResponse->getHttpStatus());
+        return $this->cachedHttpResponse($response, $domainResponse);
     }
 
     /**
      * @param ServerRequestInterface $request
      * @param ResponseInterface $response
-     * @param FindCities $action
-     * @param int $state_id
-     * @return mixed
+     * @return ResponseInterface
      */
-    public function getCities(
-        ServerRequestInterface $request,
-        ResponseInterface $response,
-        FindCities $action,
-        int $state_id
-    ) {
-        $actionResponse = $action->handle($state_id);
-
-        $response = $this->httpCache->withExpires($response, time() + getenv('HEAD_EXPIRES'));
-
-        return $response->withJson($actionResponse, $actionResponse->getHttpStatus());
+    public function getCountries(ServerRequestInterface $request, ResponseInterface $response): ResponseInterface
+    {
+        $domainResponse = $this->commandBus->handle(new GetCountriesCommand());
+        return $this->cachedHttpResponse($response, $domainResponse);
     }
 }

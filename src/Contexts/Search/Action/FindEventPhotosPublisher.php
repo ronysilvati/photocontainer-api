@@ -2,6 +2,7 @@
 
 namespace PhotoContainer\PhotoContainer\Contexts\Search\Action;
 
+use PhotoContainer\PhotoContainer\Contexts\Search\Command\FindEventPhotosPublisherCommand;
 use PhotoContainer\PhotoContainer\Contexts\Search\Domain\EventRepository;
 use PhotoContainer\PhotoContainer\Contexts\Search\Response\EventResponse;
 
@@ -15,9 +16,9 @@ class FindEventPhotosPublisher
         $this->repository = $repository;
     }
 
-    public function handle(int $id, int $user_id): \PhotoContainer\PhotoContainer\Contexts\Search\Response\EventResponse
+    public function handle(FindEventPhotosPublisherCommand $command): EventResponse
     {
-        $result = $this->repository->findEventPhotosPublisher($id, $user_id);
+        $result = $this->repository->findEventPhotosPublisher($command->getEventId(), $command->getUserId());
         return new EventResponse($result, 'gallery_photos_publisher');
     }
 }

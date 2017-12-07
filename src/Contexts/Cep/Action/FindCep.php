@@ -2,8 +2,7 @@
 
 namespace PhotoContainer\PhotoContainer\Contexts\Cep\Action;
 
-
-
+use PhotoContainer\PhotoContainer\Contexts\Cep\Command\FindCepCommand;
 use PhotoContainer\PhotoContainer\Contexts\Cep\Persistence\RestCepRepository;
 use PhotoContainer\PhotoContainer\Contexts\Cep\Response\CepResponse;
 
@@ -24,13 +23,13 @@ class FindCep
     }
 
     /**
-     * @param string $zipmail
+     * @param FindCepCommand $command
      * @return CepResponse
      * @throws \PhotoContainer\PhotoContainer\Infrastructure\Exception\PersistenceException
      */
-    public function handle(string $zipmail): \PhotoContainer\PhotoContainer\Contexts\Cep\Response\CepResponse
+    public function handle(FindCepCommand $command): CepResponse
     {
-        $cep = $this->repository->findCep($zipmail);
+        $cep = $this->repository->findCep($command->getCep());
         return new CepResponse($cep);
     }
 }

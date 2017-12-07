@@ -2,10 +2,10 @@
 
 namespace PhotoContainer\PhotoContainer\Contexts\Photo\Action;
 
+use PhotoContainer\PhotoContainer\Contexts\Photo\Command\DeletePhotoCommand;
 use PhotoContainer\PhotoContainer\Infrastructure\Helper\EventPhotoHelper;
 use PhotoContainer\PhotoContainer\Contexts\Photo\Domain\PhotoRepository;
 use PhotoContainer\PhotoContainer\Contexts\Photo\Response\DeletedPhotoResponse;
-use PhotoContainer\PhotoContainer\Infrastructure\Web\DomainExceptionResponse;
 
 class DeletePhoto
 {
@@ -31,13 +31,13 @@ class DeletePhoto
     }
 
     /**
-     * @param string $guid
-     * @return DeletedPhotoResponse|DomainExceptionResponse
+     * @param DeletePhotoCommand $command
+     * @return DeletedPhotoResponse
      * @throws \PhotoContainer\PhotoContainer\Infrastructure\Exception\PersistenceException
      */
-    public function handle(string $guid)
+    public function handle(DeletePhotoCommand $command): DeletedPhotoResponse
     {
-        $photo = $this->dbRepo->deletePhoto($guid);
+        $photo = $this->dbRepo->deletePhoto($command->getGuid());
         $this->photoHelper->deletePhoto($photo);
 
         return new DeletedPhotoResponse($photo);

@@ -2,6 +2,7 @@
 
 namespace PhotoContainer\PhotoContainer\Contexts\User\Action;
 
+use PhotoContainer\PhotoContainer\Contexts\User\Command\UpdatePasswordCommand;
 use PhotoContainer\PhotoContainer\Contexts\User\Domain\UserRepository;
 use PhotoContainer\PhotoContainer\Contexts\User\Response\PasswordUpdatedResponse;
 use PhotoContainer\PhotoContainer\Infrastructure\Crypto\CryptoMethod;
@@ -44,26 +45,29 @@ class UpdatePassword
     }
 
     /**
-     * @param string $token
-     * @param string $password
+     * @param UpdatePasswordCommand $command
      * @return PasswordUpdatedResponse|DomainExceptionResponse
-     * @throws \PhotoContainer\PhotoContainer\Infrastructure\Exception\DomainViolationException
      * @throws DomainViolationException
      */
-    public function handle(string $token, string $password)
+    public function handle(UpdatePasswordCommand $command)
     {
-        if (empty($password)) {
+        if (empty($command->getPwd())) {
             return new DomainExceptionResponse('A senha deve possuir um valor.');
         }
 
-        $reqPwd = $this->userRepository->getValidToken($token);
+        $reqPwd = $this->userRepository->getValidToken($command->getToken());
         if(!$reqPwd) {
-            throw new DomainViolationException('O seu pedido para troca de senha está inválido. Favor requisitar novamente.');
+            throw new DomainViolationException(
+                'Seu pedido para troca de senha está inválido. Favor requisitar novamente.'
+            );
         }
 
         $user = $this->userRepository->findUser($reqPwd->getUserId());
+        if (!$user) {
+            throw new DomainViolationException('Usuário não encontrado.');
+        }
 
-        $user->changePwd($this->cryptoMethod->hash($password));
+        $user->changePwd($this->cryptoMethod->hash($command->getPwd()));
 
         $this->atomicWorker->execute(function() use ($user, $reqPwd) {
             $this->userRepository->updateUser($user);

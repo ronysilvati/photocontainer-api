@@ -2,193 +2,177 @@
 
 namespace PhotoContainer\PhotoContainer\Application\Controllers;
 
-use PhotoContainer\PhotoContainer\Contexts\Search\Action\FindCategories;
-use PhotoContainer\PhotoContainer\Contexts\Search\Action\FindEvent;
-use PhotoContainer\PhotoContainer\Contexts\Search\Action\FindEventPhotosPhotographer;
-use PhotoContainer\PhotoContainer\Contexts\Search\Action\FindEventPhotosPublisher;
-use PhotoContainer\PhotoContainer\Contexts\Search\Action\FindHistoric;
-use PhotoContainer\PhotoContainer\Contexts\Search\Action\FindTags;
-use PhotoContainer\PhotoContainer\Contexts\Search\Action\GetNotifications;
-use PhotoContainer\PhotoContainer\Contexts\Search\Action\WaitingForApproval;
-use PhotoContainer\PhotoContainer\Contexts\Search\Domain\Tag;
-use PhotoContainer\PhotoContainer\Infrastructure\Cache\CacheHelper;
+use PhotoContainer\PhotoContainer\Contexts\Search\Command\FindEventCommand;
+use PhotoContainer\PhotoContainer\Contexts\Search\Command\FindEventPhotosPhotographerCommand;
+use PhotoContainer\PhotoContainer\Contexts\Search\Command\FindEventPhotosPublisherCommand;
+use PhotoContainer\PhotoContainer\Contexts\Search\Command\FindHistoricCommand;
+use PhotoContainer\PhotoContainer\Contexts\Search\Command\FindTagsCommand;
+use PhotoContainer\PhotoContainer\Contexts\Search\Command\GetNotificationsCommand;
+use PhotoContainer\PhotoContainer\Contexts\Search\Command\SearchResourceCommand;
+use PhotoContainer\PhotoContainer\Contexts\Search\Command\WaitingForApprovalCommand;
+use PhotoContainer\PhotoContainer\Infrastructure\Web\CachedControllerResponseTrait;
+use PhotoContainer\PhotoContainer\Infrastructure\Web\Controller;
 use Psr\Http\Message\ServerRequestInterface;
 use Psr\Http\Message\ResponseInterface;
-use Slim\HttpCache\CacheProvider;
 
-class SearchController
+class SearchController extends Controller
 {
-    /**
-     * @var CacheHelper
-     */
-    private $cacheHelper;
+    use CachedControllerResponseTrait;
 
     /**
-     * @var CacheProvider
+     * @param ServerRequestInterface $request
+     * @param ResponseInterface $response
+     * @return ResponseInterface
+     * @throws \Exception
+     * @throws \Psr\Container\ContainerExceptionInterface
+     * @throws \Psr\Container\NotFoundExceptionInterface
      */
-    private $cacheProvider;
-
-    /**
-     * SearchController constructor.
-     * @param CacheHelper $cacheHelper
-     * @param CacheProvider $cacheProvider
-     */
-    public function __construct(CacheHelper $cacheHelper, CacheProvider $cacheProvider)
+    public function searchEvent(ServerRequestInterface $request, ResponseInterface $response): ResponseInterface
     {
-        $this->cacheHelper = $cacheHelper;
-        $this->cacheProvider = $cacheProvider;
+        $params = $request->getQueryParams();
+
+        $command = new FindEventCommand(
+            (int) $params['photographer'],
+            (int) $params['publisher'],
+            $params['keyword'],
+            isset($params['categories']) && is_array($params['categories']) ? $params['categories'] : null,
+            isset($params['tags']) && is_array($params['tags']) ? $params['tags'] : null
+        );
+
+        $domainResponse = $this->commandBus()->handle($command);
+        return $response->withJson($domainResponse, $domainResponse->getHttpStatus());
     }
 
     /**
      * @param ServerRequestInterface $request
      * @param ResponseInterface $response
-     * @param FindEvent $action
-     * @return mixed
-     * @throws \PhotoContainer\PhotoContainer\Infrastructure\Exception\PersistenceException
+     * @param string $resource
+     * @return ResponseInterface
+     * @throws \Exception
+     * @throws \Psr\Container\ContainerExceptionInterface
+     * @throws \Psr\Container\NotFoundExceptionInterface
      */
-    public function searchEvent(ServerRequestInterface $request, ResponseInterface $response, FindEvent $action)
-    {
-        $actionResponse = $action->handle($request->getQueryParams());
-        return $response->withJson($actionResponse, $actionResponse->getHttpStatus());
-    }
-
-    /**
-     * @param ServerRequestInterface $request
-     * @param ResponseInterface $response
-     * @param FindCategories $action
-     * @return mixed
-     */
-    public function searchCategories(
+    public function searchResources(
         ServerRequestInterface $request,
         ResponseInterface $response,
-        FindCategories $action
-    ) {
-        $actionResponse = $this->cacheHelper->remember('categories', function () use ($action) {
-            return $action->handle();
-        });
+        string $resource
+    ): ResponseInterface {
+        $params = $request->getQueryParams();
 
-        $response = $this->cacheProvider->withExpires($response, time() + getenv('HEAD_EXPIRES'));
-
-        return $response->withJson($actionResponse, $actionResponse->getHttpStatus());
+        $domainResponse = $this->commandBus()->handle(new SearchResourceCommand($resource, $params));
+        return $response->withJson($domainResponse, $domainResponse->getHttpStatus());
     }
 
     /**
      * @param ServerRequestInterface $request
      * @param ResponseInterface $response
-     * @param FindTags $action
-     * @return mixed
+     * @return ResponseInterface
+     * @throws \Psr\Container\ContainerExceptionInterface
+     * @throws \Psr\Container\NotFoundExceptionInterface
      */
-    public function searchTags(ServerRequestInterface $request, ResponseInterface $response, FindTags $action)
+    public function searchTags(ServerRequestInterface $request, ResponseInterface $response): ResponseInterface
     {
-        $actionResponse = $this->cacheHelper->remember('tags', function () use ($action) {
-            return $action->handle();
-        });
-
-        $response = $this->cacheProvider->withExpires($response, time() + getenv('HEAD_EXPIRES'));
-
-        return $response->withJson($actionResponse, $actionResponse->getHttpStatus());
+        $domainResponse = $this->cachedCommandBus()->handle(new FindTagsCommand());
+        return $this->cachedHttpResponse($response, $domainResponse);
     }
 
     /**
      * @param ServerRequestInterface $request
      * @param ResponseInterface $response
-     * @param FindEventPhotosPublisher $action
-     * @param int $event_id
-     * @param int $user_id
-     * @return mixed
+     * @return ResponseInterface
+     * @throws \Exception
+     * @throws \Psr\Container\ContainerExceptionInterface
+     * @throws \Psr\Container\NotFoundExceptionInterface
      */
     public function searchEventPhotosPublisher(
         ServerRequestInterface $request,
-        ResponseInterface $response,
-        FindEventPhotosPublisher $action,
-        int $event_id,
-        int $user_id
-    ) {
-        $actionResponse = $action->handle($event_id, $user_id);
-        return $response->withJson($actionResponse, $actionResponse->getHttpStatus());
+        ResponseInterface $response
+    ): ResponseInterface {
+        /** @var  $route */
+        $route = $request->getAttribute('route');
+
+        $domainResponse = $this->commandBus()->handle(
+            new FindEventPhotosPublisherCommand($route->getArgument('event_id'), $route->getArgument('user_id'))
+        );
+        return $response->withJson($domainResponse, $domainResponse->getHttpStatus());
     }
 
     /**
      * @param ServerRequestInterface $request
      * @param ResponseInterface $response
-     * @param FindEventPhotosPhotographer $action
-     * @param int $photographer_id
      * @return mixed
+     * @throws \Exception
+     * @throws \Psr\Container\ContainerExceptionInterface
+     * @throws \Psr\Container\NotFoundExceptionInterface
      */
-    public function searchEventPhotosPhotographer(
-        ServerRequestInterface $request,
-        ResponseInterface $response,
-        FindEventPhotosPhotographer $action,
-        int $photographer_id
-    ) {
-        $actionResponse = $action->handle($photographer_id);
-        return $response->withJson($actionResponse, $actionResponse->getHttpStatus());
+    public function searchEventPhotosPhotographer(ServerRequestInterface $request, ResponseInterface $response)
+    {
+        $route = $request->getAttribute('route');
+
+        $domainResponse = $this->commandBus()->handle(
+            new FindEventPhotosPhotographerCommand($route->getArgument('photographer_id'))
+        );
+        return $response->withJson($domainResponse, $domainResponse->getHttpStatus());
     }
 
     /**
      * @param ServerRequestInterface $request
      * @param ResponseInterface $response
-     * @param FindHistoric $action
-     * @param int $publisher_id
-     * @param string $type
      * @return mixed
+     * @throws \Exception
+     * @throws \Psr\Container\ContainerExceptionInterface
+     * @throws \Psr\Container\NotFoundExceptionInterface
      */
-    public function publisherHistoric(
-        ServerRequestInterface $request,
-        ResponseInterface $response,
-        FindHistoric $action,
-        int $publisher_id,
-        string $type
-    ) {
+    public function publisherHistoric(ServerRequestInterface $request, ResponseInterface $response): ResponseInterface
+    {
+        $route = $request->getAttribute('route');
         $qsParams = $request->getQueryParams();
-        $keyword = $qsParams['keyword'] ?? null;
 
-        $allTags = null;
-        if (!empty($qsParams['tags'])) {
-            $allTags = [];
-            foreach ($qsParams['tags'] as $tag) {
-                if ($tag != '') {
-                    $allTags[] = new Tag((int) $tag, null);
-                }
-            }
-        }
+        $domainResponse = $this->commandBus()->handle(
+            new FindHistoricCommand(
+                $route->getArgument('publisher_id'),
+                $qsParams['keyword'] ?? null,
+                $qsParams['tags'] ?? null,
+                $route->getArgument('type')
+            )
+        );
 
-        $actionResponse = $action->handle($publisher_id, $keyword, $allTags, $type);
-
-        return $response->withJson($actionResponse, $actionResponse->getHttpStatus());
+        return $response->withJson($domainResponse, $domainResponse->getHttpStatus());
     }
 
     /**
      * @param ServerRequestInterface $request
      * @param ResponseInterface $response
-     * @param WaitingForApproval $action
-     * @param int $photographer_id
      * @return mixed
+     * @throws \Exception
+     * @throws \Psr\Container\ContainerExceptionInterface
+     * @throws \Psr\Container\NotFoundExceptionInterface
      */
-    public function waitingForApproval(
-        ServerRequestInterface $request,
-        ResponseInterface $response,
-        WaitingForApproval $action,
-        int $photographer_id
-    ) {
-        $actionResponse = $action->handle($photographer_id);
-        return $response->withJson($actionResponse, $actionResponse->getHttpStatus());
+    public function waitingForApproval(ServerRequestInterface $request, ResponseInterface $response): ResponseInterface
+    {
+        /** @var  $route */
+        $route = $request->getAttribute('route');
+
+        $domainResponse = $this->commandBus()->handle(
+            new WaitingForApprovalCommand($route->getArgument('photographer_id'))
+        );
+        return $response->withJson($domainResponse, $domainResponse->getHttpStatus());
     }
 
     /**
      * @param ServerRequestInterface $request
      * @param ResponseInterface $response
-     * @param GetNotifications $action
-     * @param int $user_id
      * @return mixed
+     * @throws \Exception
+     * @throws \Psr\Container\ContainerExceptionInterface
+     * @throws \Psr\Container\NotFoundExceptionInterface
      */
-    public function notifications(
-        ServerRequestInterface $request,
-        ResponseInterface $response,
-        GetNotifications $action,
-        int $user_id
-    ) {
-        $actionResponse = $action->handle($user_id);
-        return $response->withJson($actionResponse, $actionResponse->getHttpStatus());
+    public function notifications(ServerRequestInterface $request, ResponseInterface $response): ResponseInterface
+    {
+        /** @var  $route */
+        $route = $request->getAttribute('route');
+
+        $domainResponse = $this->commandBus()->handle(new GetNotificationsCommand($route->getArgument('user_id')));
+        return $response->withJson($domainResponse, $domainResponse->getHttpStatus());
     }
 }

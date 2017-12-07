@@ -2,11 +2,11 @@
 
 namespace PhotoContainer\PhotoContainer\Contexts\User\Action;
 
+use PhotoContainer\PhotoContainer\Contexts\User\Command\FindUserCommand;
 use PhotoContainer\PhotoContainer\Contexts\User\Domain\UserRepository;
 use PhotoContainer\PhotoContainer\Contexts\User\Response\UserResponse;
+use PhotoContainer\PhotoContainer\Infrastructure\Exception\DomainViolationException;
 use PhotoContainer\PhotoContainer\Infrastructure\Helper\ProfileImageHelper;
-
-use PhotoContainer\PhotoContainer\Infrastructure\Web\DomainExceptionResponse;
 
 class FindUser
 {
@@ -32,13 +32,18 @@ class FindUser
     }
 
     /**
-     * @param int|null $id
-     * @param string|null $email
-     * @return UserResponse|DomainExceptionResponse
+     * @param FindUserCommand $command
+     * @return UserResponse
+     * @throws \PhotoContainer\PhotoContainer\Infrastructure\Exception\DomainViolationException
+     * @throws DomainViolationException
      */
-    public function handle(int $id = null, string $email = null)
+    public function handle(FindUserCommand $command): \PhotoContainer\PhotoContainer\Contexts\User\Response\UserResponse
     {
-        $user = $this->userRepository->findUser($id, $email);
+        $user = $this->userRepository->findUser($command->getId(), $command->getEmail());
+
+        if (!$user) {
+            throw new DomainViolationException('Usuário não encontrado.');
+        }
 
         $profileImageUri = $this->profileImageHelper->resolveUri($user->getId());
 

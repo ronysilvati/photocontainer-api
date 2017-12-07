@@ -2,7 +2,7 @@
 
 namespace PhotoContainer\PhotoContainer\Contexts\User\Action;
 
-use PhotoContainer\PhotoContainer\Contexts\User\Domain\User;
+use PhotoContainer\PhotoContainer\Contexts\User\Command\CreateUserCommand;
 use PhotoContainer\PhotoContainer\Contexts\User\Domain\UserRepository;
 use PhotoContainer\PhotoContainer\Contexts\User\Response\NoUserSlotsResponse;
 use PhotoContainer\PhotoContainer\Contexts\User\Response\UserCreatedResponse;
@@ -42,15 +42,19 @@ class CreateUser
     }
 
     /**
-     * @param User $user
+     * @param CreateUserCommand $command
      * @return NoUserSlotsResponse|UserCreatedResponse
+     * @throws \PhotoContainer\PhotoContainer\Infrastructure\Exception\DomainViolationException
      * @throws DomainViolationException
      */
-    public function handle(User $user)
+    public function handle(CreateUserCommand $command)
     {
-        if (getenv('MAX_USER_SLOTS') !== false && !$this->userRepository->isUserSlotsAvailable(getenv('MAX_USER_SLOTS'))) {
+        $maxUserSlots = getenv('MAX_USER_SLOTS');
+        if ($maxUserSlots !== false && !$this->userRepository->isUserSlotsAvailable($maxUserSlots)) {
             return new NoUserSlotsResponse();
         }
+
+        $user = $command->getUser();
 
         if(!$this->userRepository->isUserUnique($user->getEmail())) {
             throw new DomainViolationException('Este email já está sendo utilizado por outro usuário.');

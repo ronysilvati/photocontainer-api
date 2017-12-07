@@ -3,6 +3,7 @@
 namespace PhotoContainer\PhotoContainer\Contexts\User\Action;
 
 use PhotoContainer\PhotoContainer\Application\Resources\Emails\PasswordRequestEmail;
+use PhotoContainer\PhotoContainer\Contexts\User\Command\RequestPwdChangeCommand;
 use PhotoContainer\PhotoContainer\Contexts\User\Domain\RequestPassword;
 use PhotoContainer\PhotoContainer\Contexts\User\Domain\User;
 use PhotoContainer\PhotoContainer\Contexts\User\Domain\UserRepository;
@@ -55,13 +56,13 @@ class RequestPwdChange
     }
 
     /**
-     * @param string $email
+     * @param RequestPwdChangeCommand $command
      * @return RequestPasswordCreated|DomainExceptionResponse
      * @throws \RuntimeException
      */
-    public function handle(string $email)
+    public function handle(RequestPwdChangeCommand $command)
     {
-        $user = $this->userRepository->findUser(null, $email);
+        $user = $this->userRepository->findUser(null, $command->getEmail());
         if(!$user) {
             return new DomainExceptionResponse('O email não foi encontrado na base de usuários.');
         }

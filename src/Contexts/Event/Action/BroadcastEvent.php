@@ -3,7 +3,8 @@
 namespace PhotoContainer\PhotoContainer\Contexts\Event\Action;
 
 use PhotoContainer\PhotoContainer\Application\Resources\Emails\BroadcastEventEmail;
-use PhotoContainer\PhotoContainer\Contexts\Event\Domain\EventNotificationRepository;
+use PhotoContainer\PhotoContainer\Contexts\Event\Command\BroadcastEventCommand;
+use PhotoContainer\PhotoContainer\Contexts\Event\Domain\Event;
 use PhotoContainer\PhotoContainer\Contexts\Event\Domain\EventRepository;
 use PhotoContainer\PhotoContainer\Contexts\Event\Domain\Publisher;
 use PhotoContainer\PhotoContainer\Contexts\Event\Domain\UserRepository;
@@ -14,11 +15,6 @@ use PhotoContainer\PhotoContainer\Infrastructure\Exception\DomainViolationExcept
 
 class BroadcastEvent
 {
-    /**
-     * @var EventNotificationRepository
-     */
-    private $notificationRepository;
-
     /**
      * @var EventRepository
      */
@@ -37,31 +33,28 @@ class BroadcastEvent
     /**
      * BroadcastEvent constructor.
      * @param EventRepository $eventRepository
-     * @param EventNotificationRepository $notificationRepository
      * @param UserRepository $userRepository
      * @param SwiftPoolMailerHelper $emailHelper
      */
     public function __construct(
         EventRepository $eventRepository,
-        EventNotificationRepository $notificationRepository,
         UserRepository $userRepository,
         SwiftPoolMailerHelper $emailHelper
     ) {
         $this->eventRepository = $eventRepository;
-        $this->notificationRepository = $notificationRepository;
         $this->userRepository = $userRepository;
         $this->emailHelper = $emailHelper;
     }
 
     /**
-     * @param int $event_id
+     * @param BroadcastEventCommand $command
      * @return BroadcastResponse
      * @throws \PhotoContainer\PhotoContainer\Infrastructure\Exception\DomainViolationException
      * @throws DomainViolationException
      */
-    public function handle(int $event_id): BroadcastResponse
+    public function handle(BroadcastEventCommand $command): BroadcastResponse
     {
-        $event = $this->eventRepository->find($event_id);
+        $event = $this->eventRepository->find($command->getEventId());
         if (!$event) {
             throw new DomainViolationException('Evento inexistente.');
         }
@@ -73,11 +66,12 @@ class BroadcastEvent
         return new BroadcastResponse();
     }
 
-    public function queueEmails($publishers, $event): void
+    public function queueEmails(array $publishers, Event $event): void
     {
         $to = ['name' => getenv('PHOTOCONTAINER_EMAIL_NAME'), 'email' => getenv('PHOTOCONTAINER_EMAIL')];
 
         $template = '';
+        /** @var Publisher $publisher */
         foreach ($publishers as $publisher) {
             try {
                 $email = new BroadcastEventEmail(

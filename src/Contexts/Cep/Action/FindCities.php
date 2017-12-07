@@ -2,10 +2,9 @@
 
 namespace PhotoContainer\PhotoContainer\Contexts\Cep\Action;
 
-
+use PhotoContainer\PhotoContainer\Contexts\Cep\Command\FindCitiesCommand;
 use PhotoContainer\PhotoContainer\Contexts\Cep\Domain\CepRepository;
 use PhotoContainer\PhotoContainer\Contexts\Cep\Response\StateCollectionResponse;
-
 
 class FindCities
 {
@@ -24,12 +23,12 @@ class FindCities
     }
 
     /**
-     * @param int $state_id
+     * @param FindCitiesCommand $command
      * @return StateCollectionResponse
      */
-    public function handle(int $state_id): \PhotoContainer\PhotoContainer\Contexts\Cep\Response\StateCollectionResponse
+    public function handle(FindCitiesCommand $command): StateCollectionResponse
     {
-        $states = $this->repository->findCities($state_id);
+        $states = $this->repository->findCities($command->getStateId());
         return new StateCollectionResponse($states);
     }
 }

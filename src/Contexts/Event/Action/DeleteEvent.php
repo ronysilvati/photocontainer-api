@@ -2,6 +2,7 @@
 
 namespace PhotoContainer\PhotoContainer\Contexts\Event\Action;
 
+use PhotoContainer\PhotoContainer\Contexts\Event\Command\DeleteEventCommand;
 use PhotoContainer\PhotoContainer\Contexts\Event\Domain\EventRepository;
 use PhotoContainer\PhotoContainer\Contexts\Event\Response\EventRemovedResponse;
 
@@ -23,12 +24,12 @@ class DeleteEvent
     }
 
     /**
-     * @param int $id
+     * @param DeleteEventCommand $command
      * @return EventRemovedResponse
      */
-    public function handle(int $id): \PhotoContainer\PhotoContainer\Contexts\Event\Response\EventRemovedResponse
+    public function handle(DeleteEventCommand $command): EventRemovedResponse
     {
-        $this->repository->delete($id);
-        return new EventRemovedResponse($id);
+        $this->repository->delete($command->getEventId());
+        return new EventRemovedResponse($command->getEventId());
     }
 }

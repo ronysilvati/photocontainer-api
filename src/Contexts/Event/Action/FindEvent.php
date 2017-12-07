@@ -25,7 +25,7 @@ class FindEvent
      * @param int $id
      * @return EventFoundResponse
      */
-    public function handle(int $id): \PhotoContainer\PhotoContainer\Contexts\Event\Response\EventFoundResponse
+    public function handle(int $id): EventFoundResponse
     {
         $event = $this->repository->find($id);
         return new EventFoundResponse($event);

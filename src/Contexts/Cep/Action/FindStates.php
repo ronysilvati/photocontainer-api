@@ -2,10 +2,9 @@
 
 namespace PhotoContainer\PhotoContainer\Contexts\Cep\Action;
 
-
+use PhotoContainer\PhotoContainer\Contexts\Cep\Command\FindStatesCommand;
 use PhotoContainer\PhotoContainer\Contexts\Cep\Domain\CepRepository;
 use PhotoContainer\PhotoContainer\Contexts\Cep\Response\StateCollectionResponse;
-
 
 class FindStates
 {
@@ -24,12 +23,12 @@ class FindStates
     }
 
     /**
-     * @param int $coutry_id
+     * @param FindStatesCommand $command
      * @return StateCollectionResponse
      */
-    public function handle(int $coutry_id): \PhotoContainer\PhotoContainer\Contexts\Cep\Response\StateCollectionResponse
+    public function handle(FindStatesCommand $command): StateCollectionResponse
     {
-        $states = $this->repository->findStates($coutry_id);
+        $states = $this->repository->findStates($command->getCountryId());
         return new StateCollectionResponse($states);
     }
 }

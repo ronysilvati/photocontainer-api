@@ -2,7 +2,7 @@
 
 namespace PhotoContainer\PhotoContainer\Contexts\Event\Action;
 
-use PhotoContainer\PhotoContainer\Contexts\Event\Domain\Event;
+use PhotoContainer\PhotoContainer\Contexts\Event\Command\CreateEventCommand;
 use PhotoContainer\PhotoContainer\Contexts\Event\Domain\EventRepository;
 use PhotoContainer\PhotoContainer\Contexts\Event\Domain\UserRepository;
 use PhotoContainer\PhotoContainer\Contexts\Event\Response\EventCreatedResponse;
@@ -27,11 +27,13 @@ class CreateEvent
     }
 
     /**
-     * @param Event $event
+     * @param CreateEventCommand $command
      * @return EventCreatedResponse
      */
-    public function handle(Event $event): \PhotoContainer\PhotoContainer\Contexts\Event\Response\EventCreatedResponse
+    public function handle(CreateEventCommand $command): EventCreatedResponse
     {
+        $event = $command->getEvent();
+
         $event->changePhotographer($this->userRepo->findPhotographer($event->getPhotographer()));
         $this->repository->create($event);
 

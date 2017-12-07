@@ -2,6 +2,7 @@
 
 namespace PhotoContainer\PhotoContainer\Contexts\User\Action;
 
+use PhotoContainer\PhotoContainer\Contexts\User\Command\FindFreeSlotForUserCommand;
 use PhotoContainer\PhotoContainer\Contexts\User\Domain\UserRepository;
 use PhotoContainer\PhotoContainer\Contexts\User\Response\HasSlotsResponse;
 use PhotoContainer\PhotoContainer\Contexts\User\Response\NoUserSlotsResponse;
@@ -24,9 +25,10 @@ class FindFreeSlotForUser
     }
 
     /**
+     * @param FindFreeSlotForUserCommand $command
      * @return HasSlotsResponse|NoUserSlotsResponse
      */
-    public function handle()
+    public function handle(FindFreeSlotForUserCommand $command)
     {
         if (getenv('MAX_USER_SLOTS') === false) {
             return new HasSlotsResponse();

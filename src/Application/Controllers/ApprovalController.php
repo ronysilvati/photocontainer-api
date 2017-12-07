@@ -2,71 +2,71 @@
 
 namespace PhotoContainer\PhotoContainer\Application\Controllers;
 
-use PhotoContainer\PhotoContainer\Contexts\Approval\Action\ApprovalDownload;
-use PhotoContainer\PhotoContainer\Contexts\Approval\Action\DisapprovalDownload;
-use PhotoContainer\PhotoContainer\Contexts\Approval\Action\RequestDownload;
+use PhotoContainer\PhotoContainer\Contexts\Approval\Command\ApprovalDownloadCommand;
+use PhotoContainer\PhotoContainer\Contexts\Approval\Command\RequestDownloadCommand;
+use PhotoContainer\PhotoContainer\Infrastructure\Web\Controller;
 use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\ServerRequestInterface;
 
-class ApprovalController
+class ApprovalController extends Controller
 {
     /**
      * @param ServerRequestInterface $request
      * @param ResponseInterface $response
-     * @param int $event_id
-     * @param int $publisher_id
-     * @param RequestDownload $action
+     * @param int $eventId
+     * @param int $publisherId
      * @return mixed
      * @throws \Exception
+     * @throws \Psr\Container\ContainerExceptionInterface
+     * @throws \Psr\Container\NotFoundExceptionInterface
      */
     public function requestDownload(
         ServerRequestInterface $request,
         ResponseInterface $response,
-        int $event_id,
-        int $publisher_id,
-        RequestDownload $action
+        int $eventId,
+        int $publisherId
     ) {
-        $actionResponse = $action->handle($event_id, $publisher_id);
-        return $response->withJson($actionResponse, $actionResponse->getHttpStatus());
+        $domainResponse = $this->commandBus()->handle(new RequestDownloadCommand($eventId, $publisherId));
+        return $response->withJson($domainResponse, $domainResponse->getHttpStatus());
     }
 
     /**
      * @param ServerRequestInterface $request
      * @param ResponseInterface $response
-     * @param int $event_id
-     * @param int $publisher_id
-     * @param ApprovalDownload $action
+     * @param int $eventId
+     * @param int $publisherId
      * @return mixed
      * @throws \Exception
+     * @throws \Psr\Container\ContainerExceptionInterface
+     * @throws \Psr\Container\NotFoundExceptionInterface
      */
     public function approvalDownload(
         ServerRequestInterface $request,
         ResponseInterface $response,
-        int $event_id,
-        int $publisher_id,
-        ApprovalDownload $action
+        int $eventId,
+        int $publisherId
     ) {
-        $actionResponse = $action->handle($event_id, $publisher_id);
-        return $response->withJson($actionResponse, $actionResponse->getHttpStatus());
+        $domainResponse = $this->commandBus()->handle(new ApprovalDownloadCommand($eventId, $publisherId));
+        return $response->withJson($domainResponse, $domainResponse->getHttpStatus());
     }
 
     /**
      * @param ServerRequestInterface $request
      * @param ResponseInterface $response
-     * @param int $event_id
-     * @param int $publisher_id
-     * @param DisapprovalDownload $action
+     * @param int $eventId
+     * @param int $publisherId
      * @return mixed
      * @throws \Exception
+     * @throws \Psr\Container\ContainerExceptionInterface
+     * @throws \Psr\Container\NotFoundExceptionInterface
      */
     public function disapprovalDownload(
         ServerRequestInterface $request,
         ResponseInterface $response,
-        int $event_id,
-        int $publisher_id,
-        DisapprovalDownload $action
+        int $eventId,
+        int $publisherId
     ) {
-        $actionResponse = $action->handle($event_id, $publisher_id);
-        return $response->withJson($actionResponse, $actionResponse->getHttpStatus());
+        $domainResponse = $this->commandBus()->handle(new ApprovalDownloadCommand($eventId, $publisherId));
+        return $response->withJson($domainResponse, $domainResponse->getHttpStatus());
     }
 }
