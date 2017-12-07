@@ -17,6 +17,7 @@ class EloquentApprovalRepository implements ApprovalRepository
     /**
      * @param DownloadRequest $request
      * @return DownloadRequest
+     * @throws \PhotoContainer\PhotoContainer\Infrastructure\Exception\PersistenceException
      * @throws PersistenceException
      */
     public function createDownloadRequest(DownloadRequest $request): DownloadRequest
@@ -42,6 +43,7 @@ class EloquentApprovalRepository implements ApprovalRepository
      * @param int $event_id
      * @param int $user_id
      * @return null|DownloadRequest
+     * @throws \PhotoContainer\PhotoContainer\Infrastructure\Exception\PersistenceException
      * @throws PersistenceException
      */
     public function findDownloadRequest(int $event_id, int $user_id): ?DownloadRequest
@@ -71,6 +73,7 @@ class EloquentApprovalRepository implements ApprovalRepository
     /**
      * @param DownloadRequest $request
      * @return null|DownloadRequest
+     * @throws \PhotoContainer\PhotoContainer\Infrastructure\Exception\PersistenceException
      * @throws PersistenceException
      */
     public function approval(DownloadRequest $request): ?DownloadRequest
@@ -93,6 +96,7 @@ class EloquentApprovalRepository implements ApprovalRepository
     /**
      * @param DownloadRequest $request
      * @return null|DownloadRequest
+     * @throws \PhotoContainer\PhotoContainer\Infrastructure\Exception\PersistenceException
      * @throws PersistenceException
      */
     public function disapproval(DownloadRequest $request): ?DownloadRequest
@@ -115,6 +119,7 @@ class EloquentApprovalRepository implements ApprovalRepository
     /**
      * @param int $event_id
      * @return Event
+     * @throws \PhotoContainer\PhotoContainer\Infrastructure\Exception\PersistenceException
      * @throws PersistenceException
      */
     public function findEvent(int $event_id): Event
@@ -130,6 +135,7 @@ class EloquentApprovalRepository implements ApprovalRepository
     /**
      * @param int $user_id
      * @return User
+     * @throws \PhotoContainer\PhotoContainer\Infrastructure\Exception\PersistenceException
      * @throws PersistenceException
      */
     public function findUser(int $user_id): User

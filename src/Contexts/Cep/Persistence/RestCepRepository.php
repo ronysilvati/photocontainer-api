@@ -26,6 +26,7 @@ class RestCepRepository implements CepRepository
     /**
      * @param string $zipcode
      * @return Cep
+     * @throws \PhotoContainer\PhotoContainer\Infrastructure\Exception\PersistenceException
      * @throws PersistenceException
      */
     public function findCep(string $zipcode): Cep
@@ -56,6 +57,7 @@ class RestCepRepository implements CepRepository
     /**
      * @param int $country_id
      * @return array
+     * @throws \RuntimeException
      */
     public function findStates(int $country_id): array
     {
@@ -65,6 +67,7 @@ class RestCepRepository implements CepRepository
     /**
      * @param int $state_id
      * @return array
+     * @throws \RuntimeException
      */
     public function findCities(int $state_id): array
     {
@@ -73,6 +76,7 @@ class RestCepRepository implements CepRepository
 
     /**
      * @return array
+     * @throws \RuntimeException
      */
     public function getCountries(): array
     {

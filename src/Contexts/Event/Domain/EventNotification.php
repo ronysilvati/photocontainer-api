@@ -25,4 +25,19 @@ class EventNotification
         $this->publisher = $publisher;
     }
 
+    /**
+     * @return Event
+     */
+    public function getEvent(): Event
+    {
+        return $this->event;
+    }
+
+    /**
+     * @return Publisher
+     */
+    public function getPublisher(): Publisher
+    {
+        return $this->publisher;
+    }
 }

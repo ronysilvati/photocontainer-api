@@ -12,7 +12,7 @@ class HasSlotsResponse
         return 204;
     }
 
-    public function jsonSerialize()
+    public function jsonSerialize(): array
     {
         return [];
     }

@@ -9,7 +9,7 @@ class UserResponse implements \JsonSerializable
     private $selfReference;
     private $addressReference;
     private $detailReference;
-    private $httpStatus = 200;
+    protected $httpStatus = 200;
     private $user;
     private $profileImageUri;
 
@@ -22,7 +22,7 @@ class UserResponse implements \JsonSerializable
             $this->detailReference = "details/{$user->getDetails()->getId()}";
         }
 
-        if ($user->getAddress() && $user->getAddress()->getId() > 0) {
+        if ($user->getAddress() !== null && $user->getAddress()->getId() > 0) {
             $this->addressReference = "details/{$user->getAddress()->getId()}";
         }
 
@@ -67,9 +67,9 @@ class UserResponse implements \JsonSerializable
 
             $photographerDetails = $this->user->getDetails()->getPhographerDetails();
             if ($photographerDetails) {
-                $out['details']['name_type'] = $this->user->getDetails()->getPhographerDetails()->getNameType();
-                $out['details']['studio'] = $this->user->getDetails()->getPhographerDetails()->getStudio();
-                $out['details']['bio'] = $this->user->getDetails()->getPhographerDetails()->getBio();
+                $out['details']['name_type'] = $photographerDetails->getNameType();
+                $out['details']['studio'] = $photographerDetails->getStudio();
+                $out['details']['bio'] = $photographerDetails->getBio();
             }
         }
 

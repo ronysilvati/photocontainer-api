@@ -15,7 +15,6 @@ use PhotoContainer\PhotoContainer\Infrastructure\Persistence\Eloquent\EventCateg
 use PhotoContainer\PhotoContainer\Infrastructure\Persistence\Eloquent\EventSuppliers;
 use PhotoContainer\PhotoContainer\Infrastructure\Persistence\Eloquent\EventTag as EventTagModel;
 
-
 class EloquentEventRepository implements EventRepository
 {
     /**
@@ -215,7 +214,11 @@ class EloquentEventRepository implements EventRepository
             }
 
             $suppliersData = EventSuppliers::where('event_id', $id)->first();
-            $suppliers = new Suppliers($suppliersData->id ?? null, $suppliersData->event_id ?? null, $suppliersData->suppliers ?? null);
+            $suppliers = new Suppliers(
+                $suppliersData->id ?? null,
+                $suppliersData->event_id ?? null,
+                $suppliersData->suppliers ?? null
+            );
 
             return new Event(
                 $eventData['id'],
@@ -237,7 +240,6 @@ class EloquentEventRepository implements EventRepository
                 $suppliers
             );
         } catch (\Exception $e) {
-            var_dump($e->getMessage());exit;
             throw new PersistenceException('Erro na busca de evento.', $e->getMessage());
         }
     }

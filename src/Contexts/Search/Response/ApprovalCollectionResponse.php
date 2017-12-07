@@ -20,7 +20,7 @@ class ApprovalCollectionResponse implements \JsonSerializable
     /**
      * @return array
      */
-    public function jsonSerialize()
+    public function jsonSerialize(): array
     {
         $out = [];
         foreach ($this->collection as $item) {

@@ -129,7 +129,7 @@ class Photo
     {
         $file_path = 'events/' . $this->getEventId() . '/' . $thatFolder;
 
-        $file_path = $file_path[-1] == '/' ? $file_path : $file_path. '/';
+        $file_path = $file_path[-1] === '/' ? $file_path : $file_path. '/';
 
         if ($with_shared_path) {
             $file_path = getenv('SHARED_PATH') . '/' . $file_path;

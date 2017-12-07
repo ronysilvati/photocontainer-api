@@ -12,6 +12,7 @@ class EloquentTagRepository implements TagRepository
 {
     /**
      * @return array
+     * @throws \PhotoContainer\PhotoContainer\Infrastructure\Exception\PersistenceException
      * @throws PersistenceException
      */
     public function findAll(): array

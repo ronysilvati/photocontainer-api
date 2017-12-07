@@ -9,9 +9,10 @@ class Notification
      */
     private $values = [];
 
-    public function addNotification(string $name, int $value): void
+    public function addNotification(string $name, int $value): self
     {
         $this->values[$name] = $value;
+        return $this;
     }
 
     public function getTotal(): int

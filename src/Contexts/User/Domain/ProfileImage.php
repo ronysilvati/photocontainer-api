@@ -47,6 +47,7 @@ class ProfileImage
     /**
      * @param array $file
      * @throws DomainViolationException
+     * @throws \PhotoContainer\PhotoContainer\Infrastructure\Exception\DomainViolationException
      */
     public function changeFile(array $file): void
     {

@@ -13,9 +13,10 @@ class EloquentAuthRepository implements AuthRepository
     /**
      * @param string $user
      * @return string
+     * @throws \PhotoContainer\PhotoContainer\Infrastructure\Exception\PersistenceException
      * @throws PersistenceException
      */
-    public function find(string $user)
+    public function find(string $user): ?string
     {
         try {
             $user = User::where('email', $user)->first();
@@ -33,6 +34,7 @@ class EloquentAuthRepository implements AuthRepository
     /**
      * @param int $user_id
      * @throws PersistenceException
+     * @throws \PhotoContainer\PhotoContainer\Infrastructure\Exception\PersistenceException
      */
     public function logAccess(int $user_id): void
     {

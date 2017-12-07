@@ -97,7 +97,8 @@ class User
      */
     public function changeDetails(Details $details = null): void
     {
-        if ($this->getProfile()->getProfileId() === Profile::PUBLISHER && null === $details->getBlog()) {
+        if ($details !== null && $details->getBlog() === null &&
+            $this->getProfile()->getProfileId() === Profile::PUBLISHER) {
             throw new DomainViolationException('O endereço do blog deve ser enviado!');
         }
 

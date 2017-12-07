@@ -32,6 +32,7 @@ class DbalEventRepository implements EventRepository
     /**
      * @param EventSearch $search
      * @return array|null
+     * @throws \PhotoContainer\PhotoContainer\Infrastructure\Exception\PersistenceException
      * @throws PersistenceException
      */
     public function find(EventSearch $search): ?array

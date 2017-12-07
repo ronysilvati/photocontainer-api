@@ -218,7 +218,7 @@ class EventSearch
      */
     public function isPublisherLike(): bool
     {
-        return $this->publisherLike == null ? false : $this->publisherLike;
+        return $this->publisherLike === null ?? false;
     }
 
     /**
@@ -247,7 +247,7 @@ class EventSearch
      */
     public function getThumb(): ?string
     {
-        if ($this->filename == null) {
+        if ($this->filename === null) {
             return null;
         }
 

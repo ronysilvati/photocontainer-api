@@ -25,6 +25,7 @@ class EloquentUserRepository implements UserRepository
      * @param User $user
      * @param null|string $encryptedPwd
      * @return null|User
+     * @throws \PhotoContainer\PhotoContainer\Infrastructure\Exception\PersistenceException
      * @throws PersistenceException
      */
     public function createUser(User $user, ?string $encryptedPwd): ?\PhotoContainer\PhotoContainer\Contexts\User\Domain\User
@@ -104,6 +105,7 @@ class EloquentUserRepository implements UserRepository
      * @param int|null $id
      * @param null|string $email
      * @return null|User
+     * @throws \PhotoContainer\PhotoContainer\Infrastructure\Exception\PersistenceException
      * @throws PersistenceException
      */
     public function findUser(?int $id = null, ?string $email = null): ?User
@@ -178,6 +180,7 @@ class EloquentUserRepository implements UserRepository
     /**
      * @param User $user
      * @return null|User
+     * @throws \PhotoContainer\PhotoContainer\Infrastructure\Exception\PersistenceException
      * @throws PersistenceException
      */
     public function updateUser(User $user): ?\PhotoContainer\PhotoContainer\Contexts\User\Domain\User
@@ -262,6 +265,7 @@ class EloquentUserRepository implements UserRepository
     /**
      * @param User $user
      * @return null|RequestPassword
+     * @throws \PhotoContainer\PhotoContainer\Infrastructure\Exception\PersistenceException
      * @throws PersistenceException
      */
     public function findPwdRequest(User $user): ?RequestPassword
@@ -283,6 +287,7 @@ class EloquentUserRepository implements UserRepository
     /**
      * @param RequestPassword $requestPassword
      * @return RequestPassword
+     * @throws \PhotoContainer\PhotoContainer\Infrastructure\Exception\PersistenceException
      * @throws PersistenceException
      */
     public function createPwdRequest(RequestPassword $requestPassword): RequestPassword
@@ -304,6 +309,7 @@ class EloquentUserRepository implements UserRepository
     /**
      * @param RequestPassword $requestPassword
      * @throws PersistenceException
+     * @throws \PhotoContainer\PhotoContainer\Infrastructure\Exception\PersistenceException
      */
     public function removePwdRequest(RequestPassword $requestPassword): void
     {
@@ -319,6 +325,7 @@ class EloquentUserRepository implements UserRepository
     /**
      * @param string $token
      * @return null|RequestPassword
+     * @throws \PhotoContainer\PhotoContainer\Infrastructure\Exception\PersistenceException
      * @throws PersistenceException
      */
     public function getValidToken(string $token): ?RequestPassword

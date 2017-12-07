@@ -25,7 +25,7 @@ class EventResponse implements \JsonSerializable
     public function jsonSerialize()
     {
         $out = [];
-        if ($this->context == 'gallery_photos_publisher') {
+        if ($this->context === 'gallery_photos_publisher') {
             $thumb = !empty($this->event->getPhotos()) ? $this->event->getPhotos()[0]['thumb'] : 'sem_foto.png';
 
             $out = [
@@ -40,7 +40,7 @@ class EventResponse implements \JsonSerializable
             ];
         }
 
-        if ($this->context == 'gallery_photos_photographer') {
+        if ($this->context === 'gallery_photos_photographer') {
             $out = [
                 'id' => $this->event->getId(),
                 'title' => $this->event->getTitle(),

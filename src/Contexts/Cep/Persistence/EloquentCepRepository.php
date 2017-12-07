@@ -14,6 +14,7 @@ class EloquentCepRepository implements CepRepository
     /**
      * @param string $zipcode
      * @return Cep
+     * @throws \RuntimeException
      */
     public function findCep(string $zipcode): Cep
     {
@@ -23,6 +24,7 @@ class EloquentCepRepository implements CepRepository
     /**
      * @param int $country_id
      * @return array
+     * @throws \PhotoContainer\PhotoContainer\Infrastructure\Exception\PersistenceException
      * @throws PersistenceException
      */
     public function findStates(int $country_id): array
@@ -37,6 +39,7 @@ class EloquentCepRepository implements CepRepository
     /**
      * @param int $state_id
      * @return array
+     * @throws \PhotoContainer\PhotoContainer\Infrastructure\Exception\PersistenceException
      * @throws PersistenceException
      */
     public function findCities(int $state_id): array
@@ -50,6 +53,7 @@ class EloquentCepRepository implements CepRepository
 
     /**
      * @return array
+     * @throws \PhotoContainer\PhotoContainer\Infrastructure\Exception\PersistenceException
      * @throws PersistenceException
      */
     public function getCountries(): array

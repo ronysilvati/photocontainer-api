@@ -23,7 +23,7 @@ class RequestPasswordCreated implements \JsonSerializable
     /**
      * @return array
      */
-    public function jsonSerialize()
+    public function jsonSerialize(): array
     {
         return [
             'valid_until' => $this->requestPassword->getValidUntil()->format('Y-d-m h:i')

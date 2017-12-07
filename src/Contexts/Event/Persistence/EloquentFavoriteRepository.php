@@ -14,6 +14,7 @@ class EloquentFavoriteRepository implements FavoriteRepository
     /**
      * @param Favorite $favorite
      * @return Favorite
+     * @throws \PhotoContainer\PhotoContainer\Infrastructure\Exception\PersistenceException
      * @throws PersistenceException
      */
     public function createFavorite(Favorite $favorite): Favorite
@@ -36,6 +37,7 @@ class EloquentFavoriteRepository implements FavoriteRepository
     /**
      * @param Favorite $favorite
      * @return Favorite
+     * @throws \PhotoContainer\PhotoContainer\Infrastructure\Exception\PersistenceException
      * @throws PersistenceException
      */
     public function removeFavorite(Favorite $favorite): Favorite

@@ -26,6 +26,7 @@ class DbalNotificationRepository implements NotificationRepository
     /**
      * @param int $photographer_id
      * @return int
+     * @throws \PhotoContainer\PhotoContainer\Infrastructure\Exception\PersistenceException
      * @throws PersistenceException
      */
     public function approvalWaitList(int $photographer_id): int
