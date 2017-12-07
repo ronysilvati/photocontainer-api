@@ -10,7 +10,8 @@ use PhotoContainer\PhotoContainer\Infrastructure\Helper\EventPhotoHelper;
 use PhotoContainer\PhotoContainer\Infrastructure\Crypto\JwtGenerator;
 use Enqueue\Fs\FsConnectionFactory;
 use Monolog\Logger;
-use Monolog\Handler\StreamHandler;
+use PhotoContainer\PhotoContainer\Infrastructure\CommandBus\Middleware\HandlerCacheMiddleware;
+use PhotoContainer\PhotoContainer\Infrastructure\Cache\CacheHelper;
 
 if (!is_dir(CACHE_DIR)) {
     mkdir(CACHE_DIR, 0777);
@@ -140,6 +141,28 @@ $defaultDI[EnqueueHelper::class] = function ($c) {
 
 $defaultDI[EventPhotoHelper::class] = function ($c) {
     return new EventPhotoHelper($c->get(EnqueueHelper::class));
+};
+
+$defaultDI['CommandBus'] = function ($c) {
+    $handlerMiddleware = new \League\Tactician\Handler\CommandHandlerMiddleware(
+        new \League\Tactician\Handler\CommandNameExtractor\ClassNameExtractor(),
+        new \PhotoContainer\PhotoContainer\Infrastructure\CommandBus\ContainerBasedHandlerLocator($c),
+        new \League\Tactician\Handler\MethodNameInflector\HandleInflector()
+    );
+    return new \League\Tactician\CommandBus([$handlerMiddleware]);
+};
+
+$defaultDI['CachedCommandBus'] = function (\Psr\Container\ContainerInterface $c) {
+    $handlerMiddleware = new \League\Tactician\Handler\CommandHandlerMiddleware(
+        new \League\Tactician\Handler\CommandNameExtractor\ClassNameExtractor(),
+        new \PhotoContainer\PhotoContainer\Infrastructure\CommandBus\ContainerBasedHandlerLocator($c),
+        new \League\Tactician\Handler\MethodNameInflector\HandleInflector()
+    );
+
+    return new \League\Tactician\CommandBus([
+        new HandlerCacheMiddleware($c),
+        $handlerMiddleware,
+    ]);
 };
 
 return $defaultDI;
