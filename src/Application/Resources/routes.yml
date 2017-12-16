@@ -69,16 +69,16 @@ PhotoContainer\PhotoContainer\Application\Controllers\SearchController:
     verb: GET
     route: /search/notifications/user/{user_id}
 
-#PhotoContainer\PhotoContainer\Application\Controllers\ApprovalController:
-#  requestDownload:
-#    verb: POST
-#    route: /events/{event_id}/request/user/{publisher_id}
-#  approvalDownload:
-#    verb: PUT
-#    route: /events/{event_id}/approval/user/{publisher_id}
-#  disapprovalDownload:
-#    verb: PUT
-#    route: /events/{event_id}/disapproval/user/{publisher_id}
+PhotoContainer\PhotoContainer\Application\Controllers\ApprovalController:
+  requestDownload:
+    verb: POST
+    route: /events/{event_id}/request/user/{publisher_id}
+  approvalDownload:
+    verb: PUT
+    route: /events/{event_id}/approval/user/{publisher_id}
+  disapprovalDownload:
+    verb: PUT
+    route: /events/{event_id}/disapproval/user/{publisher_id}
 #
 #PhotoContainer\PhotoContainer\Application\Controllers\ContactController:
 #  createContact:
