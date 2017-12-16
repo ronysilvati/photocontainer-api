@@ -11,7 +11,6 @@ use PhotoContainer\PhotoContainer\Infrastructure\Crypto\JwtGenerator;
 use Enqueue\Fs\FsConnectionFactory;
 use Monolog\Logger;
 use PhotoContainer\PhotoContainer\Infrastructure\CommandBus\Middleware\HandlerCacheMiddleware;
-use PhotoContainer\PhotoContainer\Infrastructure\Cache\CacheHelper;
 
 if (!is_dir(CACHE_DIR)) {
     mkdir(CACHE_DIR, 0777);
@@ -28,6 +27,10 @@ $defaultDI = [
         'user'      => getenv('MYSQL_USER'),
         'pwd'       => getenv('MYSQL_PASSWORD'),
         'port'      => getenv('MYSQL_PORT'),
+        'charset'  => 'utf8',
+        'driverOptions' => [
+            1002 => 'SET NAMES utf8'
+        ]
     ]
 ];
 
@@ -163,6 +166,39 @@ $defaultDI['CachedCommandBus'] = function (\Psr\Container\ContainerInterface $c)
         new HandlerCacheMiddleware($c),
         $handlerMiddleware,
     ]);
+};
+
+$defaultDI['orm_settings'] = function (\Psr\Container\ContainerInterface $container) {
+    $config = $container->get('database_config');
+
+    $db = $container->get(DbalDatabaseProvider::class);
+    return [
+            'annotation_autoloaders' => ['class_exists'],
+            'connection' => [
+                'dbname' =>$config['database'],
+                'user' => $config['user'],
+                'password' => $config['pwd'],
+                'host' => $config['host'],
+                'port' => $config['port'],
+                'driver' => 'pdo_mysql',
+            ],
+            'metadata_mapping' => [
+                [
+                    'type' => \Jgut\Slim\Doctrine\ManagerBuilder::METADATA_MAPPING_YAML,
+                    'path' => ROOT_DIR.'/src/Application/Resources/doctrine',
+                    'namespace' => 'PhotoContainer\\PhotoContainer\\Contexts'
+                ],
+            ],
+            'proxies_path' => CACHE_DIR.'/proxies',
+            'proxies_auto_generation' => 1
+
+    ];
+};
+
+$defaultDI[\Doctrine\ORM\EntityManager::class] = function (\Psr\Container\ContainerInterface $container) {
+    $builder = new \Jgut\Doctrine\ManagerBuilder\RelationalBuilder($container->get('orm_settings'));
+
+    return $builder->getManager();
 };
 
 return $defaultDI;
