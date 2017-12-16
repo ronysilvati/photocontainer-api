@@ -9,6 +9,7 @@ use PhotoContainer\PhotoContainer\Contexts\Event\Domain\EventRepository;
 use PhotoContainer\PhotoContainer\Contexts\Photo\Event\DownloadedPhoto;
 use PhotoContainer\PhotoContainer\Contexts\User\Domain\UserRepository;
 
+use PhotoContainer\PhotoContainer\Infrastructure\Email\EmailDataLoader;
 use PhotoContainer\PhotoContainer\Infrastructure\Email\SwiftPoolMailerHelper;
 
 class SendEmailPhotographerOnDownload extends AbstractListener
@@ -19,29 +20,19 @@ class SendEmailPhotographerOnDownload extends AbstractListener
     private $emailHelper;
 
     /**
-     * @var EventRepository
+     * @var EmailDataLoader
      */
-    private $eventRepository;
-
-    /**
-     * @var UserRepository
-     */
-    private $userRepository;
+    private $loader;
 
     /**
      * SendEmailPhotographerOnDownload constructor.
      * @param SwiftPoolMailerHelper $emailHelper
-     * @param EventRepository $eventRepository
-     * @param UserRepository $userRepository
+     * @param EmailDataLoader $loader
      */
-    public function __construct(
-        SwiftPoolMailerHelper $emailHelper,
-        EventRepository $eventRepository,
-        UserRepository $userRepository
-    ) {
+    public function __construct(SwiftPoolMailerHelper $emailHelper, EmailDataLoader $loader)
+    {
         $this->emailHelper = $emailHelper;
-        $this->eventRepository = $eventRepository;
-        $this->userRepository = $userRepository;
+        $this->loader = $loader;
     }
 
     /**
@@ -54,25 +45,25 @@ class SendEmailPhotographerOnDownload extends AbstractListener
             /** @var DownloadedPhoto $data */
             $data = $event->getData();
 
-            $event = $this->eventRepository->find($data->getEventId());
-            $publisher = $this->userRepository->findUser($data->getPublisherId());
-            $photographer = $this->userRepository->findUser($event->getPhotographer()->getId());
+            $event = $this->loader->getEventData($data->getEventId());
+            $publisher = $this->loader->getUserData($data->getPublisherId());
+            $photographer = $this->loader->getUserData($event->getPhotographer()->getId());
 
             $details = $publisher->getDetails();
-            $blog = '<li><a href="'.$details->getBlog().'">'.$details->getBlog().'</a></li>';
-            $facebook = '<li><a href="'.$details->getFacebook().'">'.$details->getFacebook().'</a></li>';
-            $instagram = '<li><a href="'.$details->getInstagram().'">'.$details->getInstagram().'</a></li>';
+            $blog = '<li><a href="'.$publisher['blog'].'">'.$publisher['blog'].'</a></li>';
+            $facebook = '<li><a href="'.$publisher['facebook'].'">'.$publisher['facebook'].'</a></li>';
+            $instagram = '<li><a href="'.$publisher['instagram'].'">'.$publisher['instagram'].'</a></li>';
 
             $email = new PhotographerDownloadEmail(
                 [
-                    '{PUBLISHER}' => $publisher->getName(),
-                    '{PHOTOGRAPHER}' => $photographer->getName(),
-                    '{EVENT}' => $event->getTitle(),
-                    '{PUBLISHER_BLOG}' => $details->getBlog() ? $blog : '',
-                    '{PUBLISHER_FACEBOOK}' => $details->getFacebook() ? $facebook : '',
-                    '{PUBLISHER_INSTA}' => $details->getInstagram() ? $instagram : '',
+                    '{PUBLISHER}' => $publisher['name'],
+                    '{PHOTOGRAPHER}' => $photographer['name'],
+                    '{EVENT}' => $event['title'],
+                    '{PUBLISHER_BLOG}' => $publisher['blog'] ? $blog : '',
+                    '{PUBLISHER_FACEBOOK}' => $publisher['facebook'] ? $facebook : '',
+                    '{PUBLISHER_INSTA}' => $publisher['instagram'] ? $instagram : '',
                 ],
-                ['name' => $photographer->getName(), 'email' => $photographer->getEmail()]
+                ['name' => $photographer['name'], 'email' => $photographer['email']]
             );
 
             $this->emailHelper->send($email);

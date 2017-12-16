@@ -3,21 +3,21 @@
 namespace PhotoContainer\PhotoContainer\Contexts\Cep\Action;
 
 use PhotoContainer\PhotoContainer\Contexts\Cep\Command\FindStatesCommand;
-use PhotoContainer\PhotoContainer\Contexts\Cep\Domain\CepRepository;
+use PhotoContainer\PhotoContainer\Contexts\Cep\Domain\StateRepository;
 use PhotoContainer\PhotoContainer\Contexts\Cep\Response\StateCollectionResponse;
 
 class FindStates
 {
     /**
-     * @var CepRepository
+     * @var StateRepository
      */
     protected $repository;
 
     /**
      * FindStates constructor.
-     * @param CepRepository $repository
+     * @param StateRepository $repository
      */
-    public function __construct(CepRepository $repository)
+    public function __construct(StateRepository $repository)
     {
         $this->repository = $repository;
     }

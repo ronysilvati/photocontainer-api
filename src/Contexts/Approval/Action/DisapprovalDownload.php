@@ -2,6 +2,7 @@
 
 namespace PhotoContainer\PhotoContainer\Contexts\Approval\Action;
 
+use PhotoContainer\PhotoContainer\Contexts\Approval\Command\DisapprovalDownloadCommand;
 use PhotoContainer\PhotoContainer\Contexts\Approval\Domain\ApprovalRepository;
 use PhotoContainer\PhotoContainer\Contexts\Approval\Response\DisapprovalRequestResponse;
 
@@ -22,15 +23,12 @@ class DisapprovalDownload
     }
 
     /**
-     * @param int $event_id
-     * @param int $publisher_id
+     * @param DisapprovalDownloadCommand $command
      * @return DisapprovalRequestResponse
-     * @throws \RuntimeException
-     * @throws \Exception
      */
-    public function handle(int $event_id, int $publisher_id): \PhotoContainer\PhotoContainer\Contexts\Approval\Response\DisapprovalRequestResponse
+    public function handle(DisapprovalDownloadCommand $command): DisapprovalRequestResponse
     {
-        $request = $this->repository->findDownloadRequest($event_id, $publisher_id);
+        $request = $this->repository->findDownloadRequest($command->getEventId(), $command->getPublisherId());
         if ($request == null) {
             throw new \RuntimeException('Pedido não localizado.');
         }
@@ -38,6 +36,9 @@ class DisapprovalDownload
         if ($request->isActive() == false) {
             throw new \RuntimeException('Pedido já negado.');
         }
+
+        $request->changeAuthorized(false);
+        $request->changeActive(false);
 
         $request = $this->repository->disapproval($request);
 

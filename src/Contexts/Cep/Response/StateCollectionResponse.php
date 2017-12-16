@@ -2,9 +2,11 @@
 
 namespace PhotoContainer\PhotoContainer\Contexts\Cep\Response;
 
+use PhotoContainer\PhotoContainer\Contexts\Cep\Domain\State;
+
 class StateCollectionResponse implements \JsonSerializable
 {
-    private $collection;
+    protected $collection;
 
     public function __construct(array $collection)
     {
@@ -13,7 +15,9 @@ class StateCollectionResponse implements \JsonSerializable
 
     public function jsonSerialize()
     {
-        return $this->collection;
+        return array_map(function (State $value) {
+            return ['id' => $value->getId(), 'name' => utf8_encode($value->getName())];
+        }, $this->collection);
     }
 
     /**

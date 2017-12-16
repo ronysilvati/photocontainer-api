@@ -19,9 +19,9 @@ class FindCitiesCommand
     }
 
     /**
-     * @return string
+     * @return int
      */
-    public function getStateId(): string
+    public function getStateId(): int
     {
         return $this->state_id;
     }

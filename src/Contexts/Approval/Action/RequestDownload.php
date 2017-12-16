@@ -2,6 +2,7 @@
 
 namespace PhotoContainer\PhotoContainer\Contexts\Approval\Action;
 
+use PhotoContainer\PhotoContainer\Contexts\Approval\Command\RequestDownloadCommand;
 use PhotoContainer\PhotoContainer\Contexts\Approval\Domain\ApprovalRepository;
 use PhotoContainer\PhotoContainer\Contexts\Approval\Domain\DownloadRequest;
 use PhotoContainer\PhotoContainer\Contexts\Approval\Response\DownloadRequestResponse;
@@ -23,24 +24,23 @@ class RequestDownload
     }
 
     /**
-     * @param int $event_id
-     * @param int $publisher_id
+     * @param RequestDownloadCommand $command
      * @return DownloadRequestResponse
-     * @throws \RuntimeException
-     * @throws \Exception
      */
-    public function handle(int $event_id, int $publisher_id): \PhotoContainer\PhotoContainer\Contexts\Approval\Response\DownloadRequestResponse
+    public function handle(RequestDownloadCommand $command): DownloadRequestResponse
     {
-        $dlRequest = $this->repository->findDownloadRequest($event_id, $publisher_id);
+        $dlRequest = $this->repository->findDownloadRequest($command->getEventId(), $command->getPublisherId());
+
         if ($dlRequest) {
-            $msg = !$dlRequest->isActive() && !$dlRequest->isAuthorized() ? 'Seu pedido não foi autorizado.' : 'Seu pedido para download ainda está sendo analisado.';
+            $msg = !$dlRequest->isActive() && !$dlRequest->isAuthorized() ?
+                'Seu pedido não foi autorizado.' :
+                'Seu pedido para download ainda está sendo analisado.';
             throw new \RuntimeException($msg);
         }
 
         $dlRequest = new DownloadRequest(
-            null,
-            $event_id,
-            $publisher_id,
+            $command->getEventId(),
+            $command->getPublisherId(),
             false,
             false,
             true

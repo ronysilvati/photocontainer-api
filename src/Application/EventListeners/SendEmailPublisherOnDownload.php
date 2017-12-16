@@ -9,6 +9,7 @@ use PhotoContainer\PhotoContainer\Application\Resources\Emails\PublisherDownload
 use PhotoContainer\PhotoContainer\Contexts\Photo\Domain\PhotoRepository;
 use PhotoContainer\PhotoContainer\Contexts\Photo\Event\DownloadedPhoto;
 
+use PhotoContainer\PhotoContainer\Infrastructure\Email\EmailDataLoader;
 use PhotoContainer\PhotoContainer\Infrastructure\Email\SwiftPoolMailerHelper;
 
 class SendEmailPublisherOnDownload extends AbstractListener
@@ -19,19 +20,19 @@ class SendEmailPublisherOnDownload extends AbstractListener
     private $emailHelper;
 
     /**
-     * @var PhotoRepository
+     * @var EmailDataLoader
      */
-    private $dbRepo;
+    private $loader;
 
     /**
      * SendEmailPublisherOnDownload constructor.
      * @param SwiftPoolMailerHelper $emailHelper
-     * @param PhotoRepository $dbRepo
+     * @param EmailDataLoader $loader
      */
-    public function __construct(SwiftPoolMailerHelper $emailHelper, PhotoRepository $dbRepo)
+    public function __construct(SwiftPoolMailerHelper $emailHelper, EmailDataLoader $loader)
     {
         $this->emailHelper = $emailHelper;
-        $this->dbRepo = $dbRepo;
+        $this->loader = $loader;
     }
 
     /**
@@ -44,11 +45,11 @@ class SendEmailPublisherOnDownload extends AbstractListener
             /** @var DownloadedPhoto $data */
             $data = $event->getData();
 
-            $publisher = $this->dbRepo->findPublisher($data->getPublisherId());
+            $publisher = $this->loader->getUserData($data->getPublisherId());
 
             $email = new PublisherDownloadEmail(
                 null,
-                ['name' => $publisher->getName(), 'email' => $publisher->getEmail()]
+                ['name' => $publisher['name'], 'email' => $publisher['name']]
             );
 
             $this->emailHelper->send($email);

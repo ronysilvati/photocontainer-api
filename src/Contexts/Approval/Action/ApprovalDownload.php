@@ -2,6 +2,7 @@
 
 namespace PhotoContainer\PhotoContainer\Contexts\Approval\Action;
 
+use PhotoContainer\PhotoContainer\Contexts\Approval\Command\ApprovalDownloadCommand;
 use PhotoContainer\PhotoContainer\Contexts\Approval\Domain\ApprovalRepository;
 use PhotoContainer\PhotoContainer\Contexts\Approval\Response\ApprovalRequestResponse;
 
@@ -22,15 +23,12 @@ class ApprovalDownload
     }
 
     /**
-     * @param int $event_id
-     * @param int $publisher_id
+     * @param ApprovalDownloadCommand $command
      * @return ApprovalRequestResponse
-     * @throws \RuntimeException
-     * @throws \Exception
      */
-    public function handle(int $event_id, int $publisher_id): \PhotoContainer\PhotoContainer\Contexts\Approval\Response\ApprovalRequestResponse
+    public function handle(ApprovalDownloadCommand $command): ApprovalRequestResponse
     {
-        $request = $this->repository->findDownloadRequest($event_id, $publisher_id);
+        $request = $this->repository->findDownloadRequest($command->getEventId(), $command->getPublisherId());
         if ($request == null) {
             throw new \RuntimeException('Pedido não localizado.');
         }
@@ -38,6 +36,9 @@ class ApprovalDownload
         if ($request->isAuthorized()) {
             throw new \RuntimeException('Pedido já autorizado.');
         }
+
+        $request->changeAuthorized(true);
+        $request->changeActive(false);
 
         $request = $this->repository->approval($request);
 

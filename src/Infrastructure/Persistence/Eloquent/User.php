@@ -7,6 +7,7 @@ use Illuminate\Database\Eloquent\Model as EloquentModel;
 class User extends EloquentModel
 {
     protected $table = 'users';
+    protected $with = ['detail', 'userProfile', 'address'];
 
     public function detail()
     {

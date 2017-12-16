@@ -118,7 +118,7 @@ class SlimApp implements WebApp
 
             $events = EventRecorder::getInstance()->pullEvents();
 
-            if (count($events) > 0) {
+            if (\count($events) > 0) {
                 $data = [
                     'route' => $req->getMethod(). ' ' . $req->getUri()->getPath(),
                 ];

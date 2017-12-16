@@ -7,29 +7,31 @@ use League\Event\EventInterface;
 use PhotoContainer\PhotoContainer\Application\Resources\Emails\ApprovalRequestEmail;
 use PhotoContainer\PhotoContainer\Contexts\Approval\Domain\ApprovalRepository;
 use PhotoContainer\PhotoContainer\Contexts\Approval\Event\DownloadRequested;
+use PhotoContainer\PhotoContainer\Infrastructure\Email\EmailDataLoader;
 use PhotoContainer\PhotoContainer\Infrastructure\Email\EmailHelper;
+use PhotoContainer\PhotoContainer\Infrastructure\SearchEngine\SearchEngine;
 
 class SendEmailOnDownloadRequest extends AbstractListener
 {
     /**
-     * @var EmailHelper
+     * @var EmailDataLoader
+     */
+    private $loader;
+
+    /**
+     * @var SearchEngine
      */
     private $emailHelper;
 
     /**
-     * @var ApprovalRepository
-     */
-    private $repository;
-
-    /**
      * SendEmailOnDownloadRequest constructor.
      * @param EmailHelper $emailHelper
-     * @param ApprovalRepository $repository
+     * @param EmailDataLoader $loader
      */
-    public function __construct(EmailHelper $emailHelper, ApprovalRepository $repository)
+    public function __construct(EmailHelper $emailHelper, EmailDataLoader $loader)
     {
         $this->emailHelper = $emailHelper;
-        $this->repository = $repository;
+        $this->loader = $loader;
     }
 
     /**
@@ -42,18 +44,18 @@ class SendEmailOnDownloadRequest extends AbstractListener
             /** @var DownloadRequested $eventData */
             $eventData = $event->getData();
 
-            $event = $this->repository->findEvent($eventData->getEventId());
-            $publisher = $this->repository->findUser($eventData->getPublisherId());
-            $photographer = $this->repository->findUser($event->getUserId());
+            $event = $this->loader->getEventData($eventData->getEventId());
+            $publisher = $this->loader->getUserData($eventData->getPublisherId());
+            $photographer = $this->loader->getUserData($event['user_id']);
 
             $data = [
-                '{EVENT_NAME}' => $event->getName(),
-                '{PUBLISHER}' => $publisher->getName()
+                '{EVENT_NAME}' => $event['title'],
+                '{PUBLISHER}' => $publisher['name']
             ];
 
             $email = new ApprovalRequestEmail(
                 $data,
-                ['name' => $photographer->getName(), 'email' => $photographer->getEmail()]
+                ['name' => $photographer['name'], 'email' => $photographer['email']]
             );
 
             $this->emailHelper->send($email);

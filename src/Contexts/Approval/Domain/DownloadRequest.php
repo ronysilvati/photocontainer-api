@@ -40,21 +40,21 @@ class DownloadRequest
 
     /**
      * DownloadRequest constructor.
-     * @param int|null $id
      * @param int|null $event_id
      * @param int|null $user_id
      * @param bool|null $authorized
      * @param bool|null $visualized
      * @param bool|null $active
      */
-    public function __construct(?int $id, ?int $event_id, ?int $user_id, ?bool $authorized, ?bool $visualized, ?bool $active)
+    public function __construct(?int $event_id, ?int $user_id, ?bool $authorized, ?bool $visualized, ?bool $active)
     {
-        $this->id = $id;
         $this->event_id = $event_id;
         $this->user_id = $user_id;
         $this->authorized = $authorized;
         $this->visualized = $visualized;
         $this->active = $active;
+
+        EventRecorder::getInstance()->record(new DownloadRequested($this->event_id, $this->user_id));
     }
 
     /**
@@ -63,15 +63,6 @@ class DownloadRequest
     public function getId(): int
     {
         return $this->id;
-    }
-
-    /**
-     * @param int $id
-     */
-    public function changeId(int $id): void
-    {
-        $this->id = $id;
-        EventRecorder::getInstance()->record(new DownloadRequested($this->event_id, $this->user_id));
     }
 
     /**

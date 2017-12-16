@@ -2,10 +2,9 @@
 
 namespace PhotoContainer\PhotoContainer\Infrastructure\SearchEngine;
 
-use Illuminate\Database\Eloquent\Model;
-use Illuminate\Database\Capsule\Manager as Capsule;
+use Doctrine\ORM\EntityRepository;
 
-class SearchEngine
+class SearchEngine extends EntityRepository
 {
     /**
      * @var ResourceLoader
@@ -18,20 +17,13 @@ class SearchEngine
     private $model;
 
     /**
-     * SearchEngine constructor.
-     * @param ResourceLoader $resourceLoader
-     */
-    public function __construct(ResourceLoader $resourceLoader)
-    {
-        $this->resourceLoader = $resourceLoader;
-    }
-
-    /**
      * @param string $resource
      * @return SearchEngine
      */
     public function addResource(string $resource): SearchEngine
     {
+        $this->getEntityManager()->createQueryBuilder();
+
         $this->model = $this->resourceLoader->load($resource);
         return $this;
     }

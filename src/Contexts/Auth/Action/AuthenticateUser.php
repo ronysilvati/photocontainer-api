@@ -37,11 +37,11 @@ class AuthenticateUser
     public function handle(AuthenticateUserCommand $command)
     {
         try {
-            $auth = new Auth($command->getUser(), $command->getPassword());
+            //$auth = new Auth($command->getUser(), $command->getPassword());
 
-            $user = $this->repository->find($auth->getUser());
+            $auth = $this->repository->findUser($command->getUser());
 
-            if ($this->cryptoMethod->verify($auth->getPassword(), $user->password) === false) {
+            if (!$this->cryptoMethod->verify($command->getPassword(), $auth->getPassword())) {
                 throw new \RuntimeException('A senha está incorreta');
             }
 
@@ -53,7 +53,7 @@ class AuthenticateUser
             );
             $token = $this->jwtGenerator->hash($token);
 
-            $this->saveLog($user->id);
+            $this->saveLog($auth->getId());
 
             return new AuthenticatedResponse($token);
         } catch (\Exception $e) {

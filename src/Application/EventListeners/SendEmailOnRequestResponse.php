@@ -8,29 +8,30 @@ use PhotoContainer\PhotoContainer\Application\Resources\Emails\ApprovedEmail;
 use PhotoContainer\PhotoContainer\Application\Resources\Emails\ReprovedEmail;
 use PhotoContainer\PhotoContainer\Contexts\Approval\Domain\ApprovalRepository;
 use PhotoContainer\PhotoContainer\Contexts\Approval\Event\DownloadApproval;
+use PhotoContainer\PhotoContainer\Infrastructure\Email\EmailDataLoader;
 use PhotoContainer\PhotoContainer\Infrastructure\Email\EmailHelper;
 
 class SendEmailOnRequestResponse extends AbstractListener
 {
     /**
-     * @var EmailHelper
+     * @var EmailDataLoader
      */
-    private $emailHelper;
+    private $loader;
 
     /**
      * @var ApprovalRepository
      */
-    private $repository;
+    private $emailHelper;
 
     /**
-     * SendEmailOnDownloadRequest constructor.
+     * SendEmailOnRequestResponse constructor.
      * @param EmailHelper $emailHelper
-     * @param ApprovalRepository $repository
+     * @param EmailDataLoader $loader
      */
-    public function __construct(EmailHelper $emailHelper, ApprovalRepository $repository)
+    public function __construct(EmailHelper $emailHelper, EmailDataLoader $loader)
     {
         $this->emailHelper = $emailHelper;
-        $this->repository = $repository;
+        $this->loader = $loader;
     }
 
     /**
@@ -43,22 +44,22 @@ class SendEmailOnRequestResponse extends AbstractListener
             /** @var DownloadApproval $eventData */
             $eventData = $event->getData();
 
-            $event = $this->repository->findEvent($eventData->getEventId());
-            $publisher = $this->repository->findUser($eventData->getPublisherId());
+            $event = $this->loader->getEventData($eventData->getEventId());
+            $publisher = $this->loader->getUserData($eventData->getPublisherId());
 
             $data = [
-                '{EVENT_NAME}' => $event->getName(),
+                '{EVENT_NAME}' => $event['title'],
             ];
 
             if ($eventData->isApproved()) {
                 $email = new ApprovedEmail(
                     $data,
-                    ['name' => $publisher->getName(), 'email' => $publisher->getEmail()]
+                    ['name' => $publisher['name'], 'email' => $publisher['email']]
                 );
             } else {
                 $email = new ReprovedEmail(
                     $data,
-                    ['name' => $publisher->getName(), 'email' => $publisher->getEmail()]
+                    ['name' => $publisher['name'], 'email' => $publisher['email']]
                 );
             }
 

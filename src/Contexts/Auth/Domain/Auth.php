@@ -4,6 +4,7 @@ namespace PhotoContainer\PhotoContainer\Contexts\Auth\Domain;
 
 class Auth
 {
+    private $id;
     private $user;
     private $password;
 
@@ -11,6 +12,14 @@ class Auth
     {
         $this->user = $user;
         $this->password = $pwd;
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getId()
+    {
+        return $this->id;
     }
 
     /**

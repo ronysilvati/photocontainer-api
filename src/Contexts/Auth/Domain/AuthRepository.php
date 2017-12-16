@@ -4,6 +4,15 @@ namespace PhotoContainer\PhotoContainer\Contexts\Auth\Domain;
 
 interface AuthRepository
 {
-    public function find(string $user);
+    /**
+     * @param string $user
+     * @return Auth
+     */
+    public function findUser(string $user): Auth;
+
+    /**
+     * @param int $user_id
+     * @return mixed
+     */
     public function logAccess(int $user_id);
 }

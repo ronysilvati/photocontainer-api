@@ -12,7 +12,7 @@ trait CachedControllerResponseTrait
      * @param $domainResponse
      * @return ResponseInterface
      */
-    public function cachedHttpResponse(ResponseInterface $response, $domainResponse): ResponseInterface
+    public function cachedHttpResponse(ResponseInterface $response, \JsonSerializable $domainResponse): ResponseInterface
     {
         $httpCache = $this->container->get(CacheProvider::class);
 
