@@ -4,20 +4,20 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
         "This file is @generated automatically"
     ],
-    "content-hash": "b88160946d2c7ecf9d593f3af253b098",
+    "content-hash": "904c1b4f37e5125be2d54aa85053053b",
     "packages": [
         {
             "name": "aws/aws-sdk-php",
-            "version": "3.44.1",
+            "version": "3.45.1",
             "source": {
                 "type": "git",
                 "url": "https://github.com/aws/aws-sdk-php.git",
-                "reference": "3f88cb0b9eb6ca34b2823c1cb42e10ac4d52fa6d"
+                "reference": "30c021958edfbe267d062e3b6356c7f8a94d1ea0"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/aws/aws-sdk-php/zipball/3f88cb0b9eb6ca34b2823c1cb42e10ac4d52fa6d",
-                "reference": "3f88cb0b9eb6ca34b2823c1cb42e10ac4d52fa6d",
+                "url": "https://api.github.com/repos/aws/aws-sdk-php/zipball/30c021958edfbe267d062e3b6356c7f8a94d1ea0",
+                "reference": "30c021958edfbe267d062e3b6356c7f8a94d1ea0",
                 "shasum": ""
             },
             "require": {
@@ -39,7 +39,7 @@
                 "ext-dom": "*",
                 "ext-openssl": "*",
                 "nette/neon": "^2.3",
-                "phpunit/phpunit": "^4.8.35|^5.4.0",
+                "phpunit/phpunit": "^4.8.35|^5.4.3",
                 "psr/cache": "^1.0"
             },
             "suggest": {
@@ -84,7 +84,7 @@
                 "s3",
                 "sdk"
             ],
-            "time": "2017-12-01T20:57:47+00:00"
+            "time": "2017-12-06T21:44:04+00:00"
         },
         {
             "name": "container-interop/container-interop",
@@ -540,6 +540,60 @@
             "time": "2017-07-22T12:18:28+00:00"
         },
         {
+            "name": "doctrine/instantiator",
+            "version": "1.1.0",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/doctrine/instantiator.git",
+                "reference": "185b8868aa9bf7159f5f953ed5afb2d7fcdc3bda"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/doctrine/instantiator/zipball/185b8868aa9bf7159f5f953ed5afb2d7fcdc3bda",
+                "reference": "185b8868aa9bf7159f5f953ed5afb2d7fcdc3bda",
+                "shasum": ""
+            },
+            "require": {
+                "php": "^7.1"
+            },
+            "require-dev": {
+                "athletic/athletic": "~0.1.8",
+                "ext-pdo": "*",
+                "ext-phar": "*",
+                "phpunit/phpunit": "^6.2.3",
+                "squizlabs/php_codesniffer": "^3.0.2"
+            },
+            "type": "library",
+            "extra": {
+                "branch-alias": {
+                    "dev-master": "1.2.x-dev"
+                }
+            },
+            "autoload": {
+                "psr-4": {
+                    "Doctrine\\Instantiator\\": "src/Doctrine/Instantiator/"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "Marco Pivetta",
+                    "email": "ocramius@gmail.com",
+                    "homepage": "http://ocramius.github.com/"
+                }
+            ],
+            "description": "A small, lightweight utility to instantiate objects in PHP without invoking their constructors",
+            "homepage": "https://github.com/doctrine/instantiator",
+            "keywords": [
+                "constructor",
+                "instantiate"
+            ],
+            "time": "2017-07-22T11:58:36+00:00"
+        },
+        {
             "name": "doctrine/lexer",
             "version": "v1.0.1",
             "source": {
@@ -592,6 +646,82 @@
                 "parser"
             ],
             "time": "2014-09-09T13:34:57+00:00"
+        },
+        {
+            "name": "doctrine/orm",
+            "version": "v2.5.13",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/doctrine/doctrine2.git",
+                "reference": "93103f44a3e36e7b48165b6e6b736833f33b18ef"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/doctrine/doctrine2/zipball/93103f44a3e36e7b48165b6e6b736833f33b18ef",
+                "reference": "93103f44a3e36e7b48165b6e6b736833f33b18ef",
+                "shasum": ""
+            },
+            "require": {
+                "doctrine/cache": "~1.4",
+                "doctrine/collections": "~1.2",
+                "doctrine/common": ">=2.5-dev,<2.9-dev",
+                "doctrine/dbal": ">=2.5-dev,<2.7-dev",
+                "doctrine/instantiator": "^1.0.1",
+                "ext-pdo": "*",
+                "php": ">=5.4",
+                "symfony/console": "~2.5|~3.0|~4.0"
+            },
+            "require-dev": {
+                "phpunit/phpunit": "~4.0",
+                "symfony/yaml": "~2.3|~3.0|~4.0"
+            },
+            "suggest": {
+                "symfony/yaml": "If you want to use YAML Metadata Mapping Driver"
+            },
+            "bin": [
+                "bin/doctrine",
+                "bin/doctrine.php"
+            ],
+            "type": "library",
+            "extra": {
+                "branch-alias": {
+                    "dev-master": "2.6.x-dev"
+                }
+            },
+            "autoload": {
+                "psr-0": {
+                    "Doctrine\\ORM\\": "lib/"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "Roman Borschel",
+                    "email": "roman@code-factory.org"
+                },
+                {
+                    "name": "Benjamin Eberlei",
+                    "email": "kontakt@beberlei.de"
+                },
+                {
+                    "name": "Guilherme Blanco",
+                    "email": "guilhermeblanco@gmail.com"
+                },
+                {
+                    "name": "Jonathan Wage",
+                    "email": "jonwage@gmail.com"
+                }
+            ],
+            "description": "Object-Relational-Mapper for PHP",
+            "homepage": "http://www.doctrine-project.org",
+            "keywords": [
+                "database",
+                "orm"
+            ],
+            "time": "2017-11-27T23:25:55+00:00"
         },
         {
             "name": "enqueue/dbal",
@@ -1454,6 +1584,150 @@
                 "watermark"
             ],
             "time": "2017-09-21T16:29:17+00:00"
+        },
+        {
+            "name": "juliangut/doctrine-manager-builder",
+            "version": "1.8",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/juliangut/doctrine-manager-builder.git",
+                "reference": "9fbfdab4bc62a1ca13cee81f3351109fdbf545d6"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/juliangut/doctrine-manager-builder/zipball/9fbfdab4bc62a1ca13cee81f3351109fdbf545d6",
+                "reference": "9fbfdab4bc62a1ca13cee81f3351109fdbf545d6",
+                "shasum": ""
+            },
+            "require": {
+                "doctrine/common": "^2.5",
+                "php": "^5.6|^7.0",
+                "symfony/console": "^2.0|^3.0"
+            },
+            "require-dev": {
+                "brainmaestro/composer-git-hooks": "^2.1",
+                "doctrine/couchdb-odm": "dev-master",
+                "doctrine/mongodb-odm": "^1.1",
+                "doctrine/orm": "^2.5",
+                "friendsofphp/php-cs-fixer": "^1.0",
+                "phpmd/phpmd": "^2.0",
+                "phpunit/phpunit": "^5.0|^6.0",
+                "phpunit/phpunit-mock-objects": "^3.2",
+                "sebastian/phpcpd": "^2.0",
+                "squizlabs/php_codesniffer": "^2.0"
+            },
+            "suggest": {
+                "doctrine/couchdb-odm": "dev-master",
+                "doctrine/mongodb-odm": "^1.1",
+                "doctrine/orm": "^2.4"
+            },
+            "bin": [
+                "bin/doctrine-manager"
+            ],
+            "type": "library",
+            "extra": {
+                "hooks": {
+                    "pre-commit": "composer qa && composer phpunit"
+                }
+            },
+            "autoload": {
+                "psr-4": {
+                    "Jgut\\Doctrine\\ManagerBuilder\\": "src/"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "BSD-3-Clause"
+            ],
+            "authors": [
+                {
+                    "name": "Julián Gutiérrez",
+                    "email": "juliangut@gmail.com",
+                    "homepage": "http://juliangut.com",
+                    "role": "Developer"
+                }
+            ],
+            "description": "Doctrine2 managers builder",
+            "homepage": "https://github.com/juliangut/doctrine-manager-builder",
+            "keywords": [
+                "Document Manager",
+                "Entity Manager",
+                "couchdb",
+                "dbal",
+                "doctrine2",
+                "mongodb",
+                "relational"
+            ],
+            "time": "2017-10-26T21:15:38+00:00"
+        },
+        {
+            "name": "juliangut/slim-doctrine",
+            "version": "2.3",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/juliangut/slim-doctrine.git",
+                "reference": "2ae35db51c596c79b6c49edf508e13cb508cc704"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/juliangut/slim-doctrine/zipball/2ae35db51c596c79b6c49edf508e13cb508cc704",
+                "reference": "2ae35db51c596c79b6c49edf508e13cb508cc704",
+                "shasum": ""
+            },
+            "require": {
+                "juliangut/doctrine-manager-builder": "^1.7",
+                "php": "^5.6|^7.0",
+                "slim/slim": "^3.0"
+            },
+            "require-dev": {
+                "brainmaestro/composer-git-hooks": "^2.1",
+                "doctrine/couchdb-odm": "dev-master",
+                "doctrine/mongodb-odm": "^1.1",
+                "doctrine/orm": "^2.4",
+                "friendsofphp/php-cs-fixer": "^1.0",
+                "phpmd/phpmd": "^2.0",
+                "phpunit/phpunit": "^4.5|^5.0",
+                "phpunit/phpunit-mock-objects": "^3.2",
+                "sebastian/phpcpd": "^2.0",
+                "squizlabs/php_codesniffer": "^2.0"
+            },
+            "suggest": {
+                "doctrine/couchdb-odm": "dev-master",
+                "doctrine/mongodb-odm": "^1.1",
+                "doctrine/orm": "^2.4"
+            },
+            "type": "library",
+            "extra": {
+                "hooks": {
+                    "pre-commit": "composer qa && composer phpunit"
+                }
+            },
+            "autoload": {
+                "psr-4": {
+                    "Jgut\\Slim\\Doctrine\\": "src/"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "BSD-3-Clause"
+            ],
+            "authors": [
+                {
+                    "name": "Julián Gutiérrez",
+                    "email": "juliangut@gmail.com",
+                    "homepage": "http://juliangut.com",
+                    "role": "Developer"
+                }
+            ],
+            "description": "Slim-Doctrine managers integration",
+            "homepage": "http://github.com/juliangut/slim-doctrine",
+            "keywords": [
+                "doctrine",
+                "framework",
+                "handler",
+                "slim"
+            ],
+            "time": "2017-10-08T11:27:38+00:00"
         },
         {
             "name": "league/csv",
@@ -2335,16 +2609,16 @@
         },
         {
             "name": "php-di/php-di",
-            "version": "5.4.5",
+            "version": "5.4.6",
             "source": {
                 "type": "git",
                 "url": "https://github.com/PHP-DI/PHP-DI.git",
-                "reference": "770064f4e9c7199ca93397a005aa36e9d13a5a4f"
+                "reference": "3f9255659595f3e289f473778bb6c51aa72abbbd"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/PHP-DI/PHP-DI/zipball/770064f4e9c7199ca93397a005aa36e9d13a5a4f",
-                "reference": "770064f4e9c7199ca93397a005aa36e9d13a5a4f",
+                "url": "https://api.github.com/repos/PHP-DI/PHP-DI/zipball/3f9255659595f3e289f473778bb6c51aa72abbbd",
+                "reference": "3f9255659595f3e289f473778bb6c51aa72abbbd",
                 "shasum": ""
             },
             "require": {
@@ -2394,7 +2668,7 @@
                 "dependency injection",
                 "di"
             ],
-            "time": "2017-11-11T15:09:16+00:00"
+            "time": "2017-12-03T08:20:27+00:00"
         },
         {
             "name": "php-di/phpdoc-reader",
@@ -3195,7 +3469,7 @@
         },
         {
             "name": "symfony/config",
-            "version": "v3.4.0",
+            "version": "v3.4.1",
             "source": {
                 "type": "git",
                 "url": "https://github.com/symfony/config.git",
@@ -3257,16 +3531,16 @@
         },
         {
             "name": "symfony/console",
-            "version": "v3.4.0",
+            "version": "v3.4.1",
             "source": {
                 "type": "git",
                 "url": "https://github.com/symfony/console.git",
-                "reference": "9468ad3fba3a5e1f0dc12a96e50e84cddb923cf0"
+                "reference": "2cdef78de8f54f68ff16a857e710e7302b47d4c7"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/symfony/console/zipball/9468ad3fba3a5e1f0dc12a96e50e84cddb923cf0",
-                "reference": "9468ad3fba3a5e1f0dc12a96e50e84cddb923cf0",
+                "url": "https://api.github.com/repos/symfony/console/zipball/2cdef78de8f54f68ff16a857e710e7302b47d4c7",
+                "reference": "2cdef78de8f54f68ff16a857e710e7302b47d4c7",
                 "shasum": ""
             },
             "require": {
@@ -3322,11 +3596,11 @@
             ],
             "description": "Symfony Console Component",
             "homepage": "https://symfony.com",
-            "time": "2017-11-29T13:28:14+00:00"
+            "time": "2017-12-02T18:20:11+00:00"
         },
         {
             "name": "symfony/debug",
-            "version": "v4.0.0",
+            "version": "v4.0.1",
             "source": {
                 "type": "git",
                 "url": "https://github.com/symfony/debug.git",
@@ -3382,7 +3656,7 @@
         },
         {
             "name": "symfony/filesystem",
-            "version": "v4.0.0",
+            "version": "v4.0.1",
             "source": {
                 "type": "git",
                 "url": "https://github.com/symfony/filesystem.git",
@@ -3490,7 +3764,7 @@
         },
         {
             "name": "symfony/translation",
-            "version": "v3.4.0",
+            "version": "v3.4.1",
             "source": {
                 "type": "git",
                 "url": "https://github.com/symfony/translation.git",
@@ -3558,16 +3832,16 @@
         },
         {
             "name": "symfony/yaml",
-            "version": "v3.4.0",
+            "version": "v3.4.1",
             "source": {
                 "type": "git",
                 "url": "https://github.com/symfony/yaml.git",
-                "reference": "b3d0c9c11be3831b84825967dc6b52b5a7b84e04"
+                "reference": "f6a99b95b338799645fe9f7880d7d4ca1bf79cc1"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/symfony/yaml/zipball/b3d0c9c11be3831b84825967dc6b52b5a7b84e04",
-                "reference": "b3d0c9c11be3831b84825967dc6b52b5a7b84e04",
+                "url": "https://api.github.com/repos/symfony/yaml/zipball/f6a99b95b338799645fe9f7880d7d4ca1bf79cc1",
+                "reference": "f6a99b95b338799645fe9f7880d7d4ca1bf79cc1",
                 "shasum": ""
             },
             "require": {
@@ -3612,7 +3886,7 @@
             ],
             "description": "Symfony Yaml Component",
             "homepage": "https://symfony.com",
-            "time": "2017-11-29T13:28:14+00:00"
+            "time": "2017-12-04T18:15:22+00:00"
         },
         {
             "name": "tuupola/cors-middleware",

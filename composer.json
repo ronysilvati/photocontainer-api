@@ -29,7 +29,9 @@
         "symfony/console": "^3.3",
         "enqueue/fs": "^0.8",
         "ocramius/proxy-manager": "^2.1",
-        "league/tactician": "^1.0"
+        "league/tactician": "^1.0",
+        "juliangut/slim-doctrine": "^2.3",
+        "doctrine/orm": "*"
     },
 
     "autoload": {
