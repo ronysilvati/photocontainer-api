@@ -1,0 +1,36 @@
+PhotoContainer\PhotoContainer\Contexts\Auth\Domain\Auth:
+    type: entity
+    table: users
+    repositoryClass: PhotoContainer\PhotoContainer\Contexts\Auth\Persistence\DoctrineAuthRepository
+    indexes:
+        name:
+            columns:
+                - name
+    uniqueConstraints:
+        email:
+            columns:
+                - email
+    id:
+        id:
+            type: integer
+            nullable: false
+            options:
+                unsigned: false
+            id: true
+            generator:
+                strategy: IDENTITY
+    fields:
+        user:
+            column: email
+            type: string
+            nullable: false
+            length: 100
+            options:
+                fixed: false
+        password:
+            type: text
+            nullable: false
+            length: 65535
+            options:
+                fixed: false
+    lifecycleCallbacks: {  }

@@ -1,0 +1,99 @@
+UserDetails:
+    type: entity
+    table: user_details
+    indexes:
+        user_id:
+            columns:
+                - user_id
+    id:
+        id:
+            type: integer
+            nullable: false
+            options:
+                unsigned: false
+            id: true
+            generator:
+                strategy: IDENTITY
+    fields:
+        nameBy:
+            type: string
+            nullable: false
+            length: null
+            options:
+                fixed: false
+                default: name
+            column: name_by
+        studioName:
+            type: string
+            nullable: true
+            length: 250
+            options:
+                fixed: false
+            column: studio_name
+        blog:
+            type: string
+            nullable: true
+            length: 250
+            options:
+                fixed: false
+        facebook:
+            type: string
+            nullable: true
+            length: 250
+            options:
+                fixed: false
+        instagram:
+            type: string
+            nullable: true
+            length: 250
+            options:
+                fixed: false
+        pinterest:
+            type: string
+            nullable: true
+            length: 250
+            options:
+                fixed: false
+        site:
+            type: string
+            nullable: true
+            length: 250
+            options:
+                fixed: false
+        phone:
+            type: string
+            nullable: true
+            length: 50
+            options:
+                fixed: false
+        birth:
+            type: date
+            nullable: true
+        bio:
+            type: text
+            nullable: true
+            length: 65535
+            options:
+                fixed: false
+        createdAt:
+            type: datetime
+            nullable: false
+            options:
+                default: CURRENT_TIMESTAMP
+            column: created_at
+        updatedAt:
+            type: datetime
+            nullable: true
+            column: updated_at
+    manyToOne:
+        user:
+            targetEntity: Users
+            cascade: {  }
+            fetch: LAZY
+            mappedBy: null
+            inversedBy: null
+            joinColumns:
+                user_id:
+                    referencedColumnName: id
+            orphanRemoval: false
+    lifecycleCallbacks: {  }

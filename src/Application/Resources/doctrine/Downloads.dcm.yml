@@ -1,0 +1,56 @@
+Downloads:
+    type: entity
+    table: downloads
+    indexes:
+        photo_id:
+            columns:
+                - photo_id
+                - user_id
+        user_id:
+            columns:
+                - user_id
+        IDX_4B73A4B57E9E4C8C:
+            columns:
+                - photo_id
+    id:
+        id:
+            type: integer
+            nullable: false
+            options:
+                unsigned: false
+            id: true
+            generator:
+                strategy: IDENTITY
+    fields:
+        createdAt:
+            type: datetime
+            nullable: false
+            options:
+                default: CURRENT_TIMESTAMP
+            column: created_at
+        updatedAt:
+            type: datetime
+            nullable: true
+            column: updated_at
+    manyToOne:
+        photo:
+            targetEntity: Photos
+            cascade: {  }
+            fetch: LAZY
+            mappedBy: null
+            inversedBy: null
+            joinColumns:
+                photo_id:
+                    referencedColumnName: id
+            orphanRemoval: false
+        user:
+            targetEntity: Users
+            cascade: {  }
+            fetch: LAZY
+            mappedBy: null
+            inversedBy: null
+            joinColumns:
+                user_id:
+                    referencedColumnName: id
+            orphanRemoval: false
+    lifecycleCallbacks: {  }

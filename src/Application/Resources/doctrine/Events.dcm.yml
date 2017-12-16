@@ -1,0 +1,114 @@
+Events:
+    type: entity
+    table: events
+    indexes:
+        title:
+            columns:
+                - title
+        user_id:
+            columns:
+                - user_id
+    id:
+        id:
+            type: integer
+            nullable: false
+            options:
+                unsigned: false
+            id: true
+            generator:
+                strategy: IDENTITY
+    fields:
+        groom:
+            type: string
+            nullable: true
+            length: 250
+            options:
+                fixed: false
+        bride:
+            type: string
+            nullable: true
+            length: 250
+            options:
+                fixed: false
+        eventdate:
+            type: datetime
+            nullable: true
+        title:
+            type: string
+            nullable: true
+            length: 250
+            options:
+                fixed: false
+        description:
+            type: text
+            nullable: true
+            length: 65535
+            options:
+                fixed: false
+        terms:
+            type: boolean
+            nullable: true
+        approvalGeneral:
+            type: boolean
+            nullable: true
+            column: approval_general
+        approvalPhotographer:
+            type: boolean
+            nullable: true
+            column: approval_photographer
+        approvalBride:
+            type: boolean
+            nullable: true
+            column: approval_bride
+        country:
+            type: string
+            nullable: true
+            length: 250
+            options:
+                fixed: false
+        state:
+            type: string
+            nullable: true
+            length: 250
+            options:
+                fixed: false
+        city:
+            type: string
+            nullable: true
+            length: 250
+            options:
+                fixed: false
+        active:
+            type: boolean
+            nullable: false
+            options:
+                default: '1'
+        status:
+            type: string
+            nullable: false
+            length: null
+            options:
+                fixed: false
+                default: draft
+        createdAt:
+            type: datetime
+            nullable: false
+            options:
+                default: CURRENT_TIMESTAMP
+            column: created_at
+        updatedAt:
+            type: datetime
+            nullable: true
+            column: updated_at
+    manyToOne:
+        user:
+            targetEntity: Users
+            cascade: {  }
+            fetch: LAZY
+            mappedBy: null
+            inversedBy: null
+            joinColumns:
+                user_id:
+                    referencedColumnName: id
+            orphanRemoval: false
+    lifecycleCallbacks: {  }

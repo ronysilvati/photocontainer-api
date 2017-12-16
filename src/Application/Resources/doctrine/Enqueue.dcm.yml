@@ -1,0 +1,58 @@
+Enqueue:
+    type: entity
+    table: enqueue
+    indexes:
+        queue:
+            columns:
+                - queue
+                - priority
+                - delayed_until
+    id:
+        id:
+            type: integer
+            nullable: false
+            options:
+                unsigned: false
+            id: true
+            generator:
+                strategy: IDENTITY
+    fields:
+        body:
+            type: text
+            nullable: false
+            length: 65535
+            options:
+                fixed: false
+        headers:
+            type: text
+            nullable: false
+            length: 65535
+            options:
+                fixed: false
+        properties:
+            type: text
+            nullable: false
+            length: 65535
+            options:
+                fixed: false
+        redelivered:
+            type: boolean
+            nullable: false
+        queue:
+            type: string
+            nullable: false
+            length: 255
+            options:
+                fixed: false
+        priority:
+            type: integer
+            nullable: false
+            options:
+                unsigned: false
+        delayedUntil:
+            type: integer
+            nullable: false
+            options:
+                unsigned: false
+            column: delayed_until
+    lifecycleCallbacks: {  }

@@ -1,0 +1,45 @@
+PhotoContainer\PhotoContainer\Contexts\Approval\Domain\DownloadRequest:
+    type: entity
+    table: download_requests
+    repositoryClass: PhotoContainer\PhotoContainer\Contexts\Approval\Persistence\DoctrineApprovalRepository
+    indexes:
+        user_id:
+            columns:
+                - user_id
+                - event_id
+        event_id:
+            columns:
+                - event_id
+        IDX_90279E6FA76ED395:
+            columns:
+                - user_id
+    id:
+        id:
+            type: integer
+            nullable: false
+            options:
+                unsigned: false
+            id: true
+            generator:
+                strategy: IDENTITY
+    fields:
+        authorized:
+            type: boolean
+            nullable: false
+            options:
+                default: '0'
+        visualized:
+            type: boolean
+            nullable: false
+            options:
+                default: '0'
+        active:
+            type: boolean
+            nullable: false
+            options:
+                default: '0'
+        event_id:
+            type: integer
+        user_id:
+            type: integer
+    lifecycleCallbacks: {  }

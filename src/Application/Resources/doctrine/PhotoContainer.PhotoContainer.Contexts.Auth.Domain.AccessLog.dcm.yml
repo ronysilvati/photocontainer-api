@@ -1,0 +1,21 @@
+PhotoContainer\PhotoContainer\Contexts\Auth\Domain\AccessLog:
+    type: entity
+    table: access_logs
+    indexes:
+        user_id:
+            columns:
+                - user_id
+    id:
+        id:
+            type: integer
+            nullable: false
+            options:
+                unsigned: false
+            id: true
+            generator:
+                strategy: IDENTITY
+    fields:
+        user:
+            column: user_id
+            type: integer
+    lifecycleCallbacks: {  }

@@ -1,0 +1,24 @@
+PhotoContainer\PhotoContainer\Contexts\Cep\Domain\City:
+    type: entity
+    table: cities
+    repositoryClass: PhotoContainer\PhotoContainer\Contexts\Cep\Persistence\DoctrineCityRepository
+    id:
+        id:
+            type: integer
+            nullable: false
+            options:
+                unsigned: false
+            id: true
+            generator:
+                strategy: IDENTITY
+    fields:
+        name:
+            type: string
+            nullable: false
+            length: 60
+            options:
+                fixed: false
+        stateId:
+            column: state_id
+            type: integer
+    lifecycleCallbacks: {  }
