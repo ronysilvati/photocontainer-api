@@ -28,6 +28,11 @@ services:
       ports:
        - "8080:80"
 
+    rabbitmq:
+      image: 3.7-management-alpine
+      ports:
+        - "15672:15672"
+
     mailcatcher:
       image: tophfr/mailcatcher
       container_name: photocontainer-mailcatcher
