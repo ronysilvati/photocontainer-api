@@ -67,13 +67,31 @@ class EventPhotoHelper
             $this->filesystem->writeStream($file_path, $stream);
             fclose($stream);
 
-            $manager = new ImageManager();
-            $image = $manager
+            // Original configurations
+            $managerOriginal = new ImageManager();
+
+            $imageOriginal = $managerOriginal
+                ->make($photo->getFilePath('protected', true, true));
+
+            // Verify the image size, if above 2048, resize to 2048
+            $newWithImage = ($imageOriginal->width() > 2048)? 2048 : $imageOriginal->width();
+
+            $imageOriginal->resize($newWithImage,null,function($constraint){
+                $constraint->aspectRatio();
+            });
+
+            $imageOriginal->save($photo->getFilePath('protected', true, true), 90);
+
+            // Thumb configurations
+            $managerThumb = new ImageManager();
+
+            $imageThumb = $managerThumb
                 ->make($photo->getFilePath('protected', true, true))
                 ->resize(null, 847, function ($constraint) {
                     $constraint->aspectRatio();
                 });
-            $image->save($photo->getFilePath('thumb', true, true), 30);
+
+            $imageThumb->save($photo->getFilePath('thumb', true, true), 30);
 
             $this->enqueueHelper->queueMessage(
                 json_encode([

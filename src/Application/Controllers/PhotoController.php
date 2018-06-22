@@ -38,9 +38,12 @@ class PhotoController
 
         $allPhotos = [];
         $uploaded = $request->getUploadedFiles();
+
         foreach ($uploaded as $files) {
             /** @var UploadedFile $file */
             foreach ($files as $file) {
+
+
                 if ($file->getError() !== UPLOAD_ERR_OK) {
                     throw new \RuntimeException('Erro no envio do arquivo.');
                 }
