@@ -67,7 +67,7 @@ class UserController
             $data['details']['pinterest'] ?? '',
             $data['details']['site'] ?? '',
             $data['details']['phone'] ?? '',
-            $data['details']['birth'] ?? ''
+            $data['details']['birth'] ?? null
         );
 
         $profile = new Profile(null, null, (int) $data['profile'], null);

@@ -18,7 +18,7 @@ use PhotoContainer\PhotoContainer\Infrastructure\Persistence\Eloquent\UserProfil
 
 use PhotoContainer\PhotoContainer\Infrastructure\Persistence\Eloquent\RequestPassword as RequestPasswordModel;
 
-//
+
 class EloquentUserRepository implements UserRepository
 {
     /**
